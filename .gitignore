@@ -1,0 +1,13 @@
+
+# Rstudio files
+.Rproj.user
+.Rproj
+.Rhistory
+.RData
+.DS_Store
+.Rprofile
+
+
+# Built vignettes
+vignettes/*.html
+vignettes/*.R
