@@ -6,8 +6,7 @@
 .RData
 .DS_Store
 .Rprofile
-
-
 # Built vignettes
 vignettes/*.html
 vignettes/*.R
+inst/doc
