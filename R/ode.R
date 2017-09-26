@@ -1,112 +1,132 @@
-ODESystem <- function(){
-  self <- structure(class = "ODESystem", environment())
 
-  compartments <- list(
-    null = Compartment("null", 0)
-  )
-  observation_compartment <- NULL
-  dose_compartment <- NULL
+#' @importFrom magrittr %>%
+#' @importFrom R6 R6Class
+ODESystem <- R6Class(
+  "ODESystem",
+  inherit = Artefact,
+  public = list(
+    compartments = list(),
+    observation_compartment = NULL,
+    dose_compartment = NULL,
+    initialize = function(){
+      self$compartments$null  <-  Compartment$new("null", 0)
+    },
 
-  add_compartment <- function(name, volume){
-    if(name %in% names(compartments)) stop("Compartment ", name, " already exists.")
-    compartments[[name]] <<- Compartment(name = name,
-                                      index = length(compartments),
-                                      volume = volume)
-    return(compartments[[name]])
-  }
-
-  request_compartment <- function(name, volume){
-    if(name %in% names(compartments)){
-      return(compartments[[name]])
-    }else{
-      return(add_compartment(name, volume))
+    add_compartment = function(name, volume) {
+      if (name %in% names(self$compartments))
+        stop("Compartment ", name, " already exists.")
+      self$compartments[[name]] <- Compartment$new(
+        name = name,
+        index = length(self$compartments),
+        volume = volume
+      )
+      return(self$compartments[[name]])
+    },
+    request_compartment = function(name, volume) {
+      if (name %in% names(self$compartments)) {
+        return(self$compartments[[name]])
+      } else{
+        return(self$add_compartment(name, volume))
+      }
+    },
+    add_flow = function(from = self$compartments[[1]],
+                        to  = self$compartments[[1]],
+                        equation) {
+      from$add_outflow(to, equation)
+      to$add_inflow(from, equation)
+    },
+    get_des_code = function() {
+      self$compartments %>%
+        purrr::map(~ .x$get_des_code())
     }
-  }
 
-  add_flow <- function(from = compartments[[1]],
-                       to  = compartments[[1]],
-                       equation){
-    from$add_outflow(to, equation)
-    to$add_inflow(from, equation)
-  }
-
-  get_des_code <- function(){
-    compartments %>%
-      purrr::map(~.x$get_des_code())
-  }
-  self
-}
+  )
+)
 
 
-Compartment <- function(name, index, volume){
-  self <- structure(class = "Compartment", environment())
-  name <- name
-  index <- index
-  if(missing(volume)) volume <- quote(1)
-  volume <- volume
+#' @importFrom magrittr %>%
+#' @importFrom R6 R6Class
+Compartment <- R6Class(
+  "Compartment",
+  public = list(
+    name = NULL,
+    index = NULL,
+    volume = NULL,
+    flows = list(),
+    initialize = function(name, index, volume = quote(1)) {
+      self$name <- name
+      self$index <- index
+      self$volume <- volume
+    },
+    add_outflow = function(to, equation) {
+      self$flows <-
+        c(self$flows, Outflow$new(from = self, to = to, equation))
+    },
+    add_inflow = function(from, equation) {
+      self$flows  <-
+        c(self$flows, Inflow$new(from = from, to = self,  equation))
+    },
+    get_des_code = function() {
+      equation <- self$flows %>%
+        purrr::map( ~ .x$get_des_code()) %>%
+        purrr::reduce(function(a, b)
+          substitute(a + b, list(a = a, b = b)))
 
-  flows <- list()
+      substitute(dA_dt[i]  <-
+                   equation, list(i = self$index, equation = equation))
+    }
+  )
+)
 
-  add_outflow <- function(to, equation){
-    flows <<-c(flows, Outflow(from = self, to = to, equation))
-  }
+#' @importFrom magrittr %>%
+#' @importFrom R6 R6Class
+Flow <- R6Class(
+  "Flow",
+  public <- list(
+    from = NULL,
+    to = NULL,
+    equation = NULL,
+    initialize = function(from, to, equation) {
+      if (!inherits(from, "Compartment"))
+        stop("argument 'from' needs to be a compartment")
 
-  add_inflow <- function(from, equation){
-    flows <<- c(flows, Inflow(from = from, to = self,  equation))
-  }
+      if (!inherits(to, "Compartment"))
+        stop("argument 'to' needs to be a compartment")
 
-  get_des_code <- function(){
-    equation <- flows %>%
-      purrr::map(~ .x$get_des_code()) %>%
-      purrr::reduce(function(a,b) substitute(a + b, list(a = a, b = b)))
+      if (!is.language(equation))
+        stop("argument 'equation' need to be of type language")
+      self$from <- from
+      self$to <- to
+      self$equation <- equation
+    },
+    get_des_code = function() {
+      amount_expression <- substitute(A[i], list(i = self$from$index))
+      concentration_expression <-
+        substitute(A[i] / V, list(i = self$from$index,
+                                  V = self$from$volume))
+      des_code <- pryr::substitute_q(self$equation,
+                                     list(A = amount_expression,
+                                          C = concentration_expression))
+      return(des_code)
+    }
+  )
+)
 
-      substitute(dA_dt[i]  <- equation, list(i = index, equation = equation))
-  }
-  self
-}
 
-Flow <- function(from, to, equation){
-  if(!inherits(from, "Compartment")) stop("argument 'from' needs to be a compartment")
+#' @importFrom magrittr %>%
+#' @importFrom R6 R6Class
+Inflow <- R6Class("Inflow",
+                  inherit = Flow)
 
-  if(!inherits(to, "Compartment")) stop("argument 'to' needs to be a compartment")
+#' @importFrom magrittr %>%
+#' @importFrom R6 R6Class
+Outflow <- R6Class("Outflow",
+                   inherit = Flow,
+                   public = list(
+                     initialize = function(from, to, equation){
+                       super$initialize(from, to, equation)
+                       self$equation <- substitute(-x, list(x = self$equation))
+                     }
 
-  if(!is.language(equation)) stop("argument 'equation' need to be of type language")
-
-  from <- from
-  to <- to
-  equation <- equation
-
-  get_des_code <- function(){
-    amount_expression <- substitute(A[i], list(i = from$index))
-    concentration_expression <- substitute(A[i]/V, list(i = from$index,
-                                                 V = from$volume))
-    des_code <- pryr::substitute_q(equation,
-                                   list(A = amount_expression,
-                                        C = concentration_expression))
-    return(des_code)
-  }
-
-  structure(class = "Flow", environment())
-}
-
-Inflow <- function(from, to, equation){
-  self <- Flow(from, to, equation)
-  structure(class = c("Inflow", class(self)), self)
-}
-
-Outflow <- function(from, to, equation){
-  self <- Flow(from, to, equation)
-
-  self$equation <- substitute(-x, list(x = self$equation))
-
-  structure(class = c("Outflow", class(self)), self)
-}
-
-ode <- ODESystem()
-central <- ode$request_compartment("central", 1)
-peri <- ode$request_compartment("peri", 2)
-ode$add_flow(central, equation = quote(CL*C))
-ode$add_flow(central, peri, quote(Q*C))
-# central$add_outflow(to = peri, equation = quote(CL*A))
-# central$add_inflow(from = peri, equation = quote(Q*A))
-ode$get_des_code()
+                   )
+                   )

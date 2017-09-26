@@ -1,18 +1,20 @@
-AssembledModel <- function(){
-  self <- structure(class = "AssembledModel", environment())
-  header_code <- list()
-  theta_set <- list()
-  eta_set <- list()
-  eps_set <- list()
-  code_scopes <- list()
+#' #' @importFrom R6 R6Class
+#' AssembledModel <- R6Class(
+#'   "AssembledModel",
+#'   public = list(
+#'     theta_facet = NMThetaFacet$new()
+#'   )
+#' )
+#'
+#' #' @importFrom R6 R6Class
+#' AssembledODEModel <- R6Class(
+#'   "AssembledODEModel",
+#'   inherit = AssembledModel,
+#'   public = list(
+#'     ode_system = NULL,
+#'     initialize = function(){
+#'       self$ode_system <- ODESystem$new()
+#'     }
+#'   )
+#' )
 
-
-}
-
-AssembledODEModel <- function(){
-  parent <- AssembledModel()
-  self <- structure(class = c("AssembledODEModel", class(self)),
-            environment())
-  self$ode_system <- list()
-
-}

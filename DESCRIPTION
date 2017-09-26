@@ -12,5 +12,8 @@ LazyData: true
 Suggests: testthat,
     knitr,
     rmarkdown
-Imports: pryr, purrr
+Imports: pryr, purrr,
+    assertthat,
+    stringr
 VignetteBuilder: knitr
+RoxygenNote: 6.0.1
