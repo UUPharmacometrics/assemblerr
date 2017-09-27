@@ -1,10 +1,13 @@
-
+#' @importFrom magrittr %>%
+#' @importFrom R6 R6Class
 #' @export
 Model <- function(){
   return(
     structure(
       list(
-        parameters = list()
+        parameters = list(),
+        compartments = list(),
+        flows = list()
       ), class = "Model")
   )
 }
