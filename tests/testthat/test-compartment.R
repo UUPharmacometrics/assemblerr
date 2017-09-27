@@ -10,6 +10,11 @@ test_that("can add compartment without volume", {
   expect_equal(m$compartments[["test"]]$volume, 1)
 })
 
+test_that("compartment volume can be parameter", {
+  m <- Model() %>% add_compartment("test", volume = ~V)
+  expect_equal(m$compartments[["test"]]$volume, quote(V))
+})
+
 
 
 test_that("adding a mass-balanced flow to a model works", {

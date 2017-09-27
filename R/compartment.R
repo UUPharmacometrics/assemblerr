@@ -13,6 +13,6 @@ add_compartment <- function(model, name, volume) UseMethod("add_compartment")
 
 #' @export
 add_compartment.Model <- function(model, name, volume = 1) {
-  model$compartments[[name]] <- Compartment(name =  name, volume = volume)
+  model$compartments[[name]] <- Compartment(name =  name, volume = as_equation(volume))
   return(model)
 }
