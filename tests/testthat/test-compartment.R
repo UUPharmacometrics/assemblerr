@@ -23,24 +23,25 @@ test_that("adding a mass-balanced flow to a model works", {
     add_compartment("central") %>%
     add_flow(from = "depot", to = "central", equation = ~ka*C)
 
-  expect_equal(m$flows[[1]]$from, "depot")
-  expect_equal(m$flows[[1]]$to, "central")
-  expect_equal(m$flows[[1]]$equation, quote(ka*C))
+  outflow <- m$compartments[[1]]$outflows[[1]]
+  expect_equal(outflow$from, "depot")
+  expect_equal(outflow$to, "central")
+  expect_equal(outflow$equation, quote(ka*C))
 
-  expect_equal(m$flows[[2]]$from, "central")
-  expect_equal(m$flows[[2]]$to, "depot")
-  expect_equal(m$flows[[2]]$equation, quote(-(ka*C)))
+  inflow <- m$compartments[[2]]$inflows[[1]]
+  expect_equal(inflow$from, "depot")
+  expect_equal(inflow$to, "central")
+  expect_equal(inflow$equation, quote(ka*C))
 })
 
 test_that("adding a non-mass-balanced flow adds only one flow", {
   m <- Model() %>%
     add_compartment("depot") %>%
     add_compartment("central") %>%
-    add_flow(from = "depot", to = "central", equation = ~ka*C, mass_balance = F)
+    add_flow(from = "central", equation = ~Cl*C)
 
-  expect_equal(m$flows[[1]]$from, "depot")
-  expect_equal(m$flows[[1]]$to, "central")
-  expect_equal(m$flows[[1]]$equation, quote(ka*C))
-  expect_equal(length(m$flows), 1)
-
+  outflow <- m$compartments[[2]]$outflows[[1]]
+  expect_equal(outflow$from, "central")
+  expect_equal(outflow$to, NULL)
+  expect_equal(outflow$equation, quote(Cl*C))
 })

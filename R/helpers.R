@@ -7,3 +7,11 @@ as_equation <- function(x){
       return(x)
     }
 }
+
+
+`append<-` <- function(l, value){
+  return(append(l,list(value)))
+}
+
+
+

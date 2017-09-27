@@ -6,8 +6,7 @@ Model <- function(){
     structure(
       list(
         parameters = list(),
-        compartments = list(),
-        flows = list()
+        compartments = list()
       ), class = "Model")
   )
 }

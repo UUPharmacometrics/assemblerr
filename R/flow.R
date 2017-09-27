@@ -1,5 +1,6 @@
 
 Flow <- function(from, to, equation){
+  #TODO: check usage of A and C when from is NULL
   structure(
     list(
       from = from,
@@ -11,16 +12,19 @@ Flow <- function(from, to, equation){
 }
 
 #' @export
-add_flow <- function(model, from, to, equation, mass_balance) UseMethod("add_flow")
+add_flow <- function(model, from, to, equation) UseMethod("add_flow")
 
 #' @export
-add_flow.Model <- function(model, from, to, equation, mass_balance = T) {
-  assertthat::assert_that(!is.null(model$compartments[[from]]), msg = paste("compartment", from,  "does not exist"))
-  assertthat::assert_that(!is.null(model$compartments[[to]]), msg = paste("compartment", to,  "does not exist"))
+add_flow.Model <- function(model, from = NULL, to = NULL, equation) {
   equation <- as_equation(equation)
-  model$flows[[length(model$flows)+1]] <- Flow(from = from, to = to, equation = equation)
-  if(mass_balance) {
-    model$flows[[length(model$flows)+1]] <- Flow(from = to, to = from, equation = substitute(-x, list(x = equation)))
+  if(!is.character(from) && !is.character(to)) stop("'from' or/and 'to' need to be compartment names")
+  if(!is.null(from)) {
+    if(is.null(model$compartments[[from]])) stop(paste("compartment", from,  "does not exist"))
+    append(model$compartments[[from]]$outflows) <- Flow(from = from, to = to, equation = equation)
+  }
+  if(!is.null(to)){
+    if(is.null(model$compartments[[to]])) stop(paste("compartment", to,  "does not exist"))
+    append(model$compartments[[to]]$inflows) <- Flow(from = from, to = to, equation = equation)
   }
   return(model)
 }

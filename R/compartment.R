@@ -2,7 +2,9 @@ Compartment <- function(name, volume){
   structure(
       list(
         name = name,
-        volume = volume
+        volume = volume,
+        inflows = list(),
+        outflows = list()
       ),
       class = "Compartment"
     )
