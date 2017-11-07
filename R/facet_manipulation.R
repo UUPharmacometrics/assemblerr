@@ -25,15 +25,14 @@ add_facet <- function(model, facet, property_def = list(), name_column = TRUE){
 #' @export
 add_entry <- function(model, facet, entry){
   unknown_properties <- setdiff(names(entry), names(model[[facet]]))
-  if(!is_empty(unknown_properties)) rlang::warn("Properties dropped that are not part of the facet")
+  if(!rlang::is_empty(unknown_properties)) rlang::warn("Properties dropped that are not part of the facet")
   entry[unknown_properties] <- NULL
-
   # ensure uniquness of name
-  if(exists("name", model[[facet]]) && entry[["name"]] %in% model[[facet]][["name"]]) rlang::abort("Entry id needs to be unique")
+  if(exists("name", model[[facet]]) && entry[["name"]] %in% model[[facet]][["name"]]) rlang::abort("Entry name needs to be unique")
   # generate index
   entry$index <- max(0, model[[facet]]$index) + 1
   model %>%
-    purrr::modify_at(facet, ~bind_rows(.x, purrr::discard(entry, rlang::is_null)))
+    purrr::modify_at(facet, ~dplyr::bind_rows(.x, purrr::discard(entry, rlang::is_null)))
 }
 
 #' Retrieve an entry by name
@@ -45,9 +44,12 @@ add_entry <- function(model, facet, entry){
 #' @return List representation of the entry found or an empty list
 #' @export
 get_by_name <- function(model, facet, name){
-  lookup <- name
-  model[[facet]] %>%
-  dplyr::filter(name == lookup) %>%
+  get_first(model, facet, name == !!name)
+}
+
+get_first <- function(model, facet, ...){
+  if(!exists(facet, model)) stop("Facet '", facet, "' not found in the model")
+  dplyr::filter(model[[facet]], ...) %>%
     dplyr::slice(1) %>%
     purrr::transpose() %>%
     purrr::flatten()
