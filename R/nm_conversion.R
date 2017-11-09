@@ -11,10 +11,12 @@ as_nm_model.model <- function(from){
 
 convert_compartments <- function(to, from) UseMethod("convert_compartments")
 
-convert_compartments <- function(to, from){
+convert_compartments.nm_model <- function(to, from){
   # replace generic amount and concentration variables in flow equations
   flows <- from$flows %>%
     purrr::transpose() %>%
+    purrr::map(~purrr::update_list(.x, equation = substitute(.x$equation, C = equation(A/.vol)$rhs))) %>%
+    purrr::map(~purrr::update_list(.x, equation = substitute(.x$equation, .vol = get_by_name(from, "compartments", .x$from)$volume$rhs))) %>%
     purrr::map(~purrr::update_list(.x, equation = substitute(.x$equation, A = rlang::lang("[", rlang::sym("A"), get_by_name(from, "compartments", .x$from)$index))))
 
   from$compartments %>%
@@ -30,6 +32,7 @@ convert_compartments <- function(to, from){
                       purrr::keep(~.x$to==comp$name) %>%
                       purrr::map("equation") %>%
                       purrr::reduce(`+`, .init = empty_equation())
+
 
                     eqn <- {inflow_eqn - outflow_eqn} %>%
                       set_lhs(dadt[.comp_index]) %>%
@@ -49,24 +52,7 @@ convert_observations.nm_model <- function(to, from) {
   from$observations %>%
     purrr::transpose() %>%
     purrr::reduce(.init = to,
-                  function(nm_model, obs){
-                    ipred_eqn <- obs$equation %>%
-                      set_lhs(ipred)
-                    # replace reference to compartment amount with index
-                    if("A" %in% variables(ipred_eqn)){
-                      ipred_eqn <- substitute_indicies(ipred_eqn, "A", compartment_indicies)
-                    }
-                    nm_model <- nm_model %>%
-                      add_sigma(obs$name)
-
-                    if(obs$model == "additive"){
-                       ruv_eqn <- equation(y~ipred+eps[.eps]) %>%
-                         substitute(.eps = get_by_name(nm_model, "sigmas", obs$name)$index)
-                    }
-
-                    nm_model %>%
-                      add_observation(obs$name, ipred_eqn, ruv_eqn)
-                  })
+                  ~convert_observation_model(.x, from, .y))
 }
 
 convert_parameters <- function(to, from) UseMethod("convert_parameters")
@@ -97,7 +83,6 @@ convert_parameter_model <- function(to, from, parameter){
                                           .eta = get_by_name(., "omegas", parameter$name)$index)
       )
   }
-
 .parameter_conversion[["normal"]][["nm_model"]] <- function(to, from, parameter){
   eqn <- equation(.par ~ theta[.theta]*(1+eta[.eta]))
   to %>%
@@ -111,3 +96,38 @@ convert_parameter_model <- function(to, from, parameter){
     )
 }
 
+convert_observation_model <- function(to, from, observation){
+  .observation_model_conversion[[observation$model]][[class(to)[1]]](to, from, observation)
+}
+
+.observation_model_conversion <- list()
+.observation_model_conversion[["additive"]] <- list()
+.observation_model_conversion[["proportional"]] <- list()
+.observation_model_conversion[["additive"]][["nm_model"]] <- function(to, from, obs){
+  compartment_indicies <- to$compartments %>%
+    {purrr::set_names(as.list(.$index), .$name)}
+  ipred_eqn <- obs$equation %>%
+    set_lhs(ipred)
+  # replace reference to compartment amount with index
+  if("A" %in% variables(ipred_eqn)){
+    ipred_eqn <- substitute_indicies(ipred_eqn, "A", compartment_indicies)
+  }
+  to <- add_sigma(to, obs$name)
+  ruv_eqn <- equation(y~ipred+eps[.eps]) %>%
+    substitute(.eps = get_by_name(to, "sigmas", obs$name)$index)
+  add_observation(to, obs$name, ipred_eqn, ruv_eqn)
+}
+.observation_model_conversion[["proportional"]][["nm_model"]] <- function(to, from, obs){
+  compartment_indicies <- to$compartments %>%
+  {purrr::set_names(as.list(.$index), .$name)}
+  ipred_eqn <- obs$equation %>%
+    set_lhs(ipred)
+  # replace reference to compartment amount with index
+  if("A" %in% variables(ipred_eqn)){
+    ipred_eqn <- substitute_indicies(ipred_eqn, "A", compartment_indicies)
+  }
+  to <- add_sigma(to, obs$name)
+  ruv_eqn <- equation(y~ipred+(1+eps[.eps])) %>%
+    substitute(.eps = get_by_name(to, "sigmas", obs$name)$index)
+  add_observation(to, obs$name, ipred_eqn, ruv_eqn)
+}
