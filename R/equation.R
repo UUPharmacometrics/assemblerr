@@ -24,6 +24,11 @@ as_equation.character <- function(x){
   }
 }
 #' @export
+as_equation.numeric <- function(x){
+  list(rhs = x) %>%
+    structure(class = "equation")
+}
+#' @export
 empty_equation <- function() return(structure(list(), class = "equation"))
 
 is_equationish <- function(o) return(rlang::is_formulaish(o) | is(o, "equation"))
