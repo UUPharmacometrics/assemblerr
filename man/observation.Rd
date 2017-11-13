@@ -4,7 +4,7 @@
 \alias{observation}
 \title{Create a new observation}
 \usage{
-observation(name, equation, type)
+observation(name = "ruv", equation, type)
 }
 \arguments{
 \item{type}{}

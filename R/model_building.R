@@ -99,7 +99,7 @@ parameter <- function(name, type = "log-normal"){
 #'
 #' @return A parameter fragment
 #' @export
-observation <- function(name, equation, type){
+observation <- function(name = "ruv", equation,  type){
   if(!is.character(name)) stop("'name' needs to be a character vector")
   if(!is_equationish(equation)) stop("'equation' needs to be interpreatable as an equation")
   if(!is.character(type)) stop("'type' needs to be a character vector")

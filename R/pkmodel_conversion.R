@@ -6,7 +6,7 @@ as_model.pk_model <- function(from){
 
  model() %>%
     convert_pk_components(from) %|+%
-    observation(name = "central", equation = ~A["central"]/vc, type = "additive") +
+    observation(equation = ~A["central"]/vc, type = "additive") +
     purrr::update_list(from, pk_components = NULL)
 }
 

@@ -129,9 +129,9 @@ convert_observation_model <- function(to, from, observation){
   if("A" %in% variables(ipred_eqn)){
     ipred_eqn <- substitute_indicies(ipred_eqn, "A", compartment_indicies)
   }
-  to <- to + sigma(obs$name)
+  to <- to + sigma("ruv-add", initial = get_parameter_value(from, "ruv-add", 'ruv')$value)
   ruv_eqn <- equation(y~ipred+eps[.eps]) %>%
-    substitute(.eps = get_by_name(to, "sigmas", obs$name)$index)
+    substitute(.eps = get_by_name(to, "sigmas", "ruv-add")$index)
 
   to + observation_equation(name = obs$name, ipred_equation = ipred_eqn, ruv_equation = ruv_eqn)
 }
@@ -144,8 +144,8 @@ convert_observation_model <- function(to, from, observation){
   if("A" %in% variables(ipred_eqn)){
     ipred_eqn <- substitute_indicies(ipred_eqn, "A", compartment_indicies)
   }
-  to <- to + sigma(obs$name)
+  to <- to + sigma("ruv-prop", initial = get_parameter_value(from, "ruv-prop", 'ruv')$value)
   ruv_eqn <- equation(y~ipred+(1+eps[.eps])) %>%
-    substitute(.eps = get_by_name(to, "sigmas", obs$name)$index)
+    substitute(.eps = get_by_name(to, "sigmas", "ruv-prop")$index)
   to + observation_equation(name = obs$name, ipred_equation = ipred_eqn, ruv_equation = ruv_eqn)
 }
