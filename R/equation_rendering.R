@@ -1,4 +1,4 @@
-
+#' @export
 render.equation <- function(eqn, capitalize = T, round_vec_brackets = T, equal_assign_op = T){
   if(!is.null(eqn$lhs)) {
     expr <- base::substitute(lhs <-  rhs, eqn)
@@ -14,7 +14,12 @@ render.equation <- function(eqn, capitalize = T, round_vec_brackets = T, equal_a
   if(equal_assign_op){
     expr <- transform_ast(expr, assignment_transformer)
   }
-  deparse(expr, control = c())
+  str <- deparse(expr, control = c(), width.cutoff = 200)
+  if(capitalize){
+    return(toupper(str))
+  }else{
+    return(str)
+  }
 }
 
 
