@@ -15,24 +15,70 @@ add_facet <- function(model, facet, property_def = list(), name_column = TRUE){
   return(model)
 }
 
-#' Add an entry to a facet
+#' Test if a model has a facet
 #'
 #' @param model A model
 #' @param facet Name of the facet
-#' @param entry List of property value pairs
 #'
-#' @return  A modified model
+#' @return TRUE/FALSE
 #' @export
-add_entry <- function(model, facet, entry){
-  unknown_properties <- setdiff(names(entry), names(model[[facet]]))
-  if(!rlang::is_empty(unknown_properties)) rlang::warn("Properties dropped that are not part of the facet")
-  entry[unknown_properties] <- NULL
-  # ensure uniquness of name
-  if(exists("name", model[[facet]]) && entry[["name"]] %in% model[[facet]][["name"]]) rlang::abort("Entry name needs to be unique")
-  # generate index
-  entry$index <- max(0, model[[facet]]$index) + 1
-  model %>%
-    purrr::modify_at(facet, ~dplyr::bind_rows(.x, purrr::discard(entry, rlang::is_null)))
+#' @keywords internal
+#'
+has_facet <- function(model, facet){
+  return(exists(facet, model))
+}
+
+
+#' Add a fragment to another one
+#'
+#' @param fragment1 Fragment to add to
+#' @param fragment2 Fragment to add
+#'
+#' @return  A combination of fragment1 and fragment2
+#' @export
+add_fragment <- function(fragment1, fragment2){
+
+  purrr::reduce(names(fragment2), .init = fragment1, function(frag, facet) {
+    if(!exists(facet, frag)){
+      frag[[facet]] <- fragment2[[facet]]
+    }else if(exists("name", frag[[facet]])){
+      # determine all entries that will not change and update index column
+      unchanged <- dplyr::anti_join(frag[[facet]], fragment2[[facet]], by = "name") %>%
+        dplyr::arrange(index) %>%
+        dplyr::mutate(index = seq_len(n()))
+      # generate index for updated or added entries
+      changed <- dplyr::mutate(fragment2[[facet]], index = seq_len(n())+nrow(unchanged))
+      # determined added and updated entries
+      added <- dplyr::anti_join(changed, frag[[facet]], by = "name")
+      updated <- dplyr::semi_join(changed, frag[[facet]], by = "name")
+      # warn if entries will be updated
+      if(nrow(updated)!=0) rlang::warn(paste("Entries", paste(updated$name, collapse = ", "), "in facet", facet, "have been replaced"))
+      # combine and sort by index
+      frag[[facet]] <- dplyr::bind_rows(unchanged, added, updated) %>%
+        dplyr::arrange(index)
+    }else{
+      frag[[facet]] <- dplyr::bind_rows(frag[[facet]], fragment2[[facet]])
+    }
+    frag
+  })
+}
+
+add_fragment_unless_exists <- function(fragment1, fragment2){
+  purrr::reduce(names(fragment2), .init = fragment1, function(frag, facet) {
+    if(!exists(facet, frag)){
+      frag[[facet]] <- fragment2[[facet]]
+    }else if(exists("name", frag[[facet]])){
+      # determined entries not contained in the fragment
+      added <- dplyr::anti_join(fragment2[[facet]], frag[[facet]], by = "name") %>%
+        dplyr::mutate(index = seq_len(n()) + nrow(frag[[facet]]))
+      # combine and sort by index
+      frag[[facet]] <- dplyr::bind_rows(frag[[facet]], added) %>%
+        dplyr::arrange(index)
+    }else{
+      frag[[facet]] <- dplyr::bind_rows(frag[[facet]], fragment2[[facet]])
+    }
+    frag
+  })
 }
 
 #' Retrieve an entry by name
