@@ -1,8 +1,8 @@
-
 #' Create a new model object
 #'
 #' @return A general model
 #' @export
+#' @importFrom magrittr %>%
 #'
 model <- function(){
   structure(list(), class = c("model", "fragment")) %>%
