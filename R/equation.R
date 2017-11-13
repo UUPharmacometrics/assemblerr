@@ -31,7 +31,7 @@ as_equation.numeric <- function(x){
 #' @export
 empty_equation <- function() return(structure(list(), class = "equation"))
 
-is_equationish <- function(o) return(rlang::is_formulaish(o) | is(o, "equation"))
+is_equationish <- function(o) return(rlang::is_formulaish(o) | is(o, "equation") | is.numeric(o))
 
 #' @export
 as_equation.language <- function(x){
