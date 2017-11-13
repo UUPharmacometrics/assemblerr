@@ -1,0 +1,127 @@
+---
+title: "Introduction"
+author: "Sebastian Ueckert"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+assemblerr is an R package to construct pharmacometric models by combining pre-defined model components. The resulting model can then be used to generate code for NONMEM (in the future the support of different modeling software is planned).   
+
+# Low-level building blocks
+
+```{r}
+library(assemblerr, warn.conflicts = F)
+
+# construct one-compartment 1st order elimination model
+m <- model()+
+  compartment("central", volume = ~vc) +
+  flow(from = "central", equation = ~cl*C) +
+  parameter("cl", type = "log-normal") +
+  parameter("vc", type = "log-normal") +
+  observation("central", equation = ~A["central"], type = "additive") +
+  parameter_value_table(c(cl = 4.5, vc = 1), types = "typical") +
+  parameter_value_table(c(cl = 0.09, vc = 0.09), types = "iiv")
+
+# convert to a NONMEM model and generate NMTran code
+m %>% 
+  as_model_nm() %>% 
+  render %>%
+  cat()
+
+```
+
+
+# Pharmacokinetic models
+
+For PK models assemblerr supports a higher level of abstraction to simplify the construction of these types of models.
+
+```{r}
+# construct one-compartment 1st order elimination model
+pkm <- pk_model() +
+  pk_component("distribution", "one-compartment") +
+  pk_component("elimination", "linear")+
+  parameter_value("cl", type = "typical", 4.5) +
+  parameter_value("cl", type = "iiv", 0.09) +
+  parameter_value_table(c(cl = 4.5, vc = 1), types = "typical") +
+  parameter_value_table(c(cl = 0.09, vc = 0.09), types = "iiv")
+
+# convert to a NONMEM model and generate NMTran code
+pkm %>% 
+  as_model_nm() %>% 
+  render %>%
+  cat()
+
+```
+
+The basic building blocks can still be added to a PK model, allowing to customize the pre-defined structure.
+
+```{r}
+# change the parameter model for clearance
+pkm2 <- pkm +
+  parameter("cl", type = "normal")
+
+# convert to a NONMEM model and generate NMTran code
+pkm2 %>% 
+  as_model_nm() %>% 
+  render %>%
+  cat()
+
+```
+
+# Generating a range of models
+
+A whole combination of models can be generated with the help of tools from the tidyverse. For example, one could do the following to generate one and two compartment models with linear and Michaelis-Menten elimination: 
+
+```{r}
+library(tidyverse, warn.conflicts = F)
+
+# parameter names 
+prm_names <- c("cl", "vc", "vp", "q", "km", "vmax")
+
+# parameter values table with random theta values
+pmt <- {
+  runif(6, 0, 10) %>% 
+    set_names(prm_names) %>% 
+    parameter_value_table(type = "typical")} + 
+    {rep(0.09, 6) %>% 
+        set_names(prm_names) %>% 
+      parameter_value_table(type = "iiv")}
+
+# create a list of all possible combinations
+list(
+     'distribution'=c("one-compartment", "two-compartment"),
+     'elimination' = c("linear", "mm")) %>%
+  cross() %>%
+  # make components and add to models
+  modify_depth(1, ~imap(.x, ~pk_component(.y, .x)) %>%
+                 reduce(`+`, .init = pk_model())) %>%
+  # add parameter table
+  map(~.x+pmt) %>%
+  # convert to NONMEM models
+  map(as_model_nm) %>%
+  # generate NMTran code
+  map(render) %>% 
+  # print code
+  walk(cat)
+
+```
+
+Create all possible PK models and write to current working directory
+```{r, eval=F}
+
+list(
+     'absorption-rate' = c("first-order","zero-order"),
+     'absorption-delay' = c("none", "alag"),
+     'distribution'=c("one-compartment", "two-compartment", "three-compartment"),
+     'elimination' = c("linear", "mm")) %>%
+  cross() %>%
+  modify_depth(1, ~imap(.x, ~pk_component(.y, .x)) %>%
+                 reduce(`+`, .init = pk_model())) %>%
+  map(~as_model_nm(.x)) %>%
+  imap(~write_model(.x, paste0("run", .y, ".mod")))
+```
