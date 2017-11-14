@@ -2,18 +2,23 @@
 equation <- function(expr){
   expr <- rlang::enexpr(expr)
   if(rlang::is_formula(expr)) {
-    list(lhs = rlang::f_lhs(expr),
-         rhs = rlang::f_rhs(expr)
-    ) %>%
-      structure(class = "equation")
+    data <- list(lhs = rlang::f_lhs(expr), rhs = rlang::f_rhs(expr))
   }else{
-    list(
-      rhs = expr) %>%
-      structure(class = "equation")
+    data <- list(lhs = NULL, rhs = expr)
   }
+  structure(data, class = "equation")
 }
+
+#' @export
+empty_equation <- function() return(structure(list(), class = "equation"))
+
+is_equationish <- function(o) return(rlang::is_formulaish(o) | is(o, "equation") | is.numeric(o))
+
+
 #' @export
 as_equation <- function(x) UseMethod("as_equation")
+#' @export
+as_equation.equation <- function(x) x
 #' @export
 as_equation.character <- function(x){
   expr <- rlang::parse_expr(paste0("~", x))
@@ -25,26 +30,21 @@ as_equation.character <- function(x){
 }
 #' @export
 as_equation.numeric <- function(x){
-  list(rhs = x) %>%
+  list(
+    lhs = NULL,
+    rhs = x) %>%
     structure(class = "equation")
 }
-#' @export
-empty_equation <- function() return(structure(list(), class = "equation"))
 
-is_equationish <- function(o) return(rlang::is_formulaish(o) | is(o, "equation") | is.numeric(o))
-
-#' @export
-as_equation.language <- function(x){
-  list(lhs = rlang::f_lhs(x),
-       rhs = rlang::f_rhs(x)
-  ) %>% structure(class = "equation")
-}
 #' @export
 as_equation.formula <- function(x){
   list(lhs = rlang::f_lhs(x),
        rhs = rlang::f_rhs(x)
   ) %>% structure(class = "equation")
 }
+
+as_equation.language <- as_equation.formula
+
 #' @export
 set_rhs <- function(eqn, rhs){
   purrr::update_list(eqn, rhs = rlang::enexpr(rhs))
@@ -54,17 +54,25 @@ set_lhs <- function(eqn, lhs){
   purrr::update_list(eqn, lhs = rlang::enexpr(lhs))
 
 }
-#' @export
-as_equation.equation <- function(x) x
+
 #' @export
 print.equation <- function(x){
   cat("Equation:\n")
-  if(!is.null(x$lhs)){
-    cat("\t", deparse(x$lhs), "=", deparse(x$rhs))
-  }else{
+  if(is.null(x$lhs)){
     cat("\t", deparse(x$rhs))
+  }else{
+    cat("\t", deparse(x$lhs), "=", deparse(x$rhs))
   }
 }
+
+
+#' @export
+variables <- function(x){
+  if(!is(x, "equation")) stop("Function expects an equation as input")
+  all.vars(x$rhs)
+}
+
+
 #' @export
 `+.equation` <- function(x, y){
   stopifnot(is(y, "equation"))
@@ -88,11 +96,6 @@ print.equation <- function(x){
   }
 }
 
-#' @export
-variables <- function(x){
-  if(!is(x, "equation")) stop("Function expects an equation as input")
-  all.vars(x$rhs)
-}
 
 
 #' @export
