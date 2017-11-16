@@ -11,7 +11,8 @@ as_model_nm.model <- function(from){
   model_nm() %>%
     convert_compartments(from) %>%
     convert_parameters(from) %>%
-    convert_observations(from) %|+%
+    convert_observations(from) %>%
+    convert_variables(from) %|+%
     data_items(c("ID", "DV", "TIME"))
 }
 
@@ -56,13 +57,22 @@ convert_observations.model_nm <- function(to, from) {
                   ~convert_observation_model(.x, from, .y))
 }
 
-convert_parameters <- function(to, from) UseMethod("convert_parameters")
-
 convert_parameters.model_nm <- function(to, from){
   from$parameters %>%
     purrr::transpose() %>%
     purrr::reduce(.init = to,
                   ~convert_parameter_model(.x, from, .y))
+}
+
+convert_variables.model_nm <- function(to, from){
+  from$variables %>%
+    purrr::transpose() %>%
+    purrr::reduce(.init = to,
+                  function(model, variable){
+                    eqn <- variable$equation %>%
+                      set_lhs(!!rlang::sym(variable$name))
+                    model + pk_variable(variable$name, equation = eqn)
+                  })
 }
 
 convert_parameter_model <- function(to, from, parameter){

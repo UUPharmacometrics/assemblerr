@@ -12,7 +12,14 @@ render.model_nm <- function(model){
     purrr::transpose() %>%
     purrr::map("equation") %>%
     purrr::map(render) %>%
-    stringr::str_c(collapse = "\n")
+    render_str()
+
+  # generate pk variable code
+  pk_variable_code <- model$pk_variables %>%
+    purrr::transpose() %>%
+    purrr::map("equation") %>%
+    purrr::map(render) %>%
+    render_str()
 
   # generate $MODEL code
   model_code <- model$odes %>%
@@ -36,7 +43,7 @@ render.model_nm <- function(model){
     purrr::map(~list(.x$ipred_equation, .x$ruv_equation)) %>%
     purrr::flatten() %>%
     purrr::map(render) %>%
-    stringr::str_c(collapse = "\n")
+    render_str()
 
   # generate $THETA code
   theta_code <- model$thetas %>%
@@ -65,6 +72,7 @@ $SUBROUTINES ADVAN6 TOL=9
 ${model_code}
 $PK
 ${param_code}
+${pk_variable_code}
 $DES
 ${ode_code}
 $ERROR
@@ -73,5 +81,10 @@ ${theta_code}
 ${omega_code}
 ${sigma_code}
 ")
+}
+
+render_str <- function(str){
+  if(rlang::is_empty(str)) return("")
+  return(paste(str, collapse = "\n"))
 }
 

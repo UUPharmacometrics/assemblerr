@@ -130,15 +130,17 @@ parameter_value_table <- function(values, types){
     {purrr::set_names(list(.), "parameter_values")} %>%
     structure(class = "fragment")
 }
-
-
+#' @export
+variable <- function(name, equation){
+  if(!is.character(name)) stop("'name' needs to be a character vector")
+  if(!is_equationish(equation)) stop("'equation' needs to be interpreatable as an equation")
+  item("variables", name = name, equation = as_equation(equation))
+}
 
 convert_compartments <- function(to, from) UseMethod("convert_compartments")
 
-
 convert_observations <- function(to, from) UseMethod("convert_observations")
-
-
 
 convert_parameters <- function(to, from) UseMethod("convert_parameters")
 
+convert_variables <- function(to, from) UseMethod("convert_variables")
