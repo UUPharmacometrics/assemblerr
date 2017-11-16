@@ -1,12 +1,16 @@
+new_equation <- function(lhs = NULL, rhs = NULL){
+  list(lhs = lhs, rhs = rhs) %>%
+  structure(class = "equation")
+}
+
 #' @export
 equation <- function(expr){
   expr <- rlang::enexpr(expr)
   if(rlang::is_formula(expr)) {
-    data <- list(lhs = rlang::f_lhs(expr), rhs = rlang::f_rhs(expr))
+    return(new_equation(lhs = rlang::f_lhs(expr), rhs = rlang::f_rhs(expr)))
   }else{
-    data <- list(lhs = NULL, rhs = expr)
+    return(new_equation(rhs = expr))
   }
-  structure(data, class = "equation")
 }
 
 #' @export
@@ -30,17 +34,13 @@ as_equation.character <- function(x){
 }
 #' @export
 as_equation.numeric <- function(x){
-  list(
-    lhs = NULL,
-    rhs = x) %>%
-    structure(class = "equation")
+  new_equation(rhs = x)
 }
 
 #' @export
 as_equation.formula <- function(x){
-  list(lhs = rlang::f_lhs(x),
-       rhs = rlang::f_rhs(x)
-  ) %>% structure(class = "equation")
+  new_equation(lhs = rlang::f_lhs(x),
+               rhs = rlang::f_rhs(x))
 }
 
 as_equation.language <- as_equation.formula
