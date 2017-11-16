@@ -11,7 +11,8 @@ as_model_nm.model <- function(from){
   model_nm() %>%
     convert_compartments(from) %>%
     convert_parameters(from) %>%
-    convert_observations(from)
+    convert_observations(from) %|+%
+    data_items(c("ID", "DV", "TIME"))
 }
 
 convert_compartments.model_nm <- function(to, from){
