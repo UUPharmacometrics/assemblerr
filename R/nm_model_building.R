@@ -9,7 +9,8 @@ model_nm <- function(){
     add_facet("sigmas", list(initial = numeric())) %>%
     add_facet("odes", list(equation = list())) %>%
     add_facet("parameter_equations", list(equation = list())) %>%
-    add_facet("observation_equations", list(ipred_equation = list(), ruv_equation = list()))
+    add_facet("observation_equations", list(ipred_equation = list(), ruv_equation = list())) %>%
+    add_facet("data_items", list())
 }
 #' @export
 theta <- function(name, initial = NA, lbound = -Inf, ubound = Inf){
@@ -52,4 +53,14 @@ observation_equation <- function(name, ipred_equation, ruv_equation){
   if(!is_equationish(ipred_equation)) stop("'ipred_equation' needs to be interpretable as an equation")
   if(!is_equationish(ruv_equation)) stop("'ruv_equation' needs to be interpretable as an equation")
   item("observation_equations", name = name, ipred_equation = as_equation(ipred_equation), ruv_equation = as_equation(ruv_equation))
+}
+#' @export
+data_item <- function(name){
+  if(!is.character(name)) stop("'name' needs to be a character vector")
+  item("data_items", name = name)
+}
+
+#' @export
+data_items <- function(names){
+  item("data_items", name = names)
 }

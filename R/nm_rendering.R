@@ -1,5 +1,12 @@
 #' @export
 render.model_nm <- function(model){
+  # generate $INPUT code
+  input_code <- model$data_items %>%
+      dplyr::arrange(index) %>%
+      purrr::pluck("name") %>%
+      paste(collapse = " ")
+
+
   # generate parameter code
   param_code <- model$parameter_equations%>%
     purrr::transpose() %>%
@@ -53,6 +60,7 @@ render.model_nm <- function(model){
   stringr::str_interp(
     "
 $PROBLEM assemblerr model
+$INPUT ${input_code}
 $SUBROUTINES ADVAN6 TOL=9
 ${model_code}
 $PK
