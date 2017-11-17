@@ -14,42 +14,6 @@ model <- function(){
     add_facet("parameter_values", list(parameter1 = character(), parameter2 = character(), type = character(), value = numeric()), name_column = F)
 }
 
-#' @export
-`+.fragment` <- function(x, y){
-  if(!is(y, "fragment")) stop("Only two fragments can be combined.")
-  add_fragment(x, y)
-}
-
-#' @export
-`%|+%` <- function(x,y) UseMethod("%|+%")
-
-#' @export
-`%|+%.fragment` <- function(x, y){
-  if(!is(y, "fragment")) stop("Only two fragments can be combined.")
-  add_fragment_unless_exists(x, y)
-}
-
-
-
-#' Create an individual entry fragment
-#'
-#' @param facet The name of the facet this item should be added too
-#' @param ... Properties of the item
-#'
-#' @return A fragment consisting of just one entry
-#' @export
-#' @keywords internal
-item <- function(facet, ...){
-  list(..., index = 1) %>%
-    purrr::map_if(purrr::is_list, ~list(.x)) %>%
-    purrr::compact() %>%
-    tibble::as_tibble() %>%
-    list() %>%
-    purrr::set_names(facet) %>%
-    structure(class = c("fragment"))
-}
-
-
 
 #' Create a new compartment
 #'

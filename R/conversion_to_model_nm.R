@@ -54,14 +54,18 @@ convert_observations.model_nm <- function(to, from) {
   from$observations %>%
     purrr::transpose() %>%
     purrr::reduce(.init = to,
-                  ~convert_observation_model(.x, from, .y))
+                  function(model_nm, observation){
+                    call_converter("observations", observation$type, from, model_nm, observation)
+                  } )
 }
 
 convert_parameters.model_nm <- function(to, from){
   from$parameters %>%
     purrr::transpose() %>%
     purrr::reduce(.init = to,
-                  ~convert_parameter_model(.x, from, .y))
+                  function(model_nm, parameter){
+                    call_converter("parameters", parameter$type, from, model_nm, parameter)
+                  })
 }
 
 convert_variables.model_nm <- function(to, from){
@@ -81,82 +85,115 @@ convert_parameter_model <- function(to, from, parameter){
 
 get_parameter_value <- function(model, parameter_name, type) get_first(model, "parameter_values", parameter1 == parameter_name | parameter2 == parameter_name, type == !!type)
 
-
-.parameter_conversion <- list()
-.parameter_conversion[["log-normal"]] <- list()
-.parameter_conversion[["normal"]] <- list()
-.parameter_conversion[["novar"]] <- list()
-.parameter_conversion[["log-normal"]][["model_nm"]] <- function(to, from, parameter){
+add_converter(
+  facet = "parameters",
+  name = "log-normal",
+  target = "model_nm",
+  converter_fn = function(to, from, parameter){
     eqn <- equation(.par ~ theta[.theta]*exp(eta[.eta]))
     to <- to +
       theta(name = parameter$name, initial = get_parameter_value(from, parameter$name, 'typical')$value, lbound = 0) +
       omega(name = parameter$name, initial = get_parameter_value(from, parameter$name, 'iiv')$value)
 
-      to + parameter_equation(name = parameter$name,
-                         equation = substitute(eqn,
-                                          .par = rlang::sym(parameter$name),
-                                          .theta = get_by_name(to, "thetas", parameter$name)$index,
-                                          .eta = get_by_name(to, "omegas", parameter$name)$index)
-      )
+    to + parameter_equation(name = parameter$name,
+                            equation = substitute(eqn,
+                                                  .par = rlang::sym(parameter$name),
+                                                  .theta = get_by_name(to, "thetas", parameter$name)$index,
+                                                  .eta = get_by_name(to, "omegas", parameter$name)$index)
+    )
   }
-.parameter_conversion[["normal"]][["model_nm"]] <- function(to, from, parameter){
-  eqn <- equation(.par ~ theta[.theta]*(1+eta[.eta]))
-  {to +
-    theta(name = parameter$name, initial = get_parameter_value(from, parameter$name, 'typical')$value) +
-    omega(name = parameter$name, initial = get_parameter_value(from, parameter$name, 'iiv')$value)} %>%
-    {. +
-    parameter_equation(name = parameter$name,
-                  equation = substitute(eqn,
-                                        .par = rlang::sym(parameter$name),
-                                        .theta = get_by_name(., "thetas", parameter$name)$index,
-                                        .eta = get_by_name(., "omegas", parameter$name)$index)
-    )}
-}
-.parameter_conversion[["novar"]][["model_nm"]] <- function(to, from, parameter){
-  eqn <- equation(.par ~ theta[.theta])
-  {to +
-      theta(name = parameter$name, initial = get_parameter_value(from, parameter$name, 'typical')$value)} %>%
-      {. +
-          parameter_equation(name = parameter$name,
-                             equation = substitute(eqn,
-                                                   .par = rlang::sym(parameter$name),
-                                                   .theta = get_by_name(., "thetas", parameter$name)$index)
-          )}
-}
+)
 
-convert_observation_model <- function(to, from, observation){
-  .observation_model_conversion[[observation$type]][[class(to)[1]]](to, from, observation)
-}
-
-.observation_model_conversion <- list()
-.observation_model_conversion[["additive"]] <- list()
-.observation_model_conversion[["proportional"]] <- list()
-.observation_model_conversion[["additive"]][["model_nm"]] <- function(to, from, obs){
-  compartment_indicies <- to$odes %>%
-    {purrr::set_names(as.list(.$index), .$name)}
-  ipred_eqn <- obs$equation %>%
-    set_lhs(ipred)
-  # replace reference to compartment amount with index
-  if("A" %in% variables(ipred_eqn)){
-    ipred_eqn <- substitute_indicies(ipred_eqn, "A", compartment_indicies)
+add_converter(
+  facet = "parameters",
+  name = "normal",
+  target = "model_nm",
+  converter_fn = function(to, from, parameter){
+    eqn <- equation(.par ~ theta[.theta]*(1+eta[.eta]))
+    {to +
+        theta(name = parameter$name, initial = get_parameter_value(from, parameter$name, 'typical')$value) +
+        omega(name = parameter$name, initial = get_parameter_value(from, parameter$name, 'iiv')$value)} %>%
+        {. +
+            parameter_equation(name = parameter$name,
+                               equation = substitute(eqn,
+                                                     .par = rlang::sym(parameter$name),
+                                                     .theta = get_by_name(., "thetas", parameter$name)$index,
+                                                     .eta = get_by_name(., "omegas", parameter$name)$index)
+            )}
   }
-  to <- to + sigma("ruv-add", initial = get_parameter_value(from, "ruv-add", 'ruv')$value)
-  ruv_eqn <- equation(y~ipred+eps[.eps]) %>%
-    substitute(.eps = get_by_name(to, "sigmas", "ruv-add")$index)
+)
 
-  to + observation_equation(name = obs$name, ipred_equation = ipred_eqn, ruv_equation = ruv_eqn)
-}
-.observation_model_conversion[["proportional"]][["model_nm"]] <- function(to, from, obs){
-  compartment_indicies <- to$odes %>%
-  {purrr::set_names(as.list(.$index), .$name)}
-  ipred_eqn <- obs$equation %>%
-    set_lhs(ipred)
-  # replace reference to compartment amount with index
-  if("A" %in% variables(ipred_eqn)){
-    ipred_eqn <- substitute_indicies(ipred_eqn, "A", compartment_indicies)
+add_converter(
+  facet = "parameters",
+  name = "novar",
+  target = "model_nm",
+  converter_fn = function(to, from, parameter){
+    eqn <- equation(.par ~ theta[.theta])
+    {to +
+        theta(name = parameter$name, initial = get_parameter_value(from, parameter$name, 'typical')$value)} %>%
+        {. +
+            parameter_equation(name = parameter$name,
+                               equation = substitute(eqn,
+                                                     .par = rlang::sym(parameter$name),
+                                                     .theta = get_by_name(., "thetas", parameter$name)$index)
+            )}
   }
-  to <- to + sigma("ruv-prop", initial = get_parameter_value(from, "ruv-prop", 'ruv')$value)
-  ruv_eqn <- equation(y~ipred+(1+eps[.eps])) %>%
-    substitute(.eps = get_by_name(to, "sigmas", "ruv-prop")$index)
-  to + observation_equation(name = obs$name, ipred_equation = ipred_eqn, ruv_equation = ruv_eqn)
-}
+)
+
+
+add_converter(
+  facet = "observations",
+  name = "additive",
+  target = "model_nm",
+  converter_fn = function(to, from, obs) {
+    compartment_indicies <- to$odes %>%
+    {
+      purrr::set_names(as.list(.$index), .$name)
+    }
+    ipred_eqn <- obs$equation %>%
+      set_lhs(ipred)
+    # replace reference to compartment amount with index
+    if ("A" %in% variables(ipred_eqn)) {
+      ipred_eqn <-
+        substitute_indicies(ipred_eqn, "A", compartment_indicies)
+    }
+    to <-
+      to + sigma("ruv-add", initial = get_parameter_value(from, "ruv-add", 'ruv')$value)
+    ruv_eqn <- equation(y ~ ipred + eps[.eps]) %>%
+      substitute(.eps = get_by_name(to, "sigmas", "ruv-add")$index)
+
+    to + observation_equation(
+      name = obs$name,
+      ipred_equation = ipred_eqn,
+      ruv_equation = ruv_eqn
+    )
+  }
+)
+
+add_converter(
+  facet = "observations",
+  name = "proportional",
+  target = "model_nm",
+  converter_fn = function(to, from, obs) {
+    compartment_indicies <- to$odes %>%
+    {
+      purrr::set_names(as.list(.$index), .$name)
+    }
+    ipred_eqn <- obs$equation %>%
+      set_lhs(ipred)
+    # replace reference to compartment amount with index
+    if ("A" %in% variables(ipred_eqn)) {
+      ipred_eqn <-
+        substitute_indicies(ipred_eqn, "A", compartment_indicies)
+    }
+    to <-
+      to + sigma("ruv-prop", initial = get_parameter_value(from, "ruv-prop", 'ruv')$value)
+    ruv_eqn <- equation(y ~ ipred + (1 + eps[.eps])) %>%
+      substitute(.eps = get_by_name(to, "sigmas", "ruv-prop")$index)
+    to + observation_equation(
+      name = obs$name,
+      ipred_equation = ipred_eqn,
+      ruv_equation = ruv_eqn
+    )
+  }
+)
