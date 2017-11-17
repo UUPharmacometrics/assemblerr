@@ -2,14 +2,14 @@ converters <- list()
 
 
 add_converter <- function(facet, name, target, converter_fn) {
-  if(is.list(name)) name <- paste0(name, collapse = "::")
+  if(length(name)>1) name <- paste0(name, collapse = "::")
   fragment <- item(facet, name = name, target = target, fn = converter_fn)
   converters <<- add_fragment(converters, fragment)
   invisible()
 }
 
 get_converter <- function(facet, name, target){
-  if(is.list(name)) name <- paste0(name, collapse = "::")
+  if(length(name)>1) name <- paste0(name, collapse = "::")
   get_first(converters, facet, name == !!name, target == !!target)$fn
 }
 

@@ -79,9 +79,6 @@ convert_variables.model_nm <- function(to, from){
                   })
 }
 
-convert_parameter_model <- function(to, from, parameter){
-  .parameter_conversion[[parameter$type]][[class(to)[1]]](to, from, parameter)
-}
 
 get_parameter_value <- function(model, parameter_name, type) get_first(model, "parameter_values", parameter1 == parameter_name | parameter2 == parameter_name, type == !!type)
 
