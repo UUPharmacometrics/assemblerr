@@ -12,7 +12,8 @@ as_model_nm.model <- function(from){
     convert_compartments(from) %>%
     convert_parameters(from) %>%
     convert_observations(from) %>%
-    convert_variables(from) %|+%
+    convert_variables(from) %>%
+    convert_meta_tags(from) %|+%
     data_items(c("ID", "DV", "TIME"))
 }
 
@@ -79,6 +80,14 @@ convert_variables.model_nm <- function(to, from){
                   })
 }
 
+convert_meta_tags.model_nm <- function(to, from){
+  from$meta_tags %>%
+    purrr::transpose() %>%
+    purrr::reduce(.init = to,
+                  function(model, tag){
+                    model + meta_tag(tag$name, tag$value)
+                  })
+}
 
 get_parameter_value <- function(model, parameter_name, type) get_first(model, "parameter_values", parameter1 == parameter_name | parameter2 == parameter_name, type == !!type)
 

@@ -1,5 +1,9 @@
 #' @export
 render.model_nm <- function(model){
+  # generate $PROBLEM title
+  problem_title <- get_by_name(model, "meta_tags", "title")$value
+  if(is.null(problem_title)) problem_title <- "assemblerr model"
+
   # generate $INPUT code
   input_code <- model$data_items %>%
       dplyr::arrange(index) %>%
@@ -66,7 +70,7 @@ render.model_nm <- function(model){
 
   stringr::str_interp(
     "
-$PROBLEM assemblerr model
+$PROBLEM ${problem_title}
 $INPUT ${input_code}
 $SUBROUTINES ADVAN6 TOL=9
 ${model_code}

@@ -11,7 +11,8 @@ model <- function(){
     add_facet("parameters", list(type = character())) %>%
     add_facet("variables", list(equation = list())) %>%
     add_facet("observations", list(equation = list(), type = character())) %>%
-    add_facet("parameter_values", list(parameter1 = character(), parameter2 = character(), type = character(), value = numeric()), name_column = F)
+    add_facet("parameter_values", list(parameter1 = character(), parameter2 = character(), type = character(), value = numeric()), name_column = F) %>%
+    add_facet("meta_tags", list(value = character()))
 }
 
 
@@ -101,6 +102,12 @@ variable <- function(name, equation){
   item("variables", name = name, equation = as_equation(equation))
 }
 
+#' @export
+meta_tag <- function(name, value){
+  if(!is.character(name)) stop("'name' needs to be a character vector")
+  item("meta_tags", name = name, value = value)
+}
+
 convert_compartments <- function(to, from) UseMethod("convert_compartments")
 
 convert_observations <- function(to, from) UseMethod("convert_observations")
@@ -108,3 +115,6 @@ convert_observations <- function(to, from) UseMethod("convert_observations")
 convert_parameters <- function(to, from) UseMethod("convert_parameters")
 
 convert_variables <- function(to, from) UseMethod("convert_variables")
+
+convert_meta_tags <- function(to, from) UseMethod("convert_meta_tags")
+

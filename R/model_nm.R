@@ -11,7 +11,8 @@ model_nm <- function(){
     add_facet("parameter_equations", list(equation = list())) %>%
     add_facet("pk_variables", list(equation = list())) %>%
     add_facet("observation_equations", list(ipred_equation = list(), ruv_equation = list())) %>%
-    add_facet("data_items", list())
+    add_facet("data_items", list()) %>%
+    add_facet("meta_tags", list(value = as.character()))
 }
 #' @export
 theta <- function(name, initial = NA, lbound = -Inf, ubound = Inf){
