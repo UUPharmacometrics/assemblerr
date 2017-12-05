@@ -45,6 +45,20 @@ has_facet <- function(model, facet){
 }
 
 
+#' @export
+`%+!%` <- function(x,y) UseMethod("%+!%")
+
+#' @export
+`%+!%.fragment` <- function(x, y){
+  if(!is(y, "fragment")) stop("Only two fragments can be combined.")
+  rlang::with_handlers(
+    entries_updated = rlang::inplace(~1, muffle = T),
+    {
+      add_fragment(x, y)
+    }
+  )
+}
+
 
 #' Create an individual entry fragment
 #'
@@ -90,7 +104,7 @@ add_fragment <- function(fragment1, fragment2){
       added <- dplyr::anti_join(changed, frag[[facet]], by = "name")
       updated <- dplyr::semi_join(changed, frag[[facet]], by = "name")
       # warn if entries will be updated
-      if(nrow(updated)!=0) rlang::warn(paste("Entries", paste(updated$name, collapse = ", "), "in facet", facet, "have been replaced"))
+      if(nrow(updated)!=0) rlang::cnd_warn("entries_updated", .msg = paste("Entries", paste(updated$name, collapse = ", "), "in facet", facet, "have been replaced"), .mufflable = T)
       # combine and sort by index
       frag[[facet]] <- dplyr::bind_rows(unchanged, added, updated) %>%
         dplyr::arrange(index)
