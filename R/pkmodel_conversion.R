@@ -15,11 +15,13 @@ convert_pk_components <- function(to, from){
     purrr::transpose() %>%
     purrr::reduce(.init = to,
                   function(model, pk_component){
+                    title <- get_by_name(model, "meta_tags", "title")$value
                     call_converter(facet = "pk_components",
                                    name  = c(pk_component$name, pk_component$type),
                                    from = from,
                                    to = model,
-                                   fragment = pk_component)
+                                   fragment = pk_component) %+!%
+                        meta_tag("title", paste0(title, pk_component$type, " "))
                   })
 }
 
