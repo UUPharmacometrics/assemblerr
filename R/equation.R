@@ -1,9 +1,21 @@
+
 new_equation <- function(lhs = NULL, rhs = NULL){
   list(lhs = lhs, rhs = rhs) %>%
   structure(class = "equation")
 }
 
+
+#' Create or convert to equations and test for equation like behavior
+#'
+#' An equation defines a variable (the left-hand side) as a function of other variables (the right-hand side).
+#'
+#' @param expr An expression either of the form lhs~rhs or rhs
+#'
+#' @return An equation object
 #' @export
+#'
+#' @examples
+#' eqn <- equation(cl~theta*exp(eta))
 equation <- function(expr){
   expr <- rlang::enexpr(expr)
   if(rlang::is_formula(expr)) {
@@ -16,8 +28,10 @@ equation <- function(expr){
 #' @export
 empty_equation <- function() return(structure(list(), class = "equation"))
 
-is_equationish <- function(o) return(rlang::is_formulaish(o) | is(o, "equation") | is.numeric(o))
-
+#' @export
+is_equationish <- function(o) {
+  return(rlang::is_formulaish(o) | is(o, "equation") | is.numeric(o))
+}
 
 #' @export
 as_equation <- function(x) UseMethod("as_equation")
