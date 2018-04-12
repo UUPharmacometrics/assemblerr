@@ -42,11 +42,30 @@ render.model_nm <- function(model){
     stringr::str_c(collapse = "\n")
 
   # generate observation code
+  dvid_item <- get_first(model, "data_items", type == "dvid")
+  use_dvid <- nrow(model$observation_equations)>1
+  if(!rlang::is_empty(dvid_item)) {
+    dvid_name <- dvid_item$name
+  }else{
+    dvid_name <- "DVID"
+    if(use_dvid) rlang::warn("More than one observation model used but no data item with type dvid found. Resorting to 'DVID'.")
+  }
   observation_code <- model$observation_equations %>%
     purrr::transpose() %>%
+    {purrr::set_names(., purrr::map(., "name"))} %>%
     purrr::map(~list(.x$ipred_equation, .x$ruv_equation)) %>%
-    purrr::flatten() %>%
-    purrr::map(render) %>%
+    purrr::modify_depth(2, render) %>%
+    purrr::imap(function(obs_code_list,dv_name) {
+        obs_code <- render_str(obs_code_list)
+        if(dv_name!="" && use_dvid) {
+          stringr::str_interp("
+IF(${dvid_name}.EQ.${dv_name}) THEN ;${dv_name}
+${obs_code}
+ENDIF")
+        }else{
+          obs_code
+        }
+      }) %>%
     render_str()
 
   # generate $THETA code

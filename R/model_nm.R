@@ -11,8 +11,9 @@ model_nm <- function(){
     add_facet("parameter_equations", list(equation = list())) %>%
     add_facet("pk_variables", list(equation = list())) %>%
     add_facet("observation_equations", list(ipred_equation = list(), ruv_equation = list())) %>%
-    add_facet("data_items", list()) %>%
-    add_facet("meta_tags", list(value = as.character()))
+    add_facet("data_items", list(type = as.character())) %>%
+    add_facet("meta_tags", list(value = as.character())) +
+    data_items(c("ID", "TIME", "DV"), c("id", "idv", "dv"))
 }
 #' @export
 theta <- function(name, initial = NA, lbound = -Inf, ubound = Inf){
@@ -57,14 +58,14 @@ observation_equation <- function(name, ipred_equation, ruv_equation){
   item("observation_equations", name = name, ipred_equation = as_equation(ipred_equation), ruv_equation = as_equation(ruv_equation))
 }
 #' @export
-data_item <- function(name){
+data_item <- function(name, type){
   if(!is.character(name)) stop("'name' needs to be a character vector")
-  item("data_items", name = name)
+  item("data_items", name = name, type = type)
 }
 
 #' @export
-data_items <- function(names){
-  item("data_items", name = names)
+data_items <- function(names, types){
+  item("data_items", name = names, type = types)
 }
 
 #' @export

@@ -13,8 +13,7 @@ as_model_nm.model <- function(from){
     convert_parameters(from) %>%
     convert_observations(from) %>%
     convert_variables(from) %>%
-    convert_meta_tags(from) %|+%
-    data_items(c("ID", "DV", "TIME"))
+    convert_meta_tags(from)
 }
 
 convert_compartments.model_nm <- function(to, from){
@@ -52,12 +51,17 @@ convert_observations.model_nm <- function(to, from) {
   compartment_indicies <- to$compartments %>%
     {purrr::set_names(as.list(.$index), .$name)}
 
-  from$observations %>%
+  to <- from$observations %>%
     purrr::transpose() %>%
     purrr::reduce(.init = to,
                   function(model_nm, observation){
                     call_converter("observations", observation$type, from, model_nm, observation)
                   } )
+  if(nrow(from$observations)>1){  # if there are more than one observation models, a dvid variable is needed
+    to <- to +
+      data_item("DVID", "dvid")
+  }
+  to
 }
 
 convert_parameters.model_nm <- function(to, from){
@@ -163,10 +167,13 @@ add_converter(
       ipred_eqn <-
         substitute_indicies(ipred_eqn, "A", compartment_indicies)
     }
+    sigma_name <- c("ruv", obs$name, "add") %>%
+    purrr::discard(~.x=="") %>%
+      paste0(collapse="-")
     to <-
-      to + sigma("ruv-add", initial = get_parameter_value(from, "ruv-add", 'ruv')$value)
+      to + sigma(sigma_name, initial = get_parameter_value(from, sigma_name, 'ruv')$value)
     ruv_eqn <- equation(y ~ ipred + eps[.eps]) %>%
-      substitute(.eps = get_by_name(to, "sigmas", "ruv-add")$index)
+      substitute(.eps = get_by_name(to, "sigmas", sigma_name)$index)
 
     to + observation_equation(
       name = obs$name,
@@ -192,10 +199,13 @@ add_converter(
       ipred_eqn <-
         substitute_indicies(ipred_eqn, "A", compartment_indicies)
     }
+    sigma_name <- c("ruv", obs$name, "prop") %>%
+      purrr::discard(~.x=="") %>%
+      paste0(collapse="-")
     to <-
-      to + sigma("ruv-prop", initial = get_parameter_value(from, "ruv-prop", 'ruv')$value)
+      to + sigma(sigma_name, initial = get_parameter_value(from, sigma_name, 'ruv')$value)
     ruv_eqn <- equation(y ~ ipred + (1 + eps[.eps])) %>%
-      substitute(.eps = get_by_name(to, "sigmas", "ruv-prop")$index)
+      substitute(.eps = get_by_name(to, "sigmas", sigma_name)$index)
     to + observation_equation(
       name = obs$name,
       ipred_equation = ipred_eqn,
