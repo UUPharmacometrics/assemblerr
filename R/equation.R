@@ -5,9 +5,9 @@ new_equation <- function(lhs = NULL, rhs = NULL){
 }
 
 
-#' Create or convert to equations and test for equation like behavior
+#' Create an equation
 #'
-#' An equation defines a variable (the left-hand side) as a function of other variables (the right-hand side).
+#' Equations are elementary building blocks of a model that describe the mathematical relationship bewtween variables
 #'
 #' @param expr An expression either of the form lhs~rhs or rhs
 #'
@@ -15,7 +15,8 @@ new_equation <- function(lhs = NULL, rhs = NULL){
 #' @export
 #'
 #' @examples
-#' eqn <- equation(cl~theta*exp(eta))
+#' eqn1 <- equation(cl~theta*exp(eta))
+#' eqn2 <- equation(~ka*A["central"])
 equation <- function(expr){
   expr <- rlang::enexpr(expr)
   if(rlang::is_formula(expr)) {
@@ -26,6 +27,7 @@ equation <- function(expr){
 }
 
 #' @export
+#' @describeIn equation Creates an empty equation (without lhs and rhs)
 empty_equation <- function() return(structure(list(), class = "equation"))
 
 #' @export
@@ -33,10 +35,20 @@ is_equationish <- function(o) {
   return(rlang::is_formulaish(o) | is(o, "equation") | is.numeric(o))
 }
 
+#' Conversion to an equation
+#'
+#' @param x Object to convert
 #' @export
+#' @examples
+#' eqn1 <- as_equation("a+b+c")
+#' eqn2 <- as_equation(1)
+#' eqn3 <- as_equation(y~b+1)
 as_equation <- function(x) UseMethod("as_equation")
+
 #' @export
 as_equation.equation <- function(x) x
+
+#' @describeIn as_equation Returns an equation with the RHS corresponding to the parsed character vector or an error if parsing was not successful.
 #' @export
 as_equation.character <- function(x){
   expr <- rlang::parse_expr(paste0("~", x))
@@ -46,17 +58,19 @@ as_equation.character <- function(x){
     stop("Couldn't interpret text '", x , "' as an equation")
   }
 }
+
+#' @describeIn as_equation Returns an equation with the RHS set to the number provided.
 #' @export
 as_equation.numeric <- function(x){
   new_equation(rhs = x)
 }
 
+#' @describeIn as_equation Returns an equation with LHS and RHS taken from the provided formula.
 #' @export
 as_equation.formula <- function(x){
   new_equation(lhs = rlang::f_lhs(x),
                rhs = rlang::f_rhs(x))
 }
-
 as_equation.language <- as_equation.formula
 
 #' @export
@@ -121,7 +135,7 @@ functions <- function(x){
 substitute_indicies <- function(eqn, array_name, substitutions){
   purrr::modify(eqn, ~transform_ast(.x, index_transformer, array_name = array_name, substitutions = substitutions))
 }
-#' @export
+
 index_transformer <- function(node, array_name, substitutions){
   # if vector access
   if(rlang::is_lang(node) && rlang::lang_name(node) == "[" && node[[2]] == rlang::sym(array_name)){
@@ -130,7 +144,7 @@ index_transformer <- function(node, array_name, substitutions){
   }
   node
 }
-#' @export
+
 transform_ast <- function(node, transformer, ...){
   if(rlang::is_atomic(node) || rlang::is_symbol(node)) return(transformer(node, ...))
   else if(rlang::is_lang(node)){

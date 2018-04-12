@@ -18,7 +18,7 @@ test_that("Equations are created correctly", {
   expect_equal(equation(y~ka*A), expected$two_sided)
 })
 
-test_that("Conversion of one-sided equations works", {
+test_that("Conversion of to equations works", {
   # Formula
   expect_equal(as_equation(~ka*A), expected$one_sided)
   expect_equal(as_equation(y~ka*A), expected$two_sided)
@@ -108,4 +108,15 @@ test_that("Combination through substraction works",{
   a <- equation(A)
   b <- equation(B)
   expect_equal(a-b, equation(A-B))
+})
+
+test_that("Replacing a specific function works",{
+  addition_transformer <- function(node, new_op){
+    if(rlang::is_lang(node) && rlang::lang_name(node) == "+"){
+      node[[1]] <- new_op
+    }
+    node
+  }
+  transform_ast(quote(A+B), addition_transformer, new_op = quote(`-`)) %>%
+    expect_equal(quote(A-B))
 })
