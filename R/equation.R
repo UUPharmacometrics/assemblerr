@@ -86,6 +86,11 @@ variables <- function(x){
   all.vars(x$rhs)
 }
 
+#' @export
+functions <- function(x){
+  if(!is(x, "equation")) stop("Function expects an equation as input")
+  setdiff(all.names(x$rhs, unique = T), all.vars(x$rhs))
+}
 
 #' @export
 `+.equation` <- function(x, y){

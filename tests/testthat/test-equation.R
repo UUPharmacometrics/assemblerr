@@ -54,6 +54,13 @@ test_that("Variable names are listed correctly", {
   expect_equal(equation(cl~theta[1]*exp(eta[2])) %>% variables(), c("theta", "eta"))
 })
 
+test_that("Function names are listed correctly", {
+  # simple non-linear
+  expect_equal(equation(cl~theta*exp(eta)) %>% functions(), c("*", "exp"))
+
+})
+
+
 context("Equation manipulation")
 
 test_that("RHS can be set",{
