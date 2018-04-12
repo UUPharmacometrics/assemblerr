@@ -57,15 +57,24 @@ parameter <- function(name, type = "log-normal"){
 }
 
 
-#' Create a new observation
+#' Create a new observation model
 #'
-#' @param name
-#' @param equation
-#' @param type
+#' Observation models relate variables from a model to measured values.
 #'
-#' @return A parameter fragment
+#' @param name The name used to identify the measurement
+#' @param equation An equation describing the measurement
+#' @param type The model type used for the observation model
+#'
+#' @return A observation model fragment
+#'
+#' @examples
+#' # create an additive error observation model "conc" for the concentration from the "central" compartment
+#' c_obs <- observation("conc", ~C["central"], "additive")
+#'
+#' # create a combined error observation model "eff" for the variable effect
+#' e_obs <- observation("eff", ~effect, "combined")
 #' @export
-observation <- function(name = "ruv", equation,  type){
+observation <- function(name = "", equation,  type){
   if(!is.character(name)) stop("'name' needs to be a character vector")
   if(!is_equationish(equation)) stop("'equation' needs to be interpreatable as an equation")
   if(!is.character(type)) stop("'type' needs to be a character vector")
