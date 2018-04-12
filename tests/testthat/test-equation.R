@@ -1,4 +1,4 @@
-context("Equations")
+context("Equations creation")
 
 expected <- list(
   numeric = structure(list(lhs = NULL, rhs = 1), class = "equation"),
@@ -30,6 +30,7 @@ test_that("Conversion of one-sided equations works", {
   expect_equal(as_equation(1), expected$numeric)
 })
 
+context("Equation querying")
 
 test_that("Types are recognized as equation-like", {
   # Formula
@@ -53,6 +54,20 @@ test_that("Variable names are listed correctly", {
   expect_equal(equation(cl~theta[1]*exp(eta[2])) %>% variables(), c("theta", "eta"))
 })
 
+context("Equation manipulation")
+
+test_that("RHS can be set",{
+  equation(cl) %>%
+    set_rhs(ka*A) %>%
+    expect_equal(expected$one_sided)
+})
+
+test_that("LHS can be set",{
+  equation(ka*A) %>%
+    set_lhs(y) %>%
+    expect_equal(expected$two_sided)
+})
+
 test_that("Variables can be substituted with symbols", {
   equation(a~b*c) %>%
     substitute(a = rlang::sym("y"), b = rlang::sym("ka"), c = rlang::sym("A")) %>%
@@ -74,4 +89,16 @@ test_that("Array indicies can be substituted", {
   equation(dAdt~ke*A["test"]) %>%
     substitute_indicies("A", list(test = "central")) %>%
     expect_equal(expected$two_sided_with_array)
+})
+
+test_that("Combination through addition works",{
+  a <- equation(A)
+  b <- equation(B)
+  expect_equal(a+b, equation(A+B))
+})
+
+test_that("Combination through substraction works",{
+  a <- equation(A)
+  b <- equation(B)
+  expect_equal(a-b, equation(A-B))
 })
