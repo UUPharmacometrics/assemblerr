@@ -12,7 +12,7 @@ as_model_nm.model <- function(from){
     convert_compartments(from) %>%
     convert_parameters(from) %>%
     convert_observations(from) %>%
-    convert_variables(from) %>%
+    convert_algebraic_equations(from) %>%
     convert_meta_tags(from)
 }
 
@@ -73,14 +73,14 @@ convert_parameters.model_nm <- function(to, from){
                   })
 }
 
-convert_variables.model_nm <- function(to, from){
-  from$variables %>%
+convert_algebraic_equations.model_nm <- function(to, from){
+  from$algebraic_equations %>%
     purrr::transpose() %>%
     purrr::reduce(.init = to,
-                  function(model, variable){
-                    eqn <- variable$equation %>%
-                      set_lhs(!!rlang::sym(variable$name))
-                    model + pk_variable(variable$name, equation = eqn)
+                  function(model, algebraic_equation){
+                    eqn <- algebraic_equation$equation %>%
+                      set_lhs(!!rlang::sym(algebraic_equation$name))
+                    model + algebraic_equation(variable$name, equation = eqn)
                   })
 }
 

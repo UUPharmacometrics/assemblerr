@@ -9,7 +9,7 @@ model_nm <- function(){
     add_facet("sigmas", list(initial = numeric())) %>%
     add_facet("odes", list(equation = list())) %>%
     add_facet("parameter_equations", list(equation = list())) %>%
-    add_facet("pk_variables", list(equation = list())) %>%
+    add_facet("algebraic_equations", list(equation = list())) %>%
     add_facet("observation_equations", list(ipred_equation = list(), ruv_equation = list())) %>%
     add_facet("data_items", list(type = as.character())) %>%
     add_facet("meta_tags", list(value = as.character())) +
@@ -68,8 +68,3 @@ data_items <- function(names, types){
   item("data_items", name = names, type = types)
 }
 
-#' @export
-#' @keywords internal
-pk_variable <- function(name, equation){
-  item("pk_variables", name = name, equation = equation)
-}

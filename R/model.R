@@ -9,7 +9,7 @@ model <- function(){
     add_facet("compartments", list(volume = list())) %>%
     add_facet("flows", list(from = character(), to = character(), equation = list()), name_column = F) %>%
     add_facet("parameters", list(type = character())) %>%
-    add_facet("variables", list(equation = list())) %>%
+    add_facet("algebraic_equations", list(equation = list())) %>%
     add_facet("observations", list(equation = list(), type = character())) %>%
     add_facet("parameter_values", list(parameter1 = character(), parameter2 = character(), type = character(), value = numeric()), name_column = F) %>%
     add_facet("meta_tags", list(value = character()))
@@ -105,10 +105,10 @@ parameter_value_table <- function(values, types){
     structure(class = "fragment")
 }
 #' @export
-variable <- function(name, equation){
+algebraic_equation <- function(name, equation){
   if(!is.character(name)) stop("'name' needs to be a character vector")
   if(!is_equationish(equation)) stop("'equation' needs to be interpreatable as an equation")
-  item("variables", name = name, equation = as_equation(equation))
+  item("algebraic_equations", name = name, equation = as_equation(equation))
 }
 
 #' @export
@@ -123,7 +123,7 @@ convert_observations <- function(to, from) UseMethod("convert_observations")
 
 convert_parameters <- function(to, from) UseMethod("convert_parameters")
 
-convert_variables <- function(to, from) UseMethod("convert_variables")
+convert_algebraic_equations <- function(to, from) UseMethod("convert_algebraic_equations")
 
 convert_meta_tags <- function(to, from) UseMethod("convert_meta_tags")
 

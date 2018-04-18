@@ -19,7 +19,7 @@ render.model_nm <- function(model){
     render_str()
 
   # generate pk variable code
-  pk_variable_code <- model$pk_variables %>%
+  pk_variable_code <- model$algebraic_equations %>%
     purrr::transpose() %>%
     purrr::map("equation") %>%
     purrr::map(render) %>%
