@@ -157,6 +157,31 @@ functions <- function(d){
   setdiff(all.names(x$definition, unique = T), all.vars(x$definition))
 }
 
+#' Combine two declarations
+#'
+#' The function allows the combination of two declarations using an arbitrary operation.
+#'
+#' @param d1 Declaration
+#' @param d2 Declaration
+#' @param op Operation (function) to combine the declarations with
+#' @param identifier Identifier for the resulting declaration (taken from d1 if missing)
+#'
+#' @return A declaration with the specified identifier and the defintion resulting from combining d1 with d2 using op
+#' @export
+#'
+#' @examples
+#' d1 <- declaration(definition = ka*A["depot"])
+#' d2 <- declaration(definition = ke*A["central"])
+#' d3 <- combine_dec(d1, d2, "-", "dA")
+combine_dec <- function(d1, d2, op = "+", identifier){
+  if(!is_declaration(d1)||!is_declaration(d2)) stop("Function expects two declarations as input")
+  def <- rlang::lang(op, d1$definition, d2$definition)
+  if(missing(identifier)){
+    identifier <- d1$identifier
+  }
+  return(new_declaration(identifier = identifier, definition = def))
+}
+
 
 #' @export
 substitute_indicies <- function(d, array_name, substitutions){
