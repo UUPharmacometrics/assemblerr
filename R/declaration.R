@@ -183,8 +183,19 @@ combine_dec <- function(d1, d2, op = "+", identifier){
 }
 
 
-#' @export
-substitute_indicies <- function(d, array_name, substitutions){
+#' Substitute the index names in a declaration
+#'
+#' @param d Declaration
+#' @param array_name Name of the array the index names should be replaced for
+#' @param substitutions List of subsitutions
+#'
+#' @return Declaration with replaced index names
+#'
+#' @examples
+#' d <- declaration("dA", ka*A["depot"]-ke*A["central"])
+#' index_subs_dec(d, "A", list(depot = 1, central = 2))
+index_subs_dec <- function(d, array_name, substitutions){
+  if(!is_declaration(d)) stop("Function expects a declaration as input")
   purrr::modify_at(d, "definition", ~transform_ast(.x, index_transformer, array_name = array_name, substitutions = substitutions))
 }
 
@@ -197,6 +208,42 @@ index_transformer <- function(node, array_name, substitutions){
   node
 }
 
+
+#' Substitute symbols in a declaration
+#'
+#' @param d Declaration
+#' @param ... A list of symbols and their replacement
+#'
+#' @return Declaration with substituted symbols in the definition
+#'
+#' @examples
+#' d <- declaration("cl", theta*exp(eta))
+#' subs_dec(d, eta = eta+a)
+subs_dec <- function(d, ...){
+  substitutions <- rlang::exprs(...)
+  if(!is_declaration(d)) stop("Function expects a declaration as input")
+  purrr::modify_at(d, "definition", ~transform_ast(.x, subs_transformer, substitutions = substitutions))
+}
+
+subs_transformer <- function(node, substitutions){
+  if(rlang::is_atomic(node) || rlang::is_symbol(node)){
+    if(exists(as.character(node), substitutions)){
+      node <-  substitutions[[as.character(node)]]
+    }
+  }
+  node
+}
+
+#' Modify AST
+#'
+#' This recursive function is the work-horse for all expression transformations. It takes a language node and a transformer function,
+#' and applies the transformer recursivly to the node and all its child nodes.
+#'
+#' @param node A language node
+#' @param transformer A transformer function
+#' @param ... Additional arguments to the transformer function
+#'
+#' @return The transformed language node
 transform_ast <- function(node, transformer, ...){
   if(rlang::is_atomic(node) || rlang::is_symbol(node)) return(transformer(node, ...))
   else if(rlang::is_lang(node)){
@@ -214,13 +261,3 @@ transform_ast <- function(node, transformer, ...){
   }
 }
 
-#' @export
-substitute <- function(x, ...) UseMethod("substitute")
-#' @export
-substitute.default <- base::substitute
-#' @export
-substitute.declaration <- function(x, ...){
-  args <- rlang::dots_list(...)
-  purrr::map_if(x, is.language, ~pryr::substitute_q(.x, args)) %>%
-    structure(class = "declaration")
-}
