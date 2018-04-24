@@ -5,12 +5,31 @@ new_declaration <- function(identifier = NULL, definition = NULL){
     structure(class = "declaration")
 }
 
+make_identifier <- function(expr){
+  # check if the expression is actually a name
+  name <- purrr::possibly(eval, NULL)(expr)
+  # check if the name is a valid variable name
+  if(is.character(name)){
+    if(make.names(name) != name) stop("identifier needs to be a valid variable name", call. = F)
+    identifier <- rlang::sym(name)
+  }else{
+    # check if expr is valid for lhs
+    contains_no_functions <- setdiff(all.names(expr, unique = T), all.vars(expr)) %>% setdiff("[") %>% rlang::is_empty()
+    contains_only_one_var <- all.vars(expr) %>% length() == 1
+    if(contains_only_one_var && contains_no_functions) {
+      identifier <- expr
+    }else{
+      stop("invalid identifier expression", call. = F)
+    }
+  }
+  return(identifier)
+}
 
 #' Create a declaration
 #'
 #' Declarations are elementary building blocks of a model that provide the definition for an identifier
 #'
-#' @param identifier The name of the variable to be declared
+#' @param identifier An expression or the name of the variable to be declared
 #' @param definition An expression
 #'
 #' @return A declaration object
@@ -18,10 +37,22 @@ new_declaration <- function(identifier = NULL, definition = NULL){
 #'
 #' @examples
 #' d <- declaration("cl", theta*exp(eta))
-declaration <- function(identifier = NULL, definition){
-  if(missing(definition)) stop("a definition needs to be provided")
-  definition <- rlang::enexpr(definition)
-  if(!is.null(identifier) && identifier!=make.names(identifier)) stop("the left-hand side of the provided expression needs to be a valid variable name")
+declaration <- function(identifier, definition){
+  if(missing(identifier)){
+    identifier <- NULL
+  }else{
+    identifier <- rlang::enexpr(identifier) %>% make_identifier()
+  }
+  if(missing(definition)){
+    definition <- NULL
+  }else{
+    definition <- rlang::enexpr(definition)
+  }
+  # if only the identifer is given
+  if(is.null(definition) && !is.null(identifier)) {
+    definition <- identifier
+    identifier <- NULL
+  }
   new_declaration(identifier, definition)
 }
 
@@ -40,8 +71,11 @@ is_declaration <- function(o) {
 
 #' @describeIn is_declaration Has a wider definition of declaration and also returns true if the object could be converted to a declaration
 #' @export
-is_declarationish <- function(o) {
-  return(rlang::is_formulaish(o) | is_declaration(o) | is.numeric(o))
+is_declarationish <- function(o, parse = F) {
+  if(!parse) return(rlang::is_formulaish(o) | is_declaration(o) | is.numeric(o) | is.character(o))
+  parses_succefully <- T
+  if(is.character(o) || rlang::is_formulaish(o)) parses_succefully <- !is.null(purrr::possibly(as_declaration, NULL)(o))
+  return(parses_succefully | is_declaration(o) | is.numeric(o))
 }
 
 #' @describeIn is_declaration Tests whether a declaration has an identifier
@@ -68,15 +102,25 @@ as_declaration.declaration <- function(x) x
 #' @describeIn as_declaration Returns a declaration with the definition corresponding to the parsed character vector or an error if parsing was not successful.
 #' @export
 as_declaration.character <- function(x){
-  expr <- rlang::parse_expr(paste0("~", x))
-  if(rlang::is_formula(expr)){
-    return(as_declaration.language(expr))
+  d <- NULL
+  try({
+    expr <- rlang::parse_expr(x)
+    if(rlang::is_formula(expr)){
+      d <- new_declaration(rlang::f_lhs(expr), rlang::f_rhs(expr))
+    }else{
+      d <- new_declaration(definition = expr)
+    }
+  },
+  silent = T
+  )
+  if(!is.null(d)){
+    return(d)
   }else{
     stop("Couldn't interpret text '", x , "' as a declaration")
   }
 }
 
-#' @describeIn as_declaration Returns a declaration with the definition set to the number provided.
+#' @describeIn as_declaration Returns an anonymous declaration with the definition set to the number provided.
 #' @export
 as_declaration.numeric <- function(x){
   new_declaration(definition = x)
@@ -89,13 +133,27 @@ as_declaration.formula <- function(x){
   rhs <- rlang::f_rhs(x)
   identifier <- NULL
   if(!is.null(lhs)) {
-    identifier <- deparse(lhs)
-    if(identifier!=make.names(identifier)) stop("the left-hand side of a two-sided formula must be a single valid variable name")
+    identifier <- make_identifier(lhs)
   }
   new_declaration(identifier = identifier, definition = rhs)
 }
 as_declaration.language <- as_declaration.formula
 
+
+#' Interpret function argument as declaration
+#'
+#' Helper function to simplify the common task of checking whether an argument could serve as a declaration, raising an error or
+#' doing the conversion.
+#'
+#' @param arg Variable to be interpreted
+#'
+#' @return A declaration or an error message if the variable could not be interpreted as a declaration
+#' @export
+arg_as_declaration <- function(arg){
+  arg_expr <- rlang::enexpr(arg)
+  if(!is_declarationish(arg, parse = T)) stop("Argument '", arg_expr %>% as.character(), "' can not be interpreted as a declaration", call. = F)
+  return(as_declaration(arg))
+}
 
 #' Set identifier or definition of a declaration
 #'
@@ -122,14 +180,28 @@ set_identifier <- function(d, identifier = NULL){
   purrr::update_list(d, identifier = identifier)
 }
 
+get_identifier <- function(d) {
+  if(!is_declaration(d)) stop("Function expects a declaration as input")
+  return(d$identifier)
+}
+
+get_definition <- function(d) {
+  if(!is_declaration(d)) stop("Function expects a declaration as input")
+  return(d$definition)
+}
+
 #' @export
 print.declaration <- function(x){
-  if(is_anonymous(x)){
-    cat("Anonymous declaration:\n")
-    cat("\t", deparse(x$definition))
+  if(is.null(x$definition) && is.null(x$identifier)){
+    cat("Empty declaration")
   }else{
-    cat("Declaration:\n")
-    cat("\t", x$identifier, "=", deparse(x$definition))
+    if(is_anonymous(x)){
+      cat("Anonymous declaration:\n")
+      cat("\t", deparse(x$definition))
+    }else{
+      cat("Declaration:\n")
+      cat("\t", deparse(x$identifier), "=", deparse(x$definition))
+    }
   }
 }
 
@@ -174,10 +246,14 @@ functions <- function(d){
 #' d2 <- declaration(definition = ke*A["central"])
 #' d3 <- combine_dec(d1, d2, "-", "dA")
 combine_dec <- function(d1, d2, op = "+", identifier){
-  if(!is_declaration(d1)||!is_declaration(d2)) stop("Function expects two declarations as input")
+  d1 <- arg_as_declaration(d1)
+  d2 <- arg_as_declaration(d2)
+#  if(!is_declaration(d1)||!is_declaration(d2)) stop("Function expects two declarations as input")
   def <- rlang::lang(op, d1$definition, d2$definition)
   if(missing(identifier)){
     identifier <- d1$identifier
+  }else{
+    identifier <- make_identifier(identifier)
   }
   return(new_declaration(identifier = identifier, definition = def))
 }
@@ -196,7 +272,7 @@ combine_dec <- function(d1, d2, op = "+", identifier){
 #' index_subs_dec(d, "A", list(depot = 1, central = 2))
 index_subs_dec <- function(d, array_name, substitutions){
   if(!is_declaration(d)) stop("Function expects a declaration as input")
-  purrr::modify_at(d, "definition", ~transform_ast(.x, index_transformer, array_name = array_name, substitutions = substitutions))
+  purrr::modify(d, ~transform_ast(.x, index_transformer, array_name = array_name, substitutions = substitutions))
 }
 
 index_transformer <- function(node, array_name, substitutions){
@@ -212,27 +288,33 @@ index_transformer <- function(node, array_name, substitutions){
 #' Substitute symbols in a declaration
 #'
 #' @param d Declaration
-#' @param ... A list of symbols and their replacement
+#' @param ... A list of declarations
 #'
 #' @return Declaration with substituted symbols in the definition
 #'
+#' @export
 #' @examples
 #' d <- declaration("cl", theta*exp(eta))
-#' subs_dec(d, eta = eta+a)
+#' d1 <- declaration("theta", theta+a)
+#' subs_dec(d, d1)
 subs_dec <- function(d, ...){
-  substitutions <- rlang::exprs(...)
-  if(!is_declaration(d)) stop("Function expects a declaration as input")
-  purrr::modify_at(d, "definition", ~transform_ast(.x, subs_transformer, substitutions = substitutions))
+  substitutions <- list(...) %>% as_declaration_list()
+  d <- arg_as_declaration(d)
+  if(any(purrr::map_lgl(substitutions, is_anonymous))) stop("substitutions need to be named")
+  substitutions <- purrr::set_names(substitutions, purrr::map(substitutions, get_identifier))
+  purrr::modify(d, ~transform_ast(.x, subs_transformer, substitutions = substitutions))
 }
 
 subs_transformer <- function(node, substitutions){
   if(rlang::is_atomic(node) || rlang::is_symbol(node)){
     if(exists(as.character(node), substitutions)){
-      node <-  substitutions[[as.character(node)]]
+      node <-  substitutions[[as.character(node)]] %>% get_definition()
     }
   }
   node
 }
+
+
 
 #' Modify AST
 #'

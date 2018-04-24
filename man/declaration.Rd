@@ -4,10 +4,10 @@
 \alias{declaration}
 \title{Create a declaration}
 \usage{
-declaration(identifier = NULL, definition)
+declaration(identifier, definition)
 }
 \arguments{
-\item{identifier}{The name of the variable to be declared}
+\item{identifier}{An expression or the name of the variable to be declared}
 
 \item{definition}{An expression}
 }

@@ -1,84 +1,143 @@
-#' Create a new model object
+#' General model
 #'
-#' @return A general model
+#' \code{model()} creates the foundation for a general pharmacometric model
+#'
+#' This function creates a model object, the foundation for a general, software-agnostic description of a pharmacometric model.
+#' The object created is an empty structure. In general, one will want to add components to the model,
+#' then convert it to a software-specific model object and finally create the model code. The following components can be added
+#' to a general model:
+#' \itemize{
+#'    \item \code{\link{parameter}}
+#'    \item \code{\link{algebraic}}
+#'    \item \code{\link{compartment}}
+#'    \item \code{\link{flow}}
+#'    \item \code{\link{observation}}
+#'    \item \code{\link{parameter_value}}
+#'    \item \code{\link{meta_tags}}
+#' }
+#'
+#' @return A general pharmacometric model
 #' @export
 #' @importFrom magrittr %>%
-#'
+#' @examples
+#' m <- model()+
+#'     observation(eff~emax*dose/(ed50+dose), type = "additive") +
+#'     parameter("emax") +
+#'     parameter("ed50")
 model <- function(){
   structure(list(), class = c("model", "fragment")) %>%
     add_facet("compartments", list(volume = list())) %>%
-    add_facet("flows", list(from = character(), to = character(), equation = list()), name_column = F) %>%
+    add_facet("flows", list(from = character(), to = character(), definition = list()), name_column = F) %>%
     add_facet("parameters", list(type = character())) %>%
-    add_facet("algebraic_equations", list(equation = list())) %>%
-    add_facet("observations", list(equation = list(), type = character())) %>%
+    add_facet("algebraics", list(definition = list())) %>%
+    add_facet("observations", list(definition = list(), type = character())) %>%
     add_facet("parameter_values", list(parameter1 = character(), parameter2 = character(), type = character(), value = numeric()), name_column = F) %>%
     add_facet("meta_tags", list(value = character()))
 }
 
 
-#' Create a new compartment
+#' Compartment
 #'
-#' @param name
-#' @param volume
+#' Defines name and volume of compartment
 #'
-#' @return A compartment item
+#' @seealso \code{\link{model}}
+#' @param name Name of the compartment
+#' @param volume Defintion of the compartment volume as a number, formula or declaration
+#'
+#' @return A compartment fragment
 #' @export
+#' @examples
+#' # compartment with name "central" and volume Vc
+#' comp1 <- compartment("central", volume = ~Vc)
 compartment <- function(name, volume = 1){
   if(!is.character(name)) stop("'name' needs to be a character vector")
   if(!is_equationish(volume)) stop ("'volume' needs to be interpretable as an equation")
-  item("compartments", name = name, volume = as_equation(volume))
 }
 
-#' Create a new flow from or to compartments
-#'
-#' @param from Name of the source compartment or Null
-#' @param to Name of the sink compartment or Null
-#' @param equation An equation describing the flow
-#'
-#' @return A flow item
 #' @export
-flow <- function(from = NULL, to = NULL, equation){
+#' @describeIn compartment Is an simple alias for compartment.
+cmp <- compartment
+
+#' Flows between compartments
+#'
+#' Creates a fragment describing a flow from between compartmens.
+#'
+#' @param from Name of the source compartment or NULL
+#' @param to Name of the sink compartment or NULL
+#' @param definition Declaration of the flow using the special variable A (amount in 'from' compartment) and C (concentration in 'from' compartment)
+#'
+#' @return A flow fragment
+#' @export
+#' @examples
+#' f <- flow(from = "depot", to = "central", definition = ~ka*A)
+flow <- function(from = NULL, to = NULL, definition){
   if(!is.character(from) && !is.character(to)) stop("'from' or/and 'to' need to be compartment names")
-  if(!is_equationish(equation)) stop("'equation' needs to interpretable as an equation")
-  item("flows", from = from, to = to, equation = as_equation(equation))
+  if(!is_declarationish(definition)) stop("'definition' needs to interpretable as a declaration")
+  item("flows", from = from, to = to, definition = as_declaration(definition))
 }
 
-#' Create a new model parameter
+#' Model parameter
 #'
-#' @param name
-#' @param type
+#' Defines name and type of a model parameter
 #'
-#' @return A parameter fragment
+#' @param name Name of the paramter
+#' @param type Model type to be used for the parameter
+#'
+#' @return A \code{\link{fragment}} representing a model parameter
 #' @export
-parameter <- function(name, type = "log-normal"){
-  if(!is.character(name)) stop("'name' needs to be a character vector")
-  if(!is.character(type)) stop("'type' needs to be a character vector")
+#' @examples
+#' p <- parameter("cl", "log-normal")
+parameter <- function(name, type){
+  if(name!=make.names(name)) stop("'name' needs to be a valid variable name.")
+  if(missing(type)){
+    message("No type for the parameter '", name,"' was specified, using 'log-normal' as default.")
+    type <- "log-normal"
+  }
   item("parameters", name = name, type = type)
 }
 
 
-#' Create a new observation model
+#' Observation model
 #'
-#' Observation models relate variables from a model to measured values.
+#' Defines how variables from a model relate to values in the data
 #'
-#' @param name The name used to identify the measurement
-#' @param equation An equation describing the measurement
+#' @param definition A \code{\link{declaration}} describing the measurement
 #' @param type The model type used for the observation model
+#' @param name The name used to identify the measurement (if not provided as part of the definition)
 #'
-#' @return A observation model fragment
+#' @return A \code{\link{fragment}} representing an observation model
 #'
 #' @examples
 #' # create an additive error observation model "conc" for the concentration from the "central" compartment
-#' c_obs <- observation("conc", ~C["central"], "additive")
+#' c_obs <- observation(conc~C["central"], "additive")
 #'
 #' # create a combined error observation model "eff" for the variable effect
-#' e_obs <- observation("eff", ~effect, "combined")
+#' e_obs <- observation(name = "eff", ~effect, "combined")
 #' @export
-observation <- function(name = "", equation,  type){
-  if(!is.character(name)) stop("'name' needs to be a character vector")
-  if(!is_equationish(equation)) stop("'equation' needs to be interpreatable as an equation")
+observation <- function(definition, type, name){
+  if(!is_declarationish(definition)) stop("'definition' needs to be interpreatable as a declaration")
+  if(missing(type)) {
+    message("No type for the observation model was specified, using 'additive' as a default")
+    type <- "additive"
+  }
   if(!is.character(type)) stop("'type' needs to be a character vector")
-  item("observations", name = name, equation = as_equation(equation), type = type)
+  definition <- as_declaration(definition)
+  if(!missing(name)) {
+    if(!is_anonymous(definition)) message("Name in definition will be replaced with explicitly provided name")
+    if(name!=make.names(name)) stop("'name' needs to be a valid variable name")
+    definition <- set_identifier(definition, name)
+  }
+  name <- get_identifier(definition)
+  item("observations", name = name, definition = definition, type = type)
+}
+
+
+#' @export
+algebraic <- function(definition){
+  if(!is_declarationish(definition)) stop("'definition' needs to be interpreatable as a declaration")
+  definition <- as_declaration(definition)
+  if(is_anonymous(definition)) stop("'definition' needs to be named")
+  item("algebraics", name = get_identifier(definition), definition = definition)
 }
 
 
@@ -104,12 +163,6 @@ parameter_value_table <- function(values, types){
     {purrr::set_names(list(.), "parameter_values")} %>%
     structure(class = "fragment")
 }
-#' @export
-algebraic_equation <- function(name, equation){
-  if(!is.character(name)) stop("'name' needs to be a character vector")
-  if(!is_equationish(equation)) stop("'equation' needs to be interpreatable as an equation")
-  item("algebraic_equations", name = name, equation = as_equation(equation))
-}
 
 #' @export
 meta_tag <- function(name, value){
@@ -123,7 +176,7 @@ convert_observations <- function(to, from) UseMethod("convert_observations")
 
 convert_parameters <- function(to, from) UseMethod("convert_parameters")
 
-convert_algebraic_equations <- function(to, from) UseMethod("convert_algebraic_equations")
+convert_algebraics <- function(to, from) UseMethod("convert_algebraics")
 
 convert_meta_tags <- function(to, from) UseMethod("convert_meta_tags")
 
