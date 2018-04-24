@@ -85,6 +85,12 @@ is_anonymous <- function(o) {
   return(is.null(o$identifier))
 }
 
+#' @describeIn is_declaration Tests whether a declaration is empty
+#' @export
+is_empty_declaration <- function(o){
+  return(is_declaration(o) & is.null(o$identifier) & is.null(o$definition))
+}
+
 #' Conversion to a declaration
 #'
 #' @param x Object to convert
@@ -248,7 +254,8 @@ functions <- function(d){
 combine_dec <- function(d1, d2, op = "+", identifier){
   d1 <- arg_as_declaration(d1)
   d2 <- arg_as_declaration(d2)
-#  if(!is_declaration(d1)||!is_declaration(d2)) stop("Function expects two declarations as input")
+  if(is_empty_declaration(d2)) return(d1)
+  if(is_empty_declaration(d1)) return(d2)
   def <- rlang::lang(op, d1$definition, d2$definition)
   if(missing(identifier)){
     identifier <- d1$identifier
