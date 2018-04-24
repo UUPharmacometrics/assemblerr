@@ -254,6 +254,7 @@ functions <- function(d){
 combine_dec <- function(d1, d2, op = "+", identifier){
   d1 <- arg_as_declaration(d1)
   d2 <- arg_as_declaration(d2)
+  identifier <- rlang::enexpr(identifier)
   if(is_empty_declaration(d2)) return(d1)
   if(is_empty_declaration(d1)) return(d2)
   def <- rlang::lang(op, d1$definition, d2$definition)
