@@ -6,6 +6,7 @@ new_declaration <- function(identifier = NULL, definition = NULL){
 }
 
 make_identifier <- function(expr){
+  if(is.null(expr)) return(NULL)
   # check if the expression is actually a name
   name <- purrr::possibly(eval, NULL)(expr)
   # check if the name is a valid variable name
@@ -181,9 +182,8 @@ set_definition <- function(d, definition){
 #' @export
 #' @rdname set_definition
 set_identifier <- function(d, identifier = NULL){
-  if(!is_declaration(d)) stop("Function expects a declaration as input")
-  if(!(is.character(identifier) | is.null(identifier))) stop("identifier needs to be a character vector or NULL")
-  purrr::update_list(d, identifier = identifier)
+  d <- arg_as_declaration(d)
+  purrr::update_list(d, identifier = make_identifier(identifier))
 }
 
 get_identifier <- function(d) {
