@@ -314,14 +314,15 @@ subs_dec <- function(d, ...){
   substitutions <- list(...) %>% as_declaration_list()
   d <- arg_as_declaration(d)
   if(any(purrr::map_lgl(substitutions, is_anonymous))) stop("substitutions need to be named")
-  substitutions <- purrr::set_names(substitutions, purrr::map(substitutions, get_identifier))
+  substitutions <- purrr::set_names(substitutions, purrr::map(substitutions, ~get_identifier(.x) %>% deparse))
   purrr::modify(d, ~transform_ast(.x, subs_transformer, substitutions = substitutions))
 }
 
 subs_transformer <- function(node, substitutions){
-  if(rlang::is_atomic(node) || rlang::is_symbol(node)){
-    if(exists(as.character(node), substitutions)){
-      node <-  substitutions[[as.character(node)]] %>% get_definition()
+  # if vector access and replacement contains vector variable
+  if(rlang::is_atomic(node) || rlang::is_symbol(node) || (rlang::is_lang(node) && rlang::lang_name(node) == "[")){
+    if(exists(deparse(node), substitutions)){
+      node <-  substitutions[[deparse(node)]] %>% get_definition()
     }
   }
   node
