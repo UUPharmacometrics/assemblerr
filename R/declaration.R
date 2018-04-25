@@ -16,8 +16,8 @@ make_identifier <- function(expr){
   }else{
     # check if expr is valid for lhs
     contains_no_functions <- setdiff(all.names(expr, unique = T), all.vars(expr)) %>% setdiff("[") %>% rlang::is_empty()
-    contains_only_one_var <- all.vars(expr) %>% length() == 1
-    if(contains_only_one_var && contains_no_functions) {
+
+    if(contains_no_functions) {
       identifier <- expr
     }else{
       stop("invalid identifier expression", call. = F)
@@ -183,6 +183,7 @@ set_definition <- function(d, definition){
 #' @rdname set_definition
 set_identifier <- function(d, identifier = NULL){
   d <- arg_as_declaration(d)
+  identifier <- rlang::enexpr(identifier)
   purrr::update_list(d, identifier = make_identifier(identifier))
 }
 
@@ -255,11 +256,15 @@ combine_dec <- function(d1, d2, op = "+", identifier){
   d1 <- arg_as_declaration(d1)
   d2 <- arg_as_declaration(d2)
   identifier <- rlang::enexpr(identifier)
-  if(is_empty_declaration(d2)) return(d1)
-  if(is_empty_declaration(d1)) return(d2)
-  def <- rlang::lang(op, d1$definition, d2$definition)
+  if(is_empty_declaration(d2)){
+    def <- d1$definition
+  }else if(is_empty_declaration(d1)){
+    def <- d2$definition
+  }else{
+    def <- rlang::lang(op, d1$definition, d2$definition)
+  }
   if(missing(identifier)){
-    identifier <- d1$identifier
+    identifier <- get_identifier(d1)
   }else{
     identifier <- make_identifier(identifier)
   }
