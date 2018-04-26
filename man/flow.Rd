@@ -2,20 +2,23 @@
 % Please edit documentation in R/model.R
 \name{flow}
 \alias{flow}
-\title{Create a new flow from or to compartments}
+\title{Flows between compartments}
 \usage{
-flow(from = NULL, to = NULL, equation)
+flow(from = NULL, to = NULL, definition)
 }
 \arguments{
-\item{from}{Name of the source compartment or Null}
+\item{from}{Name of the source compartment or NULL}
 
-\item{to}{Name of the sink compartment or Null}
+\item{to}{Name of the sink compartment or NULL}
 
-\item{equation}{An equation describing the flow}
+\item{definition}{Declaration of the flow using the special variable A (amount in 'from' compartment) and C (concentration in 'from' compartment)}
 }
 \value{
-A flow item
+A flow fragment
 }
 \description{
-Create a new flow from or to compartments
+Creates a fragment describing a flow from between compartmens.
+}
+\examples{
+f <- flow(from = "depot", to = "central", definition = ~ka*A)
 }

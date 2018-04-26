@@ -4,13 +4,16 @@
 \alias{is_declaration}
 \alias{is_declarationish}
 \alias{is_anonymous}
+\alias{is_empty_declaration}
 \title{Test for declarations}
 \usage{
 is_declaration(o)
 
-is_declarationish(o)
+is_declarationish(o, parse = F)
 
 is_anonymous(o)
+
+is_empty_declaration(o)
 }
 \arguments{
 \item{o}{An object to be tested}
@@ -26,5 +29,7 @@ Tests if an object is a declaration or if it could behave as one
 \item \code{is_declarationish}: Has a wider definition of declaration and also returns true if the object could be converted to a declaration
 
 \item \code{is_anonymous}: Tests whether a declaration has an identifier
+
+\item \code{is_empty_declaration}: Tests whether a declaration is empty
 }}
 

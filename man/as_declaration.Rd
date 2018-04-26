@@ -28,7 +28,7 @@ Conversion to a declaration
 \itemize{
 \item \code{character}: Returns a declaration with the definition corresponding to the parsed character vector or an error if parsing was not successful.
 
-\item \code{numeric}: Returns a declaration with the definition set to the number provided.
+\item \code{numeric}: Returns an anonymous declaration with the definition set to the number provided.
 
 \item \code{formula}: Returns a declaration with the identifier and definition taken from the LHS and RHS of provided formula.
 }}

@@ -2,16 +2,21 @@
 % Please edit documentation in R/model.R
 \name{parameter}
 \alias{parameter}
-\title{Create a new model parameter}
+\title{Model parameter}
 \usage{
-parameter(name, type = "log-normal")
+parameter(name, type)
 }
 \arguments{
-\item{type}{}
+\item{name}{Name of the paramter}
+
+\item{type}{Model type to be used for the parameter}
 }
 \value{
-A parameter fragment
+A \code{\link{fragment}} representing a model parameter
 }
 \description{
-Create a new model parameter
+Defines name and type of a model parameter
+}
+\examples{
+p <- parameter("cl", "log-normal")
 }

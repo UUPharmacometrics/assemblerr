@@ -2,16 +2,33 @@
 % Please edit documentation in R/model.R
 \name{compartment}
 \alias{compartment}
-\title{Create a new compartment}
+\alias{cmp}
+\title{Compartment}
 \usage{
 compartment(name, volume = 1)
+
+cmp(name, volume = 1)
 }
 \arguments{
-\item{volume}{}
+\item{name}{Name of the compartment}
+
+\item{volume}{Defintion of the compartment volume as a number, formula or declaration}
 }
 \value{
-A compartment item
+A compartment fragment
 }
 \description{
-Create a new compartment
+Defines name and volume of compartment
+}
+\section{Functions}{
+\itemize{
+\item \code{cmp}: Is an simple alias for compartment.
+}}
+
+\examples{
+# compartment with name "central" and volume Vc
+comp1 <- compartment("central", volume = ~Vc)
+}
+\seealso{
+\code{\link{model}}
 }

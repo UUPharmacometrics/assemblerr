@@ -9,7 +9,7 @@ subs_dec(d, ...)
 \arguments{
 \item{d}{Declaration}
 
-\item{...}{A list of symbols and their replacement}
+\item{...}{A list of declarations}
 }
 \value{
 Declaration with substituted symbols in the definition
@@ -19,5 +19,6 @@ Substitute symbols in a declaration
 }
 \examples{
 d <- declaration("cl", theta*exp(eta))
-subs_dec(d, eta = eta+a)
+d1 <- declaration("theta", theta+a)
+subs_dec(d, d1)
 }

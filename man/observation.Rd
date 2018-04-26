@@ -2,27 +2,27 @@
 % Please edit documentation in R/model.R
 \name{observation}
 \alias{observation}
-\title{Create a new observation model}
+\title{Observation model}
 \usage{
-observation(name = "", equation, type)
+observation(definition, type, name)
 }
 \arguments{
-\item{name}{The name used to identify the measurement}
-
-\item{equation}{An equation describing the measurement}
+\item{definition}{A \code{\link{declaration}} describing the measurement}
 
 \item{type}{The model type used for the observation model}
+
+\item{name}{The name used to identify the measurement (if not provided as part of the definition)}
 }
 \value{
-A observation model fragment
+A \code{\link{fragment}} representing an observation model
 }
 \description{
-Observation models relate variables from a model to measured values.
+Defines how variables from a model relate to values in the data
 }
 \examples{
 # create an additive error observation model "conc" for the concentration from the "central" compartment
-c_obs <- observation("conc", ~C["central"], "additive")
+c_obs <- observation(conc~C["central"], "additive")
 
 # create a combined error observation model "eff" for the variable effect
-e_obs <- observation("eff", ~effect, "combined")
+e_obs <- observation(name = "eff", ~effect, "combined")
 }

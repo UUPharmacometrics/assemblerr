@@ -2,13 +2,27 @@
 % Please edit documentation in R/model_nm.R
 \name{model_nm}
 \alias{model_nm}
-\title{Create NONMEM model}
+\title{NONMEM model}
 \usage{
 model_nm()
 }
-\value{
-An empty NONMEM model
-}
 \description{
-Create NONMEM model
+\code{model_nm()} creates the foundation for a NONMEM model
+}
+\details{
+This function creates a NONMEM model object, a software-specific version of the general \link{\code{model_nm()}}. Like for the general model,
+this function only creates the empty base object which then needs to be filled with components before it can be rendered. The following components can be added
+to a NONMEM model:
+\itemize{
+   \item \code{\link{theta}}
+   \item \code{\link{omega}}
+   \item \code{\link{sigma}}
+   \item \code{\link{flow}}
+   \item \code{\link{ode}}
+   \item \code{\link{parameter_equation}}
+   \item \code{\link{algebraic_equation}}
+   \item \code{\link{observation_equation}}
+   \item \code{\link{data_item}}
+   \item \code{\link{meta_tag}}
+}
 }
