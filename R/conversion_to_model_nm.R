@@ -12,7 +12,7 @@ as_model_nm.model <- function(from){
     convert_compartments(from) %>%
     convert_parameters(from) %>%
     convert_observations(from) %>%
-    convert_algebraic_equations(from) %>%
+    convert_algebraics(from) %>%
     convert_meta_tags(from)
 }
 
@@ -20,28 +20,36 @@ convert_compartments.model_nm <- function(to, from){
   # replace generic amount and concentration variables in flow equations
   flows <- from$flows %>%
     purrr::transpose() %>%
-    purrr::map(~purrr::update_list(.x, equation = substitute(.x$equation, C = equation(A/.vol)$rhs))) %>%
-    purrr::map(~purrr::update_list(.x, equation = substitute(.x$equation, .vol = get_by_name(from, "compartments", .x$from)$volume$rhs))) %>%
-    purrr::map(~purrr::update_list(.x, equation = substitute(.x$equation, A = rlang::lang("[", rlang::sym("A"), get_by_name(from, "compartments", .x$from)$index))))
+    purrr::map(function(flow){
+      volume <- get_by_name(from, "compartments", flow$from)$volume %>%
+        set_identifier(vol)
+      cmp_index <- get_by_name(from, "compartments", flow$from)$index
+      cmp <- declaration(A, A[!!(cmp_index)])
+      conc <- as_declaration(C ~ A/vol) %>%
+        subs_dec(volume)
+      new_def <- flow$definition %>%
+        subs_dec(conc) %>%
+        subs_dec(cmp)
+      list_modify(flow, definition = new_def)
+    })
 
   from$compartments %>%
     purrr::transpose() %>%
     purrr::reduce(.init = to,
                   function(nm_model, comp){
+
                     outflow_eqn <- flows %>%
                       purrr::keep(~.x$from==comp$name) %>%
-                      purrr::map("equation") %>%
-                      purrr::reduce(`+`, .init = empty_equation())
+                      purrr::map("definition") %>%
+                      purrr::reduce(combine_dec, op = "+", .init = declaration())
 
                     inflow_eqn <- flows %>%
                       purrr::keep(~.x$to==comp$name) %>%
-                      purrr::map("equation") %>%
-                      purrr::reduce(`+`, .init = empty_equation())
+                      purrr::map("definition") %>%
+                      purrr::reduce(combine_dec, op = "+", .init = declaration())
 
 
-                    eqn <- {inflow_eqn - outflow_eqn} %>%
-                      set_lhs(dadt[.comp_index]) %>%
-                      substitute(.comp_index = comp$index)
+                    eqn <- combine_dec(inflow_eqn, outflow_eqn, op = `-`, identifier = dadt[!!(comp$index)])
 
                     nm_model + ode(name = comp$name, equation = eqn)
                   })
@@ -73,14 +81,13 @@ convert_parameters.model_nm <- function(to, from){
                   })
 }
 
-convert_algebraic_equations.model_nm <- function(to, from){
-  from$algebraic_equations %>%
+convert_algebraics.model_nm <- function(to, from){
+  from$algebraics %>%
     purrr::transpose() %>%
     purrr::reduce(.init = to,
-                  function(model, algebraic_equation){
-                    eqn <- algebraic_equation$equation %>%
-                      set_lhs(!!rlang::sym(algebraic_equation$name))
-                    model + algebraic_equation(variable$name, equation = eqn)
+                  function(model, algebraic){
+                    eqn <- algebraic$equation
+                    model + algebraic_equation(algebraic$name, equation = eqn)
                   })
 }
 
@@ -100,17 +107,15 @@ add_converter(
   name = "log-normal",
   target = "model_nm",
   converter_fn = function(to, from, parameter){
-    eqn <- equation(.par ~ theta[.theta]*exp(eta[.eta]))
     to <- to +
       theta(name = parameter$name, initial = get_parameter_value(from, parameter$name, 'typical')$value, lbound = 0) +
       omega(name = parameter$name, initial = get_parameter_value(from, parameter$name, 'iiv')$value)
 
+    theta_index <-  get_by_name(to, "thetas", parameter$name)$index
+    eta_index <- get_by_name(to, "omegas", parameter$name)$index
+    eqn <- declaration(!!(parameter$name), theta[!!(theta_index)]*exp(eta[!!(eta_index)]))
     to + parameter_equation(name = parameter$name,
-                            equation = substitute(eqn,
-                                                  .par = rlang::sym(parameter$name),
-                                                  .theta = get_by_name(to, "thetas", parameter$name)$index,
-                                                  .eta = get_by_name(to, "omegas", parameter$name)$index)
-    )
+                            equation = eqn)
   }
 )
 
@@ -120,16 +125,14 @@ add_converter(
   target = "model_nm",
   converter_fn = function(to, from, parameter){
     eqn <- equation(.par ~ theta[.theta]*(1+eta[.eta]))
-    {to +
+    to <- to +
         theta(name = parameter$name, initial = get_parameter_value(from, parameter$name, 'typical')$value) +
-        omega(name = parameter$name, initial = get_parameter_value(from, parameter$name, 'iiv')$value)} %>%
-        {. +
-            parameter_equation(name = parameter$name,
-                               equation = substitute(eqn,
-                                                     .par = rlang::sym(parameter$name),
-                                                     .theta = get_by_name(., "thetas", parameter$name)$index,
-                                                     .eta = get_by_name(., "omegas", parameter$name)$index)
-            )}
+        omega(name = parameter$name, initial = get_parameter_value(from, parameter$name, 'iiv')$value)
+    theta_index <-  get_by_name(to, "thetas", parameter$name)$index
+    eta_index <- get_by_name(to, "omegas", parameter$name)$index
+    eqn <- declaration(!!(parameter$name), theta[!!(theta_index)]*(1+eta[!!(eta_index)]))
+    to + parameter_equation(name = parameter$name,
+                            equation = eqn)
   }
 )
 
@@ -139,41 +142,48 @@ add_converter(
   target = "model_nm",
   converter_fn = function(to, from, parameter){
     eqn <- equation(.par ~ theta[.theta])
-    {to +
-        theta(name = parameter$name, initial = get_parameter_value(from, parameter$name, 'typical')$value)} %>%
-        {. +
-            parameter_equation(name = parameter$name,
-                               equation = substitute(eqn,
-                                                     .par = rlang::sym(parameter$name),
-                                                     .theta = get_by_name(., "thetas", parameter$name)$index)
-            )}
+    to <- to +
+        theta(name = parameter$name, initial = get_parameter_value(from, parameter$name, 'typical')$value)
+    theta_index <-  get_by_name(to, "thetas", parameter$name)$index
+    eqn <- declaration(!!(parameter$name), theta[!!(theta_index)])
+    to + parameter_equation(name = parameter$name,
+                            equation = eqn)
   }
 )
 
+make_ipred_equation <- function(to, from, obs){
+  compartment_indicies <- to$odes %>%
+  {
+    purrr::set_names(as.list(.$index), .$name)
+  }
+  # generate replacement rules for concentration
+  conc_declarations <- from$compartments %>%
+    purrr::transpose() %>%
+    purrr::map(~declaration(C[!!(.x$name)], A[!!(.x$name)]/vol) %>% subs_dec(set_identifier(.x$volume, vol)))
+
+  # define ipred, replace concentration expressions and compartment indicies
+  ipred_eqn <- set_identifier(obs$definition, ipred) %>%
+    purrr::invoke(.f = subs_dec, .x = conc_declarations, d = .) %>%
+    index_subs_dec("A", compartment_indicies)
+
+  return(ipred_eqn)
+}
 
 add_converter(
   facet = "observations",
   name = "additive",
   target = "model_nm",
   converter_fn = function(to, from, obs) {
-    compartment_indicies <- to$odes %>%
-    {
-      purrr::set_names(as.list(.$index), .$name)
-    }
-    ipred_eqn <- obs$equation %>%
-      set_lhs(ipred)
-    # replace reference to compartment amount with index
-    if ("A" %in% variables(ipred_eqn)) {
-      ipred_eqn <-
-        substitute_indicies(ipred_eqn, "A", compartment_indicies)
-    }
+    ipred_eqn <- make_ipred_equation(to, from, obs)
+
     sigma_name <- c("ruv", obs$name, "add") %>%
-    purrr::discard(~.x=="") %>%
+      purrr::discard(~.x=="") %>%
       paste0(collapse="-")
     to <-
       to + sigma(sigma_name, initial = get_parameter_value(from, sigma_name, 'ruv')$value)
-    ruv_eqn <- equation(y ~ ipred + eps[.eps]) %>%
-      substitute(.eps = get_by_name(to, "sigmas", sigma_name)$index)
+
+    ruv_eqn <- as_declaration(y ~ ipred + eps[.eps]) %>%
+      subs_dec(declaration(.eps, !!(get_by_name(to, "sigmas", sigma_name)$index)))
 
     to + observation_equation(
       name = obs$name,
@@ -188,17 +198,7 @@ add_converter(
   name = "proportional",
   target = "model_nm",
   converter_fn = function(to, from, obs) {
-    compartment_indicies <- to$odes %>%
-    {
-      purrr::set_names(as.list(.$index), .$name)
-    }
-    ipred_eqn <- obs$equation %>%
-      set_lhs(ipred)
-    # replace reference to compartment amount with index
-    if ("A" %in% variables(ipred_eqn)) {
-      ipred_eqn <-
-        substitute_indicies(ipred_eqn, "A", compartment_indicies)
-    }
+    ipred_eqn <- make_ipred_equation(to, from, obs)
     sigma_name <- c("ruv", obs$name, "prop") %>%
       purrr::discard(~.x=="") %>%
       paste0(collapse="-")
