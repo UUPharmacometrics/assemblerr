@@ -1,6 +1,5 @@
 #' @export
-render.declaration <- function(d, capitalize = T, round_vec_brackets = T, equal_assign_op = T){
-  browser()
+render.declaration <- function(d, capitalize = T, round_vec_brackets = T, equal_assign_op = T, pow_double_star = T){
   if(is_anonymous(d)){
     expr <- get_definition(d)
   }else{
@@ -17,6 +16,9 @@ render.declaration <- function(d, capitalize = T, round_vec_brackets = T, equal_
     expr <- transform_ast(expr, assignment_transformer)
   }
   str <- deparse(expr, control = c(), width.cutoff = 200)
+  if(pow_double_star){
+    str <- sub("\\^", "**", str)
+  }
   if(capitalize){
     return(toupper(str))
   }else{

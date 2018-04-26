@@ -231,7 +231,7 @@ add_converter(
       to +
       sigma(sigma_name, initial = get_parameter_value(from, sigma_name, 'ruv')$value) +
       theta(theta_name, initial = get_parameter_value(from, theta_name, 'typical')$value)
-    ruv_eqn <- as_declaration(y ~ ipred + eps[.eps]*ipred**theta[.theta]) %>%
+    ruv_eqn <- as_declaration(y ~ ipred + eps[.eps]*ipred^theta[.theta]) %>%
       subs_dec(declaration(.eps, !!(get_by_name(to, "sigmas", sigma_name)$index)),
                declaration(.theta, !!(get_by_name(to, "thetas", theta_name)$index)))
     to + observation_equation(
