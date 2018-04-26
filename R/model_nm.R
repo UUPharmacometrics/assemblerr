@@ -1,7 +1,28 @@
-#' Create NONMEM model
+
+#' NONMEM model
 #'
-#' @return An empty NONMEM model
+#' \code{model_nm()} creates the foundation for a NONMEM model
+#'
+#' This function creates a NONMEM model object, a software-specific version of the general \link{\code{model_nm()}}. Like for the general model,
+#' this function only creates the empty base object which then needs to be filled with components before it can be rendered. The following components can be added
+#' to a NONMEM model:
+#' \itemize{
+#'    \item \code{\link{theta}}
+#'    \item \code{\link{omega}}
+#'    \item \code{\link{sigma}}
+#'    \item \code{\link{flow}}
+#'    \item \code{\link{ode}}
+#'    \item \code{\link{parameter_equation}}
+#'    \item \code{\link{algebraic_equation}}
+#'    \item \code{\link{observation_equation}}
+#'    \item \code{\link{data_item}}
+#'    \item \code{\link{meta_tag}}
+#' }
+#'
+#' @return
 #' @export
+#'
+#' @examples
 model_nm <- function(){
   structure(list(), class = c("model_nm", "model", "fragment")) %>%
     add_facet("thetas", list(initial = numeric(), lbound = numeric(), ubound = numeric())) %>%
@@ -41,21 +62,21 @@ sigma <- function(name, initial = NA){
 #' @export
 ode <- function(name, equation){
   if(!is.character(name)) stop("'name' needs to be a character vector")
-  if(!is_equationish(equation)) stop("'equation' needs to be interpretable as an equation")
-  item("odes", name = name, equation = as_equation(equation))
+  if(!is_declarationish(equation)) stop("'equation' needs to be interpretable as an declaration")
+  item("odes", name = name, equation = as_declaration(equation))
 }
 #' @export
 parameter_equation <- function(name, equation){
   if(!is.character(name)) stop("'name' needs to be a character vector")
-  if(!is_equationish(equation)) stop("'equation' needs to be interpretable as an equation")
-  item("parameter_equations", name = name, equation = as_equation(equation))
+  if(!is_declarationish(equation)) stop("'equation' needs to be interpretable as an declaration")
+  item("parameter_equations", name = name, equation = as_declaration(equation))
 }
 #' @export
 observation_equation <- function(name, ipred_equation, ruv_equation){
   if(!is.character(name)) stop("'name' needs to be a character vector")
-  if(!is_equationish(ipred_equation)) stop("'ipred_equation' needs to be interpretable as an equation")
-  if(!is_equationish(ruv_equation)) stop("'ruv_equation' needs to be interpretable as an equation")
-  item("observation_equations", name = name, ipred_equation = as_equation(ipred_equation), ruv_equation = as_equation(ruv_equation))
+  if(!is_declarationish(ipred_equation)) stop("'ipred_equation' needs to be interpretable as an declaration")
+  if(!is_declarationish(ruv_equation)) stop("'ruv_equation' needs to be interpretable as an declaration")
+  item("observation_equations", name = name, ipred_equation = as_declaration(ipred_equation), ruv_equation = as_declaration(ruv_equation))
 }
 #' @export
 data_item <- function(name, type){

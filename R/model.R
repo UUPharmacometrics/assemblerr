@@ -52,6 +52,7 @@ model <- function(){
 compartment <- function(name, volume = 1){
   if(!is.character(name)) stop("'name' needs to be a character vector")
   if(!is_equationish(volume)) stop ("'volume' needs to be interpretable as an equation")
+  item("compartments", name = name, volume = as_declaration(volume))
 }
 
 #' @export
@@ -127,7 +128,7 @@ observation <- function(definition, type, name){
     if(name!=make.names(name)) stop("'name' needs to be a valid variable name")
     definition <- set_identifier(definition, name)
   }
-  name <- get_identifier(definition)
+  name <- get_identifier(definition) %>% as.character()
   item("observations", name = name, definition = definition, type = type)
 }
 
