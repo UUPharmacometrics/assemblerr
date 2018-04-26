@@ -204,8 +204,36 @@ add_converter(
       paste0(collapse="-")
     to <-
       to + sigma(sigma_name, initial = get_parameter_value(from, sigma_name, 'ruv')$value)
-    ruv_eqn <- equation(y ~ ipred + (1 + eps[.eps])) %>%
-      substitute(.eps = get_by_name(to, "sigmas", sigma_name)$index)
+    ruv_eqn <- as_declaration(y ~ ipred + (1 + eps[.eps])) %>%
+      subs_dec(declaration(.eps, !!(get_by_name(to, "sigmas", sigma_name)$index)))
+
+    to + observation_equation(
+      name = obs$name,
+      ipred_equation = ipred_eqn,
+      ruv_equation = ruv_eqn
+    )
+  }
+)
+
+add_converter(
+  facet = "observations",
+  name = "power",
+  target = "model_nm",
+  converter_fn = function(to, from, obs) {
+    ipred_eqn <- make_ipred_equation(to, from, obs)
+    sigma_name <- c("ruv", obs$name, "sig") %>%
+      purrr::discard(~.x=="") %>%
+      paste0(collapse="-")
+    theta_name <- c("ruv", obs$name, "power") %>%
+      purrr::discard(~.x=="") %>%
+      paste0(collapse="-")
+    to <-
+      to +
+      sigma(sigma_name, initial = get_parameter_value(from, sigma_name, 'ruv')$value) +
+      theta(theta_name, initial = get_parameter_value(from, theta_name, 'typical')$value)
+    ruv_eqn <- as_declaration(y ~ ipred + eps[.eps]*ipred**theta[.theta]) %>%
+      subs_dec(declaration(.eps, !!(get_by_name(to, "sigmas", sigma_name)$index)),
+               declaration(.theta, !!(get_by_name(to, "thetas", theta_name)$index)))
     to + observation_equation(
       name = obs$name,
       ipred_equation = ipred_eqn,
