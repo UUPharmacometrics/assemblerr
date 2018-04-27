@@ -21,15 +21,17 @@ convert_compartments.model_nm <- function(to, from){
   flows <- from$flows %>%
     purrr::transpose() %>%
     purrr::map(function(flow){
-      volume <- get_by_name(from, "compartments", flow$from)$volume %>%
-        set_identifier(vol)
+      new_def <- flow$definition
+      if("C" %in% variables(flow$definition)){
+        volume <- get_by_name(from, "compartments", flow$from)$volume %>%
+          set_identifier(vol)
+        conc <- as_declaration(C ~ A/vol) %>%
+          subs_dec(volume)
+        new_def <- subs_dec(new_def, conc)
+      }
       cmp_index <- get_by_name(from, "compartments", flow$from)$index
       cmp <- declaration(A, A[!!(cmp_index)])
-      conc <- as_declaration(C ~ A/vol) %>%
-        subs_dec(volume)
-      new_def <- flow$definition %>%
-        subs_dec(conc) %>%
-        subs_dec(cmp)
+      new_def <- subs_dec(new_def, cmp)
       list_modify(flow, definition = new_def)
     })
 
@@ -49,7 +51,7 @@ convert_compartments.model_nm <- function(to, from){
                       purrr::reduce(combine_dec, op = "+", .init = declaration())
 
 
-                    eqn <- combine_dec(inflow_eqn, outflow_eqn, op = `-`, identifier = dadt[!!(comp$index)])
+                    eqn <- combine_dec(inflow_eqn, outflow_eqn, op = "-", identifier = dadt[!!(comp$index)])
 
                     nm_model + ode(name = comp$name, equation = eqn)
                   })
@@ -86,7 +88,7 @@ convert_algebraics.model_nm <- function(to, from){
     purrr::transpose() %>%
     purrr::reduce(.init = to,
                   function(model, algebraic){
-                    eqn <- algebraic$equation
+                    eqn <- algebraic$definition
                     model + algebraic_equation(algebraic$name, equation = eqn)
                   })
 }
