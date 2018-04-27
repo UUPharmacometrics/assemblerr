@@ -226,14 +226,14 @@ print.declaration <- function(x){
 #' functions(d)
 variables <- function(d){
   if(!is_declaration(d)) stop("Function expects a declaration as input")
-  all.vars(x$definition)
+  all.vars(d$definition)
 }
 
 #' @export
 #' @rdname variables
 functions <- function(d){
   if(!is_declaration(d)) stop("Function expects a declaration as input")
-  setdiff(all.names(x$definition, unique = T), all.vars(x$definition))
+  setdiff(all.names(d$definition, unique = T), all.vars(d$definition))
 }
 
 #' Combine two declarations
