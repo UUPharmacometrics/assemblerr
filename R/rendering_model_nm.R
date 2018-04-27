@@ -10,20 +10,39 @@ render.model_nm <- function(model){
       purrr::pluck("name") %>%
       paste(collapse = " ")
 
+  pk_declarations <- model$parameter_equations%>%
+    purrr::transpose() %>%
+    purrr::map("equation")
 
-  # generate parameter code
-  param_code <- model$parameter_equations%>%
+  ode_declarations <- model$odes %>%
+    dplyr::arrange(index) %>%
+    purrr::transpose() %>%
+    purrr::map("equation")
+
+  algebraic_declarations <- model$algebraic_equations %>%
     purrr::transpose() %>%
     purrr::map("equation") %>%
-    purrr::map(render) %>%
-    render_str()
+    classify_declarations(ode_declarations)
 
-  # generate pk variable code
-  pk_variable_code <- model$algebraic_equations %>%
-    purrr::transpose() %>%
-    purrr::map("equation") %>%
-    purrr::map(render) %>%
-    render_str()
+  ode_declarations <- append(ode_declarations,
+                             dplyr::filter(algebraic_declarations, block == "DES") %>%
+                               purrr::pluck("equation"))
+  pk_declarations <- append(pk_declarations,
+                            dplyr::filter(algebraic_declarations, block == "PK") %>%
+                              purrr::pluck("equation"))
+  error_declarations <- dplyr::filter(algebraic_declarations, block == "ERROR") %>%
+    purrr::pluck("equation")
+
+
+  ode_declarations <- ode_declarations[topologic_order(ode_declarations)]
+  pk_declarations <- pk_declarations[topologic_order(pk_declarations)]
+  error_declarations <- error_declarations[topologic_order(error_declarations)]
+
+  render_code <- . %>% purrr::map(render) %>% render_str()
+
+  pk_code <- render_code(pk_declarations)
+  ode_code <- render_code(ode_declarations)
+  error_code <- render_code(error_declarations)
 
   # generate $MODEL code
   model_code <- model$odes %>%
@@ -32,14 +51,6 @@ render.model_nm <- function(model){
       code = paste0("COMPARTMENT=(",nm_name,")")) %>%
     .$code %>%
     {paste0("$MODEL NCOMPARTMENTS=", length(.), " ", paste(., collapse = " "))}
-
-  # generate ODE code
-  ode_code <- model$odes %>%
-    dplyr::arrange(index) %>%
-    purrr::transpose() %>%
-    purrr::map("equation") %>%
-    purrr::map(render) %>%
-    stringr::str_c(collapse = "\n")
 
   # generate observation code
   dvid_item <- get_first(model, "data_items", type == "dvid")
@@ -94,11 +105,11 @@ $INPUT ${input_code}
 $SUBROUTINES ADVAN6 TOL=9
 ${model_code}
 $PK
-${param_code}
-${pk_variable_code}
+${pk_code}
 $DES
 ${ode_code}
 $ERROR
+${error_code}
 ${observation_code}
 ${theta_code}
 ${omega_code}
@@ -111,3 +122,21 @@ render_str <- function(str){
   return(paste(str, collapse = "\n"))
 }
 
+# function to determine whether an algebraic declaration needs to go to PK, DES or ERROR
+classify_declarations <- function(dl, odes){
+  ode_identifiers <- purrr::map_chr(odes, ~get_identifier(.) %>% deparse())
+  dl %>%
+    purrr::map_chr(function(d){
+      var <- get_identifier(d) %>% deparse()
+      if(!depends_on(var, "A", dl)){
+        return("PK")
+      }else{
+        if(any(purrr::map_lgl(ode_identifiers, ~depends_on(.x, var, odes)))){
+          return("DES")
+        }else{
+          return("ERROR")
+        }
+      }
+    }) %>%
+  { tibble::tibble(equation = dl, block = .) }
+}
