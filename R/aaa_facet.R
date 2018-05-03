@@ -94,6 +94,9 @@ add_fragment <- function(fragment1, fragment2){
     if(!exists(facet, frag)){
       frag[[facet]] <- fragment2[[facet]]
     }else if(exists("name", frag[[facet]])){
+      # if there is no name in the second fragment, set it to "missing"
+      if(!exists("name", fragment2[[facet]])) fragment2[[facet]]$name <- as.character(NA)
+
       # determine all entries that will not change and update index column
       unchanged <- dplyr::anti_join(frag[[facet]], fragment2[[facet]], by = "name") %>%
         dplyr::arrange(index) %>%
