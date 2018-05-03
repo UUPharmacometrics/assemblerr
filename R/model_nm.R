@@ -72,6 +72,13 @@ parameter_equation <- function(name, equation){
   item("parameter_equations", name = name, equation = as_declaration(equation))
 }
 #' @export
+algebraic_equation <- function(name, equation){
+  if(!is.character(name)) stop("'name' needs to be a character vector")
+  if(!is_declarationish(equation)) stop("'equation' needs to be interpretable as an declaration")
+  item("algebraic_equations", name = name, equation = as_declaration(equation))
+}
+
+#' @export
 observation_equation <- function(name, ipred_equation, ruv_equation){
   if(!is.character(name)) stop("'name' needs to be a character vector")
   if(!is_declarationish(ipred_equation)) stop("'ipred_equation' needs to be interpretable as an declaration")

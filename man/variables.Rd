@@ -5,9 +5,9 @@
 \alias{functions}
 \title{List variables and functions of a declaration}
 \usage{
-variables(x)
+variables(d)
 
-functions(x)
+functions(d)
 }
 \arguments{
 \item{d}{A declaration}

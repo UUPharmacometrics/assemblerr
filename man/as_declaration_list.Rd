@@ -4,7 +4,7 @@
 \alias{as_declaration_list}
 \title{Make a list of declarations}
 \usage{
-as_declaration_list(l)
+as_declaration_list(dl)
 }
 \arguments{
 \item{l}{list to be converted}

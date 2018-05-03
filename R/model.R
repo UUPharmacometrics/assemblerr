@@ -51,7 +51,7 @@ model <- function(){
 #' comp1 <- compartment("central", volume = ~Vc)
 compartment <- function(name, volume = 1){
   if(!is.character(name)) stop("'name' needs to be a character vector")
-  if(!is_equationish(volume)) stop ("'volume' needs to be interpretable as an equation")
+  if(!is_declarationish(volume)) stop ("'volume' needs to be interpretable a declaration")
   item("compartments", name = name, volume = as_declaration(volume))
 }
 
@@ -138,7 +138,7 @@ algebraic <- function(definition){
   if(!is_declarationish(definition)) stop("'definition' needs to be interpreatable as a declaration")
   definition <- as_declaration(definition)
   if(is_anonymous(definition)) stop("'definition' needs to be named")
-  item("algebraics", name = get_identifier(definition), definition = definition)
+  item("algebraics", name = get_identifier(definition) %>% deparse(), definition = definition)
 }
 
 
