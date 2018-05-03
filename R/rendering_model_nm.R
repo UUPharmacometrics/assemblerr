@@ -14,43 +14,52 @@ render.model_nm <- function(model){
     purrr::transpose() %>%
     purrr::map("equation")
 
-  ode_declarations <- model$odes %>%
-    dplyr::arrange(index) %>%
-    purrr::transpose() %>%
-    purrr::map("equation")
+  pred_model <- FALSE
+  if(nrow(model$odes)==0){
+    pred_model <- TRUE
+  }
+
+  if(!pred_model){
+    ode_declarations <- model$odes %>%
+      dplyr::arrange(index) %>%
+      purrr::transpose() %>%
+      purrr::map("equation")
+  }else{
+    ode_declarations <- list()
+  }
+
 
   algebraic_declarations <- model$algebraic_equations %>%
     purrr::transpose() %>%
     purrr::map("equation") %>%
     classify_declarations(ode_declarations)
 
-  ode_declarations <- append(ode_declarations,
-                             dplyr::filter(algebraic_declarations, block == "DES") %>%
-                               purrr::pluck("equation"))
-  pk_declarations <- append(pk_declarations,
-                            dplyr::filter(algebraic_declarations, block == "PK") %>%
-                              purrr::pluck("equation"))
-  error_declarations <- dplyr::filter(algebraic_declarations, block == "ERROR") %>%
-    purrr::pluck("equation")
+  error_declarations <- list()
 
+  append_order_render <- function(declarations, block){
+    append(declarations,
+           dplyr::filter(algebraic_declarations, block == !!(block)) %>%
+             purrr::pluck("equation")) %>%
+             {.[topologic_order(.)]} %>%
+      purrr::map(render) %>%
+      render_str()
+  }
 
-  ode_declarations <- ode_declarations[topologic_order(ode_declarations)]
-  pk_declarations <- pk_declarations[topologic_order(pk_declarations)]
-  error_declarations <- error_declarations[topologic_order(error_declarations)]
+  pk_code <- append_order_render(pk_declarations, "PK")
+  error_code <- append_order_render(error_declarations, "ERROR")
 
-  render_code <- . %>% purrr::map(render) %>% render_str()
+  if(!pred_model){
+    ode_code <- append_order_render(ode_declarations, "DES")
 
-  pk_code <- render_code(pk_declarations)
-  ode_code <- render_code(ode_declarations)
-  error_code <- render_code(error_declarations)
+    # generate $MODEL code
+    model_code <- model$odes %>%
+      dplyr::mutate(
+        nm_name = toupper(.$name),
+        code = paste0("COMPARTMENT=(",nm_name,")")) %>%
+      .$code %>%
+      {paste0("$MODEL NCOMPARTMENTS=", length(.), " ", paste(., collapse = " "))}
+  }
 
-  # generate $MODEL code
-  model_code <- model$odes %>%
-    dplyr::mutate(
-      nm_name = toupper(.$name),
-      code = paste0("COMPARTMENT=(",nm_name,")")) %>%
-    .$code %>%
-    {paste0("$MODEL NCOMPARTMENTS=", length(.), " ", paste(., collapse = " "))}
 
   # generate observation code
   dvid_item <- get_first(model, "data_items", type == "dvid")
@@ -97,8 +106,22 @@ ENDIF")
     dplyr::mutate(init_code = sprintf("$SIGMA %s \t;%s", initial, toupper(name))) %>%
     {paste(.$init_code, collapse = "\n")}
 
+  if(pred_model){
+      stringr::str_interp(
+    "
+$PROBLEM ${problem_title}
+$INPUT ${input_code}
+$PRED
+${pk_code}
+${error_code}
+${observation_code}
+${theta_code}
+${omega_code}
+${sigma_code}
+")
+  }else{
 
-  stringr::str_interp(
+      stringr::str_interp(
     "
 $PROBLEM ${problem_title}
 $INPUT ${input_code}
@@ -115,6 +138,7 @@ ${theta_code}
 ${omega_code}
 ${sigma_code}
 ")
+  }
 }
 
 render_str <- function(str){
