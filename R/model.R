@@ -104,18 +104,18 @@ parameter <- function(name, type){
 #'
 #' @param definition A \code{\link{declaration}} describing the measurement
 #' @param type The model type used for the observation model
-#' @param name The name used to identify the measurement (if not provided as part of the definition)
+#' @param name The name used to identify the measurement
 #'
 #' @return A \code{\link{fragment}} representing an observation model
 #'
 #' @examples
-#' # create an additive error observation model "conc" for the concentration from the "central" compartment
+#' # create an additive error observation model for the concentration from the "central" compartment
 #' c_obs <- observation(conc~C["central"], "additive")
 #'
 #' # create a combined error observation model "eff" for the variable effect
 #' e_obs <- observation(name = "eff", ~effect, "combined")
 #' @export
-observation <- function(definition, type, name){
+observation <- function(definition, type, name = NULL){
   if(!is_declarationish(definition)) stop("'definition' needs to be interpreatable as a declaration")
   if(missing(type)) {
     message("No type for the observation model was specified, using 'additive' as a default")
@@ -123,12 +123,7 @@ observation <- function(definition, type, name){
   }
   if(!is.character(type)) stop("'type' needs to be a character vector")
   definition <- as_declaration(definition)
-  if(!missing(name)) {
-    if(!is_anonymous(definition)) message("Name in definition will be replaced with explicitly provided name")
-    if(name!=make.names(name)) stop("'name' needs to be a valid variable name")
-    definition <- set_identifier(definition, name)
-  }
-  name <- get_identifier(definition) %>% as.character()
+  if(!missing(name) && name!=make.names(name)) stop("'name' needs to be a valid variable name")
   item("observations", name = name, definition = definition, type = type)
 }
 
