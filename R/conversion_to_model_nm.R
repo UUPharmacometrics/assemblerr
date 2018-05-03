@@ -32,7 +32,7 @@ convert_compartments.model_nm <- function(to, from){
       cmp_index <- get_by_name(from, "compartments", flow$from)$index
       cmp <- declaration(A, A[!!(cmp_index)])
       new_def <- subs_dec(new_def, cmp)
-      list_modify(flow, definition = new_def)
+      purrr::list_modify(flow, definition = new_def)
     })
 
   from$compartments %>%
