@@ -51,8 +51,8 @@ model <- function(){
 #' comp1 <- compartment("central", volume = ~Vc)
 compartment <- function(name, volume = 1){
   if(!is.character(name)) stop("'name' needs to be a character vector")
-  if(!is_declarationish(volume)) stop ("'volume' needs to be interpretable a declaration")
-  item("compartments", name = name, volume = as_declaration(volume))
+  volume <- arg_as_declaration(volume)
+  item("compartments", name = name, volume = volume)
 }
 
 #' @export
@@ -73,8 +73,8 @@ cmp <- compartment
 #' f <- flow(from = "depot", to = "central", definition = ~ka*A)
 flow <- function(from = NULL, to = NULL, definition){
   if(!is.character(from) && !is.character(to)) stop("'from' or/and 'to' need to be compartment names")
-  if(!is_declarationish(definition)) stop("'definition' needs to interpretable as a declaration")
-  item("flows", from = from, to = to, definition = as_declaration(definition))
+  definition <- arg_as_declaration(definition)
+  item("flows", from = from, to = to, definition = definition)
 }
 
 #' Model parameter
@@ -116,13 +116,12 @@ parameter <- function(name, type){
 #' e_obs <- observation(name = "eff", ~effect, "combined")
 #' @export
 observation <- function(definition, type, name = NULL){
-  if(!is_declarationish(definition)) stop("'definition' needs to be interpreatable as a declaration")
+  definition <- arg_as_declaration(definition)
   if(missing(type)) {
     message("No type for the observation model was specified, using 'additive' as a default")
     type <- "additive"
   }
   if(!is.character(type)) stop("'type' needs to be a character vector")
-  definition <- as_declaration(definition)
   if(!missing(name) && name!=make.names(name)) stop("'name' needs to be a valid variable name")
   item("observations", name = name, definition = definition, type = type)
 }
@@ -130,8 +129,7 @@ observation <- function(definition, type, name = NULL){
 
 #' @export
 algebraic <- function(definition){
-  if(!is_declarationish(definition)) stop("'definition' needs to be interpreatable as a declaration")
-  definition <- as_declaration(definition)
+  definition <- arg_as_declaration(definition)
   if(is_anonymous(definition)) stop("'definition' needs to be named")
   item("algebraics", name = get_identifier(definition) %>% deparse(), definition = definition)
 }

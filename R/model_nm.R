@@ -62,28 +62,28 @@ sigma <- function(name, initial = NA){
 #' @export
 ode <- function(name, equation){
   if(!is.character(name)) stop("'name' needs to be a character vector")
-  if(!is_declarationish(equation)) stop("'equation' needs to be interpretable as an declaration")
-  item("odes", name = name, equation = as_declaration(equation))
+  equation <- arg_as_declaration(equation)
+  item("odes", name = name, equation = equation)
 }
 #' @export
 parameter_equation <- function(name, equation){
   if(!is.character(name)) stop("'name' needs to be a character vector")
-  if(!is_declarationish(equation)) stop("'equation' needs to be interpretable as an declaration")
-  item("parameter_equations", name = name, equation = as_declaration(equation))
+  equation <- arg_as_declaration(equation)
+  item("parameter_equations", name = name, equation = equation)
 }
 #' @export
 algebraic_equation <- function(name, equation){
   if(!is.character(name)) stop("'name' needs to be a character vector")
-  if(!is_declarationish(equation)) stop("'equation' needs to be interpretable as an declaration")
-  item("algebraic_equations", name = name, equation = as_declaration(equation))
+  equation <- arg_as_declaration(equation)
+  item("algebraic_equations", name = name, equation = equation)
 }
 
 #' @export
 observation_equation <- function(name, ipred_equation, ruv_equation){
   if(!is.character(name)) stop("'name' needs to be a character vector")
-  if(!is_declarationish(ipred_equation)) stop("'ipred_equation' needs to be interpretable as an declaration")
-  if(!is_declarationish(ruv_equation)) stop("'ruv_equation' needs to be interpretable as an declaration")
-  item("observation_equations", name = name, ipred_equation = as_declaration(ipred_equation), ruv_equation = as_declaration(ruv_equation))
+  ipred_equation <- arg_as_declaration(ipred_equation)
+  ruv_equation <- arg_as_declaration(ruv_equation)
+  item("observation_equations", name = name, ipred_equation = ipred_equation, ruv_equation = ruv_equation)
 }
 #' @export
 data_item <- function(name, type){
