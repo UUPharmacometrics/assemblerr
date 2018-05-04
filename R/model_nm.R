@@ -31,7 +31,7 @@ model_nm <- function(){
     add_facet("odes", list(equation = list())) %>%
     add_facet("parameter_equations", list(equation = list())) %>%
     add_facet("algebraic_equations", list(equation = list())) %>%
-    add_facet("observation_equations", list(ipred_equation = list(), ruv_equation = list())) %>%
+    add_facet("observation_declarations", list(declarations = list())) %>%
     add_facet("data_items", list(type = as.character())) %>%
     add_facet("meta_tags", list(value = as.character())) +
     data_items(c("ID", "TIME", "DV"), c("id", "idv", "dv"))
@@ -79,12 +79,12 @@ algebraic_equation <- function(name, equation){
 }
 
 #' @export
-observation_equation <- function(name, ipred_equation, ruv_equation){
-  if(!is.character(name)) stop("'name' needs to be a character vector")
-  ipred_equation <- arg_as_declaration(ipred_equation)
-  ruv_equation <- arg_as_declaration(ruv_equation)
-  item("observation_equations", name = name, ipred_equation = ipred_equation, ruv_equation = ruv_equation)
+observation_declaration <- function(name, declarations){
+  declarations <- arg_as_declaration_list(declarations)
+  item("observation_declarations", name = name, declarations = declarations)
 }
+
+
 #' @export
 data_item <- function(name, type){
   if(!is.character(name)) stop("'name' needs to be a character vector")

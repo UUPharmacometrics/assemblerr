@@ -74,8 +74,11 @@ is_declaration <- function(o) {
 #' @export
 is_declarationish <- function(o, parse = F) {
   if(!parse) return(rlang::is_formulaish(o) | is_declaration(o) | is.numeric(o) | is.character(o))
-  parses_succefully <- T
-  if(is.character(o) || rlang::is_formulaish(o)) parses_succefully <- !is.null(purrr::possibly(as_declaration, NULL)(o))
+  if(is.character(o) || rlang::is_formulaish(o)) {
+    parses_succefully <- !is.null(purrr::possibly(as_declaration, NULL)(o))
+  }else{
+    parses_succefully <- FALSE
+  }
   return(parses_succefully | is_declaration(o) | is.numeric(o))
 }
 

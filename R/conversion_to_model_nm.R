@@ -164,9 +164,15 @@ make_ipred_equation <- function(to, from, obs){
     purrr::map(~declaration(C[!!(.x$name)], A[!!(.x$name)]/vol) %>% subs_dec(set_identifier(.x$volume, vol)))
 
   # define ipred, replace concentration expressions and compartment indicies
-  ipred_eqn <- set_identifier(obs$definition, ipred) %>%
+  ipred_eqn <- obs$definition %>%
     purrr::invoke(.f = subs_dec, .x = conc_declarations, d = .) %>%
     index_subs_dec("A", compartment_indicies)
+
+  if(is_anonymous(ipred_eqn)){
+    ipred_eqn <- list(set_identifier(ipred_eqn, ipred))
+  }else{
+    ipred_eqn <- list(ipred_eqn, declaration("ipred", !!(get_identifier(ipred_eqn))))
+  }
 
   return(ipred_eqn)
 }
@@ -187,10 +193,9 @@ add_converter(
     ruv_eqn <- as_declaration(y ~ ipred + eps[.eps]) %>%
       subs_dec(declaration(.eps, !!(get_by_name(to, "sigmas", sigma_name)$index)))
 
-    to + observation_equation(
+    to + observation_declaration(
       name = obs$name,
-      ipred_equation = ipred_eqn,
-      ruv_equation = ruv_eqn
+      declarations = c(ipred_eqn, list(ruv_eqn))
     )
   }
 )
@@ -209,10 +214,9 @@ add_converter(
     ruv_eqn <- as_declaration(y ~ ipred + (1 + eps[.eps])) %>%
       subs_dec(declaration(.eps, !!(get_by_name(to, "sigmas", sigma_name)$index)))
 
-    to + observation_equation(
+    to + observation_declaration(
       name = obs$name,
-      ipred_equation = ipred_eqn,
-      ruv_equation = ruv_eqn
+      declarations = c(ipred_eqn, list(ruv_eqn))
     )
   }
 )
@@ -236,10 +240,9 @@ add_converter(
     ruv_eqn <- as_declaration(y ~ ipred + eps[.eps]*ipred^theta[.theta]) %>%
       subs_dec(declaration(.eps, !!(get_by_name(to, "sigmas", sigma_name)$index)),
                declaration(.theta, !!(get_by_name(to, "thetas", theta_name)$index)))
-    to + observation_equation(
+    to + observation_declaration(
       name = obs$name,
-      ipred_equation = ipred_eqn,
-      ruv_equation = ruv_eqn
+      declarations = c(ipred_eqn, list(ruv_eqn))
     )
   }
 )

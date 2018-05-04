@@ -9,13 +9,23 @@
 #' @examples
 #' list(~cl, "V") %>%  as_declaration_list()
 as_declaration_list <- function(dl){
-  declarationish <- dl %>%
-    purrr::map_lgl(is_declarationish, parse = T)
-  if(any(!declarationish)) stop("Elements ", dl[!declarationish], " could not be interpreted as a declaration.", call. = F)
-  dl %>%
-    purrr::map(as_declaration) %>%
-    return()
+  #declarationish <- dl %>%
+  #  purrr::map_lgl(is_declarationish, parse = T)
+  #if(any(!declarationish)) stop("Elements ", dl[!declarationish], " could not be interpreted as a declaration.", call. = F)
+  if(is_declarationish(dl, parse = T)) return(list(as_declaration(dl)))
+  return(purrr::map(dl, as_declaration))
 }
+
+is_declarationish_list <- function(dl, parse = F) {
+  return(is_declarationish(dl, parse) || all(purrr::map_lgl(dl, is_declarationish)))
+}
+
+arg_as_declaration_list <- function(arg){
+  arg_expr <- rlang::enexpr(arg)
+  if(!is_declarationish_list(arg, parse = T)) stop("Argument '", arg_expr %>% as.character(), "' can not be interpreted as a declaration list", call. = F)
+  return(as_declaration_list(arg))
+}
+
 
 # returns true if var1 depends on var2
 depends_on <- function(var1, var2, dl) {
