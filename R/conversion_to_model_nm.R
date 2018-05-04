@@ -68,8 +68,11 @@ convert_observations.model_nm <- function(to, from) {
                     call_converter("observations", observation$type, from, model_nm, observation)
                   } )
   if(nrow(from$observations)>1){  # if there are more than one observation models, a dvid variable is needed
+    mapping <- from$observations %>%
+    {purrr::set_names(.[["index"]], .[["name"]])}
+
     to <- to +
-      data_item("DVID", "dvid")
+      data_item("DVID", "dvid", mapping = mapping)
   }
   to
 }
@@ -126,7 +129,6 @@ add_converter(
   name = "normal",
   target = "model_nm",
   converter_fn = function(to, from, parameter){
-    eqn <- equation(.par ~ theta[.theta]*(1+eta[.eta]))
     to <- to +
         theta(name = parameter$name, initial = get_parameter_value(from, parameter$name, 'typical')$value) +
         omega(name = parameter$name, initial = get_parameter_value(from, parameter$name, 'iiv')$value)
@@ -143,7 +145,6 @@ add_converter(
   name = "novar",
   target = "model_nm",
   converter_fn = function(to, from, parameter){
-    eqn <- equation(.par ~ theta[.theta])
     to <- to +
         theta(name = parameter$name, initial = get_parameter_value(from, parameter$name, 'typical')$value)
     theta_index <-  get_by_name(to, "thetas", parameter$name)$index
