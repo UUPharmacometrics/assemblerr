@@ -32,7 +32,7 @@ model_nm <- function(){
     add_facet("parameter_equations", list(equation = list())) %>%
     add_facet("algebraic_equations", list(equation = list())) %>%
     add_facet("observation_declarations", list(declarations = list())) %>%
-    add_facet("data_items", list(type = as.character())) %>%
+    add_facet("data_items", list(type = as.character(), properties = list())) %>%
     add_facet("meta_tags", list(value = as.character())) +
     data_items(c("ID", "TIME", "DV"), c("id", "idv", "dv"))
 }
@@ -86,9 +86,9 @@ observation_declaration <- function(name, declarations){
 
 
 #' @export
-data_item <- function(name, type){
+data_item <- function(name, type, ...){
   if(!is.character(name)) stop("'name' needs to be a character vector")
-  item("data_items", name = name, type = type)
+  item("data_items", name = name, type = type, properties = list(...))
 }
 
 #' @export
