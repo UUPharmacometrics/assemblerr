@@ -66,6 +66,7 @@ render.model_nm <- function(model){
   use_dvid <- nrow(model$observation_declarations)>1
   if(!rlang::is_empty(dvid_item)) {
     dvid_name <- dvid_item$name
+    mapping <- dvid_item$properties$mapping
   }else{
     dvid_name <- "DVID"
     if(use_dvid) rlang::warn("More than one observation model used but no data item with type dvid found. Resorting to 'DVID'.")
@@ -79,8 +80,9 @@ render.model_nm <- function(model){
     purrr::imap(function(obs_code_list,dv_name) {
         obs_code <- render_str(obs_code_list)
         if(!is.na(dv_name) && use_dvid) {
-          stringr::str_interp("
-IF(${dvid_name}.EQ.${dv_name}) THEN ;${dv_name}
+          dvid <- mapping[[dv_name]]
+          stringr::str_interp(
+"IF(${dvid_name}.EQ.${dvid}) THEN ;${dv_name}
 ${obs_code}
 ENDIF")
         }else{
