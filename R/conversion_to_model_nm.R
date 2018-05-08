@@ -91,7 +91,8 @@ convert_algebraics.model_nm <- function(to, from){
     purrr::transpose() %>%
     purrr::reduce(.init = to,
                   function(model, algebraic){
-                    eqn <- algebraic$definition
+                    eqn <- algebraic$definition %>%
+                      replace_compartment_references(to, from)
                     model + algebraic_equation(algebraic$name, equation = eqn)
                   })
 }
@@ -154,21 +155,28 @@ add_converter(
   }
 )
 
-make_ipred_equation <- function(to, from, obs){
-  compartment_indicies <- to$odes %>%
-  {
-    purrr::set_names(as.list(.$index), .$name)
+replace_compartment_references <- function(d, to, from){
+  if(any(c("C","A") %in% variables(d))){
+    compartment_indicies <- to$odes %>%
+    {
+      purrr::set_names(as.list(.$index), .$name)
+    }
+    # generate replacement rules for concentration
+    conc_declarations <- from$compartments %>%
+      purrr::transpose() %>%
+      purrr::map(~declaration(C[!!(.x$name)], A[!!(.x$name)]/vol) %>% subs_dec(set_identifier(.x$volume, vol)))
+
+    dt <- d %>%
+      purrr::invoke(.f = subs_dec, .x = conc_declarations, d = .) %>%
+      index_subs_dec("A", compartment_indicies)
+    return(dt)
+  }else{
+    return(d)
   }
-  # generate replacement rules for concentration
-  conc_declarations <- from$compartments %>%
-    purrr::transpose() %>%
-    purrr::map(~declaration(C[!!(.x$name)], A[!!(.x$name)]/vol) %>% subs_dec(set_identifier(.x$volume, vol)))
+}
 
-  # define ipred, replace concentration expressions and compartment indicies
-  ipred_eqn <- obs$definition %>%
-    purrr::invoke(.f = subs_dec, .x = conc_declarations, d = .) %>%
-    index_subs_dec("A", compartment_indicies)
-
+make_ipred_equation <- function(to, from, obs){
+  ipred_eqn <- replace_compartment_references(obs$definition, to, from)
   if(is_anonymous(ipred_eqn)){
     ipred_eqn <- list(set_identifier(ipred_eqn, ipred))
   }else{
