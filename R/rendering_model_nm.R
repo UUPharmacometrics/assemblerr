@@ -1,5 +1,5 @@
 #' @export
-render.model_nm <- function(model){
+render.model_nm <- function(model, opts = render_opts_nm()){
   # generate $PROBLEM title
   problem_title <- get_by_name(model, "meta_tags", "title")$value
   if(is.null(problem_title)) problem_title <- "assemblerr model"
@@ -41,7 +41,7 @@ render.model_nm <- function(model){
            dplyr::filter(algebraic_declarations, block == !!(block)) %>%
              purrr::pluck("equation")) %>%
              {.[topologic_order(.)]} %>%
-      purrr::map(render) %>%
+      purrr::map(render, opts = opts) %>%
       render_str()
   }
 
@@ -76,7 +76,7 @@ render.model_nm <- function(model){
     purrr::transpose() %>%
     {purrr::set_names(., purrr::map(., "name"))} %>%
     purrr::map("declarations") %>%
-    purrr::modify_depth(2, render) %>%
+    purrr::modify_depth(2, render, opts = opts) %>%
     purrr::imap(function(obs_code_list,dv_name) {
         obs_code <- render_str(obs_code_list)
         if(!is.na(dv_name) && use_dvid) {
