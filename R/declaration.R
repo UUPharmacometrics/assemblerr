@@ -49,11 +49,6 @@ declaration <- function(identifier, definition){
   }else{
     definition <- rlang::enexpr(definition)
   }
-  # if only the identifer is given
-  if(is.null(definition) && !is.null(identifier)) {
-    definition <- identifier
-    identifier <- NULL
-  }
   new_declaration(identifier, definition)
 }
 
@@ -92,7 +87,7 @@ is_anonymous <- function(o) {
 #' @describeIn is_declaration Tests whether a declaration is empty
 #' @export
 is_empty_declaration <- function(o){
-  return(is_declaration(o) & is.null(o$identifier) & is.null(o$definition))
+  return(is_declaration(o) && is.null(o$identifier) && is.null(o$definition))
 }
 
 #' Conversion to a declaration
