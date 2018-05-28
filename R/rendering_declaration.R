@@ -1,7 +1,7 @@
 #' @export
 render.declaration <- function(d, capitalize = T, round_vec_brackets = T, equal_assign_op = T, pow_double_star = T){
   if(is_anonymous(d)){
-    expr <- get_definition(d)
+    expr <- dec_get_def(d)
   }else{
     expr <- base::substitute(identifier <- definition, d)
   }

@@ -159,7 +159,7 @@ as_declaration.language <- as_declaration.formula
 #'
 #' @return A declaration or an error message if the variable could not be interpreted as a declaration
 #' @export
-arg_as_declaration <- function(arg){
+arg2dec <- function(arg){
   arg_expr <- rlang::enexpr(arg)
   if(!is_declarationish(arg, parse = T)) stop("Argument '", arg_expr %>% as.character(), "' can not be interpreted as a declaration", call. = F)
   return(as_declaration(arg))
@@ -176,27 +176,27 @@ arg_as_declaration <- function(arg){
 #'
 #' @examples
 #' d <- declaration("cl", theta*exp(eta))
-#' d2 <- set_identifier(d, "v")
-#' d3 <- set_definition(d, theta)
-set_definition <- function(d, definition){
-  if(!is_declaration(d)) stop("Function expects a declaration as input")
+#' d2 <- dec_set_def(d, "v")
+#' d3 <- dec_set_id(d, theta)
+dec_set_def <- function(d, definition){
+  d <- arg2dec(d)
   purrr::update_list(d, definition = rlang::enexpr(definition))
 }
 #' @export
 #' @rdname set_definition
-set_identifier <- function(d, identifier = NULL){
-  d <- arg_as_declaration(d)
+dec_set_id <- function(d, identifier = NULL){
+  d <- arg2dec(d)
   identifier <- rlang::enexpr(identifier)
   purrr::update_list(d, identifier = make_identifier(identifier))
 }
 
-get_identifier <- function(d) {
-  if(!is_declaration(d)) stop("Function expects a declaration as input")
+dec_get_id <- function(d) {
+  d <- arg2dec(d)
   return(d$identifier)
 }
 
-get_definition <- function(d) {
-  if(!is_declaration(d)) stop("Function expects a declaration as input")
+dec_get_def <- function(d) {
+  d <- arg2dec(d)
   return(d$definition)
 }
 
@@ -225,17 +225,17 @@ print.declaration <- function(x){
 #'
 #' @examples
 #' d <- declaration("cl", theta*exp(eta))
-#' variables(d)
-#' functions(d)
-variables <- function(d){
-  if(!is_declaration(d)) stop("Function expects a declaration as input")
+#' dec_vars(d)
+#' dec_funs(d)
+dec_vars <- function(d){
+  d <- arg2dec(d)
   all.vars(d$definition)
 }
 
 #' @export
 #' @rdname variables
-functions <- function(d){
-  if(!is_declaration(d)) stop("Function expects a declaration as input")
+dec_funs <- function(d){
+  d <- arg2dec(d)
   setdiff(all.names(d$definition, unique = T), all.vars(d$definition))
 }
 
@@ -254,10 +254,10 @@ functions <- function(d){
 #' @examples
 #' d1 <- declaration(definition = ka*A["depot"])
 #' d2 <- declaration(definition = ke*A["central"])
-#' d3 <- combine_dec(d1, d2, "-", "dA")
-combine_dec <- function(d1, d2, op = "+", identifier){
-  d1 <- arg_as_declaration(d1)
-  d2 <- arg_as_declaration(d2)
+#' d3 <- dec_combine(d1, d2, "-", "dA")
+dec_combine <- function(d1, d2, op = "+", identifier){
+  d1 <- arg2dec(d1)
+  d2 <- arg2dec(d2)
   identifier <- rlang::enexpr(identifier)
   if(is_empty_declaration(d2)){
     def <- d1$definition
@@ -267,7 +267,7 @@ combine_dec <- function(d1, d2, op = "+", identifier){
     def <- rlang::lang(op, d1$definition, d2$definition)
   }
   if(missing(identifier)){
-    identifier <- get_identifier(d1)
+    identifier <- dec_get_id(d1)
   }else{
     identifier <- make_identifier(identifier)
   }
@@ -285,9 +285,9 @@ combine_dec <- function(d1, d2, op = "+", identifier){
 #'
 #' @examples
 #' d <- declaration("dA", ka*A["depot"]-ke*A["central"])
-#' index_subs_dec(d, "A", list(depot = 1, central = 2))
-index_subs_dec <- function(d, array_name, substitutions){
-  if(!is_declaration(d)) stop("Function expects a declaration as input")
+#' dec_index_subs(d, "A", list(depot = 1, central = 2))
+dec_index_subs <- function(d, array_name, substitutions){
+  d <- arg2dec(d)
   purrr::modify(d, ~transform_ast(.x, index_transformer, array_name = array_name, substitutions = substitutions))
 }
 
@@ -312,12 +312,12 @@ index_transformer <- function(node, array_name, substitutions){
 #' @examples
 #' d <- declaration("cl", theta*exp(eta))
 #' d1 <- declaration("theta", theta+a)
-#' subs_dec(d, d1)
-subs_dec <- function(d, ...){
+#' dec_subs(d, d1)
+dec_subs <- function(d, ...){
   substitutions <- list(...) %>% as_declaration_list()
-  d <- arg_as_declaration(d)
+  d <- arg2dec(d)
   if(any(purrr::map_lgl(substitutions, is_anonymous))) stop("substitutions need to be named")
-  substitutions <- purrr::set_names(substitutions, purrr::map(substitutions, ~get_identifier(.x) %>% deparse))
+  substitutions <- purrr::set_names(substitutions, purrr::map(substitutions, ~dec_get_id(.x) %>% deparse))
   purrr::modify(d, ~transform_ast(.x, subs_transformer, substitutions = substitutions))
 }
 
@@ -325,7 +325,7 @@ subs_transformer <- function(node, substitutions){
   # if vector access and replacement contains vector variable
   if(rlang::is_atomic(node) || rlang::is_symbol(node) || (rlang::is_lang(node) && rlang::lang_name(node) == "[")){
     if(exists(deparse(node), substitutions)){
-      node <-  substitutions[[deparse(node)]] %>% get_definition()
+      node <-  substitutions[[deparse(node)]] %>% dec_get_def()
     }
   }
   node

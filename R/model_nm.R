@@ -62,19 +62,19 @@ sigma <- function(name, initial = NA){
 #' @export
 ode <- function(name, equation){
   if(!is.character(name)) stop("'name' needs to be a character vector")
-  equation <- arg_as_declaration(equation)
+  equation <- arg2dec(equation)
   item("odes", name = name, equation = equation)
 }
 #' @export
 parameter_equation <- function(name, equation){
   if(!is.character(name)) stop("'name' needs to be a character vector")
-  equation <- arg_as_declaration(equation)
+  equation <- arg2dec(equation)
   item("parameter_equations", name = name, equation = equation)
 }
 #' @export
 algebraic_equation <- function(name, equation){
   if(!is.character(name)) stop("'name' needs to be a character vector")
-  equation <- arg_as_declaration(equation)
+  equation <- arg2dec(equation)
   item("algebraic_equations", name = name, equation = equation)
 }
 

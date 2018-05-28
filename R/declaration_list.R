@@ -34,8 +34,8 @@ depends_on <- function(var1, var2, dl) {
   while(!purrr::is_empty(to_visit)){
     visited <- union(visited, to_visit[1])
     to_visit <- dl %>%
-      purrr::keep(~deparse(get_identifier(.x)) == to_visit[1]) %>%
-      purrr::map(~variables(.x)) %>%
+      purrr::keep(~deparse(dec_get_id(.x)) == to_visit[1]) %>%
+      purrr::map(~dec_vars(.x)) %>%
       unlist() %>%
       union(to_visit) %>%
       setdiff(visited)
@@ -49,7 +49,7 @@ depends_on <- function(var1, var2, dl) {
 # returns a list of indicies from the declaration list that depend on the variable
 get_direct_dependants <- function(dl, variable){
   dl %>%
-    purrr::map(variables) %>%
+    purrr::map(dec_vars) %>%
     purrr::map_lgl(~ variable  %in% .x) %>%
     which()
 }
@@ -79,7 +79,7 @@ topologic_visit <- function(dl, index, marked_perm, marked_temp, l){
   if(index %in% marked_temp) stop("Error")
   marked_temp <- c(marked_temp, index)
   # find all nodes that depend on the current node
-  var <- get_identifier(dl[[index]]) %>% deparse()
+  var <- dec_get_id(dl[[index]]) %>% deparse()
   for(i in get_direct_dependants(dl, var)){
     ret <- topologic_visit(dl, i, marked_perm, marked_temp, l)
     marked_perm <- ret$marked_perm
@@ -95,5 +95,5 @@ topologic_visit <- function(dl, index, marked_perm, marked_temp, l){
 # get a list of variables the equations depend on
 get_external_dependencies <- function(dl){
   dl[topologic_order(dl) %>% rev()] %>% # process equations in reverse topological order
-    purrr::reduce(~c(.x, variables(.y)) %>% purrr::discard(function(x) x == deparse(get_identifier(.y))) , .init = c()) # at each step add all variables from the rhs and remove variable from lhs
+    purrr::reduce(~c(.x, dec_vars(.y)) %>% purrr::discard(function(x) x == deparse(dec_get_id(.y))) , .init = c()) # at each step add all variables from the rhs and remove variable from lhs
 }

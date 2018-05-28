@@ -22,16 +22,16 @@ convert_compartments.model_nm <- function(to, from){
     purrr::transpose() %>%
     purrr::map(function(flow){
       new_def <- flow$definition
-      if("C" %in% variables(flow$definition)){
+      if("C" %in% dec_vars(flow$definition)){
         volume <- get_by_name(from, "compartments", flow$from)$volume %>%
-          set_identifier(vol)
+          dec_set_id(vol)
         conc <- as_declaration(C ~ A/vol) %>%
-          subs_dec(volume)
-        new_def <- subs_dec(new_def, conc)
+          dec_subs(volume)
+        new_def <- dec_subs(new_def, conc)
       }
       cmp_index <- get_by_name(from, "compartments", flow$from)$index
       cmp <- declaration(A, A[!!(cmp_index)])
-      new_def <- subs_dec(new_def, cmp)
+      new_def <- dec_subs(new_def, cmp)
       purrr::list_modify(flow, definition = new_def)
     })
 
@@ -43,15 +43,15 @@ convert_compartments.model_nm <- function(to, from){
                     outflow_eqn <- flows %>%
                       purrr::keep(~.x$from==comp$name) %>%
                       purrr::map("definition") %>%
-                      purrr::reduce(combine_dec, op = "+", .init = declaration())
+                      purrr::reduce(dec_combine, op = "+", .init = declaration())
 
                     inflow_eqn <- flows %>%
                       purrr::keep(~.x$to==comp$name) %>%
                       purrr::map("definition") %>%
-                      purrr::reduce(combine_dec, op = "+", .init = declaration())
+                      purrr::reduce(dec_combine, op = "+", .init = declaration())
 
 
-                    eqn <- combine_dec(inflow_eqn, outflow_eqn, op = "-", identifier = dadt[!!(comp$index)])
+                    eqn <- dec_combine(inflow_eqn, outflow_eqn, op = "-", identifier = dadt[!!(comp$index)])
 
                     nm_model + ode(name = comp$name, equation = eqn)
                   })
@@ -156,7 +156,7 @@ add_converter(
 )
 
 replace_compartment_references <- function(d, to, from){
-  if(any(c("C","A") %in% variables(d))){
+  if(any(c("C","A") %in% dec_vars(d))){
     compartment_indicies <- to$odes %>%
     {
       purrr::set_names(as.list(.$index), .$name)
@@ -164,11 +164,11 @@ replace_compartment_references <- function(d, to, from){
     # generate replacement rules for concentration
     conc_declarations <- from$compartments %>%
       purrr::transpose() %>%
-      purrr::map(~declaration(C[!!(.x$name)], A[!!(.x$name)]/vol) %>% subs_dec(set_identifier(.x$volume, vol)))
+      purrr::map(~declaration(C[!!(.x$name)], A[!!(.x$name)]/vol) %>% dec_subs(dec_set_id(.x$volume, vol)))
 
     dt <- d %>%
-      purrr::invoke(.f = subs_dec, .x = conc_declarations, d = .) %>%
-      index_subs_dec("A", compartment_indicies)
+      purrr::invoke(.f = dec_subs, .x = conc_declarations, d = .) %>%
+      dec_index_subs("A", compartment_indicies)
     return(dt)
   }else{
     return(d)
@@ -178,9 +178,9 @@ replace_compartment_references <- function(d, to, from){
 make_ipred_equation <- function(to, from, obs){
   ipred_eqn <- replace_compartment_references(obs$definition, to, from)
   if(is_anonymous(ipred_eqn)){
-    ipred_eqn <- list(set_identifier(ipred_eqn, ipred))
+    ipred_eqn <- list(dec_set_id(ipred_eqn, ipred))
   }else{
-    ipred_eqn <- list(ipred_eqn, declaration("ipred", !!(get_identifier(ipred_eqn))))
+    ipred_eqn <- list(ipred_eqn, declaration("ipred", !!(dec_get_id(ipred_eqn))))
   }
 
   return(ipred_eqn)
@@ -200,7 +200,7 @@ add_converter(
       to + sigma(sigma_name, initial = get_parameter_value(from, sigma_name, 'ruv')$value)
 
     ruv_eqn <- as_declaration(y ~ ipred + eps[.eps]) %>%
-      subs_dec(declaration(.eps, !!(get_by_name(to, "sigmas", sigma_name)$index)))
+      dec_subs(declaration(.eps, !!(get_by_name(to, "sigmas", sigma_name)$index)))
 
     to + observation_declaration(
       name = obs$name,
@@ -221,7 +221,7 @@ add_converter(
     to <-
       to + sigma(sigma_name, initial = get_parameter_value(from, sigma_name, 'ruv')$value)
     ruv_eqn <- as_declaration(y ~ ipred + (1 + eps[.eps])) %>%
-      subs_dec(declaration(.eps, !!(get_by_name(to, "sigmas", sigma_name)$index)))
+      dec_subs(declaration(.eps, !!(get_by_name(to, "sigmas", sigma_name)$index)))
 
     to + observation_declaration(
       name = obs$name,
@@ -247,7 +247,7 @@ add_converter(
       sigma(sigma_name, initial = get_parameter_value(from, sigma_name, 'ruv')$value) +
       theta(theta_name, initial = get_parameter_value(from, theta_name, 'typical')$value)
     ruv_eqn <- as_declaration(y ~ ipred + eps[.eps]*ipred^theta[.theta]) %>%
-      subs_dec(declaration(.eps, !!(get_by_name(to, "sigmas", sigma_name)$index)),
+      dec_subs(declaration(.eps, !!(get_by_name(to, "sigmas", sigma_name)$index)),
                declaration(.theta, !!(get_by_name(to, "thetas", theta_name)$index)))
     to + observation_declaration(
       name = obs$name,

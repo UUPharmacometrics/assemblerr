@@ -51,7 +51,7 @@ model <- function(){
 #' comp1 <- compartment("central", volume = ~Vc)
 compartment <- function(name, volume = 1){
   if(!is.character(name)) stop("'name' needs to be a character vector")
-  volume <- arg_as_declaration(volume)
+  volume <- arg2dec(volume)
   item("compartments", name = name, volume = volume)
 }
 
@@ -73,7 +73,7 @@ cmp <- compartment
 #' f <- flow(from = "depot", to = "central", definition = ~ka*A)
 flow <- function(from = NULL, to = NULL, definition){
   if(!is.character(from) && !is.character(to)) stop("'from' or/and 'to' need to be compartment names")
-  definition <- arg_as_declaration(definition)
+  definition <- arg2dec(definition)
   item("flows", from = from, to = to, definition = definition)
 }
 
@@ -116,7 +116,7 @@ parameter <- function(name, type){
 #' e_obs <- observation(name = "eff", ~effect, "combined")
 #' @export
 observation <- function(definition, type, name = NULL){
-  definition <- arg_as_declaration(definition)
+  definition <- arg2dec(definition)
   if(missing(type)) {
     message("No type for the observation model was specified, using 'additive' as a default")
     type <- "additive"
@@ -129,9 +129,9 @@ observation <- function(definition, type, name = NULL){
 
 #' @export
 algebraic <- function(definition){
-  definition <- arg_as_declaration(definition)
+  definition <- arg2dec(definition)
   if(is_anonymous(definition)) stop("'definition' needs to be named")
-  item("algebraics", name = get_identifier(definition) %>% deparse(), definition = definition)
+  item("algebraics", name = dec_get_id(definition) %>% deparse(), definition = definition)
 }
 
 

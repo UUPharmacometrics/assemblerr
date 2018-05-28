@@ -151,10 +151,10 @@ render_str <- function(str){
 
 # function to determine whether an algebraic declaration needs to go to PK, DES or ERROR
 classify_declarations <- function(dl, odes){
-  ode_identifiers <- purrr::map_chr(odes, ~get_identifier(.) %>% deparse())
+  ode_identifiers <- purrr::map_chr(odes, ~dec_get_id(.) %>% deparse())
   dl %>%
     purrr::map_chr(function(d){
-      var <- get_identifier(d) %>% deparse()
+      var <- dec_get_id(d) %>% deparse()
       if(!depends_on(var, "A", dl)){
         return("PK")
       }else{
