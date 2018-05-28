@@ -328,6 +328,30 @@ subs_transformer <- function(node, substitutions){
 
 
 
+#' Substitute functions in a declaration
+#'
+#' @param d Declaration
+#' @param substitutions A list of function names with their corresponding substitution
+#'
+#' @return Declaration with substituted function names in the definition
+#'
+#' @examples
+#' d <- declaration("cl", theta*exp(eta))
+#' dec_funs_subs(d, c(exp = log))
+dec_funs_subs <- function(d, substitutions){
+  d <- arg2dec(d)
+  purrr::modify(d, ~transform_ast(.x, funs_transformer, substitutions = substitutions))
+}
+
+funs_transformer <- function(node, substitutions){
+  # if function call and replacement contains vector variable
+  if(rlang::is_lang(node) && rlang::lang_name(node) %in% names(substitutions)){
+    node[[1]] <-  purrr::pluck(substitutions, deparse(node[[1]])) %>% rlang::sym()
+  }
+  node
+}
+
+
 #' Modify AST
 #'
 #' This recursive function is the work-horse for all expression transformations. It takes a language node and a transformer function,
