@@ -21,3 +21,12 @@ render_opts_nm <- function(){
     equal_assign_op = TRUE
   )
 }
+
+
+render_opts_viz <- function(){
+  list(
+    capitalize = FALSE,
+    round_vec_brackets = FALSE,
+    equal_assign_op = TRUE
+  )
+}

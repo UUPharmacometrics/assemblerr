@@ -92,3 +92,20 @@ m %>%
   cat()
 
 ```
+
+# Model visualization
+
+assemblerr can create a simple visualization of the model
+
+```{r}
+pkm <- pk_model()+
+  pk_component("distribution", "three-compartment")+
+  pk_component("elimination", "linear")+
+  pk_component("absorption-rate", "first-order")
+
+pkm %>% 
+  as_model() %>% 
+  visualize()
+
+```
+
