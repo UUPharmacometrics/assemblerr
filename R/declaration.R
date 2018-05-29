@@ -363,6 +363,7 @@ funs_transformer <- function(node, substitutions){
 #'
 #' @return The transformed language node
 transform_ast <- function(node, transformer, ...){
+
   if(rlang::is_atomic(node) || rlang::is_symbol(node)) return(transformer(node, ...))
   else if(rlang::is_lang(node)){
     transformer(node, ...) %>%
@@ -373,8 +374,10 @@ transform_ast <- function(node, transformer, ...){
     lapply(node, transform_ast, ...) %>%
       rlang::as_pairlist() %>%
       return()
-  }else {
-    stop("Don't know how to handle type ", typeof(x),
+  }else if(is.null(node)){
+    return(NULL)
+  } else {
+    stop("Don't know how to handle type ", typeof(node),
          call. = FALSE)
   }
 }
