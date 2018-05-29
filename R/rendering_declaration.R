@@ -26,7 +26,7 @@ render.declaration <- function(d, opts){
 }
 
 test_allowed_funs <- function(d, allowed_functions){
-  if(missing(allowed_functions)) return(TRUE)
+  if(missing(allowed_functions) || is.null(allowed_functions)) return(TRUE)
   funs <- dec_funs(d)
   if(any(!funs %in% allowed_functions)) {
 
