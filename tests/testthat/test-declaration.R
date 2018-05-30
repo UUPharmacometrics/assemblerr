@@ -91,3 +91,50 @@ test_that("listing of functions works", {
     c("*", "+", "exp")),
     character(0))
 })
+
+test_that("left and right hand side can be accessed",{
+  expect_equal(dec_get_id(expected$two_sided), expected$two_sided$identifier)
+  expect_null(dec_get_id(expected$one_sided))
+
+  expect_equal(dec_get_def(expected$two_sided), expected$two_sided$definition)
+})
+
+context("Declaration manipulation")
+
+
+test_that("left and right hand side can be set",{
+
+  expect_equal(dec_set_id(~ka*A, y), expected$two_sided)
+
+  expect_equal(dec_set_def(y~1, ka*A), expected$two_sided)
+})
+
+
+test_that("two declartions can be combined", {
+  expect_equal(
+    dec_combine(~ka*A[1], ~cl*A[2], op = "-"),
+    declaration(definition = ka*A[1]-cl*A[2])
+  )
+})
+
+test_that("indicies in arrays can be substituted", {
+  expect_equal(
+    dec_index_subs(~ka*A["depot"]-cl*A["central"], "A", c(depot = 1, central = 2)),
+    declaration(definition = ka*A[1]-cl*A[2])
+  )
+})
+
+test_that("variables can be substituted", {
+  expect_equal(
+    dec_subs(y~k*C, k~ka, C~A),
+    expected$two_sided
+  )
+})
+
+test_that("functions can be substituted", {
+  expect_equal(
+    dec_funs_subs(~log(cl), c(log = "exp")),
+    declaration(definition = exp(cl))
+  )
+})
+
