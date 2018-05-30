@@ -283,6 +283,7 @@ dec_combine <- function(d1, d2, op = "+", identifier){
 #' dec_index_subs(d, "A", list(depot = 1, central = 2))
 dec_index_subs <- function(d, array_name, substitutions){
   d <- arg2dec(d)
+  substitutions <- as.list(substitutions)
   purrr::modify(d, ~transform_ast(.x, index_transformer, array_name = array_name, substitutions = substitutions))
 }
 
