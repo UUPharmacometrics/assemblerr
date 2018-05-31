@@ -367,10 +367,9 @@ transform_ast <- function(node, transformer, ...){
 
   if(rlang::is_atomic(node) || rlang::is_symbol(node)) return(transformer(node, ...))
   else if(rlang::is_lang(node)){
-    transformer(node, ...) %>%
-      lapply(transform_ast, transformer, ...) %>%
-      as.call() %>%
-      return()
+    node <- transformer(node, ...)
+    for(i  in 1:length(node)) node[[i]] <- transform_ast(node[[i]], transformer, ...)
+    return(node)
   }else if(rlang::is_pairlist(node)){
     lapply(node, transform_ast, ...) %>%
       rlang::as_pairlist() %>%
