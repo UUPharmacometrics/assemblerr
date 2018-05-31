@@ -97,7 +97,7 @@ m %>%
 
 assemblerr can create a simple visualization of the model
 
-```{r}
+```{r, fig.height=5, fig.width=7}
 pkm <- pk_model()+
   pk_component("distribution", "three-compartment")+
   pk_component("elimination", "linear")+
@@ -107,5 +107,44 @@ pkm %>%
   as_model() %>% 
   visualize()
 
+```
+
+# Conversion diagram
+
+```{r, echo=FALSE, fig.height=5, fig.width=7}
+DiagrammeR::mermaid("
+graph TD
+subgraph domain specific
+A[pk_model]
+B[pbpk_model]
+C[pd_model] 
+end
+A --> D[model]
+B --> D
+C --> D
+subgraph software specifc
+E[model_nm]
+F[model_mlx]
+G[model_poped]
+end
+D --> E
+D --> F
+D --> G
+")
+```
+
+# Conditional declarations
+
+assemblerr supports conditional declarations through the function `cases`. Examples
+
+- Different typical values for males and females `cl~cases(sex, 0 ~ theta[1], 1 ~ theta[2])*exp(eta[1])`
+- Probabilities for binary response `p~cases(y, 0 ~ p0, 1 ~ 1 - p0)`
+- Censoring due to quantification limits `cases(conc, conc > 1 ~ ipred, conc <= 1 ~ prob)`
+
+
+```{r}
+as_declaration(cl~cases(sex, 0 ~ theta[1], 1 ~ theta[2])*exp(eta[1])) %>% 
+  render(render_opts_nm()) %>% 
+  cat()
 ```
 

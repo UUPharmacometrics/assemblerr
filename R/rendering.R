@@ -8,9 +8,11 @@ render_opts_nm <- function(){
       '+', '-', '*', '/', '^', # basic arithmetics
       '[', # vector access
       '(', # grouping
-      'log', 'log10', 'exp', 'sqrt', 'sin', 'cos', 'abs', 'tan', 'asin', 'acos', 'atan', 'int', 'dnorm', 'min', 'max', '%%', 'lgamma' # built-in functions
+      'log', 'log10', 'exp', 'sqrt', 'sin', 'cos', 'abs', 'tan', 'asin', 'acos', 'atan', 'int', 'dnorm', 'min', 'max', '%%', 'lgamma', # built-in functions
+      'cases', '~' # special
       ),
     function_subtitutions = c(
+      '&&' = "%.AND.%", # and operator
       '^' = "%**%", # power operator
       '%%' = 'mod', # modulo operator
       'lgamma' = 'gamln', # logarithm of gamma function
