@@ -29,9 +29,9 @@ library(assemblerr, warn.conflicts = F)
 # construct one-compartment 1st order elimination model
 m <- model()+
   algebraic(effect~emax*dose/(ed50+dose))+
-  parameter("EMAX")+
-  parameter("ED50")+
-  observation(~effect)
+  prm_log_normal("EMAX")+
+  prm_log_normal("ED50")+
+  obs_additive(eff~effect)
 
 # convert to a NONMEM model and generate NMTran code
 as_model_nm(m)  %>% 
@@ -50,12 +50,12 @@ m <- model()+
   compartment("central", volume = ~vc) +
   flow(from = "central", definition = ~cl*C) +
   flow(to = "central", definition = ~kin) +
-  parameter("cl", type = "log-normal") +
-  parameter("vc", type = "log-normal") +
+  prm_log_normal("cl") +
+  prm_log_normal("vc") +
   algebraic(k~cl/v)+
   algebraic(conc~A["central"])+
   algebraic(kin~k*A["central"])+
-  observation(~conc, type = "additive", "conc") +
+  obs_additive(~conc, "conc") +
   parameter_value_table(c(cl = 4.5, vc = 1), types = "typical") +
   parameter_value_table(c(cl = 0.09, vc = 0.09), types = "iiv")+
   parameter_value("ruv-add", "ruv", 1)
@@ -76,12 +76,13 @@ assemblerr supports multiple observation models per model
 m <- model()+
   compartment("central", volume = ~vc) +
   flow(from = "central", definition = ~cl*C) +
-  parameter("cl", type = "log-normal") +
-  parameter("vc", type = "log-normal") +
-  parameter("emax", type = "normal")+
-  parameter("ed50", type = "novar")+
-  observation(~C["central"], type = "additive", name = "PK") +
-  observation(~emax*C["central"]/(C["central"]+ed50), type = "additive", name = "PD")+
+  prm_log_normal("cl") +
+  prm_log_normal("vc") +
+  prm_normal("emax")+
+  prm_novar("ed50")+
+  algebraic(conc~C["central"])+
+  obs_additive(~conc, name = "PK") +
+  obs_additive(~emax*conc/(conc+ed50), name = "PD")+
   parameter_value_table(c(cl = 4.5, vc = 1), types = "typical") +
   parameter_value_table(c(cl = 0.09, vc = 0.09), types = "iiv")+
   parameter_value("ruv-add", "ruv", 1)

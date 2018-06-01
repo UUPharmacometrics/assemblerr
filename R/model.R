@@ -28,9 +28,9 @@ model <- function(){
   structure(list(), class = c("model", "fragment")) %>%
     add_facet("compartments", list(volume = list())) %>%
     add_facet("flows", list(from = character(), to = character(), definition = list()), name_column = F) %>%
-    add_facet("parameters", list(type = character())) %>%
+    add_facet("parameters", list(type = character(), options = list())) %>%
     add_facet("algebraics", list(definition = list())) %>%
-    add_facet("observations", list(definition = list(), type = character())) %>%
+    add_facet("observations", list(type = character(), options = list())) %>%
     add_facet("parameter_values", list(parameter1 = character(), parameter2 = character(), type = character(), value = numeric()), name_column = F) %>%
     add_facet("meta_tags", list(value = character()))
 }
@@ -77,54 +77,27 @@ flow <- function(from = NULL, to = NULL, definition){
   item("flows", from = from, to = to, definition = definition)
 }
 
-#' Model parameter
-#'
-#' Defines name and type of a model parameter
-#'
-#' @param name Name of the paramter
-#' @param type Model type to be used for the parameter
-#'
-#' @return A \code{\link{fragment}} representing a model parameter
-#' @export
-#' @examples
-#' p <- parameter("cl", "log-normal")
-parameter <- function(name, type){
-  if(name!=make.names(name)) stop("'name' needs to be a valid variable name.")
-  if(missing(type)){
-    message("No type for the parameter '", name,"' was specified, using 'log-normal' as default.")
-    type <- "log-normal"
-  }
-  item("parameters", name = name, type = type)
-}
+#' #' Model parameter
+#' #'
+#' #' Defines name and type of a model parameter
+#' #'
+#' #' @param name Name of the paramter
+#' #' @param type Model type to be used for the parameter
+#' #'
+#' #' @return A \code{\link{fragment}} representing a model parameter
+#' #' @export
+#' #' @examples
+#' #' p <- parameter("cl", "log-normal")
+#' parameter <- function(name, type){
+#'   if(name!=make.names(name)) stop("'name' needs to be a valid variable name.")
+#'   if(missing(type)){
+#'     message("No type for the parameter '", name,"' was specified, using 'log-normal' as default.")
+#'     type <- "log-normal"
+#'   }
+#'   item("parameters", name = name, type = type)
+#' }
 
 
-#' Observation model
-#'
-#' Defines how variables from a model relate to values in the data
-#'
-#' @param definition A \code{\link{declaration}} describing the measurement
-#' @param type The model type used for the observation model
-#' @param name The name used to identify the measurement
-#'
-#' @return A \code{\link{fragment}} representing an observation model
-#'
-#' @examples
-#' # create an additive error observation model for the concentration from the "central" compartment
-#' c_obs <- observation(conc~C["central"], "additive")
-#'
-#' # create a combined error observation model "eff" for the variable effect
-#' e_obs <- observation(name = "eff", ~effect, "combined")
-#' @export
-observation <- function(definition, type, name = NULL){
-  definition <- arg2dec(definition)
-  if(missing(type)) {
-    message("No type for the observation model was specified, using 'additive' as a default")
-    type <- "additive"
-  }
-  if(!is.character(type)) stop("'type' needs to be a character vector")
-  if(!missing(name) && name!=make.names(name)) stop("'name' needs to be a valid variable name")
-  item("observations", name = name, definition = definition, type = type)
-}
 
 
 #' @export

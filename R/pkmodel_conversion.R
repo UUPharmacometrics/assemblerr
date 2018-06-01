@@ -5,7 +5,7 @@ as_model <- function(from) UseMethod("as_model")
 as_model.pk_model <- function(from){
  model() %>%
     convert_pk_components(from) %|+%
-    observation(name = "PK", ~A["central"]/vc, type = "additive") +
+    obs_additive(name = "PK", ~A["central"]/vc) +
     purrr::update_list(from, pk_components = NULL) # all other components are taken "as-is"
 }
 

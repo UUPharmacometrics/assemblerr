@@ -176,7 +176,7 @@ replace_compartment_references <- function(d, to, from){
 }
 
 make_ipred_equation <- function(to, from, obs){
-  ipred_eqn <- replace_compartment_references(obs$definition, to, from)
+  ipred_eqn <- replace_compartment_references(obs$options$prediction, to, from)
   if(is_anonymous(ipred_eqn)){
     ipred_eqn <- list(dec_set_id(ipred_eqn, ipred))
   }else{
