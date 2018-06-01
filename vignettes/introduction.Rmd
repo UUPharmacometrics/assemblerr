@@ -10,7 +10,42 @@ vignette: >
 ---
 
 
-assemblerr is an R package to construct pharmacometric models by combining pre-defined model components. The resulting model can then be used to generate code for NONMEM (in the future the support of different modeling software is planned).   
+assemblerr is an R package to construct pharmacometric models by combining pre-defined model components. It's intended to simplify the specification of complex pharmacometric models and provide a mechanism to generate models in an automatic way. With assemblerr, models are specified using R code and then converted to a NONMEM control stream (in the future the support of different modeling software is planned).   
+
+# Quick start
+
+## Load assemblerr 
+
+```{r}
+library(assemblerr, warn.conflicts = F)
+```
+
+## Build an Emax dose-response model
+
+```{r}
+m <- model()+
+  prm_log_normal("EMAX")+
+  prm_log_normal("ED50")+
+  obs_additive(effect~emax*dose/(ed50+dose))
+
+m
+```
+
+
+## Generate NONMEM code
+
+```{r}
+m %>% 
+  as_model_nm() %>% 
+  render() %>% 
+  cat()
+```
+
+
+# Workflow
+
+assemblerr's workflow is similar to ggplot, where different components are added to a model 
+
 
 # Low-level building blocks
 
@@ -43,7 +78,7 @@ For PK models assemblerr supports a higher level of abstraction to simplify the 
 ```{r}
 # construct one-compartment 1st order elimination model
 pkm <- pk_model() +
-  pk_component("distribution", "one-compartment") +
+  pk_component("distribution", "two-compartment") +
   pk_component("elimination", "linear")+
   parameter_value("cl", type = "typical", 4.5) +
   parameter_value("cl", type = "iiv", 0.09) +
