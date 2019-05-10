@@ -31,10 +31,11 @@ m <- model()+
   algebraic(effect~emax*dose/(ed50+dose))+
   prm_log_normal("EMAX")+
   prm_log_normal("ED50")+
-  obs_additive(eff~effect)
+  obs_additive(eff~effect, "effect")+
+  obs_additive(~emax, "emax")
 
 # convert to a NONMEM model and generate NMTran code
-as_model_nm(m)  %>% 
+as_nm_model(m)  %>% 
   render %>%
   cat()
 ```
@@ -147,5 +148,34 @@ assemblerr supports conditional declarations through the function `cases`. Examp
 as_declaration(cl~cases(sex, 0 ~ theta[1], 1 ~ theta[2])*exp(eta[1])) %>% 
   render(render_opts_nm()) %>% 
   cat()
+```
+
+# Binary observations
+
+```{r}
+m <- model()+
+  prm_logit("pbase")+
+  obs_binary(~pbase, "effect")
+
+# convert to a NONMEM model and generate NMTran code
+as_model_nm(m)  %>% 
+  render %>%
+  cat()
+```
+
+# Support for PKPDsim
+
+```{r}
+m <- model()+
+  compartment("central", volume = ~vc) +
+  flow(from = "central", definition = ~cl*C) +
+  prm_log_normal("cl") +
+  prm_log_normal("vc")
+
+m_sim <- m %>% 
+  as_model_pkpd_sim()
+
+m_sim$odes
+
 ```
 

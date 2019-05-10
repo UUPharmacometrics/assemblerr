@@ -52,7 +52,7 @@ has_facet <- function(model, facet){
 `%+!%.fragment` <- function(x, y){
   if(!is(y, "fragment")) stop("Only two fragments can be combined.")
   rlang::with_handlers(
-    entries_updated = rlang::inplace(~1, muffle = T),
+    entries_updated = rlang::calling(~1),
     {
       add_fragment(x, y)
     }
@@ -89,7 +89,6 @@ item <- function(facet, ...){
 #' @return  A combination of fragment1 and fragment2
 #' @export
 add_fragment <- function(fragment1, fragment2){
-
   purrr::reduce(names(fragment2), .init = fragment1, function(frag, facet) {
     if(!exists(facet, frag)){
       frag[[facet]] <- fragment2[[facet]]
@@ -100,9 +99,9 @@ add_fragment <- function(fragment1, fragment2){
       # determine all entries that will not change and update index column
       unchanged <- dplyr::anti_join(frag[[facet]], fragment2[[facet]], by = "name") %>%
         dplyr::arrange(index) %>%
-        dplyr::mutate(index = seq_len(n()))
+        dplyr::mutate(index = seq_len(dplyr::n()))
       # generate index for updated or added entries
-      changed <- dplyr::mutate(fragment2[[facet]], index = seq_len(n())+nrow(unchanged))
+      changed <- dplyr::mutate(fragment2[[facet]], index = seq_len(dplyr::n())+nrow(unchanged))
       # determined added and updated entries
       added <- dplyr::anti_join(changed, frag[[facet]], by = "name")
       updated <- dplyr::semi_join(changed, frag[[facet]], by = "name")

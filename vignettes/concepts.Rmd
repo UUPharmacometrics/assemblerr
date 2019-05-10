@@ -1,0 +1,57 @@
+---
+title: "Package Concepts"
+author: "Sebastian Ueckert"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This document serves as an overview for the concepts used in the package.
+
+__Model__: A parameterized representation of a data generating process  
+
+__Facet:__ An aspect of a model that can be changed
+
+__Fragment__: One or more facets together with their properties
+
+ - Use R syntax but software-specific semantics
+
+# Conversion diagram
+
+```{r, echo=FALSE, fig.height=5, fig.width=7}
+DiagrammeR::mermaid("
+graph TD
+subgraph domain specific
+A[pk_model]
+B[pbpk_model]
+C[pd_model] 
+end
+A --> D[model]
+B --> D
+C --> D
+subgraph software specifc
+E[model_nm]
+F[model_mlx]
+G[model_poped]
+end
+D --> E
+D --> F
+D --> G
+")
+```
+
+
+
+__Declaration__: The mathematical definition of a variable as a function of other variables
+
+__Statement__: The expression of an action to be carried out

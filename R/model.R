@@ -148,7 +148,7 @@ parameter_value <- function(parameter1, type, value, parameter2 = NULL){
 parameter_value_table <- function(values, types){
   values %>%
     tibble::enframe(name = "parameter1") %>%
-    dplyr::mutate(type = types, index = seq_len(n())) %>%
+    dplyr::mutate(type = types, index = seq_len(dplyr::n())) %>%
     {purrr::set_names(list(.), "parameter_values")} %>%
     structure(class = "fragment")
 }

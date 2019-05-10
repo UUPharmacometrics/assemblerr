@@ -36,7 +36,7 @@ m
 
 ```{r}
 m %>% 
-  as_model_nm() %>% 
+  as_nm_model() %>% 
   render() %>% 
   cat()
 ```
@@ -64,7 +64,7 @@ m <- model()+
   parameter_value("ruv-add", "ruv", 1)
 
 # convert to a NONMEM model and generate NMTran code
-as_model_nm(m)  %>% 
+as_nm_model(m)  %>% 
   render %>%
   cat()
 
@@ -89,7 +89,7 @@ pkm <- pk_model() +
 
 # convert to a NONMEM model and generate NMTran code
 pkm %>% 
-  as_model_nm() %>% 
+  as_nm_model() %>% 
   render %>%
   cat()
 

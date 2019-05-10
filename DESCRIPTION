@@ -19,4 +19,4 @@ Imports: pryr, purrr,
     rlang,
     magrittr
 VignetteBuilder: knitr
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1

@@ -259,7 +259,7 @@ dec_combine <- function(d1, d2, op = "+", identifier){
   }else if(is_empty_declaration(d1)){
     def <- d2$definition
   }else{
-    def <- rlang::lang(op, d1$definition, d2$definition)
+    def <- rlang::call2(op, d1$definition, d2$definition)
   }
   if(missing(identifier)){
     identifier <- dec_get_id(d1)
@@ -284,12 +284,12 @@ dec_combine <- function(d1, d2, op = "+", identifier){
 dec_index_subs <- function(d, array_name, substitutions){
   d <- arg2dec(d)
   substitutions <- as.list(substitutions)
-  purrr::modify(d, ~transform_ast(.x, index_transformer, array_name = array_name, substitutions = substitutions))
+  purrr::modify_if(d, ~!is.null(.x), ~transform_ast(.x, index_transformer, array_name = array_name, substitutions = substitutions))
 }
 
 index_transformer <- function(node, array_name, substitutions){
   # if vector access
-  if(rlang::is_lang(node) && rlang::lang_name(node) == "[" && node[[2]] == rlang::sym(array_name)){
+  if(rlang::is_call(node) && rlang::call_name(node) == "[" && node[[2]] == rlang::sym(array_name)){
     if(!exists(node[[3]], substitutions)) rlang::cnd_signal("missing_substitution", index = node[[3]])
     node[[3]] <- substitutions[[node[[3]]]]
   }
@@ -314,12 +314,12 @@ dec_subs <- function(d, ...){
   d <- arg2dec(d)
   if(any(purrr::map_lgl(substitutions, is_anonymous))) stop("substitutions need to be named")
   substitutions <- purrr::set_names(substitutions, purrr::map(substitutions, ~dec_get_id(.x) %>% deparse))
-  purrr::modify(d, ~transform_ast(.x, subs_transformer, substitutions = substitutions))
+  purrr::modify_if(d, ~!is.null(.x), ~transform_ast(.x, subs_transformer, substitutions = substitutions))
 }
 
 subs_transformer <- function(node, substitutions){
   # if vector access and replacement contains vector variable
-  if(rlang::is_atomic(node) || rlang::is_symbol(node) || (rlang::is_lang(node) && rlang::lang_name(node) == "[")){
+  if(rlang::is_atomic(node) || rlang::is_symbol(node) || (rlang::is_call(node) && rlang::call_name(node) == "[")){
     if(exists(deparse(node), substitutions)){
       node <-  substitutions[[deparse(node)]] %>% dec_get_def()
     }
@@ -341,12 +341,12 @@ subs_transformer <- function(node, substitutions){
 #' dec_funs_subs(d, c(exp = log))
 dec_funs_subs <- function(d, substitutions){
   d <- arg2dec(d)
-  purrr::modify(d, ~transform_ast(.x, funs_transformer, substitutions = substitutions))
+  purrr::modify_if(d, ~!is.null(.x), ~transform_ast(.x, funs_transformer, substitutions = substitutions))
 }
 
 funs_transformer <- function(node, substitutions){
   # if function call and replacement contains vector variable
-  if(rlang::is_lang(node) && rlang::lang_name(node) %in% names(substitutions)){
+  if(rlang::is_call(node) && rlang::call_name(node) %in% names(substitutions)){
     node[[1]] <-  purrr::pluck(substitutions, deparse(node[[1]])) %>% rlang::sym()
   }
   node
@@ -364,11 +364,10 @@ funs_transformer <- function(node, substitutions){
 #'
 #' @return The transformed language node
 transform_ast <- function(node, transformer, ...){
-
   if(rlang::is_atomic(node) || rlang::is_symbol(node)) return(transformer(node, ...))
-  else if(rlang::is_lang(node)){
+  else if(rlang::is_call(node)){
     node <- transformer(node, ...)
-    for(i  in 1:length(node)) node[[i]] <- transform_ast(node[[i]], transformer, ...)
+    if(rlang::is_call(node)) for(i  in 1:length(node)) node[[i]] <- transform_ast(node[[i]], transformer, ...)
     return(node)
   }else if(rlang::is_pairlist(node)){
     lapply(node, transform_ast, ...) %>%
