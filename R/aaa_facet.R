@@ -124,7 +124,7 @@ add_fragment_unless_exists <- function(fragment1, fragment2){
     }else if(exists("name", frag[[facet]])){
       # determined entries not contained in the fragment
       added <- dplyr::anti_join(fragment2[[facet]], frag[[facet]], by = "name") %>%
-        dplyr::mutate(index = seq_len(n()) + nrow(frag[[facet]]))
+        dplyr::mutate(index = seq_len(dplyr::n()) + nrow(frag[[facet]]))
       # combine and sort by index
       frag[[facet]] <- dplyr::bind_rows(frag[[facet]], added) %>%
         dplyr::arrange(index)

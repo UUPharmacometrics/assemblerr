@@ -78,8 +78,8 @@ For PK models assemblerr supports a higher level of abstraction to simplify the 
 ```{r}
 # construct one-compartment 1st order elimination model
 pkm <- pk_model() +
-  pk_component("distribution", "two-compartment") +
-  pk_component("elimination", "linear")+
+  pk_elemination_linear() +
+  pk_distribution_2cmp() +
   parameter_value("cl", type = "typical", 4.5) +
   parameter_value("cl", type = "iiv", 0.09) +
   parameter_value_table(c(cl = 4.5, vc = 1), types = "typical") +
@@ -104,7 +104,7 @@ pkm2 <- pkm +
 
 # convert to a NONMEM model and generate NMTran code
 pkm2 %>% 
-  as_model_nm() %>% 
+  as_nm_model() %>% 
   render %>%
   cat()
 

@@ -1,13 +1,5 @@
-#' @export
-as_model <- function(from) UseMethod("as_model")
 
-#' @export
-as_model.pk_model <- function(from){
- model() %>%
-    convert_pk_components(from) %|+%
-    obs_additive(name = "PK", ~A["central"]/vc) +
-    purrr::update_list(from, pk_components = NULL) # all other components are taken "as-is"
-}
+
 
 #' convert_pk_components <- function(to, from){
 #'   from$pk_components %>%
