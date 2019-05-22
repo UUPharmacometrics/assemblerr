@@ -73,6 +73,10 @@ topologic_order <- function(dl){
   return(l)
 }
 
+topologic_sort <- function(dl){
+  dl[topologic_order(dl)]
+}
+
 
 topologic_visit <- function(dl, index, marked_perm, marked_temp, l){
   if(index %in% marked_perm) return(list(marked_perm = marked_perm, marked_temp = marked_temp, l = l))

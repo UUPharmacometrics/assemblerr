@@ -8,7 +8,8 @@ as_nm_model.model <- function(from){
   nmm <- nm_model() %>%
     add_parameters(from) %>%
     add_odes(from) %>%
-    add_observations(from)
+    add_observations(from) %>%
+    add_algebraics(from)
 
   nmm +
     nm_input("id", "id")
