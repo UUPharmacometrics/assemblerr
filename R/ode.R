@@ -28,7 +28,7 @@ generate_ode_equations <- function(model){
     purrr::map(function(cmp){
 
                     outflow_eqn <- flows %>%
-                      purrr::keep(~.x$from==cmp$name) %>%
+                      purrr::keep(~!is.na(.x$from)&&.x$from==cmp$name) %>%
                       purrr::map("definition") %>%
                       purrr::reduce(dec_combine, op = "+", .init = declaration())
 
