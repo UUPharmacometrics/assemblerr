@@ -15,10 +15,14 @@ Suggests: testthat,
     knitr,
     rmarkdown,
     DiagrammeR
-Imports: pryr, purrr,
+Imports: 
+    pryr,
+    purrr,
     assertthat,
     stringr,
     rlang,
-    magrittr
+    magrittr,
+    dplyr,
+    tibble
 VignetteBuilder: knitr
 RoxygenNote: 6.1.1
