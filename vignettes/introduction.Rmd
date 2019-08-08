@@ -114,7 +114,7 @@ pkm2 %>%
 
 A whole combination of models can be generated with the help of tools from the tidyverse. For example, one could do the following to generate one and two compartment models with linear and Michaelis-Menten elimination: 
 
-```{r}
+```{r, eval=FALSE}
 library(tidyverse, warn.conflicts = F)
 
 # parameter names 
