@@ -19,5 +19,6 @@ Substitute functions in a declaration
 }
 \examples{
 d <- declaration("cl", theta*exp(eta))
-dec_funs_subs(d, c(exp = log))
+assemblerr:::dec_funs_subs(d, c(exp = 'log'))
 }
+\keyword{internal}

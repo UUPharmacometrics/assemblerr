@@ -5,9 +5,6 @@
 #' @param l list to be converted
 #'
 #' @return list of declaration objects or error if any element could not be converted
-#'
-#' @examples
-#' list(~cl, "V") %>%  as_declaration_list()
 as_declaration_list <- function(dl){
   #declarationish <- dl %>%
   #  purrr::map_lgl(is_declarationish, parse = T)

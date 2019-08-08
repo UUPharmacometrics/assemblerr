@@ -277,10 +277,10 @@ dec_combine <- function(d1, d2, op = "+", identifier){
 #' @param substitutions List of subsitutions
 #'
 #' @return Declaration with replaced index names
-#'
+#' @keywords internal
 #' @examples
 #' d <- declaration("dA", ka*A["depot"]-ke*A["central"])
-#' dec_index_subs(d, "A", list(depot = 1, central = 2))
+#' assemblerr:::dec_index_subs(d, "A", list(depot = 1, central = 2))
 dec_index_subs <- function(d, array_name, substitutions){
   d <- arg2dec(d)
   substitutions <- as.list(substitutions)
@@ -308,7 +308,7 @@ index_transformer <- function(node, array_name, substitutions){
 #' @examples
 #' d <- declaration("cl", theta*exp(eta))
 #' d1 <- declaration("theta", theta+a)
-#' dec_subs(d, d1)
+#' assemblerr:::dec_subs(d, d1)
 dec_subs <- function(d, ...){
   substitutions <- list(...) %>% as_declaration_list()
   d <- arg2dec(d)
@@ -335,10 +335,10 @@ subs_transformer <- function(node, substitutions){
 #' @param substitutions A list of function names with their corresponding substitution
 #'
 #' @return Declaration with substituted function names in the definition
-#'
+#' @keywords internal
 #' @examples
 #' d <- declaration("cl", theta*exp(eta))
-#' dec_funs_subs(d, c(exp = log))
+#' assemblerr:::dec_funs_subs(d, c(exp = 'log'))
 dec_funs_subs <- function(d, substitutions){
   d <- arg2dec(d)
   purrr::modify_if(d, ~!is.null(.x), ~transform_ast(.x, funs_transformer, substitutions = substitutions))

@@ -29,7 +29,7 @@ to a general model:
 }
 \examples{
 m <- model()+
-    observation(eff~emax*dose/(ed50+dose), type = "additive") +
-    parameter("emax") +
-    parameter("ed50")
+    obs_additive(eff~emax*dose/(ed50+dose)) +
+    prm_log_normal("emax") +
+    prm_log_normal("ed50")
 }

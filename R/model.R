@@ -21,9 +21,9 @@
 #' @importFrom magrittr %>%
 #' @examples
 #' m <- model()+
-#'     observation(eff~emax*dose/(ed50+dose), type = "additive") +
-#'     parameter("emax") +
-#'     parameter("ed50")
+#'     obs_additive(eff~emax*dose/(ed50+dose)) +
+#'     prm_log_normal("emax") +
+#'     prm_log_normal("ed50")
 model <- function(){
   structure(list(), class = c("model", "fragment")) %>%
     add_facet("compartments", list(volume = list())) %>%
@@ -132,10 +132,6 @@ algebraic <- function(definition){
 
 #' Create a new parameter_value
 #'
-#' @param parameter1
-#' @param type
-#' @param value
-#' @param parameter2
 #'
 #' @return A parameter value fragment
 #' @export

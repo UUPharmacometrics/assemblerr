@@ -21,5 +21,6 @@ Substitute the index names in a declaration
 }
 \examples{
 d <- declaration("dA", ka*A["depot"]-ke*A["central"])
-dec_index_subs(d, "A", list(depot = 1, central = 2))
+assemblerr:::dec_index_subs(d, "A", list(depot = 1, central = 2))
 }
+\keyword{internal}

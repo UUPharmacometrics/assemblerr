@@ -6,9 +6,6 @@
 \usage{
 parameter_value(parameter1, type, value, parameter2 = NULL)
 }
-\arguments{
-\item{parameter2}{}
-}
 \value{
 A parameter value fragment
 }

@@ -21,8 +21,5 @@ Defines how variables from a model relate to values in the data
 }
 \examples{
 # create an additive error observation model for the concentration from the "central" compartment
-c_obs <- observation(conc~C["central"], "additive")
-
-# create a combined error observation model "eff" for the variable effect
-e_obs <- observation(name = "eff", ~effect, "combined")
+c_obs <- observation(name = "conc", type = "additive", options = list(prediction = ~C["central"]))
 }

@@ -15,6 +15,3 @@ list of declaration objects or error if any element could not be converted
 \description{
 Converts each element of a list to a declaration
 }
-\examples{
-list(~cl, "V") \%>\%  as_declaration_list()
-}

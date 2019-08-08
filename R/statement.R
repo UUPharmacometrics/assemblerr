@@ -2,7 +2,7 @@
 #'
 #' @param ...
 #'
-#' @return
+#' @return A statement
 #' @export
 #'
 #' @examples

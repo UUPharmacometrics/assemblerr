@@ -20,5 +20,5 @@ Substitute symbols in a declaration
 \examples{
 d <- declaration("cl", theta*exp(eta))
 d1 <- declaration("theta", theta+a)
-dec_subs(d, d1)
+assemblerr:::dec_subs(d, d1)
 }
