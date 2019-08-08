@@ -3,3 +3,4 @@
 ^renv$
 ^renv\.lock$
 ^LICENSE\.md$
+^README\.Rmd$
