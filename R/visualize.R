@@ -10,7 +10,7 @@ visualize <- function(model){
 
   hidden_nodes <- model$flows %>%
     dplyr::filter(is.na(to)) %>%
-    dplyr::transmute(label = paste0("output", 1:n())) %>%
+    dplyr::transmute(label = paste0("output", 1:dplyr::n())) %>%
     purrr::invoke(.f = DiagrammeR::create_node_df, n = nrow(.), style = "invis", width = 0, height = 0, shape = 'point')
 
 
@@ -20,7 +20,7 @@ visualize <- function(model){
   edges <- model$flows %>%
     dplyr::group_by(to) %>%
     dplyr::mutate(
-      id = 1:n()
+      id = 1:dplyr::n()
     ) %>%
     dplyr::ungroup() %>%
     dplyr::mutate(
