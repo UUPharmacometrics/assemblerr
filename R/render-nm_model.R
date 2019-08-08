@@ -1,47 +1,47 @@
 #' @export
-render.nm_model <- function(model){
+render.nm_model <- function(object, opts){
 
-  problem_title <- get_by_name(model, "problem", "name")$value
+  problem_title <- get_by_name(object, "problem", "name")$value
   if(is.null(problem_title)) problem_title <- "assemblerr model"
 
-  input_code <- model$input %>%
+  input_code <- object$input %>%
     dplyr::arrange(index) %>%
     purrr::pluck("name") %>%
     paste(collapse = " ")
 
-  pk_code <- model$pk %>%
+  pk_code <- object$pk %>%
     purrr::transpose() %>%
     purrr::map("statement") %>%
     purrr::map(render, opts = render_opts_nm()) %>%
     paste(collapse="\n")
 
-  des_code <- model$des %>%
+  des_code <- object$des %>%
     purrr::transpose() %>%
     purrr::map("statement") %>%
     purrr::map(render, opts = render_opts_nm()) %>%
     paste(collapse="\n")
 
 
-  error_code <- model$error %>%
+  error_code <- object$error %>%
     purrr::transpose() %>%
     purrr::map("statement") %>%
     purrr::map(render, opts = render_opts_nm()) %>%
     paste(collapse="\n")
 
   # generate $THETA code
-  theta_code <- model$theta %>%
+  theta_code <- object$theta %>%
     dplyr::mutate_if(is.numeric, format) %>%
     dplyr::mutate(init_code = sprintf("$THETA (%s, %s, %s) \t;%s", lbound, initial, ubound, toupper(name)) %>% toupper()) %>%
     {paste(.$init_code, collapse = "\n")}
 
   # generate $OMEGA code
-  omega_code <- model$omega %>%
+  omega_code <- object$omega %>%
     dplyr::mutate_if(is.numeric, format) %>%
     dplyr::mutate(init_code = sprintf("$OMEGA %s \t;IIV-%s", initial, toupper(name))) %>%
     {paste(.$init_code, collapse = "\n")}
 
   # generate $OMEGA code
-  sigma_code <- model$sigma %>%
+  sigma_code <- object$sigma %>%
     dplyr::mutate_if(is.numeric, format) %>%
     dplyr::mutate(init_code = sprintf("$SIGMA %s \t;%s", initial, toupper(name))) %>%
     {paste(.$init_code, collapse = "\n")}
@@ -53,7 +53,7 @@ $INPUT ${input_code}")
 ${omega_code}
 ${sigma_code}")
 
-  if(nrow(model$des)>0) {
+  if(nrow(object$des)>0) {
     body <- stringr::str_interp("$PK
 ${pk_code}
 $DES

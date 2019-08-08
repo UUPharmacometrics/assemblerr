@@ -1,8 +1,8 @@
 # This function should be replaced with a custom deparser as done in the rlang package, for now it utilizes the default
 # deparser and employs a mixture of AST and regex transformations to get the desired output.
 #' @export
-render.statement <- function(stm, opts){
-  stm$expressions %>%
+render.statement <- function(object, opts){
+  object$expressions %>%
     transform_if(.if = opts$round_vec_brackets, vec2fcall_transformer) %>%
     transform_if(.if = opts$equal_assign_op, assignment_transformer) %>%
     purrr::map_chr(function(expr) {

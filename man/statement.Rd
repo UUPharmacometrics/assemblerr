@@ -9,6 +9,9 @@ statement(...)
 \arguments{
 \item{...}{}
 }
+\value{
+A statement
+}
 \description{
 One or several imperative instructions
 }

@@ -1,10 +1,10 @@
 #' @export
-render.declaration <- function(d, opts){
-  test_allowed_funs(d, opts$allowed_functions)
-  if(is_anonymous(d)){
-    expr <- dec_get_def(d)
+render.declaration <- function(object, opts){
+  test_allowed_funs(object, opts$allowed_functions)
+  if(is_anonymous(object)){
+    expr <- dec_get_def(object)
   }else{
-    expr <- base::substitute(identifier <- definition, d)
+    expr <- base::substitute(identifier <- definition, object)
   }
   transform_cases2if(expr) %>%
     transform_if(.if = !rlang::is_empty(opts$function_subtitutions), functions_transformer, opts$function_subtitutions) %>%

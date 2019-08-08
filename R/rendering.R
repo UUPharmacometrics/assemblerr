@@ -1,5 +1,5 @@
 #' @export
-render <- function(object, ...) UseMethod("render")
+render <- function(object, opts) UseMethod("render")
 
 #' @export
 render_opts_nm <- function(){
