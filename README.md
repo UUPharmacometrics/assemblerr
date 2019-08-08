@@ -5,6 +5,8 @@
 
 <!-- badges: start -->
 
+[![Travis build
+status](https://travis-ci.org/sebastianueckert/assemblerr.svg?branch=master)](https://travis-ci.org/sebastianueckert/assemblerr)
 <!-- badges: end -->
 
 The goal of assemblerr is to …
