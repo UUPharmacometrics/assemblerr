@@ -6,23 +6,26 @@
 \usage{
 nm_model()
 }
+\value{
+An nm_model
+}
 \description{
 \code{nm_model()} creates the foundation for a NONMEM model
 }
 \details{
-This function creates a NONMEM model object, a software-specific version of the general \link{\code{model_nm()}}. Like for the general model,
-this function only creates the empty base object which then needs to be filled with components before it can be rendered. The following components can be added
+This function creates a NONMEM model object, a software-specific version of the general
+\code{\link{model}}. Like for the general model,this function only creates the empty
+base object which then needs to be filled with components before it can be rendered. The
+following components can be added
 to a NONMEM model:
 \itemize{
-   \item \code{\link{theta}}
-   \item \code{\link{omega}}
-   \item \code{\link{sigma}}
-   \item \code{\link{flow}}
-   \item \code{\link{ode}}
-   \item \code{\link{parameter_equation}}
-   \item \code{\link{algebraic_equation}}
-   \item \code{\link{observation_equation}}
-   \item \code{\link{data_item}}
-   \item \code{\link{meta_tag}}
+   \item \code{\link{nm_problem}}
+   \item \code{\link{nm_input}}
+   \item \code{\link{nm_pk}}
+   \item \code{\link{nm_des}}
+   \item \code{\link{nm_error}}
+   \item \code{\link{nm_theta}}
+   \item \code{\link{nm_omega}}
+   \item \code{\link{nm_sigma}}
 }
 }
