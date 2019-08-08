@@ -63,7 +63,7 @@ m <- model()+
 
 
 # convert to a NONMEM model and generate NMTran code
-as_model_nm(m)  %>% 
+as_nm_model(m)  %>% 
   render %>%
   cat()
 
@@ -101,9 +101,9 @@ assemblerr can create a simple visualization of the model
 
 ```{r, fig.height=5, fig.width=7}
 pkm <- pk_model()+
-  pk_component("distribution", "three-compartment")+
-  pk_component("elimination", "linear")+
-  pk_component("absorption-rate", "first-order")
+  pk_distribution_3cmp()+
+  pk_elemination_linear()+
+  pk_absorption_rate_fo()
 
 pkm %>% 
   as_model() %>% 
