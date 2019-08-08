@@ -1,11 +1,13 @@
 Package: assemblerr
-Type: Package
 Title: Assembly of Pharmacometric Models
-Version: 0.0.1.9000
-Author: person('Sebastian', 'Ueckert',
-             role  = c('aut', 'cph'),
-             email = 'sebastian.ueckert@farmbio.uu.se')
 Description: Assembly of pharmacometric models from individual components.
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Sebastian",
+           family = "Ueckert",
+           role = c("aut", "cre"),
+           email = "sebastian.ueckert@gmail.com",
+           comment = c(ORCID = "0000-0002-3712-0255"))
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
