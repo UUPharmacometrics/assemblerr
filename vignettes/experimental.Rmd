@@ -73,7 +73,7 @@ as_nm_model(m)  %>%
 
 assemblerr supports multiple observation models per model
 
-```{r}
+```{r, eval=F}
 m <- model()+
   compartment("central", volume = ~vc) +
   flow(from = "central", definition = ~cl*C) +
@@ -152,20 +152,20 @@ as_declaration(cl~cases(sex, 0 ~ theta[1], 1 ~ theta[2])*exp(eta[1])) %>%
 
 # Binary observations
 
-```{r}
+```{r, eval =FALSE}
 m <- model()+
   prm_logit("pbase")+
   obs_binary(~pbase, "effect")
 
 # convert to a NONMEM model and generate NMTran code
-as_model_nm(m)  %>% 
+as_nm_model(m)  %>% 
   render %>%
   cat()
 ```
 
 # Support for PKPDsim
 
-```{r}
+```{r, eval=FALSE}
 m <- model()+
   compartment("central", volume = ~vc) +
   flow(from = "central", definition = ~cl*C) +
