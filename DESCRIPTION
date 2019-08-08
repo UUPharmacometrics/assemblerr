@@ -6,7 +6,7 @@ Author: person('Sebastian', 'Ueckert',
              role  = c('aut', 'cph'),
              email = 'sebastian.ueckert@farmbio.uu.se')
 Description: Assembly of pharmacometric models from individual components.
-License: LGPL-3
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Suggests: testthat,
