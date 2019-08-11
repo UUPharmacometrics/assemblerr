@@ -10,7 +10,7 @@
 #'
 add_facet <- function(model, facet, property_def = list(), name_column = TRUE){
   additional_columns <- list(index = integer())
-  if(name_column) additional_columns <- rlang::modify(additional_columns, name = character())
+  if(name_column) additional_columns <- purrr::list_modify(additional_columns, name = character())
   model[[facet]] <- do.call(tibble::tibble, c(property_def, additional_columns))
   return(model)
 }
