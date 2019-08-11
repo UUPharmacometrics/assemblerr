@@ -16,9 +16,7 @@ Suggests: testthat,
     rmarkdown,
     DiagrammeR
 Imports: 
-    pryr,
     purrr,
-    assertthat,
     stringr,
     rlang,
     magrittr,
