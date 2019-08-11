@@ -20,9 +20,9 @@
     },
     "assemblerr": {
       "Package": "assemblerr",
-      "Version": "0.0.1",
+      "Version": "0.0.0.9000",
       "Source": "unknown",
-      "Hash": "ddb1c729591cddffa9dff5037e1d8951"
+      "Hash": "a18a6e1b1d9a5aff36bed0d152ad89b3"
     },
     "assertthat": {
       "Package": "assertthat",
@@ -54,23 +54,11 @@
       "Source": "CRAN",
       "Hash": "329122d89df869b70ed9bbd7ed7d4412"
     },
-    "broom": {
-      "Package": "broom",
-      "Version": "0.5.0",
-      "Source": "CRAN",
-      "Hash": "302ef37bbdfd4f3e67497646b7ed3556"
-    },
     "callr": {
       "Package": "callr",
       "Version": "3.2.0",
       "Source": "CRAN",
       "Hash": "7af03bdfa915fefcf1e1abcfad81755f"
-    },
-    "cellranger": {
-      "Package": "cellranger",
-      "Version": "1.1.0",
-      "Source": "CRAN",
-      "Hash": "a6279d19fb8783f899f8dc3edb9a71b0"
     },
     "cli": {
       "Package": "cli",
@@ -126,18 +114,6 @@
       "Source": "CRAN",
       "Hash": "921ecc2db7bca3844daaec11fce12e76"
     },
-    "DBI": {
-      "Package": "DBI",
-      "Version": "1.0.0",
-      "Source": "CRAN",
-      "Hash": "5608e5aeeba9ae979e5bfd26ca0835a5"
-    },
-    "dbplyr": {
-      "Package": "dbplyr",
-      "Version": "1.2.2",
-      "Source": "CRAN",
-      "Hash": "371f09dbcabe177bc51dc79610540592"
-    },
     "desc": {
       "Package": "desc",
       "Version": "1.2.0",
@@ -174,12 +150,6 @@
       "Source": "CRAN",
       "Hash": "30e02c841d82e1aecafbd080297c2b82"
     },
-    "ellipsis": {
-      "Package": "ellipsis",
-      "Version": "0.1.0",
-      "Source": "CRAN",
-      "Hash": "6d1d4612d4cfcaa05e67a534c3b5e470"
-    },
     "evaluate": {
       "Package": "evaluate",
       "Version": "0.13",
@@ -191,12 +161,6 @@
       "Version": "0.4.0",
       "Source": "CRAN",
       "Hash": "7e8ca3a2d400cbdaf72a602e9833c920"
-    },
-    "forcats": {
-      "Package": "forcats",
-      "Version": "0.4.0",
-      "Source": "CRAN",
-      "Hash": "c5d5b0c24161479679cfbf94fba339f4"
     },
     "fs": {
       "Package": "fs",
@@ -239,12 +203,6 @@
       "Version": "0.3.0",
       "Source": "CRAN",
       "Hash": "120444406cc884baa3a2ff5c0566045b"
-    },
-    "haven": {
-      "Package": "haven",
-      "Version": "1.1.2",
-      "Source": "CRAN",
-      "Hash": "96d5bb37f43c0182cc9e45e8509d1e4e"
     },
     "highr": {
       "Package": "highr",
@@ -324,12 +282,6 @@
       "Source": "CRAN",
       "Hash": "8c343e48c3f58de2c70a641592abc0f1"
     },
-    "lubridate": {
-      "Package": "lubridate",
-      "Version": "1.7.4",
-      "Source": "CRAN",
-      "Hash": "4af93df0d50bb3919de67f36e7d3d00b"
-    },
     "magrittr": {
       "Package": "magrittr",
       "Version": "1.5",
@@ -371,12 +323,6 @@
       "Version": "0.6",
       "Source": "CRAN",
       "Hash": "217bc37b46b42e1e0636460ae3b96a7d"
-    },
-    "modelr": {
-      "Package": "modelr",
-      "Version": "0.1.2",
-      "Source": "CRAN",
-      "Hash": "b6895644113731205d7a8adcc591a56b"
     },
     "munsell": {
       "Package": "munsell",
@@ -450,12 +396,6 @@
       "Source": "CRAN",
       "Hash": "9bd5df42ed39766a2ac15eafa7d97ded"
     },
-    "progress": {
-      "Package": "progress",
-      "Version": "1.2.0",
-      "Source": "CRAN",
-      "Hash": "d72bac138cb24ed3a787f03a33954c46"
-    },
     "pryr": {
       "Package": "pryr",
       "Version": "0.1.4",
@@ -504,29 +444,11 @@
       "Source": "CRAN",
       "Hash": "19e0ffd8bcaff3476349d8787fc8bd59"
     },
-    "readxl": {
-      "Package": "readxl",
-      "Version": "1.3.1",
-      "Source": "CRAN",
-      "Hash": "b0467b5406ee2c29709c4a57cab692d1"
-    },
-    "rematch": {
-      "Package": "rematch",
-      "Version": "1.0.1",
-      "Source": "CRAN",
-      "Hash": "d80f39f4db9c537a1def235969d648ea"
-    },
     "remotes": {
       "Package": "remotes",
       "Version": "2.0.2",
       "Source": "CRAN",
       "Hash": "6a529187fea76fc9588b4dc981120375"
-    },
-    "reprex": {
-      "Package": "reprex",
-      "Version": "0.2.1",
-      "Source": "CRAN",
-      "Hash": "b4d698a5ce71a5cfb1481c2e9176c0bf"
     },
     "reshape2": {
       "Package": "reshape2",
@@ -542,9 +464,9 @@
     },
     "rlang": {
       "Package": "rlang",
-      "Version": "0.3.3",
+      "Version": "0.4.0",
       "Source": "CRAN",
-      "Hash": "ce26c85191896eaedbe41a17aa5380b3"
+      "Hash": "e48086a0605a981e1deb719711d4be63"
     },
     "rmarkdown": {
       "Package": "rmarkdown",
@@ -576,23 +498,11 @@
       "Source": "CRAN",
       "Hash": "6c03ab57831cbdae14d599151e832e18"
     },
-    "rvest": {
-      "Package": "rvest",
-      "Version": "0.3.2",
-      "Source": "CRAN",
-      "Hash": "547a7e1c3fcc354dda6439c2852baf09"
-    },
     "scales": {
       "Package": "scales",
       "Version": "1.0.0",
       "Source": "CRAN",
       "Hash": "17cfbe1a4fcc8d0440a2af68d9e07bf4"
-    },
-    "selectr": {
-      "Package": "selectr",
-      "Version": "0.4-1",
-      "Source": "CRAN",
-      "Hash": "cc537e333408bb2f0088bc7b20f0e821"
     },
     "sessioninfo": {
       "Package": "sessioninfo",
@@ -641,12 +551,6 @@
       "Version": "0.2.5",
       "Source": "CRAN",
       "Hash": "66c1a6de7f98266b76503698f2ca111d"
-    },
-    "tidyverse": {
-      "Package": "tidyverse",
-      "Version": "1.2.1",
-      "Source": "CRAN",
-      "Hash": "ea055dfa5ed1e736f1ebacb553cbddbd"
     },
     "tinytex": {
       "Package": "tinytex",
