@@ -178,7 +178,7 @@ dec_set_def <- function(d, definition){
   purrr::update_list(d, definition = rlang::enexpr(definition))
 }
 #' @export
-#' @rdname set_definition
+#' @rdname dec_set_def
 dec_set_id <- function(d, identifier = NULL){
   d <- arg2dec(d)
   identifier <- rlang::enexpr(identifier)
@@ -228,7 +228,7 @@ dec_vars <- function(d){
 }
 
 #' @export
-#' @rdname variables
+#' @rdname dec_vars
 dec_funs <- function(d){
   d <- arg2dec(d)
   setdiff(all.names(d$definition, unique = T), all.vars(d$definition))

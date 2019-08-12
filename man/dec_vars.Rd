@@ -2,9 +2,12 @@
 % Please edit documentation in R/declaration.R
 \name{dec_vars}
 \alias{dec_vars}
+\alias{dec_funs}
 \title{List variables and functions of a declaration}
 \usage{
 dec_vars(d)
+
+dec_funs(d)
 }
 \arguments{
 \item{d}{A declaration}

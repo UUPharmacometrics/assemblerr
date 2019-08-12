@@ -2,9 +2,12 @@
 % Please edit documentation in R/statement.R
 \name{statement}
 \alias{statement}
+\alias{stm}
 \title{One or several imperative instructions}
 \usage{
 statement(...)
+
+stm(...)
 }
 \arguments{
 \item{...}{}
@@ -15,3 +18,8 @@ A statement
 \description{
 One or several imperative instructions
 }
+\section{Functions}{
+\itemize{
+\item \code{stm}: Alias for statement
+}}
+

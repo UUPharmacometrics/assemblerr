@@ -2,9 +2,12 @@
 % Please edit documentation in R/declaration.R
 \name{dec_set_def}
 \alias{dec_set_def}
+\alias{dec_set_id}
 \title{Set identifier or definition of a declaration}
 \usage{
 dec_set_def(d, definition)
+
+dec_set_id(d, identifier = NULL)
 }
 \arguments{
 \item{d}{A declaration}

@@ -4,8 +4,6 @@
 #'
 #' @return A statement
 #' @export
-#'
-#' @examples
 statement <- function(...){
   list(
     expressions = rlang::enexprs(...)
@@ -14,7 +12,7 @@ statement <- function(...){
 }
 
 #' @export
-#' @describeIn statement
+#' @describeIn statement Alias for statement
 stm <- statement
 
 
