@@ -116,7 +116,7 @@ add_obs_additive.nm_model <- function(target, source, obs){
 
   # create the declartions for this observations
   obs_dec <- make_ipred_dec(target, source, obs)
-  obs_dec[[length(obs_dec)+1]] <- declaration(y, ipred + eps[!!(get_by_name(target, "sigma", sigma_name)$index)])
+  obs_dec[[length(obs_dec)+1]] <- declaration("y", ipred + eps[!!(get_by_name(target, "sigma", sigma_name)$index)])
 
   # convert to statements for NM
   obs_stm <- as_statement(obs_dec)

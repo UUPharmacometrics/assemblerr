@@ -1,5 +1,5 @@
 #' @keywords internal
-#' @importFrom methods is
+#' @importFrom methods is getFunction
 #' @importFrom rlang .data
 "_PACKAGE"
 
@@ -8,3 +8,5 @@
 ## usethis namespace: start
 ## usethis namespace: end
 NULL
+
+if(getRversion() >= "2.15.1")  utils::globalVariables(".")
