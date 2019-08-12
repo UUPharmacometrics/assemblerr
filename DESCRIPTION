@@ -21,6 +21,7 @@ Imports:
     rlang,
     magrittr,
     dplyr,
-    tibble
+    tibble,
+    methods
 VignetteBuilder: knitr
 RoxygenNote: 6.1.1

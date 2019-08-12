@@ -98,7 +98,7 @@ add_fragment <- function(fragment1, fragment2){
 
       # determine all entries that will not change and update index column
       unchanged <- dplyr::anti_join(frag[[facet]], fragment2[[facet]], by = "name") %>%
-        dplyr::arrange(index) %>%
+        dplyr::arrange(.data$index) %>%
         dplyr::mutate(index = seq_len(dplyr::n()))
       # generate index for updated or added entries
       changed <- dplyr::mutate(fragment2[[facet]], index = seq_len(dplyr::n())+nrow(unchanged))
@@ -109,7 +109,7 @@ add_fragment <- function(fragment1, fragment2){
       if(nrow(updated)!=0) rlang::warning_cnd("entries_updated", .msg = paste("Entries", paste(updated$name, collapse = ", "), "in facet", facet, "have been replaced"), .mufflable = T)
       # combine and sort by index
       frag[[facet]] <- dplyr::bind_rows(unchanged, added, updated) %>%
-        dplyr::arrange(index)
+        dplyr::arrange(.data$index)
     }else{
       frag[[facet]] <- dplyr::bind_rows(frag[[facet]], fragment2[[facet]])
     }
@@ -127,7 +127,7 @@ add_fragment_unless_exists <- function(fragment1, fragment2){
         dplyr::mutate(index = seq_len(dplyr::n()) + nrow(frag[[facet]]))
       # combine and sort by index
       frag[[facet]] <- dplyr::bind_rows(frag[[facet]], added) %>%
-        dplyr::arrange(index)
+        dplyr::arrange(.data$index)
     }else{
       frag[[facet]] <- dplyr::bind_rows(frag[[facet]], fragment2[[facet]])
     }
