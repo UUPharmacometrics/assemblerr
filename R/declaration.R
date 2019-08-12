@@ -196,7 +196,7 @@ dec_get_def <- function(d) {
 }
 
 #' @export
-print.declaration <- function(x){
+print.declaration <- function(x, ...){
   if(is.null(x$definition) && is.null(x$identifier)){
     cat("Empty declaration")
   }else{

@@ -19,7 +19,7 @@ stm <- statement
 
 
 #' @export
-print.statement <- function(x){
+print.statement <- function(x,...){
   if(length(x$expression)==1) cat("Statement:\n")
   else cat("Statements:\n")
   x$expressions %>%

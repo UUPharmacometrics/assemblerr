@@ -36,24 +36,24 @@ model <- function(){
 }
 
 #' @export
-print.model <- function(m){
-  title <- get_first(m, "meta_tags", name == "title")$value
+print.model <- function(x,...){
+  title <- get_first(x, "meta_tags", name == "title")$value
   if(!is.null(title)){
     cat('assemblerr model "', title,'":\n')
   } else{
     cat('assemblerr model:\n')
   }
-  prms <- m$parameters$name %>% paste(collapse = ", ")
+  prms <- x$parameters$name %>% paste(collapse = ", ")
   cat('  - Parameters: ', prms, '\n')
-  obs_txt <- m$observations %>%
+  obs_txt <- x$observations %>%
     dplyr::mutate(txt = paste0("    + \"", name, "\" (", type, ")")) %>%
     purrr::pluck("txt") %>%
     paste(collapse = "\n")
   cat('  - Observations: \n')
   cat(obs_txt, "\n")
-  comp_txt <- m$compartments$name %>% paste(collapse = ", ")
-  if(nrow(m$compartments)>0) cat('  - Compartments: ', comp_txt, "\n")
-  alg_count <- m$algebraics %>% nrow()
+  comp_txt <- x$compartments$name %>% paste(collapse = ", ")
+  if(nrow(x$compartments)>0) cat('  - Compartments: ', comp_txt, "\n")
+  alg_count <- x$algebraics %>% nrow()
   if(alg_count>0) cat('  - Algebraic relationships: ', alg_count, "\n")
 }
 
