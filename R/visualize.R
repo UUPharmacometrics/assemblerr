@@ -4,12 +4,12 @@ visualize <- function(model){
   if(!requireNamespace("DiagrammeR", quietly = TRUE)) stop("The package 'DiagrammeR' needs to be installed to use this functionality.")
 
   nodes <- model$compartments %>%
-    dplyr::transmute(label = name, shape = 'rectangle') %>%
+    dplyr::transmute(label = .data$name, shape = 'rectangle') %>%
     purrr::invoke(.f = DiagrammeR::create_node_df, n = nrow(.),
                   width = .8, height = .8, fillcolor = "gray70", fontcolor = "black")
 
   hidden_nodes <- model$flows %>%
-    dplyr::filter(is.na(to)) %>%
+    dplyr::filter(is.na(.data$to)) %>%
     dplyr::transmute(label = paste0("output", 1:dplyr::n())) %>%
     purrr::invoke(.f = DiagrammeR::create_node_df, n = nrow(.), style = "invis", width = 0, height = 0, shape = 'point')
 
@@ -18,16 +18,17 @@ visualize <- function(model){
 
   node_ids <- all_nodes %>% {purrr::set_names(.$id, .$label)}
   edges <- model$flows %>%
-    dplyr::group_by(to) %>%
+    dplyr::group_by(.data$to) %>%
     dplyr::mutate(
       id = 1:dplyr::n()
     ) %>%
     dplyr::ungroup() %>%
     dplyr::mutate(
-      to = ifelse(is.na(to), paste0('output', id), to)
+      to = ifelse(is.na(.data$to), paste0('output', .data$id), .data$to)
     ) %>%
     dplyr::transmute(
-      from = node_ids[from], to = node_ids[to], label = purrr::map_chr(definition, render, opts = render_opts_viz())) %>%
+      from = node_ids[.data$from], to = node_ids[.data$to],
+      label = purrr::map_chr(.data$definition, render, opts = render_opts_viz())) %>%
     purrr::invoke(.f = DiagrammeR::create_edge_df)
 
 

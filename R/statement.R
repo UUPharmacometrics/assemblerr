@@ -1,6 +1,6 @@
 #' One or several imperative instructions
 #'
-#' @param ...
+#' @param ... The statement
 #'
 #' @return A statement
 #' @export
@@ -28,8 +28,16 @@ print.statement <- function(x,...){
 as_statement <- function(x) UseMethod("as_statement")
 #' @export
 as_statement.declaration <- function(x) {
-  if(is_anonymous(x)) return(stm(!!dec_get_def(x)))
-  else return(stm(!!dec_get_id(x) <- !!dec_get_def(x)))
+`dec_get_id<-` <- NA
+  if(is_anonymous(x)) return(as_statement(dec_get_def(x)))
+  else return(stm(rlang::UQ(dec_get_id(x)) <- rlang::UQ(dec_get_def(x))))
+}
+#' @export
+as_statement.expression <- function(x){
+  list(
+    expressions = x
+  ) %>%
+    structure(class = "statement")
 }
 #' @export
 as_statement.list <- function(x){

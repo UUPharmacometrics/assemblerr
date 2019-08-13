@@ -2,7 +2,7 @@
 #'
 #' Converts each element of a list to a declaration
 #'
-#' @param l list to be converted
+#' @param dl list to be converted
 #'
 #' @return list of declaration objects or error if any element could not be converted
 as_declaration_list <- function(dl){

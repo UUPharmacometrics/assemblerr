@@ -5,7 +5,7 @@ render.nm_model <- function(object, opts){
   if(is.null(problem_title)) problem_title <- "assemblerr model"
 
   input_code <- object$input %>%
-    dplyr::arrange(index) %>%
+    dplyr::arrange(.data$index) %>%
     purrr::pluck("name") %>%
     paste(collapse = " ")
 
@@ -31,19 +31,19 @@ render.nm_model <- function(object, opts){
   # generate $THETA code
   theta_code <- object$theta %>%
     dplyr::mutate_if(is.numeric, format) %>%
-    dplyr::mutate(init_code = sprintf("$THETA (%s, %s, %s) \t;%s", lbound, initial, ubound, toupper(name)) %>% toupper()) %>%
+    dplyr::mutate(init_code = sprintf("$THETA (%s, %s, %s) \t;%s", .data$lbound, .data$initial, .data$ubound, toupper(.data$name)) %>% toupper()) %>%
     {paste(.$init_code, collapse = "\n")}
 
   # generate $OMEGA code
   omega_code <- object$omega %>%
     dplyr::mutate_if(is.numeric, format) %>%
-    dplyr::mutate(init_code = sprintf("$OMEGA %s \t;IIV-%s", initial, toupper(name))) %>%
+    dplyr::mutate(init_code = sprintf("$OMEGA %s \t;IIV-%s", .data$initial, toupper(.data$name))) %>%
     {paste(.$init_code, collapse = "\n")}
 
   # generate $OMEGA code
   sigma_code <- object$sigma %>%
     dplyr::mutate_if(is.numeric, format) %>%
-    dplyr::mutate(init_code = sprintf("$SIGMA %s \t;%s", initial, toupper(name))) %>%
+    dplyr::mutate(init_code = sprintf("$SIGMA %s \t;%s", .data$initial, toupper(.data$name))) %>%
     {paste(.$init_code, collapse = "\n")}
 
   header <- stringr::str_interp("

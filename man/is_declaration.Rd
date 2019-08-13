@@ -17,6 +17,8 @@ is_empty_declaration(o)
 }
 \arguments{
 \item{o}{An object to be tested}
+
+\item{parse}{Should strings be parsed}
 }
 \value{
 Boolean

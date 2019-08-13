@@ -91,7 +91,7 @@ replace_compartment_references <- function(d, to, from){
 }
 
 make_ipred_dec <- function(target, source, obs){
-
+  ipred <- NA
   ipred_dec <- replace_compartment_references(obs$options$prediction, target, source)
   if(is_anonymous(ipred_dec)){
     ipred_dec <- list(dec_set_id(ipred_dec, ipred))
@@ -116,17 +116,18 @@ add_obs_additive.nm_model <- function(target, source, obs){
 
   # create the declartions for this observations
   obs_dec <- make_ipred_dec(target, source, obs)
-  obs_dec[[length(obs_dec)+1]] <- declaration("y", ipred + eps[!!(get_by_name(target, "sigma", sigma_name)$index)])
+  expr <- parse(text = sprintf("ipred + eps[%i]", get_by_name(target, "sigma", sigma_name)$index))
+  obs_dec[[length(obs_dec)+1]] <- declaration("y", expr)
 
   # convert to statements for NM
   obs_stm <- as_statement(obs_dec)
 
   # add conditional statement if there is more than one observation
-  if(nrow(source$observations)>1) {
-    obs_stm <- stm(if(dvid == !!(obs$index)){
-      !!!(obs_stm$expressions)
-    })
-  }
+  # if(nrow(source$observations)>1) {
+  #   obs_stm <- stm(if(dvid == !!(obs$index)){
+  #     !!!(obs_stm$expressions)
+  #   })
+  # }
 
   target + nm_error(name = obs$name, statement = obs_stm)
 }

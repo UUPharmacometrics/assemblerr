@@ -7,7 +7,7 @@
 as_declaration_list(dl)
 }
 \arguments{
-\item{l}{list to be converted}
+\item{dl}{list to be converted}
 }
 \value{
 list of declaration objects or error if any element could not be converted

@@ -6,6 +6,7 @@ add_odes <- function(to, from){
 }
 
 generate_ode_equations <- function(model){
+  vol <- volume <- dadt <- A <- NA #silence CRAN check
   flows <- model$flows %>%
     purrr::transpose() %>%
     purrr::map(function(flow){

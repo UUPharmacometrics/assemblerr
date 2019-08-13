@@ -57,6 +57,7 @@ declaration <- function(identifier, definition){
 #' Tests if an object is a declaration or if it could behave as one
 #'
 #' @param o An object to be tested
+#' @param parse Should strings be parsed
 #'
 #' @return Boolean
 #' @export

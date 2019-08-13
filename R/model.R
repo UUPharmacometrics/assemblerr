@@ -37,6 +37,7 @@ model <- function(){
 
 #' @export
 print.model <- function(x,...){
+  name <- NA
   title <- get_first(x, "meta_tags", name == "title")$value
   if(!is.null(title)){
     cat('assemblerr model "', title,'":\n')
@@ -46,7 +47,7 @@ print.model <- function(x,...){
   prms <- x$parameters$name %>% paste(collapse = ", ")
   cat('  - Parameters: ', prms, '\n')
   obs_txt <- x$observations %>%
-    dplyr::mutate(txt = paste0("    + \"", name, "\" (", type, ")")) %>%
+    dplyr::mutate(txt = paste0("    + \"", .data$name, "\" (", .data$type, ")")) %>%
     purrr::pluck("txt") %>%
     paste(collapse = "\n")
   cat('  - Observations: \n')
@@ -110,6 +111,10 @@ algebraic <- function(definition){
 
 #' Create a new parameter_value
 #'
+#' @param parameter1 Name
+#' @param type Type
+#' @param value Value
+#' @param parameter2 Optional name
 #'
 #' @return A parameter value fragment
 #' @export

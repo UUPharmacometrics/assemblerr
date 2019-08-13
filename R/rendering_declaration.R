@@ -1,5 +1,6 @@
 #' @export
 render.declaration <- function(object, opts){
+  definition <- NA
   test_allowed_funs(object, opts$allowed_functions)
   if(is_anonymous(object)){
     expr <- dec_get_def(object)

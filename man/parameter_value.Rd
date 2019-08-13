@@ -6,6 +6,15 @@
 \usage{
 parameter_value(parameter1, type, value, parameter2 = NULL)
 }
+\arguments{
+\item{parameter1}{Name}
+
+\item{type}{Type}
+
+\item{value}{Value}
+
+\item{parameter2}{Optional name}
+}
 \value{
 A parameter value fragment
 }

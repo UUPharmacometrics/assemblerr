@@ -10,6 +10,8 @@ parameter(name, type, options = NULL)
 \item{name}{Name of the paramter}
 
 \item{type}{Model type to be used for the parameter}
+
+\item{options}{Options}
 }
 \value{
 A \code{\link{fragment}} representing a model parameter
