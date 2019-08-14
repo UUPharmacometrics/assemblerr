@@ -22,7 +22,7 @@
       "Package": "assemblerr",
       "Version": "0.0.0.9000",
       "Source": "unknown",
-      "Hash": "a18a6e1b1d9a5aff36bed0d152ad89b3"
+      "Hash": "6d91ea2475e0a4548c17b1bf949a4fea"
     },
     "assertthat": {
       "Package": "assertthat",
@@ -83,12 +83,6 @@
       "Version": "1.2.0",
       "Source": "CRAN",
       "Hash": "e4438538e94e5fda0c2950f0e6fd2a33"
-    },
-    "codetools": {
-      "Package": "codetools",
-      "Version": "0.2-15",
-      "Source": "CRAN",
-      "Hash": "71fa8e1fac5dc255507f5ed253c6a367"
     },
     "colorspace": {
       "Package": "colorspace",
@@ -395,12 +389,6 @@
       "Version": "3.3.0",
       "Source": "CRAN",
       "Hash": "9bd5df42ed39766a2ac15eafa7d97ded"
-    },
-    "pryr": {
-      "Package": "pryr",
-      "Version": "0.1.4",
-      "Source": "CRAN",
-      "Hash": "072bc11dcdee103acd388de5e17455a3"
     },
     "ps": {
       "Package": "ps",

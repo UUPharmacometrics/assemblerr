@@ -11,10 +11,12 @@ Authors@R:
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Suggests: testthat,
+Suggests: 
+    testthat,
     knitr,
     rmarkdown,
-    DiagrammeR
+    DiagrammeR,
+    covr
 Imports: 
     purrr,
     stringr,
