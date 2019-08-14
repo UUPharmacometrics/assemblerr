@@ -6,7 +6,7 @@
 #' @param type The model type used for the observation model
 #' @param options A \code{\link{declaration}} describing the measurement
 #'
-#' @return A \code{\link{fragment}} representing an observation model
+#' @return A \code{fragment} representing an observation model
 #'
 #' @examples
 #' # create an additive error observation model for the concentration from the "central" compartment
@@ -32,15 +32,21 @@ obs_continuous <- function(prediction, type, name){
 }
 
 #' @export
+#' @param prediction Declaration for prediction
+#' @rdname observation
 obs_additive <- function(prediction, name) obs_continuous(prediction, "additive", name)
 
 #' @export
+#' @rdname observation
 obs_proportional <- function(prediction, name) obs_continuous(prediction, "proportional", name)
 
 #' @export
+#' @rdname observation
 obs_power <- function(prediction, name) obs_continuous(prediction, "power", name)
 
 #' @export
+#' @param p1 Declaration for P(Y=1)
+#' @rdname observation
 obs_binary <- function(p1, name){
   p1 <- arg2dec(p1)
   options <- list(

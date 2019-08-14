@@ -1,7 +1,13 @@
+#' Render an object
+#'
+#' @param object The object to render
+#' @param opts Rendering options
+#'
 #' @export
 render <- function(object, opts) UseMethod("render")
 
 #' @export
+#' @rdname render
 render_opts_nm <- function(){
   list(
     allowed_functions = c(

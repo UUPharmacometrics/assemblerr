@@ -1,4 +1,9 @@
 
+
+#' Visualize a model
+#'
+#' @param model The model
+#'
 #' @export
 visualize <- function(model){
   if(!requireNamespace("DiagrammeR", quietly = TRUE)) stop("The package 'DiagrammeR' needs to be installed to use this functionality.")

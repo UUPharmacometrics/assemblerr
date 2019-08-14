@@ -1,3 +1,6 @@
+#' Convert model to NONMEM model
+#'
+#' @param from Model to convert
 #' @export
 as_nm_model <- function(from) UseMethod("as_nm_model")
 
@@ -15,6 +18,9 @@ as_nm_model.model <- function(from){
     nm_input("id", "id")
 }
 
+#' Convert to a model
+#'
+#' @param from The source
 #' @export
 as_model <- function(from) UseMethod("as_model")
 

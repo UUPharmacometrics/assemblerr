@@ -2,9 +2,21 @@
 % Please edit documentation in R/observation.R
 \name{observation}
 \alias{observation}
+\alias{obs_additive}
+\alias{obs_proportional}
+\alias{obs_power}
+\alias{obs_binary}
 \title{Observation model}
 \usage{
 observation(name, type, options = NULL)
+
+obs_additive(prediction, name)
+
+obs_proportional(prediction, name)
+
+obs_power(prediction, name)
+
+obs_binary(p1, name)
 }
 \arguments{
 \item{name}{The name used to identify the measurement}
@@ -12,9 +24,13 @@ observation(name, type, options = NULL)
 \item{type}{The model type used for the observation model}
 
 \item{options}{A \code{\link{declaration}} describing the measurement}
+
+\item{prediction}{Declaration for prediction}
+
+\item{p1}{Declaration for P(Y=1)}
 }
 \value{
-A \code{\link{fragment}} representing an observation model
+A \code{fragment} representing an observation model
 }
 \description{
 Defines how variables from a model relate to values in the data

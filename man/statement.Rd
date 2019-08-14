@@ -10,7 +10,7 @@ statement(...)
 stm(...)
 }
 \arguments{
-\item{...}{}
+\item{...}{The statement}
 }
 \value{
 A statement

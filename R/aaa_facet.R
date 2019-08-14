@@ -35,20 +35,19 @@ has_facet <- function(model, facet){
   add_fragment(x, y)
 }
 
-#' @export
+
 `%|+%` <- function(x,y) UseMethod("%|+%")
 
-#' @export
+
 `%|+%.fragment` <- function(x, y){
   if(!is(y, "fragment")) stop("Only two fragments can be combined.")
   add_fragment_unless_exists(x, y)
 }
 
 
-#' @export
+
 `%+!%` <- function(x,y) UseMethod("%+!%")
 
-#' @export
 `%+!%.fragment` <- function(x, y){
   if(!is(y, "fragment")) stop("Only two fragments can be combined.")
   rlang::with_handlers(

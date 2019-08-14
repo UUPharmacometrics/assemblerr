@@ -35,49 +35,77 @@ nm_model <- function(){
     add_facet("sigma", list(initial = numeric()))
 }
 
-#' A problem
+
+
+#' Create NONMEM model facets
 #'
+#' @param name Facet name
 #'
+#' @return A facet
 #' @export
-#' @keywords internal
 nm_problem <- function(name){
   if(!is.character(name)) stop("'name' needs to be a character vector")
   item("problem", name = name)
 }
 
 #' @export
+#' @param type Column type
+#' @param ... Additional arguments
+#' @rdname nm_problem
 nm_input <- function(name, type, ...){
   if(!is.character(name)) stop("'name' needs to be a character vector")
   item("input", name = name, type = type, properties = list(...))
 }
 
 
-#' @keywords internal
+#' Create facet for initial values
+#'
+#' @param name Parameter name
+#' @param initial Initial value
+#' @param lbound Lower bound
+#' @param ubound Upper bound
+#'
+#' @return Facet
+#' @export
 nm_theta <- function(name, initial = NA, lbound = -Inf, ubound = Inf){
   if(!is.character(name)) stop("'name' needs to be a character vector")
   item("theta", name = name, initial = initial, lbound = lbound, ubound = ubound)
 }
-#' @keywords internal
+#' @export
+#' @rdname nm_theta
 nm_omega <- function(name, initial = NA){
   if(!is.character(name)) stop("'name' needs to be a character vector")
   item("omega", name = name, initial = initial)
 }
-#' @keywords internal
+#' @export
+#' @rdname nm_theta
 nm_sigma <- function(name, initial = NA){
   if(!is.character(name)) stop("'name' needs to be a character vector")
   item("sigma", name = name, initial = initial)
 }
-#' @keywords internal
+
+
+#' Create model code facet
+#'
+#' @param name Facet name
+#' @param statement Code statement
+#'
+#' @return A facet
+#' @export
 nm_pk <- function(name, statement){
   if(!is.character(name)) stop("'name' needs to be a character vector")
   item("pk", name = name, statement = statement)
 }
-#' @keywords internal
+
+#' @rdname  nm_pk
+#' @export
 nm_des <- function(name, statement){
   if(!is.character(name)) stop("'name' needs to be a character vector")
   item("des", name = name, statement = statement)
 }
-#' @keywords internal
+
+#' @rdname  nm_pk
+#' @export
 nm_error <- function(name, statement){
   if(!is.character(name)) stop("'name' needs to be a character vector")
   item("error", name = name, statement = statement)

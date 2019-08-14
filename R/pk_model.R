@@ -1,3 +1,7 @@
+
+#' Create a PK model
+#'
+#' @return A pk_model
 #' @export
 pk_model <- function(){
   model() %>%
@@ -13,7 +17,13 @@ as_model.pk_model <- function(from){
     purrr::update_list(from, pk_components = NULL) # all other components are taken "as-is"
 }
 
+#' Create PK model components
+#'
 #' @export
+#' @param name Component name
+#' @param type Component type
+#' @param options Additional options
+#' @return A pk_model component
 pk_component <- function(name, type, options = NULL){
   if(!is.character(name)) stop("'name' needs to be a character vector")
   if(!is.character(type)) stop("'type' needs to be a character vector")
@@ -22,27 +32,34 @@ pk_component <- function(name, type, options = NULL){
 }
 
 #' @export
+#' @rdname pk_component
 pk_distribution_1cmp <- function() pk_component("distribution", "1cmp")
 
 #' @export
+#' @rdname pk_component
 pk_distribution_2cmp <- function() pk_component("distribution", "2cmp")
 
+#' @rdname pk_component
 #' @export
 pk_distribution_3cmp <- function() pk_component("distribution", "3cmp")
 
-
+#' @rdname pk_component
 #' @export
 pk_elemination_linear <- function() pk_component("elemination", "linear")
 
+#' @rdname pk_component
 #' @export
 pk_elemination_mm <- function() pk_component("elemination", "mm")
 
+#' @rdname pk_component
 #' @export
 pk_absorption_rate_fo <- function() pk_component("absorption-rate", "fo")
 
+#' @rdname pk_component
 #' @export
 pk_absorption_rate_zo <- function() pk_component("absorption-rate", "zo")
 
+#' @rdname pk_component
 #' @export
 pk_absorption_delay_none <- function() pk_component("absorption-delay", "none")
 

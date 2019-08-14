@@ -1,3 +1,8 @@
+#' Write model code to file
+#'
+#' @param model The model
+#' @param filename The filename for the model file
+#' @param directory The directory where to save the file
 #' @export
 write_model <- function(model, filename, directory = getwd()) UseMethod("write_model")
 

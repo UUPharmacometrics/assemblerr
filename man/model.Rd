@@ -24,7 +24,7 @@ to a general model:
    \item \code{\link{flow}}
    \item \code{\link{observation}}
    \item \code{\link{parameter_value}}
-   \item \code{\link{meta_tags}}
+   \item \code{\link{meta_tag}}
 }
 }
 \examples{

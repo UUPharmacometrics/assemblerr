@@ -13,7 +13,7 @@
 #'    \item \code{\link{flow}}
 #'    \item \code{\link{observation}}
 #'    \item \code{\link{parameter_value}}
-#'    \item \code{\link{meta_tags}}
+#'    \item \code{\link{meta_tag}}
 #' }
 #'
 #' @return A general pharmacometric model
@@ -101,6 +101,12 @@ flow <- function(from = NULL, to = NULL, definition){
 }
 
 
+
+#' Create an algebraic relationship
+#'
+#' @param definition The definition
+#'
+#' @return A algebraic fragment
 #' @export
 algebraic <- function(definition){
   definition <- arg2dec(definition)
@@ -124,6 +130,9 @@ parameter_value <- function(parameter1, type, value, parameter2 = NULL){
   item("parameter_values", parameter1 = parameter1, type = type, value = value, parameter2 = parameter2)
 }
 #' @export
+#' @param values List of values
+#' @param types List of types
+#' @rdname parameter_value
 parameter_value_table <- function(values, types){
   values %>%
     tibble::enframe(name = "parameter1") %>%
@@ -132,6 +141,13 @@ parameter_value_table <- function(values, types){
     structure(class = "fragment")
 }
 
+
+#' Create a meta tag facet
+#'
+#' @param name Tag name
+#' @param value Tag value
+#'
+#' @return A meta tag facet
 #' @export
 meta_tag <- function(name, value){
   if(!is.character(name)) stop("'name' needs to be a character vector")

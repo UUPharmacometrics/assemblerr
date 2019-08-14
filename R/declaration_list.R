@@ -52,7 +52,6 @@ get_direct_dependants <- function(dl, variable){
 }
 
 # orders the provided declaration list topologically
-#' @export
 topologic_order <- function(dl){
   # DFS (https://en.wikipedia.org/wiki/Topological_sorting)
   l <- c() # list of sorted nodes

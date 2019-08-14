@@ -2,9 +2,21 @@
 % Please edit documentation in R/parameter.R
 \name{parameter}
 \alias{parameter}
+\alias{prm_log_normal}
+\alias{prm_normal}
+\alias{prm_novar}
+\alias{prm_logit}
 \title{Model parameter}
 \usage{
 parameter(name, type, options = NULL)
+
+prm_log_normal(name)
+
+prm_normal(name)
+
+prm_novar(name)
+
+prm_logit(name)
 }
 \arguments{
 \item{name}{Name of the paramter}
@@ -14,11 +26,22 @@ parameter(name, type, options = NULL)
 \item{options}{Options}
 }
 \value{
-A \code{\link{fragment}} representing a model parameter
+A \code{fragment} representing a model parameter
 }
 \description{
 Defines name and type of a model parameter
 }
+\section{Functions}{
+\itemize{
+\item \code{prm_log_normal}: Creates a parameter with a log-normal distribution
+
+\item \code{prm_normal}: Creates a parameter with a normal distribution
+
+\item \code{prm_novar}: Creates a parameter with no IIV
+
+\item \code{prm_logit}: Creates a parameter with a logit distribution
+}}
+
 \examples{
 p <- parameter("cl", "log-normal")
 }

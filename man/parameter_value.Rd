@@ -2,9 +2,12 @@
 % Please edit documentation in R/model.R
 \name{parameter_value}
 \alias{parameter_value}
+\alias{parameter_value_table}
 \title{Create a new parameter_value}
 \usage{
 parameter_value(parameter1, type, value, parameter2 = NULL)
+
+parameter_value_table(values, types)
 }
 \arguments{
 \item{parameter1}{Name}
@@ -14,6 +17,10 @@ parameter_value(parameter1, type, value, parameter2 = NULL)
 \item{value}{Value}
 
 \item{parameter2}{Optional name}
+
+\item{values}{List of values}
+
+\item{types}{List of types}
 }
 \value{
 A parameter value fragment

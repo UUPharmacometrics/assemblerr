@@ -24,6 +24,10 @@ print.statement <- function(x,...){
     purrr::walk(~cat(deparse(.), sep = "\n"))
 }
 
+#' Convert to statement
+#'
+#' @param x Object to convert
+#' @return A statement
 #' @export
 as_statement <- function(x) UseMethod("as_statement")
 #' @export

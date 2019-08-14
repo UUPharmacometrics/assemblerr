@@ -2,11 +2,23 @@
 % Please edit documentation in R/nm_model.R
 \name{nm_problem}
 \alias{nm_problem}
-\title{A problem}
+\alias{nm_input}
+\title{Create NONMEM model facets}
 \usage{
 nm_problem(name)
+
+nm_input(name, type, ...)
+}
+\arguments{
+\item{name}{Facet name}
+
+\item{type}{Column type}
+
+\item{...}{Additional arguments}
+}
+\value{
+A facet
 }
 \description{
-A problem
+Create NONMEM model facets
 }
-\keyword{internal}

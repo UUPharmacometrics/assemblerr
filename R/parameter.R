@@ -6,7 +6,7 @@
 #' @param type Model type to be used for the parameter
 #' @param options Options
 #'
-#' @return A \code{\link{fragment}} representing a model parameter
+#' @return A \code{fragment} representing a model parameter
 #' @export
 #' @examples
 #' p <- parameter("cl", "log-normal")
@@ -20,15 +20,19 @@ parameter <- function(name, type, options = NULL){
 }
 
 #' @export
+#' @describeIn parameter Creates a parameter with a log-normal distribution
 prm_log_normal <- function(name) parameter(name, type = "log_normal")
 
 #' @export
+#' @describeIn parameter Creates a parameter with a normal distribution
 prm_normal <- function(name) parameter(name, type = "normal")
 
 #' @export
+#' @describeIn parameter Creates a parameter with no IIV
 prm_novar <- function(name) parameter(name, type = "novar")
 
 #' @export
+#' @describeIn parameter Creates a parameter with a logit distribution
 prm_logit <- function(name) parameter(name, type = "logit")
 
 
