@@ -16,6 +16,11 @@ fml_is_anonymous <- function(fml){
   return(is.null(rlang::f_lhs(fml)))
 }
 
+fml_get_lhs <- function(fml) rlang::f_lhs(fml)
+fml_get_rhs <- function(fml) rlang::f_rhs(fml)
+fml_set_lhs <- function(fml, value) rlang::`f_lhs<-`(fml, value)
+fml_set_rhs <- function(fml, value) rlang::`f_rhs<-`(fml, value)
+
 # fml_is_convertable <- function(fml, parse = FALSE){
 #   if(!parse) return(rlang::is_formulaish(fml) | is_declaration(fml) | is.numeric(fml) | is.character(fml))
 #   if(is.character(fml) || rlang::is_formulaish(o)) {

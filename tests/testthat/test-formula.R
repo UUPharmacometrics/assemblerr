@@ -13,3 +13,13 @@ test_that("anonymous formulas are identified correctly", {
   expect_true(fml_is_anonymous(~a+b))
   expect_false(fml_is_anonymous(c~a+b))
 })
+
+test_that("LHS and RHS can be accessed",{
+  expect_equal(fml_get_lhs(c~a+b), quote(c))
+  expect_equal(fml_get_rhs(c~a+b), quote(a+b))
+})
+
+test_that("LHS and RHS can be set",{
+  expect_equal(fml_set_lhs(c~a+b, quote(d)), d~a+b)
+  expect_equal(fml_set_rhs(c~a+b, quote(g+d)), quote(c~g+d))
+})
