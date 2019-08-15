@@ -33,3 +33,9 @@ test_that("Functions can be listed",{
   expect_setequal(fml_funs(~emax*conc/(conc+ec50)), c("/","*","(","+"))
   expect_setequal(fml_funs(~theta[1]*exp(eta[1])), c("*","exp", "["))
 })
+
+test_that("Formulas can be combined", {
+  expect_equal(fml_combine(~a, ~b, '+'), ~a+b)
+  expect_equal(fml_combine(~a, ~b+c, '/'), ~a/(b+c))
+  expect_equal(fml_combine(~a, ~b+c, '/', quote(test)), test~a/(b+c))
+})

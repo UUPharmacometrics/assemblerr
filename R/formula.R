@@ -2,7 +2,7 @@
 #'
 #' @param fml A formula
 #'
-#' @return
+#' @return TRUE/FALSE
 fml_has_valid_lhs <- function(fml, allow_null = TRUE){
   if(!is(fml, "formula")) return(FALSE)
   lhs <- rlang::f_lhs(fml)
@@ -23,6 +23,17 @@ fml_set_rhs <- function(fml, value) rlang::`f_rhs<-`(fml, value)
 
 fml_vars <- function(fml) all.vars(fml)
 fml_funs <- function(fml) setdiff(all.names(fml, unique = T), c(all.vars(fml), "~"))
+
+fml_combine <- function(fml1, fml2, op = '+', lhs){
+  rhs1 <- fml_get_rhs(fml1)
+  rhs2 <- fml_get_rhs(fml2)
+  fml <- rlang::call2(op, rhs1, rhs2) %>%
+    deparse() %>%
+    paste0("~", .) %>%
+    formula(env = rlang::f_env(fml1))
+  if(!missing(lhs)) fml <- fml_set_lhs(fml, lhs)
+  return(fml)
+}
 
 # fml_is_convertable <- function(fml, parse = FALSE){
 #   if(!parse) return(rlang::is_formulaish(fml) | is_declaration(fml) | is.numeric(fml) | is.character(fml))
