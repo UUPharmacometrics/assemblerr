@@ -28,6 +28,20 @@ has_facet <- function(model, facet){
   return(exists(facet, model))
 }
 
+#' List available facets
+#'
+#' The function lists all facets of a model.
+#'
+#' @param model The model
+#'
+#' @return A character vector
+#' @export
+list_facets <- function(model){
+  purrr::imap_chr(model, ~ifelse(is(.x, "tbl_df"), .y, NULL)) %>%
+    unname() %>%
+    purrr::compact()
+}
+
 
 #' @export
 `+.fragment` <- function(x, y){
