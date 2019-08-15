@@ -23,3 +23,13 @@ test_that("LHS and RHS can be set",{
   expect_equal(fml_set_lhs(c~a+b, quote(d)), d~a+b)
   expect_equal(fml_set_rhs(c~a+b, quote(g+d)), quote(c~g+d))
 })
+
+test_that("Variables can be listed",{
+  expect_setequal(fml_vars(~emax*conc/(conc+ec50)), c("emax","conc","ec50"))
+  expect_setequal(fml_vars(~theta[1]*exp(eta[1])), c("theta","eta"))
+})
+
+test_that("Functions can be listed",{
+  expect_setequal(fml_funs(~emax*conc/(conc+ec50)), c("/","*","(","+"))
+  expect_setequal(fml_funs(~theta[1]*exp(eta[1])), c("*","exp", "["))
+})

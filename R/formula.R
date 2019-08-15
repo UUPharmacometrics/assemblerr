@@ -21,6 +21,9 @@ fml_get_rhs <- function(fml) rlang::f_rhs(fml)
 fml_set_lhs <- function(fml, value) rlang::`f_lhs<-`(fml, value)
 fml_set_rhs <- function(fml, value) rlang::`f_rhs<-`(fml, value)
 
+fml_vars <- function(fml) all.vars(fml)
+fml_funs <- function(fml) setdiff(all.names(fml, unique = T), c(all.vars(fml), "~"))
+
 # fml_is_convertable <- function(fml, parse = FALSE){
 #   if(!parse) return(rlang::is_formulaish(fml) | is_declaration(fml) | is.numeric(fml) | is.character(fml))
 #   if(is.character(fml) || rlang::is_formulaish(o)) {
