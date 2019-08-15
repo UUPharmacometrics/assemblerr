@@ -11,3 +11,18 @@ fml_has_valid_lhs <- function(fml, allow_null = TRUE){
   contains_no_functions <- setdiff(all.names(lhs, unique = T), all.vars(lhs)) %>% setdiff("[") %>% rlang::is_empty()
   return(contains_no_functions)
 }
+
+fml_is_anonymous <- function(fml){
+  return(is.null(rlang::f_lhs(fml)))
+}
+
+# fml_is_convertable <- function(fml, parse = FALSE){
+#   if(!parse) return(rlang::is_formulaish(fml) | is_declaration(fml) | is.numeric(fml) | is.character(fml))
+#   if(is.character(fml) || rlang::is_formulaish(o)) {
+#     parses_succefully <- !is.null(purrr::possibly(as_declaration, NULL)(o))
+#   }else{
+#     parses_succefully <- FALSE
+#   }
+#   return(parses_succefully | is_declaration(o) | is.numeric(o))
+# }
+
