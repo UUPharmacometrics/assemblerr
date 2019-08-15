@@ -39,3 +39,10 @@ test_that("Formulas can be combined", {
   expect_equal(fml_combine(~a, ~b+c, '/'), ~a/(b+c))
   expect_equal(fml_combine(~a, ~b+c, '/', quote(test)), test~a/(b+c))
 })
+
+test_that("Indicies can be substituted",{
+  fml <- dadt["central"] ~ ka*A["central"]
+  expect_equal(fml_subs_idx(fml, "dadt", list(central = 1)), dadt[1]~ka*A["central"])
+  expect_equal(fml_subs_idx(fml, "A", list(central = 'test')), dadt["central"]~ka*A["test"])
+  expect_warning(fml_subs_idx(fml, "A", list()))
+})

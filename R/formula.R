@@ -35,6 +35,22 @@ fml_combine <- function(fml1, fml2, op = '+', lhs){
   return(fml)
 }
 
+fml_subs_idx <- function(fml, array_name, substitutions){
+  substitutions <- as.list(substitutions)
+  purrr::modify_if(fml, ~!is.null(.x), ~transform_ast(.x, index_transformer, array_name = array_name, substitutions = substitutions))
+}
+
+index_transformer <- function(node, array_name, substitutions){
+  # if vector access
+  if(rlang::is_call(node) && rlang::call_name(node) == "[" && node[[2]] == rlang::sym(array_name)){
+    if(!exists(node[[3]], substitutions)) rlang::warn("missing_substitution", index = node[[3]])
+    node[[3]] <- substitutions[[node[[3]]]]
+  }
+  node
+}
+
+
+
 # fml_is_convertable <- function(fml, parse = FALSE){
 #   if(!parse) return(rlang::is_formulaish(fml) | is_declaration(fml) | is.numeric(fml) | is.character(fml))
 #   if(is.character(fml) || rlang::is_formulaish(o)) {
