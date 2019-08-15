@@ -9,6 +9,9 @@ fml_has_valid_lhs(fml, allow_null = TRUE)
 \arguments{
 \item{fml}{A formula}
 }
+\value{
+TRUE/FALSE
+}
 \description{
 Test if LHS of formula is valid
 }
