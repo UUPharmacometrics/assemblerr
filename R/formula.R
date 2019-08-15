@@ -49,7 +49,7 @@ index_transformer <- function(node, array_name, substitutions){
   node
 }
 
-
+fml_subs_sym <- function(fml, ...) do.call(substitute, args = list(fml, env = list(...)))
 
 # fml_is_convertable <- function(fml, parse = FALSE){
 #   if(!parse) return(rlang::is_formulaish(fml) | is_declaration(fml) | is.numeric(fml) | is.character(fml))

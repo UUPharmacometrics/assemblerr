@@ -46,3 +46,8 @@ test_that("Indicies can be substituted",{
   expect_equal(fml_subs_idx(fml, "A", list(central = 'test')), dadt["central"]~ka*A["test"])
   expect_warning(fml_subs_idx(fml, "A", list()))
 })
+
+test_that("Symbols can be substituted",{
+  fml <- dadt["central"] ~ ka*A["central"]
+  expect_equal(fml_subs_sym(fml, ka = quote(cl), A = quote(B)), dadt["central"]~cl*B["central"])
+})
