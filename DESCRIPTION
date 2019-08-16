@@ -24,6 +24,7 @@ Imports:
     magrittr,
     dplyr,
     tibble,
-    methods
+    methods,
+    stats
 VignetteBuilder: knitr
 RoxygenNote: 6.1.1

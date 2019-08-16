@@ -1,6 +1,7 @@
 #' Test if LHS of formula is valid
 #'
 #' @param fml A formula
+#' @param allow_null Whether an empty LHS should be accepted
 #'
 #' @return TRUE/FALSE
 fml_has_valid_lhs <- function(fml, allow_null = TRUE){
@@ -30,7 +31,7 @@ fml_combine <- function(fml1, fml2, op = '+', lhs){
   fml <- rlang::call2(op, rhs1, rhs2) %>%
     deparse() %>%
     paste0("~", .) %>%
-    formula(env = rlang::f_env(fml1))
+    stats::formula(env = rlang::f_env(fml1))
   if(!missing(lhs)) fml <- fml_set_lhs(fml, lhs)
   return(fml)
 }

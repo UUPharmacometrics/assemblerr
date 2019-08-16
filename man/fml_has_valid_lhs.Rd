@@ -8,6 +8,8 @@ fml_has_valid_lhs(fml, allow_null = TRUE)
 }
 \arguments{
 \item{fml}{A formula}
+
+\item{allow_null}{Whether an empty LHS should be accepted}
 }
 \value{
 TRUE/FALSE
