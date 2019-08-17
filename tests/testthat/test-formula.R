@@ -27,6 +27,7 @@ test_that("LHS and RHS can be set",{
 test_that("Variables can be listed",{
   expect_setequal(fml_vars(~emax*conc/(conc+ec50)), c("emax","conc","ec50"))
   expect_setequal(fml_vars(~theta[1]*exp(eta[1])), c("theta","eta"))
+  expect_setequal(fml_vars(~theta[1]*exp(eta[1]) + a*b, include_indicies = TRUE), c("theta[1]","eta[1]", "a", "b"))
 })
 
 test_that("Functions can be listed",{
@@ -50,4 +51,16 @@ test_that("Indicies can be substituted",{
 test_that("Symbols can be substituted",{
   fml <- dadt["central"] ~ ka*A["central"]
   expect_equal(fml_subs_sym(fml, ka = quote(cl), A = quote(B)), dadt["central"]~cl*B["central"])
+})
+
+test_that("dependencies are recognized correctly", {
+  fmls <- list(cl~theta1*exp(eta2), v~theta2, k~cl/v, dadt[1]~k*A[1], dadt[2]~ka*A[2])
+  expect_true(fml_depends_on("k","theta1", fmls))
+  expect_true(fml_depends_on("dadt[1]","theta1", fmls))
+  expect_true(fml_depends_on("dadt[1]","A[1]", fmls))
+  expect_true(fml_depends_on("dadt[1]","A", fmls, include_indicies = FALSE))
+
+  expect_false(fml_depends_on("dadt[1]","ka", fmls))
+  expect_false(fml_depends_on("dadt[1]","A[2]", fmls))
+  expect_false(fml_depends_on("v","theta1", fmls))
 })
