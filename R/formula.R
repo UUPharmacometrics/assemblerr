@@ -91,12 +91,13 @@ find_vars_with_indicies <- function(fml){
 }
 
 # returns a list of indicies from the declaration list that depend on the variable
-fml_direct_dependants <- function(fmls, variable){
+fmls_direct_dependants <- function(fmls, variable){
   fmls %>%
     purrr::map(fml_vars, include_lhs = FALSE) %>%
     purrr::map_lgl(~ variable  %in% .x) %>%
     which()
 }
+
 
 # fml_is_convertable <- function(fml, parse = FALSE){
 #   if(!parse) return(rlang::is_formulaish(fml) | is_declaration(fml) | is.numeric(fml) | is.character(fml))
