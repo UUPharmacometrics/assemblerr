@@ -22,7 +22,8 @@ fml_get_rhs <- function(fml) rlang::f_rhs(fml)
 fml_set_lhs <- function(fml, value) rlang::`f_lhs<-`(fml, value)
 fml_set_rhs <- function(fml, value) rlang::`f_rhs<-`(fml, value)
 
-fml_vars <- function(fml, include_indicies = FALSE) {
+fml_vars <- function(fml, include_indicies = FALSE, include_lhs = TRUE) {
+  if(!include_lhs) fml <- fml_set_lhs(fml, NULL)
   if(include_indicies) return(unique(unlist(find_vars_with_indicies(fml))))
   else return(all.vars(fml))
 }
@@ -87,6 +88,14 @@ find_vars_with_indicies <- function(fml){
   }else{
     return(NULL)
   }
+}
+
+# returns a list of indicies from the declaration list that depend on the variable
+fml_direct_dependants <- function(fmls, variable){
+  fmls %>%
+    purrr::map(fml_vars, include_lhs = FALSE) %>%
+    purrr::map_lgl(~ variable  %in% .x) %>%
+    which()
 }
 
 # fml_is_convertable <- function(fml, parse = FALSE){

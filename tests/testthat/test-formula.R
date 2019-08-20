@@ -64,3 +64,9 @@ test_that("dependencies are recognized correctly", {
   expect_false(fml_depends_on("dadt[1]","A[2]", fmls))
   expect_false(fml_depends_on("v","theta1", fmls))
 })
+
+test_that("direct dependants are recognized", {
+  fmls <- list(cl~theta1*exp(eta2), v~theta2, k~cl/v, dadt[1]~k*A[1], dadt[2]~ka*A[2])
+  expect_equal(fml_direct_dependants(fmls, "cl"), c(3))
+  expect_equal(fml_direct_dependants(fmls, "A"), c(4,5))
+})
