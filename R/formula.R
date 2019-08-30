@@ -138,6 +138,12 @@ fmls_topologic_sort <- function(fmls){
   fmls[fmls_topologic_order(fmls)]
 }
 
+fmls_external_dependencies <- function(fmls){
+  fmls[topologic_order(fmls) %>% rev()] %>% # process equations in reverse topological order
+    purrr::reduce(~c(.x, fml_vars(.y)) %>% purrr::discard(function(x) x == deparse(fml_get_lhs(.y))) , .init = c()) # at each step add all variables from the rhs and remove variable from lhs
+}
+
+
 # fml_is_convertable <- function(fml, parse = FALSE){
 #   if(!parse) return(rlang::is_formulaish(fml) | is_declaration(fml) | is.numeric(fml) | is.character(fml))
 #   if(is.character(fml) || rlang::is_formulaish(o)) {
