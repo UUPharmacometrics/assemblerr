@@ -75,3 +75,8 @@ test_that("topologic order works",{
   fmls <- list(dadt[1]~k*A[1], cl~theta1*exp(eta2), v~theta2, k~cl/v)
   expect_equal(fmls_topologic_order(fmls), c(2,3,4,1))
 })
+
+test_that("topologic sort works",{
+  fmls <- list(dadt[1]~k*A[1], cl~theta1*exp(eta2), v~theta2, k~cl/v)
+  expect_equal(fmls_topologic_sort(fmls), fmls[c(2,3,4,1)])
+})

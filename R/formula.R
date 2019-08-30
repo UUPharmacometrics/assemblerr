@@ -134,6 +134,9 @@ topologic_visit <- function(fml, index, marked_perm, marked_temp, l){
   return(list(marked_perm = marked_perm, marked_temp = marked_temp, l = l))
 }
 
+fmls_topologic_sort <- function(fmls){
+  fmls[fmls_topologic_order(fmls)]
+}
 
 # fml_is_convertable <- function(fml, parse = FALSE){
 #   if(!parse) return(rlang::is_formulaish(fml) | is_declaration(fml) | is.numeric(fml) | is.character(fml))
