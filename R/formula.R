@@ -98,6 +98,42 @@ fmls_direct_dependants <- function(fmls, variable){
     which()
 }
 
+# orders the provided declaration list topologically
+fmls_topologic_order <- function(fmls){
+  # DFS (https://en.wikipedia.org/wiki/Topological_sorting)
+  l <- c() # list of sorted nodes
+  marked_perm <- c() # nodes completed
+  marked_temp <- c() # nodes visited but not completed
+  unmarked <- seq_along(fmls) %>% rev() # nodes not yet visited
+  while(!rlang::is_empty(unmarked)){
+    i <- unmarked[1]
+    ret <- topologic_visit(fmls, i, marked_perm, marked_temp, l)
+    marked_perm <- ret$marked_perm
+    marked_temp <- ret$marked_temp
+    l <- ret$l
+    unmarked <- setdiff(unmarked, c(marked_perm, marked_temp))
+  }
+  return(l)
+}
+
+topologic_visit <- function(fml, index, marked_perm, marked_temp, l){
+  if(index %in% marked_perm) return(list(marked_perm = marked_perm, marked_temp = marked_temp, l = l))
+  if(index %in% marked_temp) stop("Error")
+  marked_temp <- c(marked_temp, index)
+  # find all nodes that depend on the current node
+  var <- fml_get_lhs(fml[[index]]) %>% deparse()
+  for(i in fmls_direct_dependants(fml, var)){
+    ret <- topologic_visit(fml, i, marked_perm, marked_temp, l)
+    marked_perm <- ret$marked_perm
+    marked_temp <- ret$marked_temp
+    l <- ret$l
+  }
+  marked_temp <- marked_temp %>% purrr::discard(~.x == index)
+  marked_perm <- c(marked_perm, index)
+  l <- c(index, l)
+  return(list(marked_perm = marked_perm, marked_temp = marked_temp, l = l))
+}
+
 
 # fml_is_convertable <- function(fml, parse = FALSE){
 #   if(!parse) return(rlang::is_formulaish(fml) | is_declaration(fml) | is.numeric(fml) | is.character(fml))

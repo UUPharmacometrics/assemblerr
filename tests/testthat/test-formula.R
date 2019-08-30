@@ -70,3 +70,8 @@ test_that("direct dependants are recognized", {
   expect_equal(fmls_direct_dependants(fmls, "cl"), c(3))
   expect_equal(fmls_direct_dependants(fmls, "A"), c(4,5))
 })
+
+test_that("topologic order works",{
+  fmls <- list(dadt[1]~k*A[1], cl~theta1*exp(eta2), v~theta2, k~cl/v)
+  expect_equal(fmls_topologic_order(fmls), c(2,3,4,1))
+})
