@@ -1,5 +1,10 @@
 context("Formula")
 
+test_that("numbers can be converted",{
+  expect_is(as_fml(1), "formula")
+  expect_is(as_fml(1.1), "formula")
+})
+
 test_that("LHS is validated correctly", {
   expect_true(fml_has_valid_lhs(~a))
   expect_true(fml_has_valid_lhs(test~a))

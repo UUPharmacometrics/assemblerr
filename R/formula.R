@@ -143,6 +143,9 @@ fmls_external_dependencies <- function(fmls){
     purrr::reduce(~c(.x, fml_vars(.y)) %>% purrr::discard(function(x) x == deparse(fml_get_lhs(.y))) , .init = c()) # at each step add all variables from the rhs and remove variable from lhs
 }
 
+as_fml <- function(x) UseMethod("as_fml")
+
+as_fml.numeric <- function(x) as.formula(paste0("~",x))
 
 # fml_is_convertable <- function(fml, parse = FALSE){
 #   if(!parse) return(rlang::is_formulaish(fml) | is_declaration(fml) | is.numeric(fml) | is.character(fml))
