@@ -5,6 +5,12 @@ test_that("numbers can be converted",{
   expect_is(as_fml(1.1), "formula")
 })
 
+test_that("possibility of conversion is recognized", {
+  expect_true(fml_is(~test))
+  expect_true(fml_is(1.1))
+  expect_false(fml_is("~test"))
+})
+
 test_that("LHS is validated correctly", {
   expect_true(fml_has_valid_lhs(~a))
   expect_true(fml_has_valid_lhs(test~a))
@@ -89,4 +95,13 @@ test_that("topologic sort works",{
 test_that("external dependency discovery works",{
   fmls <- list(dadt[1]~k*A[1], cl~theta1*exp(eta2), v~theta2, k~cl/v)
   expect_equal(fmls_external_dependencies(fmls), c("dadt", "A", "theta2", "theta1", "eta2"))
+})
+
+test_that("argument validation works",{
+  test <-cl ~ theta * exp(eta)
+  test2 <- 1
+  expect_is(arg2fml(test), "formula")
+  expect_is(arg2fml(test2), "formula")
+  function_arg <- "dog"
+  expect_error(arg2fml(function_arg), regexp = "function_arg")
 })

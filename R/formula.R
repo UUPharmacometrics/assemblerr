@@ -145,7 +145,27 @@ fmls_external_dependencies <- function(fmls){
 
 as_fml <- function(x) UseMethod("as_fml")
 
+as_fml.formula <- function(x) return(x)
+
 as_fml.numeric <- function(x) as.formula(paste0("~",x))
+
+fml_is <- function(x){
+  return(is(x, "formula") || is.numeric(x))
+}
+
+#' Interpret function argument as a formula
+#'
+#' Helper function to simplify the common task of checking whether an argument could serve as a formula,
+#' raising an error or doing the conversion.
+#'
+#' @param arg Variable to be interpreted
+#'
+#' @return A formula or an error message if the variable could not be interpreted as such
+arg2fml <- function(arg){
+  arg_expr <- rlang::enexpr(arg)
+  if(!fml_is(arg)) rlang::abort(paste("The argument", arg_expr %>% as.character(), "needs to be a valid formula."))
+  return(as_fml(arg))
+}
 
 # fml_is_convertable <- function(fml, parse = FALSE){
 #   if(!parse) return(rlang::is_formulaish(fml) | is_declaration(fml) | is.numeric(fml) | is.character(fml))
