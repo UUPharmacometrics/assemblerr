@@ -57,6 +57,16 @@ index_transformer <- function(node, array_name, substitutions){
 
 fml_subs_sym <- function(fml, ...) do.call(substitute, args = list(fml, env = list(...)))
 
+fml_subs_fml <- function(fml, ...) {
+  fmls <- list(...)
+  lhs <- purrr::map(fmls, fml_get_lhs) %>%
+    purrr::map(deparse)
+  rhs <- purrr::map(fmls, fml_get_rhs)
+  call_args <- rlang::set_names(rhs, lhs)
+  call_args[["fml"]] <- fml
+  return(do.call(fml_subs_sym, args = call_args, quote = TRUE))
+}
+
 # returns true if var1 depends on var2
 fml_depends_on <- function(var1, var2, fmls, include_indicies = TRUE) {
   to_visit <- var1
