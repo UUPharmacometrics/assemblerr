@@ -61,3 +61,19 @@ test_that("facets that do not have a name column are appended to the correspondi
   expect_equal(f3$facet1$index, c(1,1))
   expect_equal(f3$facet1$type, c("a","b"))
 })
+
+test_that("fragments can be created through item()", {
+  frgm <- item("test", name = "test", args = list(a = 1, b = 2))
+  expect_is(frgm, "fragment")
+  expect_equal(frgm$test$name, "test")
+  expect_equal(frgm$test$args[[1]], list(a = 1, b = 2))
+})
+
+test_that("properties can be retrieved by name",{
+  m <- list()
+  m <- add_facet(model = m, facet = "parameters", property_def = list(type = "character", equation = list()))
+  frgm <- item("parameters", name = "cl", type = "normal", equation = cl~theta+eta)
+  m <- m + frgm
+  expect_equal(get_by_name(m, "parameters", "cl"),
+               list(type = "normal",  equation = cl~theta+eta, index = 1, name = "cl"))
+})
