@@ -83,7 +83,7 @@ list_facets <- function(model){
 #' @keywords internal
 item <- function(facet, ...){
   list(..., index = 1) %>%
-    purrr::map_if(~purrr::is_list(.x)|purrr::is_function(.x), ~list(.x)) %>%
+    purrr::map_if(~!rlang::is_atomic(.x), rlang::as_box) %>%
     purrr::compact() %>%
     tibble::as_tibble() %>%
     list() %>%
