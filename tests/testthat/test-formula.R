@@ -66,7 +66,7 @@ test_that("Symbols can be substituted",{
 
 test_that("Symbols can be substituted using fmls",{
   fml <- dadt["central"] ~ ka*A["central"]
-  expect_equal(fml_subs_fml(fml, ka ~ cl, A ~ B), dadt["central"]~cl*B["central"])
+  expect_equal(fml_subs_fml(fml, ka ~ cl, A["central"] ~ B[1L]), dadt["central"]~cl*B[1L])
 })
 
 test_that("dependencies are recognized correctly", {

@@ -58,14 +58,26 @@ index_transformer <- function(node, array_name, substitutions){
 fml_subs_sym <- function(fml, ...) do.call(substitute, args = list(fml, env = list(...)))
 
 fml_subs_fml <- function(fml, ...) {
+  substitutions <- list(...)
+
   fmls <- list(...)
   lhs <- purrr::map(fmls, fml_get_lhs) %>%
-    purrr::map(deparse)
-  rhs <- purrr::map(fmls, fml_get_rhs)
-  call_args <- rlang::set_names(rhs, lhs)
-  call_args[["fml"]] <- fml
-  return(do.call(fml_subs_sym, args = call_args, quote = TRUE))
+    purrr::map_chr(deparse)
+  substitutions <- purrr::set_names(substitutions, lhs)
+  return(transform_ast(fml, fml_subs_transformer, substitutions = substitutions))
 }
+
+
+fml_subs_transformer <- function(node, substitutions){
+  # if vector access and replacement contains vector variable
+  if(rlang::is_atomic(node) || rlang::is_symbol(node) || (rlang::is_call(node) && rlang::call_name(node) == "[")){
+    if(exists(deparse(node), substitutions)){
+      node <-  substitutions[[deparse(node)]] %>% fml_get_rhs()
+    }
+  }
+  node
+}
+
 
 # returns true if var1 depends on var2
 fml_depends_on <- function(var1, var2, fmls, include_indicies = TRUE) {
