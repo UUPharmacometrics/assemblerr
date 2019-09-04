@@ -10,3 +10,7 @@ as_expr.formula <- function(x) {
     return(expr)
   }
 }
+
+as_expr.list <- function(x) {
+  purrr::map(x, as_expr)
+}
