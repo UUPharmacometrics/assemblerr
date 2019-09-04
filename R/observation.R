@@ -23,8 +23,8 @@ observation <- function(name, type, options = NULL){
 }
 
 obs_continuous <- function(prediction, type, name){
-  prediction <- arg2dec(prediction)
-  if(missing(name)) name <- dec_get_id(prediction) %>% as.character()
+  prediction <- arg2fml(prediction)
+  if(missing(name)) name <- fml_get_lhs(prediction) %>% deparse()
   options <- list(
     prediction = prediction
   )
@@ -76,35 +76,36 @@ call_obs_converter <- function(target, source, obs) {
   do.call(fn, list(target, source, obs))
 }
 
-replace_compartment_references <- function(d, to, from){
-  if(any(c("C","A") %in% dec_vars(d))){
-    compartment_indicies <- to$des %>%
-    {
-      purrr::set_names(as.list(.$index), .$name)
-    }
-    # generate replacement rules for concentration
-    conc_declarations <- from$compartments %>%
-      purrr::transpose() %>%
-      purrr::map(~declaration(C[!!(.x$name)], A[!!(.x$name)]/vol) %>% dec_subs(dec_set_id(.x$volume, vol)))
+generate_conc_fml <- function(cmp) {
+  bquote(C[.(cmp$name)]~A[.(cmp$name)]/volume) %>%
+  fml_subs_sym(volume = fml_get_rhs(cmp$volume))
+}
 
-    dt <- d %>%
-      purrr::invoke(.f = dec_subs, .x = conc_declarations, d = .) %>%
-      dec_index_subs("A", compartment_indicies)
-    return(dt)
+replace_compartment_references <- function(fml, to, from){
+  if(any(c("C","A") %in% fml_vars(fml))){
+    compartment_indicies <- purrr::set_names(to$des$index, to$des$name)
+    # generate replacement rules for concentration
+    conc_fmls <- from$compartments %>%
+      purrr::transpose() %>%
+      purrr::map(generate_conc_fml)
+
+    tfml <- purrr::exec(.fn = fml_subs_fml, !!!conc_fmls, fml = fml) %>%
+      fml_subs_idx("A", compartment_indicies)
+    return(tfml)
   }else{
-    return(d)
+    return(fml)
   }
 }
 
-make_ipred_dec <- function(target, source, obs){
-  ipred <- NA
-  ipred_dec <- replace_compartment_references(obs$options$prediction, target, source)
-  if(is_anonymous(ipred_dec)){
-    ipred_dec <- list(dec_set_id(ipred_dec, ipred))
+make_ipred_fml <- function(target, source, obs){
+
+  ipred_fml <- replace_compartment_references(obs$options$prediction, target, source)
+  if(fml_is_anonymous(ipred_fml)){
+    ipred_fml <- list(fml_set_lhs(ipred_fml, quote(ipred)))
   }else{
-    ipred_dec <- list(ipred_dec, declaration("ipred", !!(dec_get_id(ipred_dec))))
+    ipred_fml <- list(ipred_fml, bquote(ipred~.(fml_get_lhs(ipred_fml))))
   }
-  return(ipred_dec)
+  return(ipred_fml)
 }
 
 add_obs_additive <- function(target, source, obs) UseMethod("add_obs_additive")
@@ -121,12 +122,12 @@ add_obs_additive.nm_model <- function(target, source, obs){
   target <- target + nm_sigma(sigma_name)
 
   # create the declartions for this observations
-  obs_dec <- make_ipred_dec(target, source, obs)
-  expr <- parse(text = sprintf("ipred + eps[%i]", get_by_name(target, "sigma", sigma_name)$index))
-  obs_dec[[length(obs_dec)+1]] <- declaration("y", expr)
+  obs_fml <- make_ipred_fml(target, source, obs)
+  ruv_fml <- bquote(y~ipred+eps[.(get_by_name(target, "sigma", sigma_name)$index)])
+  obs_fml[[length(obs_fml)+1]] <- ruv_fml
 
   # convert to statements for NM
-  obs_stm <- as_statement(obs_dec)
+  obs_expr <- as_expr(obs_fml)
 
   # add conditional statement if there is more than one observation
   # if(nrow(source$observations)>1) {
@@ -135,5 +136,5 @@ add_obs_additive.nm_model <- function(target, source, obs){
   #   })
   # }
 
-  target + nm_error(name = obs$name, statement = obs_stm)
+  target + nm_error(name = obs$name, statement = obs_expr)
 }
