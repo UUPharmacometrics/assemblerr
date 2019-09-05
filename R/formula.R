@@ -30,7 +30,9 @@ fml_vars <- function(fml, include_indicies = FALSE, include_lhs = TRUE) {
 
 fml_funs <- function(fml) setdiff(all.names(fml, unique = T), c(all.vars(fml), "~"))
 
-fml_combine <- function(fml1, fml2, op = '+', lhs){
+fml_combine <- function(fml1, fml2, op = '+', lhs = NULL){
+  if(is.null(fml1)) return(fml_set_lhs(fml2, lhs))
+  if(is.null(fml2)) return(fml_set_lhs(fml1, lhs))
   rhs1 <- fml_get_rhs(fml1)
   rhs2 <- fml_get_rhs(fml2)
   fml <- rlang::call2(op, rhs1, rhs2) %>%
