@@ -74,7 +74,7 @@ print.model <- function(x,...){
 #' comp1 <- compartment("central", volume = ~Vc)
 compartment <- function(name, volume = 1){
   if(!is.character(name)) stop("'name' needs to be a character vector")
-  volume <- arg2dec(volume)
+  volume <- arg2fml(volume)
   item("compartments", name = name, volume = volume)
 }
 
@@ -96,7 +96,7 @@ cmp <- compartment
 #' f <- flow(from = "depot", to = "central", definition = ~ka*A)
 flow <- function(from = NULL, to = NULL, definition){
   if(!is.character(from) && !is.character(to)) stop("'from' or/and 'to' need to be compartment names")
-  definition <- arg2dec(definition)
+  definition <- arg2fml(definition)
   item("flows", from = from, to = to, definition = definition)
 }
 
@@ -109,9 +109,9 @@ flow <- function(from = NULL, to = NULL, definition){
 #' @return A algebraic fragment
 #' @export
 algebraic <- function(definition){
-  definition <- arg2dec(definition)
-  if(is_anonymous(definition)) stop("'definition' needs to be named")
-  item("algebraics", name = dec_get_id(definition) %>% deparse(), definition = definition)
+  definition <- arg2fml(definition)
+  if(fml_is_anonymous(definition)) stop("'definition' needs to be named")
+  item("algebraics", name = fml_get_lhs(definition) %>% deparse(), definition = definition)
 }
 
 
