@@ -33,7 +33,7 @@ visualize <- function(model){
     ) %>%
     dplyr::transmute(
       from = node_ids[.data$from], to = node_ids[.data$to],
-      label = purrr::map_chr(.data$definition, render, opts = render_opts_viz())) %>%
+      label = purrr::map_chr(.data$definition, render_expr, opts = render_opts_viz())) %>%
     purrr::invoke(.f = DiagrammeR::create_edge_df)
 
 
