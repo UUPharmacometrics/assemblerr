@@ -72,7 +72,7 @@ add_prm_normal.nm_model <- function(target, source, prm){
   theta_index <-  get_by_name(target, "theta", prm$name)$index
   eta_index <- get_by_name(target, "omega", prm$name)$index
 
-  expr <- parse(text = sprintf("%s <- theta[%i]+eta[%i]", prm$name, theta_index, eta_index))
+  expr <- bquote(.(rlang::sym(prm$name)) <- theta[.(theta_index)]+eta[.(eta_index)])
 
   target + nm_pk(name = prm$name,
                 statement = as_statement(expr))
@@ -93,8 +93,8 @@ add_prm_log_normal.nm_model <- function(target, source, prm){
   theta_index <-  get_by_name(target, "theta", prm$name)$index
   eta_index <- get_by_name(target, "omega", prm$name)$index
 
-  expr <- parse(text = sprintf("%s <- theta[%i]*exp(eta[%i])", prm$name, theta_index, eta_index))
+  expr <- bquote(.(rlang::sym(prm$name)) <- theta[.(theta_index)]*exp(eta[.(eta_index)]))
 
   target + nm_pk(name = prm$name,
-                statement = as_statement(expr))
+                statement = expr)
 }

@@ -1,8 +1,8 @@
 # This function should be replaced with a custom deparser as done in the rlang package, for now it utilizes the default
 # deparser and employs a mixture of AST and regex transformations to get the desired output.
 #' @export
-render.statement <- function(object, opts){
-  object$expressions %>%
+render_expr <- function(object, opts){
+  object %>%
     transform_if(.if = opts$round_vec_brackets, vec2fcall_transformer) %>%
     transform_if(.if = opts$equal_assign_op, assignment_transformer) %>%
     purrr::map_chr(function(expr) {
@@ -27,16 +27,32 @@ nm_if_reformatter <- function(string){
 }
 
 assignment_transformer <- function(node){
-  if(rlang::is_lang(node) && rlang::lang_name(node) == "<-"){
+  if(rlang::is_call(node) && rlang::call_name(node) == "<-"){
     node[[1]] <- quote(`=`)
   }
   node
 }
 
 vec2fcall_transformer <- function(node){
-  if(rlang::is_lang(node) && rlang::lang_name(node) == "["){
+  if(rlang::is_call(node) && rlang::call_name(node) == "["){
     node[[1]] <- node[[2]]
     node[[2]] <- NULL
   }
   node
+}
+
+transform_if <- function(l, .if,  transformer, ...){
+  if(.if) return(purrr::map(l, transform_ast, transformer = transformer, ...))
+  return(l)
+}
+
+test_allowed_funs <- function(d, allowed_functions){
+  if(missing(allowed_functions) || is.null(allowed_functions)) return(TRUE)
+  funs <- dec_funs(d)
+  if(any(!funs %in% allowed_functions)) {
+
+    not_allowed <- funs[!funs %in% allowed_functions]  %>%  paste(collapse = ", ")
+    stop("The functions ", not_allowed, " are not allowed in the selected target", call. = F)
+  }
+  return(TRUE)
 }

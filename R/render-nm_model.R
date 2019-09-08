@@ -12,21 +12,21 @@ render.nm_model <- function(object, opts){
   pk_code <- object$pk %>%
     purrr::transpose() %>%
     purrr::map("statement") %>%
-    purrr::map(render, opts = render_opts_nm()) %>%
-    paste(collapse="\n")
+    unlist() %>%
+    render_expr(opts = render_opts_nm())
 
   des_code <- object$des %>%
     purrr::transpose() %>%
     purrr::map("statement") %>%
-    purrr::map(render, opts = render_opts_nm()) %>%
-    paste(collapse="\n")
+    unlist() %>%
+    render_expr(opts = render_opts_nm())
 
 
   error_code <- object$error %>%
     purrr::transpose() %>%
     purrr::map("statement") %>%
-    purrr::map(render, opts = render_opts_nm()) %>%
-    paste(collapse="\n")
+    unlist() %>%
+    render_expr(opts = render_opts_nm())
 
   # generate $THETA code
   theta_code <- object$theta %>%
