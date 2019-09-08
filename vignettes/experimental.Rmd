@@ -144,7 +144,7 @@ assemblerr supports conditional declarations through the function `cases`. Examp
 - Censoring due to quantification limits `cases(conc, conc > 1 ~ ipred, conc <= 1 ~ prob)`
 
 
-```{r}
+```{r, eval=FALSE}
 as_declaration(cl~cases(sex, 0 ~ theta[1], 1 ~ theta[2])*exp(eta[1])) %>% 
   render(render_opts_nm()) %>% 
   cat()
