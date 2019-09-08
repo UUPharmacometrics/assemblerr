@@ -171,7 +171,7 @@ as_fml <- function(x) UseMethod("as_fml")
 
 as_fml.formula <- function(x) return(x)
 
-as_fml.numeric <- function(x) as.formula(paste0("~",x))
+as_fml.numeric <- function(x) stats::as.formula(paste0("~",x))
 
 fml_is <- function(x){
   return(is(x, "formula") || is.numeric(x))
