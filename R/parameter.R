@@ -75,7 +75,7 @@ add_prm_normal.nm_model <- function(target, source, prm){
   expr <- bquote(.(rlang::sym(prm$name)) <- theta[.(theta_index)]+eta[.(eta_index)])
 
   target + nm_pk(name = prm$name,
-                statement = as_statement(expr))
+                statement = expr)
 }
 
 add_prm_log_normal <- function(target, source, prm) UseMethod("add_prm_log_normal")
