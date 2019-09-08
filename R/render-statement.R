@@ -1,6 +1,4 @@
-# This function should be replaced with a custom deparser as done in the rlang package, for now it utilizes the default
-# deparser and employs a mixture of AST and regex transformations to get the desired output.
-#' @export
+
 render_expr <- function(object, opts){
   object %>%
     transform_if(.if = opts$round_vec_brackets, vec2fcall_transformer) %>%
