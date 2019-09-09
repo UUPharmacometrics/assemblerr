@@ -4,7 +4,7 @@
 #'
 #' @param name The name used to identify the measurement
 #' @param type The model type used for the observation model
-#' @param options A \code{\link{declaration}} describing the measurement
+#' @param options A formula describing the measurement
 #'
 #' @return A \code{fragment} representing an observation model
 #'
@@ -48,7 +48,7 @@ obs_power <- function(prediction, name) obs_continuous(prediction, "power", name
 #' @param p1 Declaration for P(Y=1)
 #' @rdname observation
 obs_binary <- function(p1, name){
-  p1 <- arg2dec(p1)
+  p1 <- arg2fml(p1)
   options <- list(
     p1 = p1
   )

@@ -46,7 +46,7 @@ transform_if <- function(l, .if,  transformer, ...){
 
 test_allowed_funs <- function(d, allowed_functions){
   if(missing(allowed_functions) || is.null(allowed_functions)) return(TRUE)
-  funs <- dec_funs(d)
+  funs <- fml_funs(d)
   if(any(!funs %in% allowed_functions)) {
 
     not_allowed <- funs[!funs %in% allowed_functions]  %>%  paste(collapse = ", ")

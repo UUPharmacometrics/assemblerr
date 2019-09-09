@@ -163,7 +163,7 @@ fmls_topologic_sort <- function(fmls){
 }
 
 fmls_external_dependencies <- function(fmls){
-  fmls[topologic_order(fmls) %>% rev()] %>% # process equations in reverse topological order
+  fmls[fmls_topologic_order(fmls) %>% rev()] %>% # process equations in reverse topological order
     purrr::reduce(~c(.x, fml_vars(.y)) %>% purrr::discard(function(x) x == deparse(fml_get_lhs(.y))) , .init = c()) # at each step add all variables from the rhs and remove variable from lhs
 }
 

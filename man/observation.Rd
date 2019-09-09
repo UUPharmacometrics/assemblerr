@@ -23,7 +23,7 @@ obs_binary(p1, name)
 
 \item{type}{The model type used for the observation model}
 
-\item{options}{A \code{\link{declaration}} describing the measurement}
+\item{options}{A formula describing the measurement}
 
 \item{prediction}{Declaration for prediction}
 
