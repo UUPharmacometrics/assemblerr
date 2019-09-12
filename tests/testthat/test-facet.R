@@ -77,3 +77,21 @@ test_that("properties can be retrieved by name",{
   expect_equal(get_by_name(m, "parameters", "cl"),
                list(type = "normal",  equation = cl~theta+eta, index = 1, name = "cl"))
 })
+
+test_that("properties can be retrieved through filtering",{
+  m <- list()
+  m <- add_facet(model = m, facet = "parameter_values",
+                 property_def = list(parameter = character(), value = double()),
+                 name_column = FALSE)
+
+  frgm1 <- item("parameter_values", parameter = "cl", value = 1)
+  frgm2 <- item("parameter_values", parameter = "cl", value = 2)
+  frgm3 <- item("parameter_values", parameter = "v", value = 3)
+
+  m <- m + frgm1 + frgm2 + frgm3
+  pvs <- get_all(m, "parameter_values", parameter == "cl") %>%
+    purrr::map_dbl("value")
+  expect_equal(pvs,
+               c(1,2))
+
+})
