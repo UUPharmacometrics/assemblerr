@@ -26,3 +26,4 @@ as_model <- function(from) UseMethod("as_model")
 
 #' @export
 as_model.model <- function(from) return(from)
+

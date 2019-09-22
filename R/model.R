@@ -12,7 +12,7 @@
 #'    \item \code{\link{compartment}}
 #'    \item \code{\link{flow}}
 #'    \item \code{\link{observation}}
-#'    \item \code{\link{parameter_value}}
+#'    \item \code{\link{parameter_values}}
 #'    \item \code{\link{meta_tag}}
 #' }
 #'
@@ -27,11 +27,11 @@
 model <- function(){
   structure(list(), class = c("model", "fragment")) %>%
     add_facet("compartments", list(volume = list())) %>%
-    add_facet("flows", list(from = character(), to = character(), definition = list()), name_column = F) %>%
+    add_facet("flows", list(from = character(), to = character(), definition = list()), name_column = FALSE) %>%
     add_facet("parameters", list(type = character(), options = list())) %>%
     add_facet("algebraics", list(definition = list())) %>%
     add_facet("observations", list(type = character(), options = list())) %>%
-    add_facet("parameter_values", list(parameter1 = character(), parameter2 = character(), type = character(), value = numeric()), name_column = F) %>%
+    add_facet("parameter_values", list(parameter = character(), values = list()), name_column = FALSE) %>%
     add_facet("meta_tags", list(value = character()))
 }
 
@@ -114,31 +114,23 @@ algebraic <- function(definition){
   item("algebraics", name = fml_get_lhs(definition) %>% deparse(), definition = definition)
 }
 
-
-#' Create a new parameter_value
+#' Set values for parameters
 #'
-#' @param parameter1 Name
-#' @param type Type
-#' @param value Value
-#' @param parameter2 Optional name
+#' @param ... parameter names and values
 #'
-#' @return A parameter value fragment
 #' @export
-parameter_value <- function(parameter1, type, value, parameter2 = NULL){
-  if(!is.character(parameter1)) stop("'parameter1' needs to be a character vector")
-  if(!is.null(parameter2) && !is.character(parameter2)) stop("'parameter2' needs to be a character vector")
-  item("parameter_values", parameter1 = parameter1, type = type, value = value, parameter2 = parameter2)
-}
-#' @export
-#' @param values List of values
-#' @param types List of types
-#' @rdname parameter_value
-parameter_value_table <- function(values, types){
-  values %>%
-    tibble::enframe(name = "parameter1") %>%
-    dplyr::mutate(type = types, index = seq_len(dplyr::n())) %>%
-    {purrr::set_names(list(.), "parameter_values")} %>%
-    structure(class = "fragment")
+#' @examples
+#' vals <- parameter_values(cl = c(tv = 5, var = 0.3))
+parameter_values <- function(...){
+  args <- rlang::dots_list(...)
+  prms <- names(args)
+  values <- purrr::set_names(args, NULL)
+  structure(
+    list(
+      parameter_values = tibble::tibble(parameter = prms, values = values)
+    ),
+    class = "fragment"
+  )
 }
 
 

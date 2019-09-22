@@ -86,9 +86,11 @@ add_prm_log_normal.default <- function(target, source, prm) {
 }
 
 add_prm_log_normal.nm_model <- function(target, source, prm){
+  pv <- get_pv_log_normal(source, prm$name, "log_mu-log_sigma2")
+
   target <- target +
-    nm_theta(prm$name) +
-    nm_omega(prm$name)
+    nm_theta(prm$name, initial = pv[1], lbound = 0) +
+    nm_omega(prm$name, initial = pv[2])
 
   theta_index <-  get_by_name(target, "theta", prm$name)$index
   eta_index <- get_by_name(target, "omega", prm$name)$index
