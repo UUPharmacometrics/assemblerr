@@ -59,6 +59,7 @@ call_prm_converter <- function(target, source, prm) {
 
 add_prm_normal <- function(target, source, prm) UseMethod("add_prm_normal")
 
+
 add_prm_normal.default <- function(target, source, prm) {
   rlang::warn("converter not implemented for this model type")
   return(target)
@@ -80,13 +81,30 @@ add_prm_normal.nm_model <- function(target, source, prm){
 
 add_prm_log_normal <- function(target, source, prm) UseMethod("add_prm_log_normal")
 
+
+add_parameterizations("log_normal",
+                      input = list(
+                        function(log_mu, log_sigma, ...) return(list(log_mu = log_mu,
+                                                                     log_sigma = log_sigma,
+                                                                     not_used = list(...))),
+                        function(mean, sd, ...) return(list(log_mu = log(mean/sqrt(1+sd^2/mean^2)),
+                                                            log_sigma = sqrt(log(1+sd^2/mean^2)),
+                                                            not_used = list(...)))
+                      ),
+                      output = list(
+                        "log_mu-log_sigma" = function(log_mu, log_sigma) return(c(log_mu = log_mu, log_sigma = log_sigma)),
+                        "log_mu-log_sigma2" = function(log_mu, log_sigma) return(c(log_mu = log_mu, log_sigma2 = log_sigma^2)),
+                        "mean-sd" = function(log_mu, log_sigma) return(c(mean = exp(log_mu+0.5*log_sigma^2),
+                                                                         sd = exp(log_mu+0.5*log_sigma^2)*sqrt(exp(log_sigma^2-1))))
+                      ))
+
 add_prm_log_normal.default <- function(target, source, prm) {
   rlang::warn("converter not implemented for this model type")
   return(target)
 }
 
 add_prm_log_normal.nm_model <- function(target, source, prm){
-  pv <- get_pv_log_normal(source, prm$name, "log_mu-log_sigma2")
+  pv <- get_pv(source, prm, "log_mu-log_sigma2")
 
   target <- target +
     nm_theta(prm$name, initial = pv[1], lbound = 0) +

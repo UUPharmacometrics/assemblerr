@@ -60,7 +60,8 @@ m <- model()+
   prm_log_normal("vc")+
   obs_additive(conc~C["central"])+
   parameter_values(cl = c(log_mu = 4.5, log_sigma = 0.1),
-                   vc = c(log_mu = 1, log_sigma = 0.1))
+                   vc = c(log_mu = 1, log_sigma = 0.1), 
+                   ruv = c(sd = 1))
 
 # convert to a NONMEM model and generate NMTran code
 as_nm_model(m)  %>% 

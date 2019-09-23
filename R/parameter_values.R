@@ -1,37 +1,39 @@
 
 
 
-# parameter value should actually be requested during the conversion of the parameter model. The software-specific
-# parameter model should request the desired parameter (e.g. typical) and the parameter value system should
-# return the requested value, doing eventual conversions if needed.
 
 #' Get parameter values
 #'
+#' helpful: (https://sites.google.com/site/probonto/download)
+#'
 #' @param m Model
-#' @param prm_name Parameter name
+#' @param prm Parameter
 #' @param prmz Parameterization
 #'
-#' @return
-get_pv_log_normal <- function(m, prm_name, prmz){
+#' @return Parameter values as a named vector in requested parameterization or a vector of NA values if
+#' something went wrong.
+get_pv <- function(m, prm, prmz){
   # collect all parameter value information for specific parameter
+  pvs <- get_all_pvs(m, prm$name)
+  # convert provided prm values to std parameterization
+
+  std_pvs <- get_standard_parameterization(pvs, .prmzs[[prm$type]][["input"]], prm$name)
+
+  # convert from std prmz to requested one
+
+  convert_to_parameterization(std_pvs, .prmzs[[prm$type]][["output"]], prmz)
+}
+
+get_all_pvs <- function(model, prm_name){
   pvs <- get_all(m, "parameter_values", parameter == prm_name) %>%
     purrr::map("values") %>%
     purrr::flatten_dbl()
-  # convert provided prm values to std parameterization
+}
 
-  # possible input parameterizations (https://sites.google.com/site/probonto/download)
-  input_prmz <- list(
-    function(log_mu, log_sigma, ...) return(list(log_mu = log_mu,
-                                         log_sigma = log_sigma,
-                                         not_used = list(...))),
-    function(mean, sd, ...) return(list(log_mu = log(mean/sqrt(1+sd^2/mean^2)),
-                                        log_sigma = sqrt(log(1+sd^2/mean^2)),
-                                        not_used = list(...)))
-  )
-
+get_standard_parameterization <- function(parameter_values, input_prmz, prm_name){
   # safely evaluate each input paramterization with the list of pvs
   conversion_results <- purrr::map(input_prmz, purrr::safely) %>%
-    purrr::map(~rlang::exec(.x, !!!pvs))
+    purrr::map(~rlang::exec(.x, !!!parameter_values))
 
   # retrieve successful conversions
   successful_conversion <- conversion_results %>%
@@ -51,18 +53,13 @@ get_pv_log_normal <- function(m, prm_name, prmz){
     ui_warning("Parameter values ", paste(names(std_pvs$not_used), collapse = ","),
                " provided for parameter '", prm_name,"' not required and ignored.")
   std_pvs$not_used <- NULL
-  # convert from std prmz to requested one
-  output_prmzs <- list(
-    "log_mu-log_sigma" = function(log_mu, log_sigma) return(c(log_mu = log_mu, log_sigma = log_sigma)),
-    "log_mu-log_sigma2" = function(log_mu, log_sigma) return(c(log_mu = log_mu, log_sigma2 = log_sigma^2)),
-    "mean-sd" = function(log_mu, log_sigma) return(c(mean = exp(log_mu+0.5*log_sigma^2),
-                                                 sd = exp(log_mu+0.5*log_sigma^2)*sqrt(exp(log_sigma^2-1))))
-  )
+  std_pvs
+}
+
+convert_to_parameterization <- function(std_pvs, output_prmzs, prmz){
   if(!exists(prmz, output_prmzs)) {
     ui_warning("Requested output parameterization not available.")
     return(c(NA,NA))
   }
   rlang::exec(output_prmzs[[prmz]], !!!std_pvs)
-
 }
-
