@@ -59,6 +59,20 @@ call_prm_converter <- function(target, source, prm) {
 
 add_prm_normal <- function(target, source, prm) UseMethod("add_prm_normal")
 
+add_parameterizations("normal",
+                      input = list(
+                        function(mu, sigma, ...) return(list(mu = mu,
+                                                             sigma = sigma,
+                                                             not_used = list(...))),
+                        function(mean, sd, ...) return(list(mu = mean,
+                                                            sd = sd,
+                                                            not_used = list(...)))
+                      ),
+                      output = list(
+                        "mu-sigma" = function(lmu, sigma) return(c(mu = mu, sigma = sigma)),
+                        "mu-sigma2" = function(lmu, sigma) return(c(mu = mu, sigma2 = sigma^2))
+                      ))
+
 
 add_prm_normal.default <- function(target, source, prm) {
   rlang::warn("converter not implemented for this model type")
@@ -66,9 +80,10 @@ add_prm_normal.default <- function(target, source, prm) {
 }
 
 add_prm_normal.nm_model <- function(target, source, prm){
+  pv <- get_pv(source, prm, "mu-sigma2")
   taret <- target +
-    nm_theta(prm$name) +
-    nm_omega(prm$name)
+    nm_theta(prm$name, initial = pv$mu) +
+    nm_omega(prm$name, initial = pv$sigma2)
 
   theta_index <-  get_by_name(target, "theta", prm$name)$index
   eta_index <- get_by_name(target, "omega", prm$name)$index
