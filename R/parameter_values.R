@@ -24,8 +24,19 @@ get_pv <- function(m, prm, prmz){
   convert_to_parameterization(std_pvs, .prmzs[[prm$type]][["output"]], prmz)
 }
 
+#' Get parameter value for observational models
+#'
+#' @param m Model
+#' @param obs Observation
+#' @param prmz Requested parameterization
+#'
+#' @return Parameter values as a named vector
+get_obs_pv <- function(m, obs, prmz){
+
+}
+
 get_all_pvs <- function(model, prm_name){
-  pvs <- get_all(m, "parameter_values", parameter == prm_name) %>%
+  pvs <- get_all(model, "parameter_values", parameter == prm_name) %>%
     purrr::map("values") %>%
     purrr::flatten_dbl()
 }

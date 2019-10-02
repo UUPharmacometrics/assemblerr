@@ -69,8 +69,8 @@ add_parameterizations("normal",
                                                             not_used = list(...)))
                       ),
                       output = list(
-                        "mu-sigma" = function(lmu, sigma) return(c(mu = mu, sigma = sigma)),
-                        "mu-sigma2" = function(lmu, sigma) return(c(mu = mu, sigma2 = sigma^2))
+                        "mu-sigma" = function(mu, sigma) return(c(mu = mu, sigma = sigma)),
+                        "mu-sigma2" = function(mu, sigma) return(c(mu = mu, sigma2 = sigma^2))
                       ))
 
 
@@ -81,9 +81,9 @@ add_prm_normal.default <- function(target, source, prm) {
 
 add_prm_normal.nm_model <- function(target, source, prm){
   pv <- get_pv(source, prm, "mu-sigma2")
-  taret <- target +
-    nm_theta(prm$name, initial = pv$mu) +
-    nm_omega(prm$name, initial = pv$sigma2)
+  target <- target +
+    nm_theta(prm$name, initial = pv[["mu"]]) +
+    nm_omega(prm$name, initial = pv[["sigma2"]])
 
   theta_index <-  get_by_name(target, "theta", prm$name)$index
   eta_index <- get_by_name(target, "omega", prm$name)$index
@@ -120,7 +120,6 @@ add_prm_log_normal.default <- function(target, source, prm) {
 
 add_prm_log_normal.nm_model <- function(target, source, prm){
   pv <- get_pv(source, prm, "log_mu-log_sigma2")
-
   target <- target +
     nm_theta(prm$name, initial = pv[1], lbound = 0) +
     nm_omega(prm$name, initial = pv[2])

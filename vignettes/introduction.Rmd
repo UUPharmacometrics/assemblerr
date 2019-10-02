@@ -61,7 +61,7 @@ m <- model()+
   obs_additive(conc~C["central"])+
   parameter_values(cl = c(log_mu = 4.5, log_sigma = 0.1),
                    vc = c(log_mu = 1, log_sigma = 0.1), 
-                   ruv = c(sd = 1))
+                   conc = c(sd = 1))
 
 # convert to a NONMEM model and generate NMTran code
 as_nm_model(m)  %>% 
@@ -80,8 +80,8 @@ For PK models assemblerr supports a higher level of abstraction to simplify the 
 pkm <- pk_model() +
   pk_elemination_linear() +
   pk_distribution_2cmp() +
-    parameter_values(cl = c(typical = 4.5, iiv = 0.09),
-                   vc = c(typical = 1, iiv = 0.09),
+    parameter_values(cl = c(log_mu = 4.5, log_sigma = 0.1),
+                   vc = c(log_mu = 1, log_sigma = 0.1),
                    ruv = c(sd = 0.1)) +
   meta_tag("title", "run1")
 
@@ -98,7 +98,8 @@ The basic building blocks can still be added to a PK model, allowing to customiz
 ```{r}
 # change the parameter model for clearance
 pkm2 <- pkm +
-  prm_normal("cl")
+  prm_normal("cl")+
+  parameter_values(cl = c(mu = 12, sigma = 1))
 
 # convert to a NONMEM model and generate NMTran code
 pkm2 %>% 

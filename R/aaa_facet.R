@@ -168,7 +168,7 @@ get_first <- function(model, facet, ...){
     purrr::flatten()
 }
 
-#' @export
+
 get_all <- function(model, facet, ...){
   if(!exists(facet, model)) stop("Facet '", facet, "' not found in the model")
   dplyr::filter(model[[facet]], ...) %>%
