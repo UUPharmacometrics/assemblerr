@@ -2,11 +2,9 @@ context("NM model generation")
 
 test_that("Assembly of NM models works", {
   m <- model()+
-    prm_log_normal("emax")+
-    prm_log_normal("ed50")+
-    obs_additive(effect~emax*dose/(ed50+dose)) +
-    parameter_values(emax = c(log_mu = 0.2, log_sigma = 0.1),
-                     ed50 = c(log_mu = 0.3, log_sigma = 0.1))
+    prm_log_normal("emax", values = c(0.2, 0.1))+
+    prm_log_normal("ed50", values = c(0.3, 0.1))+
+    obs_additive(effect~emax*dose/(ed50+dose), values = 2)
   nm_code <-   as_nm_model(m) %>%
     render()
 

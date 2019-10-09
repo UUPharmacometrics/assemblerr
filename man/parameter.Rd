@@ -8,11 +8,11 @@
 \alias{prm_logit}
 \title{Model parameter}
 \usage{
-parameter(name, type, options = NULL)
+parameter(name, type, values, options = NULL)
 
-prm_log_normal(name)
+prm_log_normal(name, values)
 
-prm_normal(name)
+prm_normal(name, values)
 
 prm_novar(name)
 

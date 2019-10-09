@@ -10,30 +10,34 @@
 #' @export
 #' @examples
 #' p <- parameter("cl", "log-normal")
-parameter <- function(name, type, options = NULL){
+parameter <- function(name, type, values, options = NULL){
   if(name!=make.names(name)) stop("'name' needs to be a valid variable name.")
   if(missing(type)){
     message("No type for the parameter '", name,"' was specified, using 'log-normal' as default.")
     type <- "log_normal"
   }
-  item("parameters", name = name, type = type, options = options)
+  item("parameters", name = name, type = type, values = list(values), options = options)
 }
 
 #' @export
 #' @describeIn parameter Creates a parameter with a log-normal distribution
-prm_log_normal <- function(name) parameter(name, type = "log_normal")
+prm_log_normal <- function(name, values) {
+  parameter(name, type = "log_normal", values = check_pvs(values, c("log_mu", "log_sigma"), lower = c(log_sigma = 0)))
+}
 
 #' @export
 #' @describeIn parameter Creates a parameter with a normal distribution
-prm_normal <- function(name) parameter(name, type = "normal")
+prm_normal <- function(name, values) {
+  parameter(name, type = "normal", values = check_pvs(values, c("mu", "sigma"), lower = c(sigma = 0)))
+}
 
 #' @export
 #' @describeIn parameter Creates a parameter with no IIV
-prm_novar <- function(name) parameter(name, type = "novar")
+prm_novar <- function(name) parameter(name, type = "novar", values = check_pvs(values, c("mu")))
 
 #' @export
 #' @describeIn parameter Creates a parameter with a logit distribution
-prm_logit <- function(name) parameter(name, type = "logit")
+prm_logit <- function(name) parameter(name, type = "logit", values = values)
 
 
 add_parameters <- function(target, source){
@@ -59,19 +63,6 @@ call_prm_converter <- function(target, source, prm) {
 
 add_prm_normal <- function(target, source, prm) UseMethod("add_prm_normal")
 
-add_parameterizations("normal",
-                      input = list(
-                        function(mu, sigma, ...) return(list(mu = mu,
-                                                             sigma = sigma,
-                                                             not_used = list(...))),
-                        function(mean, sd, ...) return(list(mu = mean,
-                                                            sd = sd,
-                                                            not_used = list(...)))
-                      ),
-                      output = list(
-                        "mu-sigma" = function(mu, sigma) return(c(mu = mu, sigma = sigma)),
-                        "mu-sigma2" = function(mu, sigma) return(c(mu = mu, sigma2 = sigma^2))
-                      ))
 
 
 add_prm_normal.default <- function(target, source, prm) {
@@ -79,11 +70,13 @@ add_prm_normal.default <- function(target, source, prm) {
   return(target)
 }
 
+prmz_n_nonmem <- function(mu, sigma) return(c(mu, sigma^2))
+
 add_prm_normal.nm_model <- function(target, source, prm){
-  pv <- get_pv(source, prm, "mu-sigma2")
+  pv <- to_prmz(prmz_n_nonmem, prm)
   target <- target +
-    nm_theta(prm$name, initial = pv[["mu"]]) +
-    nm_omega(prm$name, initial = pv[["sigma2"]])
+    nm_theta(prm$name, initial = pv[1]) +
+    nm_omega(prm$name, initial = pv[2])
 
   theta_index <-  get_by_name(target, "theta", prm$name)$index
   eta_index <- get_by_name(target, "omega", prm$name)$index
@@ -97,29 +90,18 @@ add_prm_normal.nm_model <- function(target, source, prm){
 add_prm_log_normal <- function(target, source, prm) UseMethod("add_prm_log_normal")
 
 
-add_parameterizations("log_normal",
-                      input = list(
-                        function(log_mu, log_sigma, ...) return(list(log_mu = log_mu,
-                                                                     log_sigma = log_sigma,
-                                                                     not_used = list(...))),
-                        function(mean, sd, ...) return(list(log_mu = log(mean/sqrt(1+sd^2/mean^2)),
-                                                            log_sigma = sqrt(log(1+sd^2/mean^2)),
-                                                            not_used = list(...)))
-                      ),
-                      output = list(
-                        "log_mu-log_sigma" = function(log_mu, log_sigma) return(c(log_mu = log_mu, log_sigma = log_sigma)),
-                        "log_mu-log_sigma2" = function(log_mu, log_sigma) return(c(log_mu = log_mu, log_sigma2 = log_sigma^2)),
-                        "mean-sd" = function(log_mu, log_sigma) return(c(mean = exp(log_mu+0.5*log_sigma^2),
-                                                                         sd = exp(log_mu+0.5*log_sigma^2)*sqrt(exp(log_sigma^2-1))))
-                      ))
+#' @export
+ln_mean_sd <- function(mean, sd) return(c(log_mu = log(mean/sqrt(1+sd^2/mean^2)), log_sigma = sqrt(log(1+sd^2/mean^2))))
 
 add_prm_log_normal.default <- function(target, source, prm) {
   rlang::warn("converter not implemented for this model type")
   return(target)
 }
 
+prmz_ln_nonmem <- function(log_mu, log_sigma) return(c(exp(log_mu), log_sigma^2))
+
 add_prm_log_normal.nm_model <- function(target, source, prm){
-  pv <- get_pv(source, prm, "log_mu-log_sigma2")
+  pv <- to_prmz(prmz_ln_nonmem, prm)
   target <- target +
     nm_theta(prm$name, initial = pv[1], lbound = 0) +
     nm_omega(prm$name, initial = pv[2])

@@ -8,9 +8,9 @@
 \alias{obs_binary}
 \title{Observation model}
 \usage{
-observation(name, type, options = NULL)
+observation(name, type, values, options = NULL)
 
-obs_additive(prediction, name)
+obs_additive(prediction, name, values)
 
 obs_proportional(prediction, name)
 

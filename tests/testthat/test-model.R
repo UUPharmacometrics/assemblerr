@@ -4,7 +4,7 @@ test_that("Model is created correctly", {
   m <- model()
   expect_setequal(list_facets(m),
                   c("compartments", "flows", "parameters",
-                    "algebraics", "observations",  "parameter_values", "meta_tags"))
+                    "algebraics", "observations", "meta_tags"))
 })
 
 test_that("compartments can be added", {

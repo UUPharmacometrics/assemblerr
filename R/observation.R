@@ -12,37 +12,43 @@
 #' # create an additive error observation model for the concentration from the "central" compartment
 #' c_obs <- observation(name = "conc", type = "additive", options = list(prediction = ~C["central"]))
 #' @export
-observation <- function(name, type, options = NULL){
+observation <- function(name, type, values, options = NULL){
   if(missing(type)) {
     message("No type for the observation model was specified, using 'additive' as a default")
     type <- "additive"
   }
   if(!is.character(type)) stop("'type' needs to be a character vector")
   if(name!=make.names(name)) stop("'name' needs to be a valid variable name")
-  item("observations", name = name, type = type, options = options)
+  item("observations", name = name, type = type, values = list(values), options = options)
 }
 
-obs_continuous <- function(prediction, type, name){
+obs_continuous <- function(prediction, type, name, values){
   prediction <- arg2fml(prediction)
   if(missing(name)) name <- fml_get_lhs(prediction) %>% deparse()
   options <- list(
     prediction = prediction
   )
-  observation(name, type, options)
+  observation(name, type, values, options)
 }
 
 #' @export
 #' @param prediction Declaration for prediction
 #' @rdname observation
-obs_additive <- function(prediction, name) obs_continuous(prediction, "additive", name)
+obs_additive <- function(prediction, name, values) {
+  obs_continuous(prediction, "additive", name, values = check_pvs(values, c("sigma"), lower = c(sigma = 0)))
+}
 
 #' @export
 #' @rdname observation
-obs_proportional <- function(prediction, name) obs_continuous(prediction, "proportional", name)
+obs_proportional <- function(prediction, name) {
+  obs_continuous(prediction, "proportional", name, values = check_pvs(values, c("sigma"), lower = c(sigma = 0)))
+}
 
 #' @export
 #' @rdname observation
-obs_power <- function(prediction, name) obs_continuous(prediction, "power", name)
+obs_power <- function(prediction, name) {
+  obs_continuous(prediction, "power", name)
+}
 
 #' @export
 #' @param p1 Declaration for P(Y=1)
@@ -114,12 +120,16 @@ add_obs_additive.default <- function(target, source, obs) {
   rlang::warn("converter not implemented for this model type")
 }
 
+prmz_obs_add_nonmem <- function(sigma) return(c(sigma^2))
+
 add_obs_additive.nm_model <- function(target, source, obs){
+  pv <- to_prmz(prmz_obs_add_nonmem, obs)
+
   # generate a name for sigma
   sigma_name <- c("ruv", obs$name, "add") %>%
     purrr::discard(~.x=="") %>%
     paste0(collapse="-")
-  target <- target + nm_sigma(sigma_name)
+  target <- target + nm_sigma(sigma_name, pv)
 
   # create the declartions for this observations
   obs_fml <- make_ipred_fml(target, source, obs)

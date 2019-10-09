@@ -12,7 +12,6 @@
 #'    \item \code{\link{compartment}}
 #'    \item \code{\link{flow}}
 #'    \item \code{\link{observation}}
-#'    \item \code{\link{parameter_values}}
 #'    \item \code{\link{meta_tag}}
 #' }
 #'
@@ -28,10 +27,9 @@ model <- function(){
   structure(list(), class = c("model", "fragment")) %>%
     add_facet("compartments", list(volume = list())) %>%
     add_facet("flows", list(from = character(), to = character(), definition = list()), name_column = FALSE) %>%
-    add_facet("parameters", list(type = character(), options = list())) %>%
+    add_facet("parameters", list(type = character(), values = list(), options = list())) %>%
     add_facet("algebraics", list(definition = list())) %>%
-    add_facet("observations", list(type = character(), options = list())) %>%
-    add_facet("parameter_values", list(parameter = character(), values = list()), name_column = FALSE) %>%
+    add_facet("observations", list(type = character(), values = list(), options = list())) %>%
     add_facet("meta_tags", list(value = character()))
 }
 
@@ -113,26 +111,6 @@ algebraic <- function(definition){
   if(fml_is_anonymous(definition)) stop("'definition' needs to be named")
   item("algebraics", name = fml_get_lhs(definition) %>% deparse(), definition = definition)
 }
-
-#' Set values for parameters
-#'
-#' @param ... parameter names and values
-#'
-#' @export
-#' @examples
-#' vals <- parameter_values(cl = c(tv = 5, var = 0.3))
-parameter_values <- function(...){
-  args <- rlang::dots_list(...)
-  prms <- names(args)
-  values <- purrr::set_names(args, NULL)
-  structure(
-    list(
-      parameter_values = tibble::tibble(parameter = prms, values = values)
-    ),
-    class = "fragment"
-  )
-}
-
 
 #' Create a meta tag facet
 #'
