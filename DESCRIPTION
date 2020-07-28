@@ -25,6 +25,7 @@ Imports:
     dplyr,
     tibble,
     methods,
-    stats
+    stats,
+    glue
 VignetteBuilder: knitr
 RoxygenNote: 6.1.1
