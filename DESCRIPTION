@@ -26,6 +26,7 @@ Imports:
     tibble,
     methods,
     stats,
-    glue
+    glue,
+    vctrs
 VignetteBuilder: knitr
 RoxygenNote: 6.1.1
