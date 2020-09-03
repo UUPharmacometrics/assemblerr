@@ -49,6 +49,21 @@ declaration <- function(...){
   return(new_declaration(identifier, definition))
 }
 
+#' Access declaration fields
+#'
+#' @param dcl An assemblerr_declaration
+#'
+#' @return An expression
+#' @export
+#' @keywords internal
+dcl_id <- function(dcl){
+  vctrs::field(dcl, "identifier")
+}
+#' @rdname dcl_id
+dcl_def <- function(dcl){
+  vctrs::field(dcl, "definition")
+}
+
 #' Test if an expression is a valid LHS for a declaration
 #'
 #' @param expr an expression
