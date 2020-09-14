@@ -15,6 +15,12 @@
 #' @usage lhs \%>\% rhs
 NULL
 
+#' Internal vctrs methods
+#'
+#' @import vctrs
+#' @keywords internal
+#' @name assemblerr-vctrs
+NULL
 
 # The following block is used by usethis to automatically manage
 # roxygen namespace tags. Modify with care!
