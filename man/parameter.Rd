@@ -8,7 +8,7 @@
 \alias{prm_logit}
 \title{Model parameter}
 \usage{
-parameter(name, type, values, options = NULL)
+parameter(name, type, values, options = list())
 
 prm_log_normal(name, values)
 

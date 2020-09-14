@@ -10,7 +10,7 @@ algebraic(definition)
 \item{definition}{The definition}
 }
 \value{
-A algebraic fragment
+An algebraic fragment
 }
 \description{
 Create an algebraic relationship

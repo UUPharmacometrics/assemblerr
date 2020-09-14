@@ -24,37 +24,40 @@
 #'     prm_log_normal("emax") +
 #'     prm_log_normal("ed50")
 model <- function(){
-  structure(list(), class = c("model", "fragment")) %>%
-    add_facet("compartments", list(volume = list())) %>%
-    add_facet("flows", list(from = character(), to = character(), definition = list()), name_column = FALSE) %>%
-    add_facet("parameters", list(type = character(), values = list(), options = list())) %>%
-    add_facet("algebraics", list(definition = list())) %>%
-    add_facet("observations", list(type = character(), values = list(), options = list())) %>%
-    add_facet("meta_tags", list(value = character()))
+  new_fragment(
+    facets = list(
+      facet(facet_name = "compartments", name = character(), volume = declaration()),
+      facet(facet_name = "flows", from = character(), to = character(), definition = declaration()),
+      facet(facet_name = "parameters", name = character(), type = character(), values = list(), options = list()),
+      facet(facet_name = "algebraics", name = character(), definition = declaration()),
+      facet(facet_name = "observations", name = character(), type = character(), values = list(), options = list()),
+      facet(facet_name = "meta_tags", name = character(), value = character())
+    ),
+    class = "model")
 }
 
-#' @export
-print.model <- function(x,...){
-  name <- NA
-  title <- get_first(x, "meta_tags", name == "title")$value
-  if(!is.null(title)){
-    cat('assemblerr model "', title,'":\n')
-  } else{
-    cat('assemblerr model:\n')
-  }
-  prms <- x$parameters$name %>% paste(collapse = ", ")
-  cat('  - Parameters: ', prms, '\n')
-  obs_txt <- x$observations %>%
-    dplyr::mutate(txt = paste0("    + \"", .data$name, "\" (", .data$type, ")")) %>%
-    purrr::pluck("txt") %>%
-    paste(collapse = "\n")
-  cat('  - Observations: \n')
-  cat(obs_txt, "\n")
-  comp_txt <- x$compartments$name %>% paste(collapse = ", ")
-  if(nrow(x$compartments)>0) cat('  - Compartments: ', comp_txt, "\n")
-  alg_count <- x$algebraics %>% nrow()
-  if(alg_count>0) cat('  - Algebraic relationships: ', alg_count, "\n")
-}
+#' #' @export
+#' print.model <- function(x,...){
+#'   name <- NA
+#'   title <- get_first(x, "meta_tags", name == "title")$value
+#'   if(!is.null(title)){
+#'     cat('assemblerr model "', title,'":\n')
+#'   } else{
+#'     cat('assemblerr model:\n')
+#'   }
+#'   prms <- x$parameters$name %>% paste(collapse = ", ")
+#'   cat('  - Parameters: ', prms, '\n')
+#'   obs_txt <- x$observations %>%
+#'     dplyr::mutate(txt = paste0("    + \"", .data$name, "\" (", .data$type, ")")) %>%
+#'     purrr::pluck("txt") %>%
+#'     paste(collapse = "\n")
+#'   cat('  - Observations: \n')
+#'   cat(obs_txt, "\n")
+#'   comp_txt <- x$compartments$name %>% paste(collapse = ", ")
+#'   if(nrow(x$compartments)>0) cat('  - Compartments: ', comp_txt, "\n")
+#'   alg_count <- x$algebraics %>% nrow()
+#'   if(alg_count>0) cat('  - Algebraic relationships: ', alg_count, "\n")
+#' }
 
 
 #' Compartment
@@ -70,10 +73,10 @@ print.model <- function(x,...){
 #' @examples
 #' # compartment with name "central" and volume Vc
 #' comp1 <- compartment("central", volume = ~Vc)
-compartment <- function(name, volume = 1){
-  if(!is.character(name)) stop("'name' needs to be a character vector")
-  volume <- arg2fml(volume)
-  item("compartments", name = name, volume = volume)
+compartment <- function(name, volume = declaration(~1)){
+  if (!is.character(name)) stop("'name' needs to be a character vector")
+  vec_assert(volume, ptype = declaration(), size = 1)
+  fragment(compartments = list(name = name, volume = volume))
 }
 
 #' @export
@@ -93,9 +96,9 @@ cmp <- compartment
 #' @examples
 #' f <- flow(from = "depot", to = "central", definition = ~ka*A)
 flow <- function(from = NULL, to = NULL, definition){
-  if(!is.character(from) && !is.character(to)) stop("'from' or/and 'to' need to be compartment names")
-  definition <- arg2fml(definition)
-  item("flows", from = from, to = to, definition = definition)
+  if (!is.character(from) && !is.character(to)) stop("'from' or/and 'to' need to be compartment names")
+  vec_assert(definition, ptype = declaration(), size = 1)
+  fragment(flows = list(from = from, to = to, definition = definition))
 }
 
 
@@ -104,12 +107,11 @@ flow <- function(from = NULL, to = NULL, definition){
 #'
 #' @param definition The definition
 #'
-#' @return A algebraic fragment
+#' @return An algebraic fragment
 #' @export
 algebraic <- function(definition){
-  definition <- arg2fml(definition)
-  if(fml_is_anonymous(definition)) stop("'definition' needs to be named")
-  item("algebraics", name = fml_get_lhs(definition) %>% deparse(), definition = definition)
+  vec_assert(definition, ptype = declaration(), size = 1)
+  fragment(algebraics = list(name = dcl_id_label(definition), definition = definition))
 }
 
 #' Create a meta tag facet
@@ -120,8 +122,8 @@ algebraic <- function(definition){
 #' @return A meta tag facet
 #' @export
 meta_tag <- function(name, value){
-  if(!is.character(name)) stop("'name' needs to be a character vector")
-  item("meta_tags", name = name, value = value)
+  if (!is.character(name)) stop("'name' needs to be a character vector")
+  fragment(meta_tags = list(name = name, value = value))
 }
 
 convert_compartments <- function(to, from) UseMethod("convert_compartments")

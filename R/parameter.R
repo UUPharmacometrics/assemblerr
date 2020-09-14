@@ -10,13 +10,13 @@
 #' @export
 #' @examples
 #' p <- parameter("cl", "log-normal")
-parameter <- function(name, type, values, options = NULL){
+parameter <- function(name, type, values, options = list()){
   if(name!=make.names(name)) stop("'name' needs to be a valid variable name.")
   if(missing(type)){
     message("No type for the parameter '", name,"' was specified, using 'log-normal' as default.")
     type <- "log_normal"
   }
-  item("parameters", name = name, type = type, values = list(values), options = options)
+  fragment(parameters = list(name = name, type = type, values = list(values), options = list(options)))
 }
 
 #' @export

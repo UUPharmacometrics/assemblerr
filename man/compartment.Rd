@@ -3,11 +3,33 @@
 \name{compartment}
 \alias{compartment}
 \alias{cmp}
-\title{Compartment}
+\title{#' @export
+print.model <- function(x,...){
+  name <- NA
+  title <- get_first(x, "meta_tags", name == "title")$value
+  if(!is.null(title)){
+    cat('assemblerr model "', title,'":\n')
+  } else{
+    cat('assemblerr model:\n')
+  }
+  prms <- x$parameters$name %>% paste(collapse = ", ")
+  cat('  - Parameters: ', prms, '\n')
+  obs_txt <- x$observations %>%
+    dplyr::mutate(txt = paste0("    + \"", .data$name, "\" (", .data$type, ")")) %>%
+    purrr::pluck("txt") %>%
+    paste(collapse = "\n")
+  cat('  - Observations: \n')
+  cat(obs_txt, "\n")
+  comp_txt <- x$compartments$name %>% paste(collapse = ", ")
+  if(nrow(x$compartments)>0) cat('  - Compartments: ', comp_txt, "\n")
+  alg_count <- x$algebraics %>% nrow()
+  if(alg_count>0) cat('  - Algebraic relationships: ', alg_count, "\n")
+}
+Compartment}
 \usage{
-compartment(name, volume = 1)
+compartment(name, volume = declaration(~1))
 
-cmp(name, volume = 1)
+cmp(name, volume = declaration(~1))
 }
 \arguments{
 \item{name}{Name of the compartment}
