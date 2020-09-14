@@ -167,10 +167,17 @@
     },
     "dplyr": {
       "Package": "dplyr",
-      "Version": "0.8.0.1",
+      "Version": "1.0.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "f027b3489fc78fe48da054a29dc8b24b"
+      "Hash": "4011f62581a34080e44105d4aa05a97f"
+    },
+    "ellipsis": {
+      "Package": "ellipsis",
+      "Version": "0.3.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "fd2844b3a43ae2d27e70ece2df1b4e2a"
     },
     "evaluate": {
       "Package": "evaluate",
@@ -186,6 +193,13 @@
       "Repository": "CRAN",
       "Hash": "b31d9e5d051553d1177083aeba04b5b9"
     },
+    "generics": {
+      "Package": "generics",
+      "Version": "0.0.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "b8cff1d1391fd1ad8b65877f4c7f2e53"
+    },
     "ggplot2": {
       "Package": "ggplot2",
       "Version": "3.1.0",
@@ -195,10 +209,10 @@
     },
     "glue": {
       "Package": "glue",
-      "Version": "1.3.1",
+      "Version": "1.4.1",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "d4e25697c450c01b202c79ef35694a83"
+      "Hash": "f43e0d5e85ccb0a4045670c0607ee504"
     },
     "gridExtra": {
       "Package": "gridExtra",
@@ -298,6 +312,13 @@
       "Repository": "CRAN",
       "Hash": "d908914ae53b04d4c0c0fd72ecc35370"
     },
+    "lifecycle": {
+      "Package": "lifecycle",
+      "Version": "0.2.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "361811f31f71f8a617a9a68bf63f1f42"
+    },
     "magrittr": {
       "Package": "magrittr",
       "Version": "1.5",
@@ -349,10 +370,10 @@
     },
     "pillar": {
       "Package": "pillar",
-      "Version": "1.3.1",
+      "Version": "1.4.6",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "2118002e39723f27ea34b929f09cbd7d"
+      "Hash": "bdf26e55ccb7df3e49a490150277f002"
     },
     "pkgconfig": {
       "Package": "pkgconfig",
@@ -360,13 +381,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "f5940986fb19bcef52284068baeb3f29"
-    },
-    "plogr": {
-      "Package": "plogr",
-      "Version": "0.2.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "09eb987710984fc2905c7129c7d85e65"
     },
     "plyr": {
       "Package": "plyr",
@@ -384,10 +398,10 @@
     },
     "purrr": {
       "Package": "purrr",
-      "Version": "0.3.2",
+      "Version": "0.3.4",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "adeb65b9e6bf7b2e1f9ca8252c2530ed"
+      "Hash": "97def703420c8ab10d8f0e6c72101e02"
     },
     "readr": {
       "Package": "readr",
@@ -430,10 +444,10 @@
     },
     "rlang": {
       "Package": "rlang",
-      "Version": "0.4.0",
+      "Version": "0.4.7",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "0c7a98b7677a03c1261efa42b6873c67"
+      "Hash": "c06d2a6887f4b414f8e927afd9ee976a"
     },
     "rmarkdown": {
       "Package": "rmarkdown",
@@ -486,10 +500,10 @@
     },
     "tibble": {
       "Package": "tibble",
-      "Version": "2.1.1",
+      "Version": "3.0.3",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "6bedd9e5351e1eec67e22cc804748d25"
+      "Hash": "08bd36bd34b20d4f7971d49e81deaab0"
     },
     "tidyr": {
       "Package": "tidyr",
@@ -500,10 +514,10 @@
     },
     "tidyselect": {
       "Package": "tidyselect",
-      "Version": "0.2.5",
+      "Version": "1.1.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "971842fead8ee9e150495a0ede343a98"
+      "Hash": "6ea435c354e8448819627cf686f66e0a"
     },
     "tinytex": {
       "Package": "tinytex",
@@ -518,6 +532,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "4a5081acfb7b81a572e4384a7aaf2af1"
+    },
+    "vctrs": {
+      "Package": "vctrs",
+      "Version": "0.3.4",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "0bc90078aeee42f2520b1d0a33bd6758"
     },
     "viridis": {
       "Package": "viridis",
