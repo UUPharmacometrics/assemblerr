@@ -1,97 +1,60 @@
 context("facet manipulation")
 
-test_that("facets added to a list show have columns index and name",{
-  m <- list()
-  m <- add_facet(model = m, facet = "parameters")
-  expect_true(exists("name", m$parameters))
-  expect_true(exists("index", m$parameters))
-
-  expect_equal(typeof(m$parameters$name), "character")
-  expect_equal(typeof(m$parameters$index), "integer")
+test_that("facet creation", {
+  f <- facet("parameter", name = character(), type = character())
+  expect_s3_class(f, "assemblerr_facet")
+  expect_named(f, c("name", "type", "index"))
+  expect_equal(facet_name(f), "parameter")
+  expect_type(f$name, "character")
+  expect_type(f$type, "character")
+  expect_true(facet_has_id_columns(f))
+  expect_equal(facet_id_columns(f), "name")
 })
 
-
-test_that("facets have the specified properties and types",{
-  m <- list()
-  m <- add_facet(model = m, facet = "parameters",
-                 property_def = list(value = numeric(),
-                                     type = character(),
-                                     options = list()))
-
-  expect_true(exists("value", m$parameters))
-  expect_true(exists("type", m$parameters))
-  expect_true(exists("options", m$parameters))
-
-  expect_equal(typeof(m$parameters$value), "double")
-  expect_equal(typeof(m$parameters$type), "character")
-  expect_equal(typeof(m$parameters$options), "list")
+test_that("fragment creation", {
+  frag <- fragment(parameter = list(name = character(), type = character()))
+  expect_s3_class(frag, "assemblerr_fragment")
+  expect_true(is_fragment(frag))
+  expect_true(has_facet(frag, "parameter"))
 })
 
-test_that("name column can be dropped", {
-  m <- list()
-  m <- add_facet(model = m, facet = "parameters", name_column = F)
-  expect_false(exists("name", m$parameters))
-  expect_true(exists("index", m$parameters))
+test_that("fragment addition different facets", {
+  frgmt1 <- fragment(parameters = list(name = "cl", type = "normal"))
+  frgmt2 <- fragment(observations = list(name = "concentration", type = "additive"))
+  frgmtr <- add_fragments(frgmt1, frgmt2)
+  expect_equal(list_facets(frgmtr), c("parameters", "observations"))
 })
 
-test_that("querying for facets works", {
-  m <- list() %>% add_facet("parameters")
-  expect_true(has_facet(m, "parameters"))
-  expect_false(has_facet(m, "values"))
+test_that("fragment addition no id_column", {
+  frgmt1 <- fragment(test = list(value = "a"))
+  frgmt2 <- fragment(test = list(value = "b"))
+  frgmtr <- add_fragments(frgmt1, frgmt2)
+  expect_equal(frgmtr$test$value, c("a", "b"))
+  expect_equal(frgmtr$test$index, c(1, 2))
 })
 
-context("fragment manipulation")
-test_that("non-existing facets from f2 are added to f1", {
-    f1 <- list() %>% add_facet("f1facet1")
-    f2 <- list() %>% add_facet("f2facet1")
-
-    f3 <- add_fragment(f1, f2)
-    expect_true(exists("f1facet1", f3))
-    expect_true(exists("f2facet1", f3))
+test_that("fragment addition with id_column distinct ids", {
+  frgmt1 <- fragment(parameters = list(name = "cl", type = "normal"))
+  frgmt2 <- fragment(parameters = list(name = "v", type = "normal"))
+  frgmtr <- add_fragments(frgmt1, frgmt2)
+  expect_equal(frgmtr$parameters$name, c("cl", "v"))
+  expect_equal(frgmtr$parameters$index, c(1, 2))
 })
 
-test_that("facets that do not have a name column are appended to the corresponding f1 facet", {
-  f1 <- list(
-    facet1 = tibble::tibble(index = 1, type = "a")
-  )
-  f2 <- list(
-    facet1 = tibble::tibble(index = 1, type = "b")
-  )
-  f3 <- add_fragment(f1, f2)
-  expect_equal(f3$facet1$index, c(1,1))
-  expect_equal(f3$facet1$type, c("a","b"))
+test_that("fragment addition with id_column same ids", {
+  frgmt1 <- fragment(parameters = list(name = c("cl", "v"), type = "normal"))
+  frgmt2 <- fragment(parameters = list(name = "cl", type = "log-normal"))
+  frgmtr <- add_fragments(frgmt1, frgmt2)
+  expect_equal(frgmtr$parameters$name, c("v", "cl"))
+  expect_equal(frgmtr$parameters$type, c("normal", "log-normal"))
+  expect_equal(frgmtr$parameters$index, c(1, 2))
 })
 
-test_that("fragments can be created through item()", {
-  frgm <- item("test", name = "test", args = list(a = 1, b = 2))
-  expect_is(frgm, "fragment")
-  expect_equal(frgm$test$name, "test")
-  expect_equal(frgm$test$args[[1]], list(a = 1, b = 2))
-})
-
-test_that("properties can be retrieved by name",{
-  m <- list()
-  m <- add_facet(model = m, facet = "parameters", property_def = list(type = "character", equation = list()))
-  frgm <- item("parameters", name = "cl", type = "normal", equation = cl~theta+eta)
-  m <- m + frgm
-  expect_equal(get_by_name(m, "parameters", "cl"),
-               list(type = "normal",  equation = cl~theta+eta, index = 1, name = "cl"))
-})
-
-test_that("properties can be retrieved through filtering",{
-  m <- list()
-  m <- add_facet(model = m, facet = "parameter_values",
-                 property_def = list(parameter = character(), value = double()),
-                 name_column = FALSE)
-
-  frgm1 <- item("parameter_values", parameter = "cl", value = 1)
-  frgm2 <- item("parameter_values", parameter = "cl", value = 2)
-  frgm3 <- item("parameter_values", parameter = "v", value = 3)
-
-  m <- m + frgm1 + frgm2 + frgm3
-  pvs <- get_all(m, "parameter_values", parameter == "cl") %>%
-    purrr::map_dbl("value")
-  expect_equal(pvs,
-               c(1,2))
-
+test_that("fragment addition with `+` operator", {
+  frgmt1 <- fragment(parameters = list(name = c("cl", "v"), type = "normal"))
+  frgmt2 <- fragment(parameters = list(name = "cl", type = "log-normal"))
+  frgmtr <- frgmt1 + frgmt2
+  expect_equal(frgmtr$parameters$name, c("v", "cl"))
+  expect_equal(frgmtr$parameters$type, c("normal", "log-normal"))
+  expect_equal(frgmtr$parameters$index, c(1, 2))
 })

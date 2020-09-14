@@ -1,52 +1,70 @@
-#' Add new facet to model
-#'
-#' @param model A model
-#' @param facet Name of the facet to add
-#' @param property_def List of properties with their type
-#' @param name_column Whether to add a unique name column
-#'
-#' @return A modified model
-#' @export
-#'
-add_facet <- function(model, facet, property_def = list(), name_column = TRUE){
-  additional_columns <- list(index = integer())
-  if(name_column) additional_columns <- purrr::list_modify(additional_columns, name = character())
-  model[[facet]] <- do.call(tibble::tibble, c(property_def, additional_columns))
-  return(model)
-}
 
-#' Test if a model has a facet
+#' Model facets
 #'
-#' @param model A model
-#' @param facet Name of the facet
+#' @param name Name of the facet to add
+#' @param property_definitions List of properties with their type
+#' @param default_definitions List of properties that will be added to the facet by default with their type
+#' @param id_columns Column names that together yield a unique identifier of the facet entries
 #'
-#' @return TRUE/FALSE
+#' @return A facet
 #' @export
 #' @keywords internal
 #'
-has_facet <- function(model, facet){
-  return(exists(facet, model))
+#' @examples
+#' f <- new_facet("theta", list(initial = numeric(), lbound = numeric(), ubound = numeric()))
+new_facet <- function(facet_name = character(),
+                      x = list(),
+                      .id_columns = character()) {
+  vec_assert(facet_name, ptype = character())
+  vec_assert(.id_columns, ptype = character())
+  if (!rlang::is_empty(.id_columns) && !all(.id_columns %in% names(x))) {
+    rlang::abort("id_columns not present")
+  }
+  x <- vec_recycle_common(!!!x)
+  index <- seq_len(vec_size_common(!!!x))
+  x[["index"]] <- index
+  new_data_frame(x, facet_name = facet_name, id_columns = .id_columns, class = "assemblerr_facet")
 }
 
-#' List available facets
-#'
-#' The function lists all facets of a model.
-#'
-#' @param model The model
-#'
-#' @return A character vector
-#' @export
-list_facets <- function(model){
-  purrr::imap_chr(model, ~ifelse(is(.x, "tbl_df"), .y, NULL)) %>%
-    unname() %>%
-    purrr::compact()
+partial_facet <- function(){
+  new_partial(learned = data_frame(), class = "assemblerr_partial_facet")
+}
+
+facet <- function(facet_name,
+                  ...) {
+  x <- rlang::dots_list(..., .named = TRUE)
+  if ("name" %in% names(x)) {
+    .id_columns <- "name"
+  } else {
+      .id_columns <- character()
+  }
+  new_facet(facet_name, x, .id_columns = .id_columns)
 }
 
 
+is_facet <- function(x){
+  inherits(x, "assemblerr_facet")
+}
+
+facet_name <- function(x) {
+  attr(x, "facet_name", exact = TRUE)
+}
+
+facet_id_columns <- function(x) {
+  stopifnot(is_facet(x))
+  attr(x, "id_columns", exact = TRUE)
+}
+
+facet_has_id_columns <- function(x){
+  !rlang::is_empty(facet_id_columns(x))
+}
+
+
+
 #' @export
-`+.fragment` <- function(x, y){
-  if(!is(y, "fragment")) stop("Only two fragments can be combined.")
-  add_fragment(x, y)
+`+.assemblerr_fragment` <- function(x, y){
+  if (!is(y, "assemblerr_fragment")) stop("Only two fragments can be combined.")
+  add_fragments(x, y)
 }
 
 
@@ -73,84 +91,73 @@ list_facets <- function(model){
 }
 
 
-#' Create an individual entry fragment
-#'
-#' @param facet The name of the facet this item should be added too
-#' @param ... Properties of the item
-#'
-#' @return A fragment consisting of just one entry
-#' @export
-#' @keywords internal
-item <- function(facet, ...){
-  list(..., index = 1) %>%
-    purrr::map_if(~!rlang::is_atomic(.x)&!is.null(.x), list) %>%
-    purrr::compact() %>%
-    tibble::as_tibble() %>%
-    list() %>%
-    purrr::set_names(facet) %>%
-    structure(class = c("fragment"))
+
+
+# a fragment is a list of facets
+new_fragment <- function(facets = list(), ..., class = NULL){
+  l <- new_vctr(facets, ..., class = vec_c(class, "assemblerr_fragment"))
+  facet_names <- purrr::map_chr(l, facet_name)
+  rlang::set_names(l, facet_names)
 }
 
+fragment <- function(...){
+  dots <- rlang::dots_list(..., .named = TRUE, .homonyms = "error", .check_assign = TRUE)
+  facets <- purrr::imap(dots, ~facet(.y, !!!.x))
+  new_fragment(facets)
+}
+
+is_fragment <- function(x){
+  inherits(x, "assemblerr_fragment")
+}
+
+list_facets <- function(x){
+  stopifnot(is_fragment(x))
+  names(x)
+}
+
+has_facet <- function(x, facet_name){
+  is_fragment(x) && facet_name %in% list_facets(x)
+}
 
 
 
 #' Add a fragment to another one
 #'
 #' @param fragment1 Fragment to add to
-#' @param fragment2 Fragment to add
+#' @param fragment2 Fragment to be added
 #'
 #' @return  A combination of fragment1 and fragment2
 #' @export
-add_fragment <- function(fragment1, fragment2){
-  purrr::reduce(names(fragment2), .init = fragment1, function(frag, facet) {
-    if(!exists(facet, frag)){
-      frag[[facet]] <- fragment2[[facet]]
-    }else if(exists("name", frag[[facet]])){
-      # if there is no name in the second fragment, set it to "missing"
-      if(!exists("name", fragment2[[facet]])) fragment2[[facet]]$name <- as.character(NA)
-
-      # determine all entries that will not change and update index column
-      unchanged <- dplyr::anti_join(frag[[facet]], fragment2[[facet]], by = "name") %>%
-        dplyr::arrange(.data$index) %>%
-        dplyr::mutate(index = seq_len(dplyr::n()))
-      # generate index for updated or added entries
-      changed <- dplyr::mutate(fragment2[[facet]], index = seq_len(dplyr::n())+nrow(unchanged))
-      # determined added and updated entries
-      added <- dplyr::anti_join(changed, frag[[facet]], by = "name")
-      updated <- dplyr::semi_join(changed, frag[[facet]], by = "name")
-      # warn if entries will be updated
-      if(nrow(updated)!=0) rlang::warning_cnd("entries_updated", .msg = paste("Entries", paste(updated$name, collapse = ", "), "in facet", facet, "have been replaced"), .mufflable = T)
-      # combine and sort by index
-      frag[[facet]] <- dplyr::bind_rows(unchanged, added, updated) %>%
-        dplyr::arrange(.data$index)
+add_fragments <- function(fragment1, fragment2) {
+  purrr::reduce(fragment2, .init = fragment1, function(frgmt, fct){
+    if (!has_facet(frgmt, facet_name(fct))) {
+      frgmt <- vec_c(frgmt, new_fragment(list(fct)))
+    }else if (facet_has_id_columns(frgmt[[facet_name(fct)]])) {
+      id_columns <- facet_id_columns(frgmt[[facet_name(fct)]])
+      for (row in seq_len(vec_size(fct))) {
+        entry <- vec_slice(fct, row)
+        matching_row <- which(vec_equal(entry[,id_columns], frgmt[[facet_name(fct)]][, id_columns]))
+        if (rlang::is_empty(matching_row)) {
+          entry[["index"]] <- vec_size(frgmt[[facet_name(fct)]]) + 1L
+          frgmt[[facet_name(fct)]] <- vec_rbind(frgmt[[facet_name(fct)]], entry)
+        }else{
+          frgmt[[facet_name(fct)]][["index"]][-matching_row] <- frgmt[[facet_name(fct)]][["index"]][-matching_row] - 1
+          entry[["index"]] <- vec_size(frgmt[[facet_name(fct)]])
+          frgmt[[facet_name(fct)]][matching_row, ] <- entry
+          frgmt[[facet_name(fct)]] <- frgmt[[facet_name(fct)]][order(frgmt[[facet_name(fct)]][["index"]]), ]
+        }
+      }
     }else{
-      frag[[facet]] <- dplyr::bind_rows(frag[[facet]], fragment2[[facet]])
+      fct[["index"]] <- max(0, frgmt[[facet_name(fct)]][["index"]]) + seq_len(vec_size(fct))
+      frgmt[[facet_name(fct)]] <- vec_rbind(frgmt[[facet_name(fct)]], fct)
     }
-    frag
-  })
-}
-
-add_fragment_unless_exists <- function(fragment1, fragment2){
-  purrr::reduce(names(fragment2), .init = fragment1, function(frag, facet) {
-    if(!exists(facet, frag)){
-      frag[[facet]] <- fragment2[[facet]]
-    }else if(exists("name", frag[[facet]])){
-      # determined entries not contained in the fragment
-      added <- dplyr::anti_join(fragment2[[facet]], frag[[facet]], by = "name") %>%
-        dplyr::mutate(index = seq_len(dplyr::n()) + nrow(frag[[facet]]))
-      # combine and sort by index
-      frag[[facet]] <- dplyr::bind_rows(frag[[facet]], added) %>%
-        dplyr::arrange(.data$index)
-    }else{
-      frag[[facet]] <- dplyr::bind_rows(frag[[facet]], fragment2[[facet]])
-    }
-    frag
+    frgmt
   })
 }
 
 #' Retrieve an entry by name
 #'
-#' @param model A model
+#' @param fragment A fragment
 #' @param facet Name of the facet
 #' @param name Name to retrieve
 #'
