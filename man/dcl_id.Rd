@@ -3,7 +3,7 @@
 \name{dcl_id}
 \alias{dcl_id}
 \alias{dcl_def}
-\title{Access declaration internals}
+\title{Access declaration fields}
 \usage{
 dcl_id(dcl)
 
@@ -16,11 +16,6 @@ dcl_def(dcl)
 An expression
 }
 \description{
-Access declaration internals
+Access declaration fields
 }
-\section{Functions}{
-\itemize{
-\item \code{dcl_def}: Get definition
-}}
-
 \keyword{internal}

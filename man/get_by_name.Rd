@@ -7,11 +7,11 @@
 get_by_name(model, facet, name)
 }
 \arguments{
-\item{model}{A model}
-
 \item{facet}{Name of the facet}
 
 \item{name}{Name to retrieve}
+
+\item{fragment}{A fragment}
 }
 \value{
 List representation of the entry found or an empty list
