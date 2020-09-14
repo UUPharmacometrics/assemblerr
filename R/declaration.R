@@ -3,8 +3,8 @@
 #'
 #' The internal constructor for a declaration vector. The user-facing version is `declaration`.
 #'
-#' The arguments `identifier` and `definition` are lists of R expressions. For `identifier` only symbols or array expression
-#' (e.g., theta[1]) are permited.
+#' The arguments `identifier` and `definition` are lists of R expressions. For `identifier` only symbols, array expressions
+#' (e.g., theta[1]), or NULL are permitted.
 #'
 #' @param identifier List of expressions
 #' @param definition List of expressions
@@ -23,7 +23,6 @@ new_declaration <- function(identifier = list(), definition = list()){
     rlang::abort("The identifiers need to be symbols or array expressions")
   vctrs::new_rcrd(list(identifier = identifier, definition = definition), class = "assemblerr_declaration")
 }
-
 
 #' Declaration
 #'
@@ -49,6 +48,12 @@ declaration <- function(...){
   return(new_declaration(identifier, definition))
 }
 
+#' @export
+vec_proxy_equal.assemblerr_declaration <- function(x, ...){
+  data_frame(identifier = dcl_id_label(x, null_value = "."),
+                   definition = dcl_def(x))
+}
+
 #' Access declaration fields
 #'
 #' @param dcl An assemblerr_declaration
@@ -64,6 +69,16 @@ dcl_def <- function(dcl){
   vctrs::field(dcl, "definition")
 }
 
+dcl_id_label <- function(dcl, null_value = NA_character_){
+  labels <- purrr::map_chr(dcl_id(dcl), rlang::expr_text)
+  if (!is.null(null_value)) labels[labels == "NULL"] <- null_value
+  labels
+}
+
+dcl_def_label <- function(dcl) {
+  purrr::map_chr(dcl_def(dcl), rlang::expr_text)
+}
+
 #' Test if an expression is a valid LHS for a declaration
 #'
 #' @param expr an expression
@@ -74,13 +89,17 @@ is_valid_lhs <- function(expr){
   return(contains_no_functions)
 }
 
+
+#' @export
 format.assemblerr_declaration <- function(x, ...){
-  id_txt <- purrr::map_chr(vctrs::field(x, "identifier"), rlang::expr_text)
-  def_txt <- purrr::map_chr(vctrs::field(x, "definition"), rlang::expr_text)
+  id_txt <- dcl_id_label(x, null_value = ".")
+  def_txt <- dcl_def_label(x)
   out <- paste0("`", id_txt, " ~ ", def_txt, "`")
 }
 
 vec_ptype_abbr.assemblerr_declaration <- function(x, ...) "dcl"
 vec_ptype_full.assemblerr_declaration <- function(x, ...) "declaration"
 
-
+list_of_declaration <- function(...){
+  list_of(..., .ptype = new_declaration())
+}

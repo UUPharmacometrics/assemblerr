@@ -18,7 +18,7 @@ An assemblerr_declaration object
 The internal constructor for a declaration vector. The user-facing version is `declaration`.
 }
 \details{
-The arguments `identifier` and `definition` are lists of R expressions. For `identifier` only symbols or array expression
-(e.g., theta[1]) are permited.
+The arguments `identifier` and `definition` are lists of R expressions. For `identifier` only symbols, array expressions
+(e.g., theta[1]), or NULL are permitted.
 }
 \keyword{internal}
