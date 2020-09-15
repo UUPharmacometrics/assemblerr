@@ -58,3 +58,12 @@ test_that("fragment addition with `+` operator", {
   expect_equal(frgmtr$parameters$type, c("normal", "log-normal"))
   expect_equal(frgmtr$parameters$index, c(1, 2))
 })
+
+test_that("lookup of properties by name", {
+  frgmt1 <- fragment(parameters = list(name = c("cl", "v"), type = "normal"),
+                     compartments = list(name = c("central"), volume = declaration(~Vc)))
+  property <- get_by_name(frgmt1, "parameters", "cl")
+  expect_equal(property$name, "cl")
+  expect_equal(property$type, "normal")
+  expect_equal(property$index, 1)
+})

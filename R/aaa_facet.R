@@ -157,27 +157,23 @@ add_fragments <- function(fragment1, fragment2) {
 
 #' Retrieve an entry by name
 #'
-#' @param fragment A fragment
+#' @param frgmt A fragment
 #' @param facet Name of the facet
 #' @param name Name to retrieve
 #'
 #' @return List representation of the entry found or an empty list
 #' @export
-get_by_name <- function(model, facet, name){
-  get_first(model, facet, name == !!name)
+get_by_name <- function(frgmt, facet, name){
+  get_first(frgmt, facet, name == !!name)
 }
 
-get_first <- function(model, facet, ...){
-  if(!exists(facet, model)) stop("Facet '", facet, "' not found in the model")
-  dplyr::filter(model[[facet]], ...) %>%
-    dplyr::slice(1) %>%
-    purrr::transpose() %>%
-    purrr::flatten()
+get_first <- function(frgmt, facet, ...){
+  if (!exists(facet, frgmt)) stop("Facet '", facet, "' not found in the fragment")
+  dplyr::filter(frgmt[[facet]], ...)
 }
 
 
-get_all <- function(model, facet, ...){
-  if(!exists(facet, model)) stop("Facet '", facet, "' not found in the model")
-  dplyr::filter(model[[facet]], ...) %>%
-    purrr::transpose()
+get_all <- function(frgmt, facet, ...){
+  if (!exists(facet, frgmt)) stop("Facet '", facet, "' not found in the fragment")
+  dplyr::filter(frgmt[[facet]], ...)
 }
