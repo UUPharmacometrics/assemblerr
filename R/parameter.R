@@ -73,18 +73,17 @@ add_prm_normal.default <- function(target, source, prm) {
 prmz_n_nonmem <- function(mu, sigma) return(c(mu, sigma^2))
 
 add_prm_normal.nm_model <- function(target, source, prm){
-  pv <- to_prmz(prmz_n_nonmem, prm)
   target <- target +
-    nm_theta(prm$name, initial = pv[1]) +
-    nm_omega(prm$name, initial = pv[2])
+    nm_theta(prm$name, initial = NA) +
+    nm_omega(prm$name, initial = NA)
 
-  theta_index <-  get_by_name(target, "theta", prm$name)$index
-  eta_index <- get_by_name(target, "omega", prm$name)$index
-
-  expr <- bquote(.(rlang::sym(prm$name)) <- theta[.(theta_index)]+eta[.(eta_index)])
+  theta_index <-  get_by_name(target, "theta", prm$name)[["index"]]
+  eta_index <- get_by_name(target, "omega", prm$name)[["index"]]
 
   target + nm_pk(name = prm$name,
-                statement = expr)
+                statement = statement(
+                  !!sym(prm$name) <- theta[!!theta_index] + eta[!!eta_index]
+                ))
 }
 
 add_prm_log_normal <- function(target, source, prm) UseMethod("add_prm_log_normal")
@@ -101,16 +100,15 @@ add_prm_log_normal.default <- function(target, source, prm) {
 prmz_ln_nonmem <- function(log_mu, log_sigma) return(c(exp(log_mu), log_sigma^2))
 
 add_prm_log_normal.nm_model <- function(target, source, prm){
-  pv <- to_prmz(prmz_ln_nonmem, prm)
   target <- target +
-    nm_theta(prm$name, initial = pv[1], lbound = 0) +
-    nm_omega(prm$name, initial = pv[2])
+    nm_theta(prm$name, initial = NA, lbound = 0) +
+    nm_omega(prm$name, initial = NA)
 
-  theta_index <-  get_by_name(target, "theta", prm$name)$index
-  eta_index <- get_by_name(target, "omega", prm$name)$index
-
-  expr <- bquote(.(rlang::sym(prm$name)) <- theta[.(theta_index)]*exp(eta[.(eta_index)]))
+  theta_index <-  get_by_name(target, "theta", prm$name)[["index"]]
+  eta_index <- get_by_name(target, "omega", prm$name)[["index"]]
 
   target + nm_pk(name = prm$name,
-                statement = expr)
+                statement = statement(
+                  !!sym(prm$name) <- theta[!!theta_index]*exp(eta[!!eta_index])
+                ))
 }
