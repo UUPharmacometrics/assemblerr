@@ -20,3 +20,13 @@ test_that("conversion from declaration",{
   expect_equal(s[2], statement(v <- theta[2]))
   expect_equal(s[3], statement(exp(eta[1])))
 })
+
+test_that("code rendering", {
+  s <- statement(
+    cl <- theta[1]*exp(eta[1]),
+    v <- theta[2]
+  )
+  expect_equal(as_code(s),
+               "CL = THETA(1) * EXP(ETA(1))\nV = THETA(2)")
+
+})

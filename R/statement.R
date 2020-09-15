@@ -45,5 +45,26 @@ vec_ptype_full.assemblerr_statement <- function(x, ...) "statement"
 as_code <- function(x, ...) UseMethod("as_code")
 
 as_code.assemblerr_statement <- function(x, ...){
+  vec_data(x) %>%
+    purrr::map(transform_ast, transformer = vec2fcall_transformer) %>%
+    purrr::map(transform_ast, transformer = assignment_transformer) %>%
+    purrr::map_chr(deparse, control = c(), width.cutoff = 200) %>%
+    paste(collapse = "\n") %>%
+    toupper()
+}
 
+
+assignment_transformer <- function(node){
+  if (rlang::is_call(node) && rlang::call_name(node) == "<-") {
+    node[[1]] <- quote(`=`)
+  }
+  node
+}
+
+vec2fcall_transformer <- function(node){
+  if (rlang::is_call(node) && rlang::call_name(node) == "[") {
+    node[[1]] <- node[[2]]
+    node[[2]] <- NULL
+  }
+  node
 }

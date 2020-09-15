@@ -24,20 +24,6 @@ nm_if_reformatter <- function(string){
        replacement = "IF(\\1) THEN\\3ENDIF" , perl = T)
 }
 
-assignment_transformer <- function(node){
-  if(rlang::is_call(node) && rlang::call_name(node) == "<-"){
-    node[[1]] <- quote(`=`)
-  }
-  node
-}
-
-vec2fcall_transformer <- function(node){
-  if(rlang::is_call(node) && rlang::call_name(node) == "["){
-    node[[1]] <- node[[2]]
-    node[[2]] <- NULL
-  }
-  node
-}
 
 transform_if <- function(l, .if,  transformer, ...){
   if(.if) return(purrr::map(l, transform_ast, transformer = transformer, ...))
