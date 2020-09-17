@@ -116,6 +116,13 @@ find_vars_with_indicies <- function(expr){
   return(results)
 }
 
+dcl_substitute <- function(dcl, ..., .include_lhs = TRUE){
+  dots <- rlang::dots_list(...)
+  ids <- dcl_id(dcl)
+  if (.include_lhs) ids <- purrr::map(ids, ~do.call(substitute, args = list(.x,  env = dots)))
+  defs <- purrr::map(dcl_def(dcl), ~do.call(substitute, args = list(.x,  env = dots)))
+  new_declaration(ids, defs)
+}
 
 #' Test if an expression is a valid LHS for a declaration
 #'

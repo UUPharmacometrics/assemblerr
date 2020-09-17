@@ -30,3 +30,10 @@ test_that("listing of variables", {
   expect_equal(dcl_vars(d, include_lhs = TRUE, include_indicies = TRUE) %>% as.character(),
                c("cl","v","theta","eta", "theta[1]", "eta[2]"))
 })
+
+test_that("substitution of variables", {
+  d <- declaration(cl~theta + eta, v~theta[1]*exp(eta[2]))
+  expect_equal(dcl_substitute(d, theta = quote(a)), declaration(cl~ a + eta, v~a[1]*exp(eta[2])))
+  expect_equal(dcl_substitute(d, cl = quote(x), .include_lhs = TRUE), declaration(x~theta + eta, v~theta[1]*exp(eta[2])))
+  expect_equal(dcl_substitute(d, cl = quote(x), .include_lhs = FALSE), d)
+})
