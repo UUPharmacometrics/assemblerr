@@ -79,6 +79,44 @@ dcl_def_label <- function(dcl) {
   purrr::map_chr(dcl_def(dcl), rlang::expr_text)
 }
 
+dcl_vars_chr <- function(dcl, include_indicies = FALSE, include_lhs = TRUE) {
+  dcl_vars(dcl, include_indicies = FALSE, include_lhs = TRUE) %>%
+    as.character()
+}
+
+dcl_vars <- function(dcl, include_indicies = FALSE, include_lhs = TRUE){
+  lhs_vars <- list()
+  if (include_lhs) {
+    lhs_vars <- dcl_id(dcl)
+  }
+  if (include_indicies) {
+    rhs_vars <- purrr::map(dcl_def(dcl), find_vars_with_indicies)
+  }else{
+    rhs_vars <- purrr::map(dcl_def(dcl), all.vars) %>%
+      purrr::map(rlang::syms)
+  }
+  vars <- vec_c(lhs_vars, purrr::flatten(rhs_vars))
+  unique(vars)
+}
+
+
+find_vars_with_indicies <- function(expr){
+  if (rlang::is_call(expr) && rlang::call_name(expr) == "[") {
+    results <- list(expr)
+  }else if (rlang::is_call(expr)) {
+    results <- list()
+    for (i  in 2:length(expr)) results <- vec_c(results, find_vars_with_indicies(expr[[i]]))
+  }else if (rlang::is_symbol(expr)) {
+    results <- list(expr)
+  } else if (rlang::is_pairlist(expr)) {
+    results <- lapply(expr, find_vars_with_indicies)
+  }else{
+    results <- list()
+  }
+  return(results)
+}
+
+
 #' Test if an expression is a valid LHS for a declaration
 #'
 #' @param expr an expression

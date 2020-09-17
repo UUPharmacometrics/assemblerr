@@ -20,3 +20,13 @@ test_that("accessing fields works", {
                  quote(theta[1]*exp(eta[2])))
                )
 })
+
+test_that("listing of variables", {
+  d <- declaration(cl~theta + eta, v~theta[1]*exp(eta[2]))
+  expect_equal(dcl_vars(d, include_lhs = FALSE, include_indicies = FALSE) %>% as.character(),
+               c("theta","eta"))
+  expect_equal(dcl_vars(d, include_lhs = TRUE, include_indicies = FALSE) %>% as.character(),
+               c("cl","v","theta","eta"))
+  expect_equal(dcl_vars(d, include_lhs = TRUE, include_indicies = TRUE) %>% as.character(),
+               c("cl","v","theta","eta", "theta[1]", "eta[2]"))
+})
