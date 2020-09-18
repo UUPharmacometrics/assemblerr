@@ -124,6 +124,16 @@ dcl_substitute <- function(dcl, ..., .include_lhs = TRUE){
   new_declaration(ids, defs)
 }
 
+dcl_combine <- function(dcl1, dcl2, combine_fn = "+"){
+  vec_assert(dcl1, declaration())
+  vec_assert(dcl2, declaration())
+  dcls <- vec_recycle_common(dcl1 = dcl1, dcl2 = dcl2)
+  new_declaration(
+    identifier = dcl_id(dcls$dcl1),
+    definition = purrr::map2(dcl_def(dcls$dcl1), dcl_def(dcls$dcl2), ~call(combine_fn, .x, .y))
+  )
+}
+
 #' Test if an expression is a valid LHS for a declaration
 #'
 #' @param expr an expression

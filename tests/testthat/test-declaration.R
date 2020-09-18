@@ -37,3 +37,11 @@ test_that("substitution of variables", {
   expect_equal(dcl_substitute(d, cl = quote(x), .include_lhs = TRUE), declaration(x~theta + eta, v~theta[1]*exp(eta[2])))
   expect_equal(dcl_substitute(d, cl = quote(x), .include_lhs = FALSE), d)
 })
+
+test_that("combination of declarations", {
+  d1 <- declaration(cl~theta + eta, v~theta[1]*exp(eta[2]))
+  d2 <- declaration(t~b)
+  d3 <- declaration(t1~b, t2~a)
+  expect_equal(dcl_combine(d1, d2, combine_fn = "+"), declaration(cl~theta + eta + b, v~theta[1]*exp(eta[2])+b))
+  expect_equal(dcl_combine(d1, d3, combine_fn = "+"), declaration(cl~theta + eta + b, v~theta[1]*exp(eta[2])+a))
+})
