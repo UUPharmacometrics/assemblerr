@@ -42,9 +42,8 @@ as_statement.assemblerr_declaration <- function(x, ...){
 vec_ptype_abbr.assemblerr_statement <- function(x, ...) "stm"
 vec_ptype_full.assemblerr_statement <- function(x, ...) "statement"
 
-as_code <- function(x, ...) UseMethod("as_code")
 
-as_code.assemblerr_statement <- function(x, ...){
+render.assemblerr_statement <- function(x, ...){
   vec_data(x) %>%
     purrr::map(transform_ast, transformer = vec2fcall_transformer) %>%
     purrr::map(transform_ast, transformer = assignment_transformer) %>%
