@@ -49,7 +49,7 @@ Defines name and volume of compartment
 
 \examples{
 # compartment with name "central" and volume Vc
-comp1 <- compartment("central", volume = ~Vc)
+comp1 <- compartment("central", volume = declaration(~Vc))
 }
 \seealso{
 \code{\link{model}}

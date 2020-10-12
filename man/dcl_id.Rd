@@ -3,19 +3,19 @@
 \name{dcl_id}
 \alias{dcl_id}
 \alias{dcl_def}
-\title{Access declaration fields}
+\title{Get declaration fields}
 \usage{
 dcl_id(dcl)
 
 dcl_def(dcl)
 }
 \arguments{
-\item{dcl}{An assemblerr_declaration}
+\item{dcl}{A declaration}
 }
 \value{
 An expression
 }
 \description{
-Access declaration fields
+These function get identifier or definition fields of a declaration.
 }
 \keyword{internal}

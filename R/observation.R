@@ -1,3 +1,28 @@
+
+setClass("ModelObservation",
+         slots = c(name = "character"), contains = "list")
+setClass("NormalObservation",
+         slots = c(mu = "assemblerr_declaration", sigma = "assemblerr_declaration"),
+         contains = "ModelObservation")
+setClass("AdditiveObservation",
+         contains = "NormalObservation")
+setMethod(f = "initialize",
+          signature = "AdditiveObservation",
+          definition = function(.Object, prediction = declaration(), ...){
+            callNextMethod(.Object,
+                           mu = prediction,
+                           sigma = declaration(~1),
+                           ...)
+          })
+
+setClass("ProportionalObservation",
+         contains = "NormalObservation")
+
+setGeneric(name = "convert",
+           def = function(target, source, component) standardGeneric("convert"))
+
+
+
 #' Observation model
 #'
 #' Defines how variables from a model relate to values in the data
@@ -34,8 +59,8 @@ obs_continuous <- function(prediction, type, name, values){
 #' @export
 #' @param prediction Declaration for prediction
 #' @rdname observation
-obs_additive <- function(prediction, name, values) {
-  obs_continuous(prediction, "additive", name, values = check_pvs(values, c("sigma"), lower = c(sigma = 0)))
+obs_additive <- function(prediction, name) {
+  fragment(observations = list(name = name, type = list(new("AdditiveObservation", prediction = as_declaration(prediction)))))
 }
 
 #' @export
@@ -63,9 +88,8 @@ obs_binary <- function(p1, name){
 
 
 add_observations <- function(target, source){
-  source$observations %>%
-    purrr::transpose() %>%
-    purrr::reduce(~call_obs_converter(target = .x, source = source, obs = .y), .init = target)
+  source$observations$type %>%
+    purrr::reduce(~convert(.x, source, .y), .init = target)
 }
 
 call_obs_converter <- function(target, source, obs) {
@@ -87,20 +111,31 @@ generate_conc_fml <- function(cmp) {
   fml_subs_sym(volume = fml_get_rhs(cmp$volume))
 }
 
-replace_compartment_references <- function(fml, to, from){
-  if(any(c("C","A") %in% fml_vars(fml))){
-    compartment_indicies <- purrr::set_names(to$des$index, to$des$name)
-    # generate replacement rules for concentration
-    conc_fmls <- from$compartments %>%
-      purrr::transpose() %>%
-      purrr::map(generate_conc_fml)
+# replace_compartment_references <- function(fml, to, from){
+#   if(any(c("C","A") %in% fml_vars(fml))){
+#     compartment_indicies <- purrr::set_names(to$des$index, to$des$name)
+#     # generate replacement rules for concentration
+#     conc_fmls <- from$compartments %>%
+#       purrr::transpose() %>%
+#       purrr::map(generate_conc_fml)
+#
+#     tfml <- purrr::exec(.fn = fml_subs_fml, !!!conc_fmls, fml = fml) %>%
+#       fml_subs_idx("A", compartment_indicies)
+#     return(tfml)
+#   }else{
+#     return(fml)
+#   }
+# }
 
-    tfml <- purrr::exec(.fn = fml_subs_fml, !!!conc_fmls, fml = fml) %>%
-      fml_subs_idx("A", compartment_indicies)
-    return(tfml)
-  }else{
-    return(fml)
+replace_compartment_references <- function(dcl, target, source){
+  if (any(c("C","A") %in% dcl_vars_chr(dcl))) {
+    conc_dcls <- as.list(generate_concentration_substitutions(source$compartments))
+    compartment_indicies <- purrr::set_names(target$des$index, target$des$name)
+    dcl <- dcl %>%
+      dcl_substitute(substitutions = conc_dcls) %>%
+      dcl_substitute_index("A", compartment_indicies)
   }
+  return(dcl)
 }
 
 make_ipred_fml <- function(target, source, obs){
@@ -148,3 +183,35 @@ add_obs_additive.nm_model <- function(target, source, obs){
 
   target + nm_error(name = obs$name, statement = obs_expr)
 }
+
+generate_concentration_substitutions <- function(cmps){
+  d <- dcl_substitute(declaration(C[name]~A[name]),
+                      substitutions = list(name = cmps$name))
+  dcl_devide(d, cmps$volume)
+}
+
+setMethod(
+  f = "convert",
+  signature = c(target = "nm_model", source = "ANY", component = "AdditiveObservation"),
+  definition = function(target, source, component) {
+    target <- target + nm_sigma("sigma")
+    ipred_dcl <- component@mu
+    if (vec_size(source$compartments) > 0) {
+      ipred_dcl <- replace_compartment_references(ipred_dcl, target, source)
+    }
+    dcl_id(ipred_dcl) <- quote(ipred)
+    ruv_dcl <- dcl_multiply(component@sigma, declaration(~eps[1]))
+    d <- vec_c(ipred_dcl,
+               dcl_add(declaration(y~ipred), ruv_dcl))
+    target <- target + nm_error("", statement = as_statement(d))
+    target
+  }
+)
+
+setMethod(
+  f = "convert",
+  signature = c(target = "nm_model", source = "ANY", component = "ProportionalObservation"),
+  definition = function(target, source, component) {
+    print("proportional not implemented")
+  }
+)

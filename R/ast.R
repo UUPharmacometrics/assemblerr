@@ -19,9 +19,27 @@ transform_ast <- function(node, transformer, ...){
       rlang::as_pairlist() %>%
       return()
   }else if(is.null(node)){
-    return(NULL)
+    return(node)
   } else {
     stop("Don't know how to handle type ", typeof(node),
          call. = FALSE)
   }
 }
+
+
+substitution_transformer <- function(node, substitutions){
+  if (exists(deparse(node), substitutions)) {
+    node <-  substitutions[[deparse(node)]]
+  }
+  node
+}
+
+index_transformer <- function(node, array_name, substitutions){
+  # if vector access
+  if(rlang::is_call(node) && rlang::call_name(node) == "[" && node[[2]] == rlang::sym(array_name)){
+    if(!exists(node[[3]], substitutions)) rlang::warn("missing_substitution", index = node[[3]])
+    node[[3]] <- substitutions[[node[[3]]]]
+  }
+  node
+}
+

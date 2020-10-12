@@ -1,10 +1,24 @@
-add_algebraics <- function(to, from) {
-  fmls <- from$algebraics %>%
-    purrr::transpose() %>%
-    purrr::map("definition") %>%
-    purrr::map(replace_compartment_references, to = to, from = from) %>%
-    fmls_topologic_sort()
-  add_declarations_to_facets(to, from, fmls)
+# add_algebraics <- function(to, from) {
+#   fmls <- from$algebraics %>%
+#     purrr::transpose() %>%
+#     purrr::map("definition") %>%
+#     purrr::map(replace_compartment_references, to = to, from = from) %>%
+#     fmls_topologic_sort()
+#   add_declarations_to_facets(to, from, fmls)
+# }
+
+add_algebraics <- function(target, source) {
+  dcl <- source$algebraics$definition %>%
+    replace_compartment_references(target = target, source = source) %>%
+    vec_sort()
+  ode_dependent <- dcl_depends_on(dcl, "A", include_indicies = FALSE)
+  pk_stms <- dcl[!ode_dependent] %>%
+    as_statement() %>%
+    nm_pk("", .)
+  error_stms <- dcl[ode_dependent] %>%
+    as_statement() %>%
+    nm_error("", .)
+  target + pk_stms + error_stms
 }
 
 # function to determine whether an algebraic formula needs to go to PK, DES or ERROR

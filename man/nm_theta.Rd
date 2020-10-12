@@ -6,11 +6,11 @@
 \alias{nm_sigma}
 \title{Create facet for initial values}
 \usage{
-nm_theta(name, initial = NA, lbound = -Inf, ubound = Inf)
+nm_theta(name, initial = 1, lbound = -Inf, ubound = Inf)
 
-nm_omega(name, initial = NA)
+nm_omega(name, initial = 0.1)
 
-nm_sigma(name, initial = NA)
+nm_sigma(name, initial = 0.1)
 }
 \arguments{
 \item{name}{Parameter name}

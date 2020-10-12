@@ -30,11 +30,13 @@ model <- function(){
       facet(facet_name = "flows", from = character(), to = character(), definition = declaration()),
       facet(facet_name = "parameters", name = character(), type = character(), values = list(), options = list()),
       facet(facet_name = "algebraics", name = character(), definition = declaration()),
-      facet(facet_name = "observations", name = character(), type = character(), values = list(), options = list()),
+      facet(facet_name = "observations", name = character(), type = list()),
       facet(facet_name = "meta_tags", name = character(), value = character())
     ),
     class = "model")
 }
+
+setOldClass("model")
 
 #' #' @export
 #' print.model <- function(x,...){
@@ -72,9 +74,10 @@ model <- function(){
 #' @export
 #' @examples
 #' # compartment with name "central" and volume Vc
-#' comp1 <- compartment("central", volume = ~Vc)
+#' comp1 <- compartment("central", volume = declaration(~Vc))
 compartment <- function(name, volume = declaration(~1)){
   if (!is.character(name)) stop("'name' needs to be a character vector")
+  volume <- as_declaration(volume)
   vec_assert(volume, ptype = declaration(), size = 1)
   fragment(compartments = list(name = name, volume = volume))
 }
@@ -94,9 +97,10 @@ cmp <- compartment
 #' @return A flow fragment
 #' @export
 #' @examples
-#' f <- flow(from = "depot", to = "central", definition = ~ka*A)
-flow <- function(from = NULL, to = NULL, definition){
+#' f <- flow(from = "depot", to = "central", definition = declaration(~ka*A))
+flow <- function(from = NA, to = NA, definition){
   if (!is.character(from) && !is.character(to)) stop("'from' or/and 'to' need to be compartment names")
+  definition <- as_declaration(definition)
   vec_assert(definition, ptype = declaration(), size = 1)
   fragment(flows = list(from = from, to = to, definition = definition))
 }
@@ -110,6 +114,7 @@ flow <- function(from = NULL, to = NULL, definition){
 #' @return An algebraic fragment
 #' @export
 algebraic <- function(definition){
+  definition <- as_declaration(definition)
   vec_assert(definition, ptype = declaration(), size = 1)
   fragment(algebraics = list(name = dcl_id_label(definition), definition = definition))
 }

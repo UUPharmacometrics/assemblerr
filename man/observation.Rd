@@ -10,7 +10,7 @@
 \usage{
 observation(name, type, values, options = NULL)
 
-obs_additive(prediction, name, values)
+obs_additive(prediction, name)
 
 obs_proportional(prediction, name)
 

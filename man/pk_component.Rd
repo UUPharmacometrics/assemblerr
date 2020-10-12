@@ -12,15 +12,16 @@
 \alias{pk_absorption_delay_none}
 \title{Create PK model components}
 \usage{
-pk_component(name, type, options = NULL)
+pk_component(name, class, prm_names)
 
-pk_distribution_1cmp()
+pk_distribution_1cmp(prm_vc = prm_log_normal("vc"))
 
-pk_distribution_2cmp()
+pk_distribution_2cmp(prm_vc = prm_log_normal("vc"),
+  prm_vp = prm_log_normal("vp"), prm_q = prm_log_normal("q"))
 
 pk_distribution_3cmp()
 
-pk_elemination_linear()
+pk_elemination_linear(prm_cl = prm_log_normal("cl"))
 
 pk_elemination_mm()
 
@@ -34,8 +35,6 @@ pk_absorption_delay_none()
 \item{name}{Component name}
 
 \item{type}{Component type}
-
-\item{options}{Additional options}
 }
 \value{
 A pk_model component

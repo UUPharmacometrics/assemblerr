@@ -11,11 +11,15 @@ as_nm_model.model <- function(from){
   nmm <- nm_model() %>%
     add_parameters(from) %>%
     add_odes(from) %>%
-    add_observations(from) %>%
-    add_algebraics(from)
+    add_algebraics(from) %>%
+    add_observations(from)
 
   nmm +
-    nm_input("id", "id")
+    nm_input("id", "id") +
+    nm_input("time", "time") +
+    nm_input("dv", "dv") +
+    nm_input("amt", "amt")
+
 }
 
 #' Convert to a model

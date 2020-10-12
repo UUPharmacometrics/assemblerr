@@ -29,16 +29,16 @@ nm_model <- function(){
       facet(facet_name = "input", name = character(), type = character(), properties = list()),
       facet(facet_name = "subroutine", name = character()),
       facet(facet_name = "pk", statement = statement()),
-      facet(facet_name = "des", statement = statement()),
+      facet(facet_name = "des", name = character(), statement = statement()),
       facet(facet_name = "error", statement = statement()),
       facet(facet_name = "theta", name = character(), initial = numeric(), lbound = numeric(), ubound = numeric()),
       facet(facet_name = "omega", name = character(), initial = numeric()),
       facet(facet_name = "sigma", name = character(), initial = numeric())
     ),
-    class = c("nm_model", "comp_model"))
+    class = "nm_model")
 }
 
-
+setOldClass("nm_model")
 
 #' Create NONMEM model facets
 #'
@@ -57,7 +57,7 @@ nm_problem <- function(name){
 #' @rdname nm_problem
 nm_input <- function(name, type, ...){
   if (!is.character(name)) stop("'name' needs to be a character vector")
-  fragment(input = list(name = name, type = type, properties = list(...)))
+  fragment(input = list(name = name, type = type, properties = list(NULL)))
 }
 
 
@@ -70,19 +70,19 @@ nm_input <- function(name, type, ...){
 #'
 #' @return Facet
 #' @export
-nm_theta <- function(name, initial = NA, lbound = -Inf, ubound = Inf){
+nm_theta <- function(name, initial = 1.0, lbound = -Inf, ubound = Inf){
   if (!is.character(name)) stop("'name' needs to be a character vector")
   fragment(theta = list(name = name, initial = initial, lbound = lbound, ubound = ubound))
 }
 #' @export
 #' @rdname nm_theta
-nm_omega <- function(name, initial = NA){
+nm_omega <- function(name, initial = 0.1){
   if (!is.character(name)) stop("'name' needs to be a character vector")
   fragment(omega = list(name = name, initial = initial))
 }
 #' @export
 #' @rdname nm_theta
-nm_sigma <- function(name, initial = NA){
+nm_sigma <- function(name, initial = 0.1){
   if (!is.character(name)) stop("'name' needs to be a character vector")
   fragment(sigma = list(name = name, initial = initial))
 }
@@ -97,7 +97,7 @@ nm_sigma <- function(name, initial = NA){
 #' @export
 nm_pk <- function(name, statement){
   if (!is.character(name)) stop("'name' needs to be a character vector")
-  fragment(pk = list(name = name, statement = statement))
+  fragment(pk = list(statement = statement))
 }
 
 #' @rdname  nm_pk
@@ -111,6 +111,6 @@ nm_des <- function(name, statement){
 #' @export
 nm_error <- function(name, statement){
   if (!is.character(name)) stop("'name' needs to be a character vector")
-  fragment(error = list(name = name, statement = statement))
+  fragment(error = list(statement = statement))
 }
 

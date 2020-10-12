@@ -10,25 +10,25 @@
 #' @export
 #' @examples
 #' p <- parameter("cl", "log-normal")
-parameter <- function(name, type, values, options = list()){
+parameter <- function(name, type, options = list()){
   if(name!=make.names(name)) stop("'name' needs to be a valid variable name.")
   if(missing(type)){
     message("No type for the parameter '", name,"' was specified, using 'log-normal' as default.")
     type <- "log_normal"
   }
-  fragment(parameters = list(name = name, type = type, values = list(values), options = list(options)))
+  fragment(parameters = list(name = name, type = type, options = list(options)))
 }
 
 #' @export
 #' @describeIn parameter Creates a parameter with a log-normal distribution
-prm_log_normal <- function(name, values) {
-  parameter(name, type = "log_normal", values = check_pvs(values, c("log_mu", "log_sigma"), lower = c(log_sigma = 0)))
+prm_log_normal <- function(name) {
+  parameter(name, type = "log_normal")
 }
 
 #' @export
 #' @describeIn parameter Creates a parameter with a normal distribution
-prm_normal <- function(name, values) {
-  parameter(name, type = "normal", values = check_pvs(values, c("mu", "sigma"), lower = c(sigma = 0)))
+prm_normal <- function(name) {
+  parameter(name, type = "normal")
 }
 
 #' @export
@@ -101,8 +101,8 @@ prmz_ln_nonmem <- function(log_mu, log_sigma) return(c(exp(log_mu), log_sigma^2)
 
 add_prm_log_normal.nm_model <- function(target, source, prm){
   target <- target +
-    nm_theta(prm$name, initial = NA, lbound = 0) +
-    nm_omega(prm$name, initial = NA)
+    nm_theta(prm$name, lbound = 0) +
+    nm_omega(prm$name)
 
   theta_index <-  get_by_name(target, "theta", prm$name)[["index"]]
   eta_index <- get_by_name(target, "omega", prm$name)[["index"]]

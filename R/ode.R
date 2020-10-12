@@ -1,43 +1,44 @@
 add_odes <- function(to, from){
-  # replace generic amount and concentration variables in flow equations
-  generate_ode_equations(from) %>%
-    purrr::imap(~get_ode_item(to, .y, .x)) %>%
-    purrr::reduce(.init = to, `+`)
+  if (vec_size(from$compartments) == 0) return(to)
+  cmp_names <- from$compartments$name
+  ode_dcl <- generate_ode_equations(from)
+  frgmt <- get_ode_item(to, cmp_names, ode_dcl)
+  to + frgmt
 }
 
 generate_ode_equations <- function(model){
   flows <- model$flows %>%
-    purrr::transpose() %>%
-    purrr::map(function(flow){
-      new_def <- flow$definition
-      if("C" %in% fml_vars(flow$definition)){
-        volume <- get_by_name(model, "compartments", flow$from)$volume %>%
-          fml_get_rhs()
-        new_def <- fml_subs_sym(new_def, C = bquote(A/.(volume)))
+    dplyr::rowwise() %>%
+    dplyr::group_map(function(flow, ...){
+      dcl <- flow$definition
+      cmp_from <- get_by_name(model, "compartments", flow$from)
+      if ("C" %in% dcl_vars_chr(flow$definition)) {
+        volume <- dcl_def(cmp_from$volume)[[1]]
+        dcl <- dcl_substitute(dcl, list(C = bquote(A/.(volume))))
       }
-      cmp_index <- get_by_name(model, "compartments", flow$from)$index
-      new_def <- fml_subs_sym(new_def, A = bquote(A[.(cmp_index)]))
-      purrr::list_modify(flow, definition = new_def)
-    })
+      dcl <- dcl_substitute(dcl, list(A = bquote(A[.(cmp_from$index)])))
+      flow$definition  <-  dcl
+      flow
+    }) %>%
+    dplyr::bind_rows()
 
-  model$compartments %>%
-    purrr::transpose() %>%
-    purrr::map(function(cmp){
-                    outflow_eqn <- flows %>%
-                      purrr::keep(~!is.na(.x$from)&&.x$from==cmp$name) %>%
-                      purrr::map("definition") %>%
-                      purrr::reduce(fml_combine, op = "+", .init = NULL)
-                    inflow_eqn <- flows %>%
-                      purrr::keep(~!is.na(.x$to)&&.x$to==cmp$name) %>%
-                      purrr::map("definition") %>%
-                      purrr::reduce(fml_combine, op = "+", .init = NULL)
-                    eqn <- fml_combine(inflow_eqn, outflow_eqn, op = "-", lhs = bquote(dadt[.(cmp$index)]))
-                    return(eqn)
-                  }) %>%
-    purrr::set_names(model$compartments$name)
+  dcl_list <- model$compartments %>%
+    dplyr::rowwise() %>%
+    dplyr::group_map(function(cmp, ...){
+      dcl_outflow <- dplyr::filter(flows, from == cmp$name) %>%
+        dplyr::pull("definition") %>%
+        dcl_sum()
+      dcl_inflow <- dplyr::filter(flows, to == cmp$name) %>%
+        dplyr::pull("definition") %>%
+        dcl_sum()
+      dcl_substract(dcl_inflow, dcl_outflow, lhs = bquote(dadt[.(cmp$index)]))
+    }) %>%
+    {vec_c(!!!.)}
+
+  return(dcl_list)
 }
 
-get_ode_item <- function(model, name, fml, ...) UseMethod("get_ode_item")
+get_ode_item <- function(model, name, dcl, ...) UseMethod("get_ode_item")
 
-get_ode_item.nm_model <- function(model, name, fml, ...) nm_des(name, as_expr(fml))
+get_ode_item.nm_model <- function(model, name, dcl, ...) nm_des(name, as_statement(dcl))
 

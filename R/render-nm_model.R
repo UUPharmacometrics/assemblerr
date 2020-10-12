@@ -7,26 +7,14 @@ render.nm_model <- function(object, opts){
   input_code <- object$input %>%
     dplyr::arrange(.data$index) %>%
     purrr::pluck("name") %>%
-    paste(collapse = " ")
+    paste(collapse = " ") %>%
+    toupper()
 
-  pk_code <- object$pk %>%
-    purrr::transpose() %>%
-    purrr::map("statement") %>%
-    unlist() %>%
-    render_expr(opts = render_opts_nm())
+  pk_code <- render(object$pk$statement)
 
-  des_code <- object$des %>%
-    purrr::transpose() %>%
-    purrr::map("statement") %>%
-    unlist() %>%
-    render_expr(opts = render_opts_nm())
+  des_code <- render(object$des$statement)
 
-
-  error_code <- object$error %>%
-    purrr::transpose() %>%
-    purrr::map("statement") %>%
-    unlist() %>%
-    render_expr(opts = render_opts_nm())
+  error_code <- render(object$error$statement)
 
   # generate $THETA code
   theta_code <- object$theta %>%

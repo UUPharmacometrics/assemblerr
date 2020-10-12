@@ -4,14 +4,14 @@
 \alias{get_by_name}
 \title{Retrieve an entry by name}
 \usage{
-get_by_name(model, facet, name)
+get_by_name(frgmt, facet, name)
 }
 \arguments{
+\item{frgmt}{A fragment}
+
 \item{facet}{Name of the facet}
 
 \item{name}{Name to retrieve}
-
-\item{fragment}{A fragment}
 }
 \value{
 List representation of the entry found or an empty list

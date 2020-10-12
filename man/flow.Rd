@@ -4,7 +4,7 @@
 \alias{flow}
 \title{Flows between compartments}
 \usage{
-flow(from = NULL, to = NULL, definition)
+flow(from = NA, to = NA, definition)
 }
 \arguments{
 \item{from}{Name of the source compartment or NULL}
@@ -20,5 +20,5 @@ A flow fragment
 Creates a fragment describing a flow from between compartmens.
 }
 \examples{
-f <- flow(from = "depot", to = "central", definition = ~ka*A)
+f <- flow(from = "depot", to = "central", definition = declaration(~ka*A))
 }
