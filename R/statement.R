@@ -1,3 +1,6 @@
+#' @include generics.R
+
+
 new_statement <- function(expr = list()){
   vec_assert(expr, ptype = list())
   new_vctr(expr, class = "assemblerr_statement")
@@ -9,6 +12,8 @@ statement <- function(...){
     purrr::map(~`attributes<-`(.x, NULL))
   new_statement(expr = dots)
 }
+
+setOldClass("assemblerr_statement")
 
 #' @export
 format.assemblerr_statement <- function(x, ...){
@@ -43,14 +48,18 @@ vec_ptype_abbr.assemblerr_statement <- function(x, ...) "stm"
 vec_ptype_full.assemblerr_statement <- function(x, ...) "statement"
 
 
-render.assemblerr_statement <- function(x, ...){
-  vec_data(x) %>%
-    purrr::map(transform_ast, transformer = vec2fcall_transformer) %>%
-    purrr::map(transform_ast, transformer = assignment_transformer) %>%
-    purrr::map_chr(deparse, control = c(), width.cutoff = 200) %>%
-    paste(collapse = "\n") %>%
-    toupper()
-}
+setMethod(
+  f = "render",
+  signature = c(x = "assemblerr_statement"),
+  definition = function(x) {
+    vec_data(x) %>%
+      purrr::map(transform_ast, transformer = vec2fcall_transformer) %>%
+      purrr::map(transform_ast, transformer = assignment_transformer) %>%
+      purrr::map_chr(deparse, control = c(), width.cutoff = 200) %>%
+      glue::glue_collapse(sep = "\n") %>%
+      toupper()
+  }
+)
 
 
 assignment_transformer <- function(node){

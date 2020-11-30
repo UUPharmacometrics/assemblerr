@@ -1,26 +1,28 @@
+#' @include model.R
+#' @include pk_model.R
+
+
 #' Convert model to NONMEM model
 #'
 #' @param from Model to convert
 #' @export
 as_nm_model <- function(from) UseMethod("as_nm_model")
 
-
-#' @export
-as_nm_model.model <- function(from){
-  from <- as_model(from)
-  nmm <- nm_model() %>%
-    add_parameters(from) %>%
-    add_odes(from) %>%
-    add_algebraics(from) %>%
-    add_observations(from)
-
-  nmm +
-    nm_input("id", "id") +
-    nm_input("time", "time") +
-    nm_input("dv", "dv") +
-    nm_input("amt", "amt")
-
-}
+setGeneric("as_nm_model",
+           def = function(x, options = options_nm()){
+             convert(target = nm_model(options = options),
+                     source = x)
+           },
+           valueClass = "NmModel"
+            )
+setMethod(
+  f = "as_nm_model",
+  signature = signature(x = "PkModel"),
+  definition = function(x, options = options_nm()){
+    convert(model(), x) %>%
+      convert(nm_model(options = options), .)
+  }
+)
 
 #' Convert to a model
 #'

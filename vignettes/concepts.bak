@@ -16,7 +16,9 @@ knitr::opts_chunk$set(
 )
 ```
 
-This document serves as an overview for the concepts used in the package.
+The `assemblerr` package allows to quickly describe complex pharmacometric models using a set of elementary building blocks and then to generate NONMEM code for these models. In `assemblerr`, each of these two steps use a different representation of the model. The model object in step 1 is only concerned with the pharmacometric substance of the model and the model in step two is mainly concerned with the 
+
+is implem  distinguishes between two types of models **decl**, a model consists of a set of **facets**  
 
 __Model__: A parameterized representation of a data generating process  
 

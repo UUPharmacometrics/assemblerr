@@ -1,44 +1,62 @@
-# add_algebraics <- function(to, from) {
-#   fmls <- from$algebraics %>%
-#     purrr::transpose() %>%
-#     purrr::map("definition") %>%
-#     purrr::map(replace_compartment_references, to = to, from = from) %>%
-#     fmls_topologic_sort()
-#   add_declarations_to_facets(to, from, fmls)
-# }
+#' @include facet.R
+#' @include declaration.R
+#' @include nm_model.R
+Algebraic <- setClass("Algebraic",
+                      slots = c(definition = "assemblerr_declaration"),
+                      contains = "NamedFacetEntry",
+                      prototype = prototype(facet_class = "AlgebraicFacet"))
 
-add_algebraics <- function(target, source) {
-  dcl <- source$algebraics$definition %>%
-    replace_compartment_references(target = target, source = source) %>%
-    vec_sort()
-  ode_dependent <- dcl_depends_on(dcl, "A", include_indicies = FALSE)
-  pk_stms <- dcl[!ode_dependent] %>%
-    as_statement() %>%
-    nm_pk("", .)
-  error_stms <- dcl[ode_dependent] %>%
-    as_statement() %>%
-    nm_error("", .)
-  target + pk_stms + error_stms
+setMethod(f = "initialize",
+          signature = "Algebraic",
+          definition = function(.Object, definition = declaration(), ...){
+            callNextMethod(.Object, name = dcl_id_label(definition), definition = definition)
+          })
+
+AlgebraicFacet <- setClass("AlgebraicFacet",
+                           contains = "NamedFacet",
+                           prototype = prototype(entry_class = "Algebraic"))
+
+setMethod(
+  f = "convert",
+  signature = c(target = "NmModel", source = "ANY", component = "AlgebraicFacet"),
+  definition = function(target, source, component) {
+    l <- purrr::map(component@entries, "definition") %>%
+      purrr::set_names(NULL)
+    if (vec_is_empty(l)) return(target)
+    dcl <- vec_c(!!!l) %>%
+      replace_compartment_references(target = target, source = source) %>%
+      vec_sort()
+    library_calls <- dcl_get_library_function_name(dcl)
+    library_calls <- library_calls[!is.na(library_calls)] %>%
+      sort()
+    if (!vec_is_empty(library_calls)) {
+      target <- purrr::map(library_calls, nm_subroutine) %>%
+        purrr::reduce(`+`, .init = target)
+    }
+    dcl <- dcl[!dcl_is_library_function_call(dcl)]
+    ode_dependent <- dcl_depends_on(dcl, "A", include_indicies = FALSE)
+    pk_stms <- dcl[!ode_dependent] %>%
+      as_statement() %>%
+      nm_pk()
+    error_stms <- dcl[ode_dependent] %>%
+      as_statement() %>%
+      nm_error()
+    target +
+      pk_stms +
+      error_stms
+  }
+)
+
+
+#' Create an algebraic relationship
+#'
+#' @param definition The definition
+#'
+#' @return An algebraic fragment
+#' @export
+algebraic <- function(definition){
+  definition <- as_declaration(definition)
+  vec_assert(definition, ptype = declaration(), size = 1)
+  Algebraic(definition = definition)
 }
 
-# function to determine whether an algebraic formula needs to go to PK, DES or ERROR
-add_declarations_to_facets <- function(to, from, fmls) UseMethod("add_declarations_to_facets")
-
-add_declarations_to_facets.nm_model <- function(to, from, fmls){
-  # get lhs of ODEs
-  odes <- generate_ode_equations(from)
-  ode_identifiers <- purrr::map_chr(odes, ~fml_get_lhs(.x) %>% deparse())
-  fmls %>%
-    purrr::map(function(fml){
-      # name of the variable being defined
-      var <- fml_get_lhs(fml) %>% deparse()
-      if(!fml_depends_on(var, "A", fmls)){
-        nm_pk("", as_expr(fml))
-      }else if(any(purrr::map_lgl(ode_identifiers, ~fml_depends_on(.x, var, odes)))){
-           nm_des("", as_expr(fml))
-      }else{
-          nm_error("", as_expr(fml))
-      }
-    }) %>%
-    purrr::reduce(.init = to, `+`)
-}

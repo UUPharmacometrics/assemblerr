@@ -1,3 +1,44 @@
+#' @include facet.R
+#' @include statement.R
+#' @include generics.R
+
+NmModel <- setClass("NmModel",
+                    contains = "GenericModel")
+
+setMethod(
+  f = "initialize",
+  signature = "NmModel",
+  definition = function(.Object, ...) {
+    callNextMethod(.Object,
+                   facets = list(NmInputEntryFacet(),
+                                 NmDataFacet(),
+                                 NmSubroutinesFacet(),
+                                 NmCompartmentFacet(),
+                                 NmPkCodeFacet(),
+                                 NmDesCodeFacet(),
+                                 NmErrorCodeFacet(),
+                                 NmThetaParameterFacet(),
+                                 NmOmegaParameterFacet(),
+                                 NmSigmaParameterFacet()),
+                   ...)
+  }
+)
+
+
+setMethod(
+  f = "render",
+  signature = c(x = "NmModel"),
+  definition = function(x, ...) {
+    is_pred <- vec_is_empty(x@facets[['NmCompartmentFacet']]@entries)
+    is_advan12 <- any(c("advan1", "advan2") %in% names(x@facets[["NmSubroutinesFacet"]]))
+    if (is_pred || is_advan12) {
+      x@facets[['NmCompartmentFacet']] <- NULL
+      x@facets[['NmDesCodeFacet']] <- NULL
+    }
+    purrr::map(x@facets, render, is_pred = is_pred) %>%
+      glue::as_glue()
+  }
+)
 
 #' NONMEM model
 #'
@@ -22,43 +63,331 @@
 #' @return An nm_model
 #' @export
 #'
-nm_model <- function(){
-  new_fragment(
-    facets = list(
-      facet(facet_name = "problem", name = character()),
-      facet(facet_name = "input", name = character(), type = character(), properties = list()),
-      facet(facet_name = "subroutine", name = character()),
-      facet(facet_name = "pk", statement = statement()),
-      facet(facet_name = "des", name = character(), statement = statement()),
-      facet(facet_name = "error", statement = statement()),
-      facet(facet_name = "theta", name = character(), initial = numeric(), lbound = numeric(), ubound = numeric()),
-      facet(facet_name = "omega", name = character(), initial = numeric()),
-      facet(facet_name = "sigma", name = character(), initial = numeric())
-    ),
-    class = "nm_model")
+
+nm_model <- function(options = options){
+  NmModel(options = options)
 }
 
-setOldClass("nm_model")
 
-#' Create NONMEM model facets
-#'
-#' @param name Facet name
-#'
-#' @return A facet
-#' @export
-nm_problem <- function(name){
-  if (!is.character(name)) stop("'name' needs to be a character vector")
-  fragment(problem = list(name = name))
-}
+# $INPUT ------------------------------------------------------------------
+
+
+NmInputEntry <- setClass(
+  "NmInputEntry",
+  slots = c(type = "character"),
+  contains = "NamedFacetEntry",
+  prototype = prototype(facet_class = "NmInputEntryFacet")
+)
+
+NmInputEntryFacet <- setClass("NmInputEntryFacet",
+                         contains = "NamedFacet",
+                         prototype = prototype(entry_class = "NmInputEntry"))
+
+setMethod(
+  f = "render",
+  signature = c(x = "NmInputEntryFacet"),
+  definition = function(x, ...) {
+    glue::glue("$INPUT {rcrds}\n", rcrds = paste(toupper(names(x)), collapse = " "))
+  }
+)
 
 #' @export
 #' @param type Column type
-#' @param ... Additional arguments
 #' @rdname nm_problem
-nm_input <- function(name, type, ...){
+nm_input <- function(name, type = NA_character_){
   if (!is.character(name)) stop("'name' needs to be a character vector")
-  fragment(input = list(name = name, type = type, properties = list(NULL)))
+  NmInputEntry(name = name, type = type)
 }
+
+# $DATA ------------------------------------------------------------------
+
+
+NmData <- setClass(
+  "NmData",
+  slots = c(path = "character"),
+  contains = "FacetEntry",
+  prototype = prototype(facet_class = "NmDataFacet")
+)
+
+NmDataFacet <- setClass("NmDataFacet",
+                        contains = "NamedFacet",
+                        prototype = prototype(entry_class = "NmData"))
+
+setMethod(
+  f = "render",
+  signature = c(x = "NmDataFacet"),
+  definition = function(x, ...) {
+    path <- "data.csv"
+    if (!vec_is_empty(x@entries)) path <- x@entries[[1]]@path
+    glue::glue("$DATA {path} IGNORE=@")
+
+  }
+)
+
+#' @export
+nm_data <- function(path){
+  if (!is.character(path)) stop("'name' needs to be a character vector")
+  NmData(path = path)
+}
+
+
+
+
+# $SUBROUTINES ------------------------
+
+NmSubroutines <- setClass(
+  "NmSubroutines",
+  slots = c(tol = "integer"),
+  contains = "NamedFacetEntry",
+  prototype = prototype(facet_class = "NmSubroutinesFacet")
+)
+
+NmSubroutinesFacet <- setClass(
+  "NmSubroutinesFacet",
+  contains = "NamedFacet",
+  prototype = prototype(entry_class = "NmSubroutines")
+)
+
+setMethod(
+  f = "render",
+  signature = c(x = "NmSubroutines"),
+  definition = function(x, ...) {
+    tol <- ifelse(is.na(x@tol), "", paste0("tol=",x@tol))
+    toupper(paste(x@name, tol, sep = " "))
+  }
+)
+
+
+setMethod(
+  f = "render",
+  signature = c(x = "NmSubroutinesFacet"),
+  definition = function(x, ...) {
+    if(vec_is_empty(x@entries)) return("")
+    purrr::map_chr(x@entries, render) %>%
+      paste(collapse = " ") %>%
+      glue::glue(
+        "$SUBROUTINES ", .)
+  }
+)
+
+
+#' @export
+nm_subroutine <- function(name, tol = NA_integer_) {
+  NmSubroutines(name = name, tol = tol)
+}
+
+# $MODEL ------------------------------------------------------------------
+
+
+
+NmCompartment <- setClass(
+  "NmCompartment",
+  contains = "NamedFacetEntry",
+  prototype = prototype(facet_class = "NmCompartmentFacet")
+)
+
+
+NmCompartmentFacet <- setClass(
+  "NmCompartmentFacet",
+  contains = "NamedFacet",
+  prototype = prototype(entry_class = "NmCompartment")
+)
+
+setMethod(
+  f = "render",
+  signature = c(x = "NmCompartmentFacet"),
+  definition = function(x, ...) {
+    glue::glue("COMP=({cmp})", cmp = toupper(names(x))) %>%
+      glue::glue_collapse(sep = " ") %>%
+      glue::glue(
+        "$MODEL ", .)
+  }
+)
+
+#' @export
+nm_compartment <- function(name) {
+  NmCompartment(name = name)
+}
+
+NmAbbrivatedCode <- setClass(
+  "NmAbbrivatedCode",
+  slots = c(statement = "assemblerr_statement"),
+  contains = "FacetEntry",
+  prototype = prototype(facet_class = "NmInputFacet")
+)
+
+NmAbbriviatedCodeFacet <- setClass(
+  "NmAbbriviatedCodeFacet",
+  contains = "Facet",
+  prototype = prototype(entry_class = "NmAbbrivatedCode")
+)
+
+
+setMethod(
+  f = "render",
+  signature = c(x = "NmAbbriviatedCodeFacet"),
+  definition = function(x, ...) {
+    if (vec_is_empty(x@entries)) return("")
+    purrr::map(x@entries, "statement") %>%
+      {vec_c(!!!.)} %>%
+      render()
+  }
+)
+
+# $PK ---------------------------------------------------------------------
+
+
+
+NmPkCode <- setClass(
+  "NmPkCode",
+  contains = "NmAbbrivatedCode",
+  prototype = prototype(facet_class = "NmPkCodeFacet")
+)
+
+NmPkCodeFacet <- setClass(
+  "NmPkCodeFacet",
+  contains = "NmAbbriviatedCodeFacet",
+  prototype = prototype(entry_class = "NmPkCode")
+)
+
+setMethod(
+  f = "render",
+  signature = c(x = "NmPkCodeFacet"),
+  definition = function(x, is_pred, ...) {
+    if (is_pred) {
+      glue::glue(
+        "$PRED\n",
+        callNextMethod(x)
+      )
+    }else{
+      glue::glue(
+        "$PK\n",
+        callNextMethod(x)
+      )
+    }
+  }
+)
+
+
+#' Create model code entry
+#'
+#' @param statement Code statement
+#'
+#' @return A facet
+#' @export
+nm_pk <- function(statement){
+  NmPkCode(statement = statement)
+}
+
+
+# $DES --------------------------------------------------------------------
+
+
+
+NmDesCode <- setClass(
+  "NmDesCode",
+  contains = "NmAbbrivatedCode",
+  prototype = prototype(facet_class = "NmDesCodeFacet")
+)
+
+NmDesCodeFacet <- setClass(
+  "NmDesCodeFacet",
+  contains = "NmAbbriviatedCodeFacet",
+  prototype = prototype(entry_class = "NmDesCode")
+)
+
+setMethod(
+  f = "render",
+  signature = c(x = "NmDesCodeFacet"),
+  definition = function(x, is_pred, ...) {
+    if (is_pred || vec_is_empty(x@entries)) {
+      callNextMethod(x)
+    }else{
+      glue::glue(
+        "$DES\n",
+        callNextMethod(x)
+      )
+    }
+  }
+)
+
+
+#' @export
+nm_des <- function(statement){
+  NmDesCode(statement = statement)
+}
+
+# $ERROR ------------------------------------------------------------------
+
+
+
+NmErrorCode <- setClass(
+  "NmErrorCode",
+  contains = "NmAbbrivatedCode",
+  prototype = prototype(facet_class = "NmErrorCodeFacet")
+)
+
+NmErrorCodeFacet <- setClass(
+  "NmErrorCodeFacet",
+  contains = "NmAbbriviatedCodeFacet",
+  prototype = prototype(entry_class = "NmErrorCode")
+)
+
+
+setMethod(
+  f = "render",
+  signature = c(x = "NmErrorCodeFacet"),
+  definition = function(x, is_pred, ...) {
+    if (is_pred) {
+      callNextMethod(x)
+    }else{
+      glue::glue(
+        "$ERROR\n",
+        callNextMethod(x)
+      )
+    }
+  }
+)
+
+
+#' @export
+nm_error <- function(statement){
+  NmErrorCode(statement = statement)
+}
+
+# $THETA ------------------------------------------------------------------
+
+
+
+NmThetaParameter <- setClass(
+  "NmThetaParameter",
+  slots = c(initial = "numeric", lbound = "numeric", ubound = "numeric"),
+  contains = "NamedFacetEntry",
+  prototype = prototype(facet_class = "NmThetaParameterFacet")
+)
+
+setMethod(
+  f = "render",
+  signature = c(x = "NmThetaParameter"),
+  definition = function(x, ...) {
+    glue::glue("$THETA ({x@lbound}, {x@initial}, {x@ubound}) ; POP_{toupper(x@name)}")
+  }
+)
+
+
+NmThetaParameterFacet <- setClass(
+  "NmThetaParameterFacet",
+  contains = "NamedFacet",
+  prototype = prototype(entry_class = "NmThetaParameter")
+)
+
+setMethod(
+  f = "render",
+  signature = c(x = "NmThetaParameterFacet"),
+  definition = function(x, ...) {
+    glue::glue_collapse(purrr::map_chr(x@entries, render), sep = "\n")
+  }
+)
 
 
 #' Create facet for initial values
@@ -68,49 +397,101 @@ nm_input <- function(name, type, ...){
 #' @param lbound Lower bound
 #' @param ubound Upper bound
 #'
-#' @return Facet
+#' @return A NONMEM Theta parameter
 #' @export
 nm_theta <- function(name, initial = 1.0, lbound = -Inf, ubound = Inf){
   if (!is.character(name)) stop("'name' needs to be a character vector")
-  fragment(theta = list(name = name, initial = initial, lbound = lbound, ubound = ubound))
+  NmThetaParameter(name = name, initial = initial, lbound = lbound, ubound = ubound)
 }
+
+
+# $OMEGA ------------------------------------------------------------------
+
+
+
+NmOmegaParameter <- setClass(
+  "NmOmegaParameter",
+  slots = c(initial = "numeric"),
+  contains = "NamedFacetEntry",
+  prototype = prototype(facet_class = "NmOmegaParameterFacet")
+)
+
+setMethod(
+  f = "render",
+  signature = c(x = "NmOmegaParameter"),
+  definition = function(x, ...) {
+    glue::glue("$OMEGA {x@initial}; IIV_{toupper(x@name)}")
+  }
+)
+
+NmOmegaParameterFacet <- setClass(
+  "NmOmegaParameterFacet",
+  contains = "NamedFacet",
+  prototype = prototype(entry_class = "NmOmegaParameter")
+)
+
+setMethod(
+  f = "render",
+  signature = c(x = "NmOmegaParameterFacet"),
+  definition = function(x, ...) {
+    glue::glue_collapse(purrr::map_chr(x@entries, render), sep = "\n")
+  }
+)
+
+
+
 #' @export
-#' @rdname nm_theta
 nm_omega <- function(name, initial = 0.1){
   if (!is.character(name)) stop("'name' needs to be a character vector")
-  fragment(omega = list(name = name, initial = initial))
+  NmOmegaParameter(name = name, initial = initial)
 }
+
+
+# $SIGMA ------------------------------------------------------------------
+
+
+
+NmSigmaParameter <- setClass(
+  "NmSigmaParameter",
+  slots = c(initial = "numeric"),
+  contains = "NamedFacetEntry",
+  prototype = prototype(facet_class = "NmSigmaParameterFacet")
+)
+
+setMethod(
+  f = "render",
+  signature = c(x = "NmSigmaParameter"),
+  definition = function(x, ...) {
+    glue::glue("$SIGMA {x@initial}")
+  }
+)
+
+
+NmSigmaParameterFacet <- setClass(
+  "NmSigmaParameterFacet",
+  contains = "NamedFacet",
+  prototype = prototype(entry_class = "NmSigmaParameter")
+)
+
+
+setMethod(
+  f = "render",
+  signature = c(x = "NmSigmaParameterFacet"),
+  definition = function(x, ...) {
+    glue::glue_collapse(purrr::map_chr(x@entries, render), sep = "\n")
+  }
+)
+
+
 #' @export
-#' @rdname nm_theta
 nm_sigma <- function(name, initial = 0.1){
   if (!is.character(name)) stop("'name' needs to be a character vector")
-  fragment(sigma = list(name = name, initial = initial))
+  NmSigmaParameter(name = name, initial = initial)
 }
 
 
-#' Create model code facet
-#'
-#' @param name Facet name
-#' @param statement Code statement
-#'
-#' @return A facet
-#' @export
-nm_pk <- function(name, statement){
-  if (!is.character(name)) stop("'name' needs to be a character vector")
-  fragment(pk = list(statement = statement))
-}
 
-#' @rdname  nm_pk
-#' @export
-nm_des <- function(name, statement){
-  if (!is.character(name)) stop("'name' needs to be a character vector")
-  fragment(des = list(name = name, statement = statement))
-}
 
-#' @rdname  nm_pk
-#' @export
-nm_error <- function(name, statement){
-  if (!is.character(name)) stop("'name' needs to be a character vector")
-  fragment(error = list(statement = statement))
-}
+
+
 

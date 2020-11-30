@@ -1,114 +1,158 @@
-#' Model parameter
-#'
-#' Defines name and type of a model parameter
-#'
-#' @param name Name of the paramter
-#' @param type Model type to be used for the parameter
-#' @param options Options
-#'
-#' @return A \code{fragment} representing a model parameter
-#' @export
-#' @examples
-#' p <- parameter("cl", "log-normal")
-parameter <- function(name, type, options = list()){
-  if(name!=make.names(name)) stop("'name' needs to be a valid variable name.")
-  if(missing(type)){
-    message("No type for the parameter '", name,"' was specified, using 'log-normal' as default.")
-    type <- "log_normal"
-  }
-  fragment(parameters = list(name = name, type = type, options = list(options)))
-}
+
+Parameter <- setClass("Parameter",
+                      contains = "NamedFacetEntry",
+                      prototype = prototype(facet_class = "ParameterFacet"))
+
+ParameterFacet <- setClass("ParameterFacet",
+                           contains = "NamedFacet",
+                           prototype = prototype(entry_class = "Parameter"))
+
+
+# log-normal --------------------------------------------------------------
+
+
+
+PrmLogNormal <- setClass("PrmLogNormal",
+                         contains = "Parameter")
 
 #' @export
-#' @describeIn parameter Creates a parameter with a log-normal distribution
 prm_log_normal <- function(name) {
-  parameter(name, type = "log_normal")
+  PrmLogNormal(name = name)
 }
 
-#' @export
-#' @describeIn parameter Creates a parameter with a normal distribution
-prm_normal <- function(name) {
-  parameter(name, type = "normal")
-}
+setMethod(
+  f = "convert",
+  signature = c(target = "NmModel", source = "ANY", component = "PrmLogNormal"),
+  definition = function(target, source, component) {
+    target <- target +
+      nm_theta(component@name, lbound = 0) +
+      nm_omega(component@name)
 
-#' @export
-#' @describeIn parameter Creates a parameter with no IIV
-prm_novar <- function(name) parameter(name, type = "novar", values = check_pvs(values, c("mu")))
+    theta_index <- index_of(target@facets$NmThetaParameterFacet, component@name)
+    eta_index <- index_of(target@facets$NmOmegaParameterFacet, component@name)
 
-#' @export
-#' @describeIn parameter Creates a parameter with a logit distribution
-prm_logit <- function(name) parameter(name, type = "logit", values = values)
-
-
-add_parameters <- function(target, source){
-  source$parameters %>%
-    purrr::transpose() %>%
-    purrr::reduce(~call_prm_converter(target = .x, source = source, prm = .y), .init = target)
-}
-
-call_prm_converter <- function(target, source, prm) {
-  # construct fn name
-  fn_name <- paste("add", "prm", prm$type, sep = "_")
-  # find function
-  fn <- getFunction(fn_name, mustFind = F)
-  #check if converter exists
-  if(is.null(fn)) {
-    rlang::warn("Converter not found")
-    return(model)
+    if (target@options$prm.use_mu_referencing) {
+      mu_name <- sym(paste0("mu_",eta_index))
+      target <- target + nm_pk(
+        statement(
+          !!mu_name <- log(theta[!!theta_index])
+        )
+      )
+    }
+    target +
+      nm_pk(
+        statement(
+          !!sym(component@name) <- theta[!!theta_index]*exp(eta[!!eta_index])
+        )
+      )
   }
-  # call converter
-  do.call(fn, list(target, source, prm))
-}
+)
 
 
-add_prm_normal <- function(target, source, prm) UseMethod("add_prm_normal")
+# normal ------------------------------------------------------------------
 
 
-
-add_prm_normal.default <- function(target, source, prm) {
-  rlang::warn("converter not implemented for this model type")
-  return(target)
-}
-
-prmz_n_nonmem <- function(mu, sigma) return(c(mu, sigma^2))
-
-add_prm_normal.nm_model <- function(target, source, prm){
-  target <- target +
-    nm_theta(prm$name, initial = NA) +
-    nm_omega(prm$name, initial = NA)
-
-  theta_index <-  get_by_name(target, "theta", prm$name)[["index"]]
-  eta_index <- get_by_name(target, "omega", prm$name)[["index"]]
-
-  target + nm_pk(name = prm$name,
-                statement = statement(
-                  !!sym(prm$name) <- theta[!!theta_index] + eta[!!eta_index]
-                ))
-}
-
-add_prm_log_normal <- function(target, source, prm) UseMethod("add_prm_log_normal")
-
+PrmNormal <- setClass("PrmNormal",
+                      contains = "Parameter")
 
 #' @export
-ln_mean_sd <- function(mean, sd) return(c(log_mu = log(mean/sqrt(1+sd^2/mean^2)), log_sigma = sqrt(log(1+sd^2/mean^2))))
-
-add_prm_log_normal.default <- function(target, source, prm) {
-  rlang::warn("converter not implemented for this model type")
-  return(target)
+prm_normal <- function(name) {
+  PrmNormal(name = name)
 }
 
-prmz_ln_nonmem <- function(log_mu, log_sigma) return(c(exp(log_mu), log_sigma^2))
+setMethod(
+  f = "convert",
+  signature = c(target = "NmModel", source = "ANY", component = "PrmNormal"),
+  definition = function(target, source, component) {
+    target <- target +
+      nm_theta(component@name, lbound = 0) +
+      nm_omega(component@name)
 
-add_prm_log_normal.nm_model <- function(target, source, prm){
-  target <- target +
-    nm_theta(prm$name, lbound = 0) +
-    nm_omega(prm$name)
+    theta_index <- index_of(target@facets$NmThetaParameterFacet, component@name)
+    eta_index <- index_of(target@facets$NmOmegaParameterFacet, component@name)
+    if (target@options$prm.use_mu_referencing) {
+      mu_name <- sym(paste0("mu_",eta_index))
+      target <- target + nm_pk(
+        statement(
+          !!mu_name <- theta[!!theta_index]
+        )
+      )
+    }
+    target +
+      nm_pk(
+        statement(
+          !!sym(component@name) <- theta[!!theta_index] + eta[!!eta_index]
+        )
+      )
+  }
+)
 
-  theta_index <-  get_by_name(target, "theta", prm$name)[["index"]]
-  eta_index <- get_by_name(target, "omega", prm$name)[["index"]]
+# logit ------------------------------------------------------------------
 
-  target + nm_pk(name = prm$name,
-                statement = statement(
-                  !!sym(prm$name) <- theta[!!theta_index]*exp(eta[!!eta_index])
-                ))
+
+PrmLogitNormal <- setClass("PrmLogitNormal",
+                      contains = "Parameter")
+
+#' @export
+prm_logit_normal <- function(name) {
+  PrmLogitNormal(name = name)
 }
+
+setMethod(
+  f = "convert",
+  signature = c(target = "NmModel", source = "ANY", component = "PrmLogitNormal"),
+  definition = function(target, source, component) {
+    target <- target +
+      nm_theta(component@name, lbound = 0, ubound = 1) +
+      nm_omega(component@name)
+
+    theta_index <- index_of(target@facets$NmThetaParameterFacet, component@name)
+    eta_index <- index_of(target@facets$NmOmegaParameterFacet, component@name)
+    if (target@options$prm.use_mu_referencing) {
+      mu_name <- sym(paste0("mu_",eta_index))
+      target <- target + nm_pk(
+        statement(
+          !!mu_name <- log(theta[!!theta_index])/(1 - log(theta[!!theta_index]))
+        )
+      )
+    }
+    target +
+      nm_pk(
+        statement(
+          !!sym(paste0("logit_", component@name)) <- log(theta[!!theta_index])/(1 - log(theta[!!theta_index])) + eta[!!eta_index],
+          !!sym(component@name) <- exp(!!sym(paste0("logit_", component@name)))/(1 + exp(!!sym(paste0("logit_", component@name))))
+        )
+      )
+  }
+)
+
+
+# log-normal --------------------------------------------------------------
+
+
+
+PrmNoVar <- setClass("PrmNoVar",
+                         contains = "Parameter")
+
+#' @export
+prm_no_var <- function(name) {
+  PrmNoVar(name = name)
+}
+
+setMethod(
+  f = "convert",
+  signature = c(target = "NmModel", source = "ANY", component = "PrmNoVar"),
+  definition = function(target, source, component) {
+    target <- target +
+      nm_theta(component@name, lbound = 0)
+
+    theta_index <- index_of(target@facets$NmThetaParameterFacet, component@name)
+
+    target +
+      nm_pk(
+        statement(
+          !!sym(component@name) <- theta[!!theta_index]
+        )
+      )
+  }
+)

@@ -2,7 +2,29 @@
 % Please edit documentation in R/model.R
 \name{meta_tag}
 \alias{meta_tag}
-\title{Create a meta tag facet}
+\title{#' @export
+print.model <- function(x,...){
+  name <- NA
+  title <- get_first(x, "meta_tags", name == "title")$value
+  if(!is.null(title)){
+    cat('assemblerr model "', title,'":\n')
+  } else{
+    cat('assemblerr model:\n')
+  }
+  prms <- x$parameters$name %>% paste(collapse = ", ")
+  cat('  - Parameters: ', prms, '\n')
+  obs_txt <- x$observations %>%
+    dplyr::mutate(txt = paste0("    + \"", .data$name, "\" (", .data$type, ")")) %>%
+    purrr::pluck("txt") %>%
+    paste(collapse = "\n")
+  cat('  - Observations: \n')
+  cat(obs_txt, "\n")
+  comp_txt <- x$compartments$name %>% paste(collapse = ", ")
+  if(nrow(x$compartments)>0) cat('  - Compartments: ', comp_txt, "\n")
+  alg_count <- x$algebraics %>% nrow()
+  if(alg_count>0) cat('  - Algebraic relationships: ', alg_count, "\n")
+}
+Create a meta tag facet}
 \usage{
 meta_tag(name, value)
 }
@@ -15,5 +37,27 @@ meta_tag(name, value)
 A meta tag facet
 }
 \description{
+#' @export
+print.model <- function(x,...){
+  name <- NA
+  title <- get_first(x, "meta_tags", name == "title")$value
+  if(!is.null(title)){
+    cat('assemblerr model "', title,'":\n')
+  } else{
+    cat('assemblerr model:\n')
+  }
+  prms <- x$parameters$name %>% paste(collapse = ", ")
+  cat('  - Parameters: ', prms, '\n')
+  obs_txt <- x$observations %>%
+    dplyr::mutate(txt = paste0("    + \"", .data$name, "\" (", .data$type, ")")) %>%
+    purrr::pluck("txt") %>%
+    paste(collapse = "\n")
+  cat('  - Observations: \n')
+  cat(obs_txt, "\n")
+  comp_txt <- x$compartments$name %>% paste(collapse = ", ")
+  if(nrow(x$compartments)>0) cat('  - Compartments: ', comp_txt, "\n")
+  alg_count <- x$algebraics %>% nrow()
+  if(alg_count>0) cat('  - Algebraic relationships: ', alg_count, "\n")
+}
 Create a meta tag facet
 }

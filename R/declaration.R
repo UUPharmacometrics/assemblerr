@@ -23,10 +23,12 @@ new_declaration <- function(identifier = list(), definition = list()){
     rlang::abort(message = "`identifier` must be an expression")
   if (!all(purrr::map_lgl(identifier, is_valid_lhs)))
     rlang::abort("The identifiers need to be symbols or array expressions")
-  vctrs::new_rcrd(list(identifier = identifier, definition = definition), class = "assemblerr_declaration")
+  vctrs::new_rcrd(list(identifier = identifier, definition = definition),
+                  class = "assemblerr_declaration")
 }
 
 setOldClass("assemblerr_declaration")
+
 
 #' Declaration
 #'
@@ -384,9 +386,109 @@ topologic_visit <- function(dcl, index, marked_perm, marked_temp, l){
 }
 
 direct_dependants <- function(dcl, variable){
-  dcl_vars_chr(dcl, include_indicies = TRUE, include_lhs = FALSE, unique = FALSE) %>%
+  dcl_vars_chr(dcl, include_indicies = FALSE, include_lhs = FALSE, unique = FALSE) %>%
     purrr::map_lgl(~ variable  %in% .x) %>%
     which()
 }
 
+dcl_linear_in <- function(dcl, variable){
+  purrr::map_lgl(dcl_def(dcl), function(expr){
+    terms <- collect_multiplications(expr)
+    matching <- purrr::map_lgl(terms, ~exprs_match_ignore_index(.x, variable))
+    if (vec_size(terms) == 1) return(matching)
+    if (sum(matching) != 1) return(FALSE)
+    return(!any(purrr::map_lgl(terms, ~!exprs_match_ignore_index(.x, variable) && as.character(variable) %in% all.vars(.x))))
+  })
+}
 
+dcl_factor_out <- function(dcl, variable){
+  new_def <- purrr::map(dcl_def(dcl), function(expr){
+    terms <- collect_multiplications(expr)
+    if (vec_size(terms) == 1) {
+      if (expr == variable) return(quote(1))
+      else return(expr)
+    }
+    index <- which(purrr::map_lgl(terms, ~exprs_match_ignore_index(.x, variable)))
+    if (vec_is_empty(index)) return(expr)
+    terms[[index]] <- NULL
+    purrr::reduce(terms, ~call("*", .x, .y))
+  })
+  new_declaration(dcl_id(dcl), new_def)
+}
+
+dcl_collect_denominators <- function(dcl){
+  new_def <- purrr::map(dcl_def(dcl), function(expr) {
+    terms <- collect_multiplications(expr)
+    if (vec_size(terms) == 1) return(expr)
+    terms %>%
+      purrr::keep(~length(.x)>1 && .x[[1]] == quote(`/`) && .x[[2]] == 1) %>%
+      purrr::map(~.x[[3]]) %>%
+      purrr::reduce(~call("*", .x, .y))
+  })
+  new_id <- vec_rep(list(NULL), vec_size(new_def))
+  new_declaration(new_id, new_def)
+}
+
+dcl_discard_denominators <- function(dcl){
+  new_def <- purrr::map(dcl_def(dcl), function(expr) {
+    terms <- collect_multiplications(expr)
+    if (vec_size(terms) == 1) return(expr)
+    terms %>%
+      purrr::discard(~length(.x)>1 && .x[[1]] == quote(`/`) && .x[[2]] == 1) %>%
+      purrr::reduce(~call("*", .x, .y))
+  })
+  new_id <- vec_rep(list(NULL), vec_size(new_def))
+  new_declaration(new_id, new_def)
+}
+
+collect_multiplications <- function(node){
+  if (length(node) > 1 && node[[1]] == quote(`*`)) {
+    return(vec_c(collect_multiplications(node[[2]]), collect_multiplications(node[[3]])))
+  } else if (length(node) > 1 && node[[1]] == quote(`/`)) {
+    return(vec_c(collect_multiplications(node[[2]]), list(bquote(1/.(node[[3]])))))
+  } else if (node == 1) {
+    return(list())
+  } else {
+    return(list(node))
+  }
+}
+
+exprs_match_ignore_index <- function(expr1, expr2) {
+  if (expr1 == expr2) return(TRUE)
+  if (length(expr1) > 1 && expr1[[1]] == quote(`[`) && length(expr2) > 1 && expr2[[1]] == quote(`[`)) {
+    return(expr1[[2]] == expr2[[2]])
+  }
+  return(FALSE)
+}
+
+dcl_discard_identities <- function(dcl) {
+  identical <- purrr::map2_lgl(dcl_id(dcl), dcl_def(dcl), ~.x==.y)
+  dcl[!identical]
+}
+
+dcl_create_function_call <- function(function_name, arguments = list(), identifier = NULL){
+  fn_call <- rlang::call2(function_name, !!!arguments)
+  new_declaration(list(identifier), list(fn_call))
+}
+
+dcl_create_library_function_call <- function(function_name, arguments = list(), identifier = NULL){
+  dcl_create_function_call(paste0(".", function_name), arguments, identifier)
+}
+
+dcl_is_library_function_call <- function(dcl){
+  purrr::map_lgl(dcl_def(dcl), function(node){
+    if (rlang::is_call(node) && grepl("^\\.", as.character(node[[1]]))) return(TRUE)
+    return(FALSE)
+  })
+}
+
+dcl_get_library_function_name <- function(dcl){
+  fn_name <- vec_rep(NA_character_, vec_size(dcl))
+  is_call <- dcl_is_library_function_call(dcl)
+  fns <- purrr::map_chr(as.list(dcl[is_call]), ~as.character(.x[[1]]))
+  is_lib_call <- grepl("^.", fns)
+  fns[!is_lib_call] <- NA
+  fns[is_lib_call] <- substring(fns[is_lib_call], 2)
+  fn_name[is_call] <- fns
+  fn_name
+}

@@ -2,24 +2,16 @@
 % Please edit documentation in R/nm_model.R
 \name{nm_pk}
 \alias{nm_pk}
-\alias{nm_des}
-\alias{nm_error}
-\title{Create model code facet}
+\title{Create model code entry}
 \usage{
-nm_pk(name, statement)
-
-nm_des(name, statement)
-
-nm_error(name, statement)
+nm_pk(statement)
 }
 \arguments{
-\item{name}{Facet name}
-
 \item{statement}{Code statement}
 }
 \value{
 A facet
 }
 \description{
-Create model code facet
+Create model code entry
 }

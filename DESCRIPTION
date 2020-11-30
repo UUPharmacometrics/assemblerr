@@ -30,3 +30,27 @@ Imports:
     vctrs
 VignetteBuilder: knitr
 RoxygenNote: 6.1.1
+Collate: 
+    'advans.R'
+    'generics.R'
+    'statement.R'
+    'facet.R'
+    'nm_model.R'
+    'declaration.R'
+    'algebraics.R'
+    'assemblerr-package.R'
+    'ast.R'
+    'model.R'
+    'compartment.R'
+    'pk_model.R'
+    'conversion.R'
+    'input_variable.R'
+    'meta.R'
+    'model-options.R'
+    'observation.R'
+    'ode.R'
+    'parameter.R'
+    'pk_component.R'
+    'util.R'
+    'visualize.R'
+    'write_model.R'

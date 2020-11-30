@@ -1,3 +1,64 @@
+#' @include facet.R
+Model <- setClass("Model", contains = "GenericModel")
+
+setMethod(
+  f = "initialize",
+  signature = "Model",
+  definition = function(.Object, ...) {
+    callNextMethod(.Object,
+                   facets = list(ParameterFacet(),
+                                 AlgebraicFacet(),
+                                 CompartmentFacet(),
+                                 FlowFacet(),
+                                 ObservationFacet(),
+                                 InputVariableFacet(),
+                                 MetaEntryFacet()),
+                   ...)
+  }
+)
+
+setMethod(
+  f = "convert",
+  signature = c(target = "Model", source = "Model", component = "missing"),
+  definition = function(target, source, component) {
+    source
+  }
+)
+
+
+setMethod(
+  f = "convert",
+  signature = c(target = "NmModel", source = "Model", component = "missing"),
+  definition = function(target, source, component) {
+    source <- optimize_for_conversion(source, target)
+    target <- convert(target, source, source@facets[["ParameterFacet"]]) %>%
+      convert(source, source@facets[["CompartmentFacet"]]) %>%
+      convert(source, source@facets[["FlowFacet"]]) %>%
+      convert(source, source@facets[["AlgebraicFacet"]]) %>%
+      convert(source, source@facets[["ObservationFacet"]]) %>%
+      convert(source, source@facets[["InputVariableFacet"]]) %>%
+      convert(source, source@facets[["MetaEntryFacet"]])
+    if (vec_is_empty(source@facets[["InputVariableFacet"]]@entries)) {
+      target  <-    target +
+        nm_input("id", "id") +
+        nm_input("time", "time") +
+        nm_input("dv", "dv") +
+        nm_input("amt", "amt")
+    }
+    target
+
+  }
+)
+
+# setMethod(
+#   f = "optimize_for_conversion",
+#   signature = signature(source = "Model", target = "NmModel"),
+#   definition = function(source, target, ...) {
+#     return(source)
+#   }
+# )
+
+
 #' General model
 #'
 #' \code{model()} creates the foundation for a general pharmacometric model
@@ -24,16 +85,7 @@
 #'     prm_log_normal("emax") +
 #'     prm_log_normal("ed50")
 model <- function(){
-  new_fragment(
-    facets = list(
-      facet(facet_name = "compartments", name = character(), volume = declaration()),
-      facet(facet_name = "flows", from = character(), to = character(), definition = declaration()),
-      facet(facet_name = "parameters", name = character(), type = character(), values = list(), options = list()),
-      facet(facet_name = "algebraics", name = character(), definition = declaration()),
-      facet(facet_name = "observations", name = character(), type = list()),
-      facet(facet_name = "meta_tags", name = character(), value = character())
-    ),
-    class = "model")
+  Model()
 }
 
 setOldClass("model")
@@ -62,62 +114,6 @@ setOldClass("model")
 #' }
 
 
-#' Compartment
-#'
-#' Defines name and volume of compartment
-#'
-#' @seealso \code{\link{model}}
-#' @param name Name of the compartment
-#' @param volume Defintion of the compartment volume as a number, formula or declaration
-#'
-#' @return A compartment fragment
-#' @export
-#' @examples
-#' # compartment with name "central" and volume Vc
-#' comp1 <- compartment("central", volume = declaration(~Vc))
-compartment <- function(name, volume = declaration(~1)){
-  if (!is.character(name)) stop("'name' needs to be a character vector")
-  volume <- as_declaration(volume)
-  vec_assert(volume, ptype = declaration(), size = 1)
-  fragment(compartments = list(name = name, volume = volume))
-}
-
-#' @export
-#' @describeIn compartment Is an simple alias for compartment.
-cmp <- compartment
-
-#' Flows between compartments
-#'
-#' Creates a fragment describing a flow from between compartmens.
-#'
-#' @param from Name of the source compartment or NULL
-#' @param to Name of the sink compartment or NULL
-#' @param definition Declaration of the flow using the special variable A (amount in 'from' compartment) and C (concentration in 'from' compartment)
-#'
-#' @return A flow fragment
-#' @export
-#' @examples
-#' f <- flow(from = "depot", to = "central", definition = declaration(~ka*A))
-flow <- function(from = NA, to = NA, definition){
-  if (!is.character(from) && !is.character(to)) stop("'from' or/and 'to' need to be compartment names")
-  definition <- as_declaration(definition)
-  vec_assert(definition, ptype = declaration(), size = 1)
-  fragment(flows = list(from = from, to = to, definition = definition))
-}
-
-
-
-#' Create an algebraic relationship
-#'
-#' @param definition The definition
-#'
-#' @return An algebraic fragment
-#' @export
-algebraic <- function(definition){
-  definition <- as_declaration(definition)
-  vec_assert(definition, ptype = declaration(), size = 1)
-  fragment(algebraics = list(name = dcl_id_label(definition), definition = definition))
-}
 
 #' Create a meta tag facet
 #'

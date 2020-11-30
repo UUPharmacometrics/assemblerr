@@ -23,13 +23,11 @@ library(assemblerr, warn.conflicts = F)
 ## Build an Emax dose-response model
 
 ```{r}
-m <- model()+
+m <- model() +
   prm_log_normal("EMAX") +
-  prm_log_normal("ED50") +
-  algebraic(effect~emax*dose/(ed50+dose)) +
-  obs_additive(~effect, "test")
+  prm_normal("ED50") +
+  obs_additive(effect~emax*dose/(ed50+dose)) 
 
-m
 ```
 
 
@@ -38,8 +36,7 @@ m
 ```{r}
 m %>% 
   as_nm_model() %>% 
-  render() %>% 
-  cat()
+  render() 
 ```
 
 
@@ -51,8 +48,6 @@ assemblerr's workflow is similar to ggplot, where different components are added
 # Low-level building blocks
 
 ```{r}
-library(assemblerr, warn.conflicts = F)
-
 # construct one-compartment 1st order elimination model
 m <- model() +
   compartment("dose") +
@@ -61,14 +56,11 @@ m <- model() +
   flow(from = "central", definition = ~cl*C) +
   prm_log_normal("cl") +
   prm_log_normal("vc") +
-  algebraic(k~cl/v) +
-  algebraic(conc~C["central"]) + 
-  obs_additive(~conc, "conc")
+  obs_additive(conc~C["central"])
 
 # convert to a NONMEM model and generate NMTran code
 as_nm_model(m)  %>% 
-  render %>%
-  cat()
+  render()
 
 ```
 
@@ -80,15 +72,16 @@ For PK models assemblerr supports a higher level of abstraction to simplify the 
 ```{r}
 # construct one-compartment 1st order elimination model
 pkm <- pk_model() +
-  pk_elemination_linear() +
+  pk_absorption_delay_transit(2) +
+  pk_absorption_rate_fo() +
+  pk_elimination_linear() +
   pk_distribution_2cmp() +
-  obs_additive(~C["central"], "conc") 
+  obs_additive(conc~C["central"]) 
 
 # convert to a NONMEM model and generate NMTran code
 pkm %>% 
   as_nm_model() %>% 
-  render %>%
-  cat()
+  render()
 
 ```
 

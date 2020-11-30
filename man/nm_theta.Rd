@@ -2,15 +2,9 @@
 % Please edit documentation in R/nm_model.R
 \name{nm_theta}
 \alias{nm_theta}
-\alias{nm_omega}
-\alias{nm_sigma}
 \title{Create facet for initial values}
 \usage{
 nm_theta(name, initial = 1, lbound = -Inf, ubound = Inf)
-
-nm_omega(name, initial = 0.1)
-
-nm_sigma(name, initial = 0.1)
 }
 \arguments{
 \item{name}{Parameter name}
@@ -22,7 +16,7 @@ nm_sigma(name, initial = 0.1)
 \item{ubound}{Upper bound}
 }
 \value{
-Facet
+A NONMEM Theta parameter
 }
 \description{
 Create facet for initial values

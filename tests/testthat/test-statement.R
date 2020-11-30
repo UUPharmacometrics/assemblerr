@@ -26,7 +26,7 @@ test_that("code rendering", {
     cl <- theta[1]*exp(eta[1]),
     v <- theta[2]
   )
-  expect_equal(as_code(s),
+  expect_equal(render(s),
                "CL = THETA(1) * EXP(ETA(1))\nV = THETA(2)")
 
 })

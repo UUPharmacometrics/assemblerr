@@ -7,6 +7,30 @@ add_odes <- function(to, from){
 }
 
 generate_ode_equations <- function(model){
+
+
+  flows <- purrr::map_dfr(model@facets[["FlowFacet"]]@entries, function(flow){
+    dcl <- flow@definition
+    cmp_from <- model@facets[["CompartmentFacet"]]@entries[[flow@from]]
+    if ("C" %in% dcl_vars_chr(dcl)) {
+      volume <- dcl_def(cmp_from@volume)[[1]]
+      dcl <- dcl_substitute(dcl, list(C = bquote(A/.(volume))))
+    }
+    dcl <- dcl_substitute(dcl, list(A = bquote(A[.(cmp_from@name)])))
+    list(definition = dcl, from = flow@from, to = flow@to)
+  })
+
+  purrr::map(model@facets[["CompartmentFacet"]]@entries, function(cmp){
+    outflow <- dcl_sum(flows$definition[flows$from == cmp@name & !is.na(flows$from)])
+    inflow <- dcl_sum(flows$definition[flows$to == cmp@name & !is.na(flows$to)])
+    dcl_substract(inflow, outflow, lhs = bquote(dadt[.(cmp@name)]))
+  }) %>%
+    purrr::set_names(NULL) %>%
+    {vec_c(!!!.)}
+}
+
+
+generate_ode_equations <- function(model){
   flows <- model$flows %>%
     dplyr::rowwise() %>%
     dplyr::group_map(function(flow, ...){
