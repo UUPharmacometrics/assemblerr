@@ -39,7 +39,7 @@ advan_definitions <- list(
     parameterizations = list(
       trans1 = function(k_depot_central, k_central_output){
         dcl_id(k_depot_central) <- quote(ka)
-        dcl_id(k_central_output) <- quote(cl)
+        dcl_id(k_central_output) <- quote(k)
         vec_c(
           k_depot_central, k_central_output
         )
