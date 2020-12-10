@@ -1,6 +1,11 @@
-setClass("FacetEntry", slots = c(facet_class = "character"))
+FacetEntry <- setClass("FacetEntry",
+         slots = c(facet_class = "character"),
+         prototype = prototype(facet_class = "Facet"))
 
-setClass("NamedFacetEntry", slots = c(name = "character"), contains = "FacetEntry")
+NamedFacetEntry <- setClass("NamedFacetEntry",
+         slots = c(name = "character"),
+         contains = "FacetEntry",
+         prototype = prototype(facet_class = "NamedFacet"))
 
 setMethod(f = "initialize",
           signature = "NamedFacetEntry",
@@ -11,7 +16,9 @@ setMethod(f = "initialize",
           })
 
 
-setClass("Facet", slots = c(entries = "list", entry_class = "character"))
+Facet <- setClass("Facet",
+                  slots = c(entries = "list", entry_class = "character"),
+                  prototype = prototype(entries = list(), entry_class = "FacetEntry"))
 
 setMethod(f = "initialize",
           signature = "Facet",
@@ -53,7 +60,7 @@ setMethod(
   }
 )
 
-setClass("NamedFacet", contains = "Facet", prototype = prototype(entry_class = "NamedFacetEntry"))
+NamedFacet <- setClass("NamedFacet", contains = "Facet", prototype = prototype(entry_class = "NamedFacetEntry"))
 
 setMethod(f = "initialize",
           signature = "NamedFacet",
