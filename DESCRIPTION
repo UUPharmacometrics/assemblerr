@@ -27,7 +27,8 @@ Imports:
     methods,
     stats,
     glue,
-    vctrs
+    vctrs,
+    cli
 VignetteBuilder: knitr
 RoxygenNote: 6.1.1
 Collate: 
