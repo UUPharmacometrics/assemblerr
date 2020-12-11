@@ -1,7 +1,6 @@
 #' @include model.R
 #' @include pk_model.R
 
-
 #' @export
 setGeneric("as_nm_model",
            def = function(x, options = options_nm()){

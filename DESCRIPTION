@@ -29,6 +29,7 @@ Imports:
     cli
 VignetteBuilder: knitr
 RoxygenNote: 6.1.1
+ByteCompile: false
 Collate: 
     'advans.R'
     'generics.R'
@@ -41,13 +42,15 @@ Collate:
     'ast.R'
     'model.R'
     'compartment.R'
+    'conversion-nm.R'
+    'parameter.R'
+    'conversion-parameter-nm.R'
     'pk_model.R'
     'conversion.R'
     'input_variable.R'
     'meta.R'
     'model-options.R'
     'observation.R'
-    'parameter.R'
     'pk_component.R'
     'util.R'
     'write_model.R'

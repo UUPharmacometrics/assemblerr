@@ -3,13 +3,14 @@
 
 new_statement <- function(expr = list()){
   vec_assert(expr, ptype = list())
+  if (!rlang::is_empty(expr) && all(!purrr::map_lgl(expr, rlang::is_expression)))
+    rlang::abort(message = "`expr` must be an expression")
   new_vctr(expr, class = "assemblerr_statement")
 }
 
 statement <- function(...){
-  dots <- rlang::enexprs(..., .named = FALSE) %>%
-    purrr::set_names(NULL) %>%
-    purrr::map(~`attributes<-`(.x, NULL))
+  dots <- rlang::dots_list(..., .named = FALSE) %>%
+    rlang::set_names(NULL)
   new_statement(expr = dots)
 }
 
