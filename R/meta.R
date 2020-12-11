@@ -16,16 +16,6 @@ MetaEntryFacet <- setClass(
 )
 
 
-setMethod(
-  f = "convert",
-  signature = c(target = "NmModel", source = "Model", component = "MetaEntry"),
-  definition = function(target, source, component) {
-    if(component@name == "dataset") {
-      target <- target + nm_data(path = component@value)
-    }
-    target
-  }
-)
 
 meta_entry <- function(name, value){
   if (!is.character(name)) stop("'name' needs to be a character vector")

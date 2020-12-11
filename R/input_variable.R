@@ -15,15 +15,6 @@ InputVariableFacet <- setClass(
                         label = "input variables")
 )
 
-
-setMethod(
-  f = "convert",
-  signature = c(target = "NmModel", source = "Model", component = "InputVariable"),
-  definition = function(target, source, component) {
-    target + nm_input(name = component@name)
-  }
-)
-
 input_variable <- function(name){
   if (!is.character(name)) stop("'name' needs to be a character vector")
   InputVariable(name = name)
