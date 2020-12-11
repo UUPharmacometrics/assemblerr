@@ -5,7 +5,10 @@ Parameter <- setClass("Parameter",
 
 ParameterFacet <- setClass("ParameterFacet",
                            contains = "NamedFacet",
-                           prototype = prototype(entry_class = "Parameter"))
+                           prototype = prototype(
+                             entry_class = "Parameter",
+                             label = "parameters"
+                            ))
 
 
 # log-normal --------------------------------------------------------------

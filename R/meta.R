@@ -12,7 +12,7 @@ MetaEntry <- setClass(
 MetaEntryFacet <- setClass(
   "MetaEntryFacet",
   contains = "NamedFacet",
-  prototype = prototype(entry_class = "MetaEntry")
+  prototype = prototype(entry_class = "MetaEntry", "meta entries")
 )
 
 

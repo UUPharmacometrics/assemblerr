@@ -11,7 +11,8 @@ InputVariable <- setClass(
 InputVariableFacet <- setClass(
   "InputVariableFacet",
   contains = "NamedFacet",
-  prototype = prototype(entry_class = "InputVariable")
+  prototype = prototype(entry_class = "InputVariable",
+                        label = "input variables")
 )
 
 

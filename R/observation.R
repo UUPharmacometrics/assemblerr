@@ -8,7 +8,10 @@ Observation <-  setClass("Observation",
 
 ObservationFacet <- setClass("ObservationFacet",
                            contains = "NamedFacet",
-                           prototype = prototype(entry_class = "Observation"))
+                           prototype = prototype(
+                             entry_class = "Observation",
+                             label = "observations"
+                          ))
 
 
 setClass("ObsNormal",

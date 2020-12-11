@@ -14,7 +14,7 @@ setMethod(f = "initialize",
 
 AlgebraicFacet <- setClass("AlgebraicFacet",
                            contains = "NamedFacet",
-                           prototype = prototype(entry_class = "Algebraic"))
+                           prototype = prototype(entry_class = "Algebraic", label = "algebraics"))
 
 setMethod(
   f = "convert",

@@ -11,7 +11,7 @@ Compartment <- setClass(
 CompartmentFacet <- setClass(
   "CompartmentFacet",
   contains = "NamedFacet",
-  prototype = prototype(entry_class = "Compartment")
+  prototype = prototype(entry_class = "Compartment", label = "compartments")
 )
 
 
@@ -36,7 +36,17 @@ Flow <- setClass(
 
 FlowFacet <- setClass("FlowFacet",
                              contains = "Facet",
-                             prototype = prototype(entry_class = "Flow"))
+                             prototype = prototype(entry_class = "Flow", label = "flows"))
+
+setMethod(
+  f = "show",
+  signature = signature(object = "FlowFacet"),
+  definition = function(object){
+    flows <- purrr::map_chr(object@entries, ~paste0(.x@from, "-->", .x@to))
+    cli::cli_text("{object@label}: {flows}{?none//}")
+    invisible(NULL)
+  }
+)
 setMethod(
   f = "optimize_for_conversion",
   signature = signature(source = "Model", target = "NmModel", component = "FlowFacet"),

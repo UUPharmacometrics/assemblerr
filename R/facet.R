@@ -17,8 +17,13 @@ setMethod(f = "initialize",
 
 
 Facet <- setClass("Facet",
-                  slots = c(entries = "list", entry_class = "character"),
-                  prototype = prototype(entries = list(), entry_class = "FacetEntry"))
+                  slots = c(label = "character", entries = "list", entry_class = "character"),
+                  prototype = prototype(
+                    label = "unnamed facet",
+                    entries = list(),
+                    entry_class = "FacetEntry"
+                    )
+                  )
 
 setMethod(f = "initialize",
           signature = "Facet",
@@ -32,9 +37,6 @@ setMethod(f = "initialize",
           })
 
 
-
-
-
 setGeneric(
   name = "index_of",
   def = function(facet, x) standardGeneric("index_of")
@@ -45,6 +47,16 @@ setMethod(
   signature = signature(facet = "Facet", x = "FacetEntry"),
   definition = function(facet, x) {
     which(purrr::map_lgl(facet@entries, ~identical(.x, x)))
+  }
+)
+
+#'@export
+setMethod(
+  f = "show",
+  signature = signature(object = "Facet"),
+  definition = function(object){
+    cli::cli_text("{object@label}: {cli::no(length(object@entries))} entr{?y/ies}")
+    invisible(NULL)
   }
 )
 
@@ -69,6 +81,17 @@ setMethod(f = "initialize",
             names(.Object@entries) <- purrr::map_chr(.Object@entries, "name")
             .Object
           })
+
+#'@export
+setMethod(
+  f = "show",
+  signature = signature(object = "NamedFacet"),
+  definition = function(object){
+    cli::cli_text("{object@label}: {names(object@entries)}{?none//}")
+    invisible(NULL)
+  }
+)
+
 
 setMethod(
   f = "index_of",
@@ -109,6 +132,26 @@ setMethod(f = "initialize",
             .Object
           })
 
+
+setMethod(
+  f = "show",
+  signature = signature(object = "Fragment"),
+  definition = function(object){
+    nfacets <- length(object@facets)
+    cli::cli_text("assemblerr fragment (size {nfacets})")
+    div <- cli::cli_div()
+    dl <- cli::cli_dl()
+    purrr::walk(object@facets, function(x) {
+      li <- cli::cli_li()
+      show(x)
+      cli::cli_end(li)
+    })
+    cli::cli_end(dl)
+    cli::cli_end(div)
+    invisible(NULL)
+  }
+)
+
 setClass("GenericModel",
          slots = c(options = "list"),
          contains = "Fragment")
@@ -120,6 +163,31 @@ setMethod(f = "initialize",
             .Object <- purrr::reduce(facets, ~combine(.x, .y), .init = .Object)
             .Object
           })
+
+setMethod(
+  f = "show",
+  signature = signature(object = "GenericModel"),
+  definition = function(object){
+    nfacets <- length(object@facets)
+    cli::cli_text("assemblerr model")
+    div <- cli::cli_div()
+    dl <- cli::cli_dl()
+    purrr::discard(object@facets, ~length(.x@entries)==0) %>%
+    purrr::walk(function(x) {
+      li <- cli::cli_li()
+      show(x)
+      cli::cli_end(li)
+    })
+    nempty <- purrr::map_int(object@facets, ~as.integer(length(.x@entries)==0)) %>%
+      sum()
+    li <- cli::cli_li()
+    cli::cli_text("({nempty} additional empty facet{?s})")
+    cli::cli_end(li)
+    cli::cli_end(dl)
+    cli::cli_end(div)
+    invisible(NULL)
+  }
+)
 
 setGeneric(
   name = "optimize_for_conversion",
