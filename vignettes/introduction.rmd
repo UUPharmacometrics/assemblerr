@@ -10,7 +10,7 @@ vignette: >
 ---
 
 
-assemblerr is an R package to construct pharmacometric models by combining pre-defined model components. It's intended to simplify the specification of complex pharmacometric models and provide a mechanism to generate models in an automatic way. With assemblerr, models are specified using R code and then converted to a NONMEM control stream (in the future the support of different modeling software is planned).   
+assemblerr is an R package to construct pharmacometric models by combining pre-defined model components. It's intended to simplify the specification of complex pharmacometric models and provide a mechanism to generate models in an automatic way. With assemblerr, models are specified using R code and then converted to a NONMEM control stream.   
 
 # Quick start
 
@@ -24,8 +24,8 @@ library(assemblerr, warn.conflicts = F)
 
 ```{r}
 m <- model() +
-  prm_log_normal("EMAX") +
-  prm_normal("ED50") +
+  prm_log_normal("emax") +
+  prm_normal("ed50") +
   obs_additive(effect~emax*dose/(ed50+dose)) 
 
 ```
@@ -42,10 +42,24 @@ m %>%
 
 # Workflow
 
-assemblerr's workflow is similar to ggplot, where different components are added to a model 
+The quick start example showed the general workflow in assemblerr:
+
+  1. A model object is created using the `model()` function 
+  2. Building blocks are added to the model using the `+` operator 
+  3. The model is converted into a NONMEM model using `as_nm_model()`
+  4. The `render()` function generates the NMTRAN code  
+
+No matter what type of model you are trying to assemble, this workflow will be the same. The difference lies in the creation function being used in step 1 and the building blocks being added in step 2. 
+
+# Model types
+
+The creation function defines the overal scope of the model by deciding which facets the model possesses. A facet is a particular feature of a model such as the model parameters or the compartments for differential equation models. Currently, assemblerr supports two types of pharmacometric models
+
+  1. **General pharmacometric models:** The lowest level of abstraction that allows the creation of a wide range of models but requires a more fine-grained definition process.  
+  2. **Pharmacokinetic models:** A higher level of abstraction that allows the definition of pharmacokinetic models with less effort.  
 
 
-# Low-level building blocks
+## General pharmacometric models
 
 ```{r}
 # construct one-compartment 1st order elimination model
@@ -65,17 +79,17 @@ as_nm_model(m)  %>%
 ```
 
 
-# Pharmacokinetic models
+## Pharmacokinetic models
 
 For PK models assemblerr supports a higher level of abstraction to simplify the construction of these types of models.
 
 ```{r}
 # construct one-compartment 1st order elimination model
 pkm <- pk_model() +
-  pk_absorption_delay_transit(2) +
+#  pk_absorption_delay_transit(2) +
   pk_absorption_rate_fo() +
   pk_elimination_linear() +
-  pk_distribution_2cmp() +
+  pk_distribution_1cmp() +
   obs_additive(conc~C["central"]) 
 
 # convert to a NONMEM model and generate NMTran code
@@ -90,67 +104,13 @@ The basic building blocks can still be added to a PK model, allowing to customiz
 ```{r}
 # change the parameter model for clearance
 pkm2 <- pkm +
-  prm_normal("cl")+
-  parameter_values(cl = c(mu = 12, sigma = 1))
+  prm_normal("cl")
 
 # convert to a NONMEM model and generate NMTran code
 pkm2 %>% 
   as_nm_model() %>% 
-  render %>%
-  cat()
+  render()
 
 ```
 
-# Generating a range of models
-
-A whole combination of models can be generated with the help of tools from the tidyverse. For example, one could do the following to generate one and two compartment models with linear and Michaelis-Menten elimination: 
-
-```{r, eval=FALSE}
-library(tidyverse, warn.conflicts = F)
-
-# parameter names 
-prm_names <- c("cl", "vc", "vp", "q", "km", "vmax")
-
-# parameter values table with random theta values
-pmt <- {
-  runif(6, 0, 10) %>% 
-    set_names(prm_names) %>% 
-    parameter_value_table(type = "typical")} + 
-    {rep(0.09, 6) %>% 
-        set_names(prm_names) %>% 
-      parameter_value_table(type = "iiv")} +
-  parameter_value("ruv-add", "ruv", 1)
-
-# create a list of all possible combinations
-list(
-     'distribution'=c("one-compartment", "two-compartment"),
-     'elimination' = c("linear", "mm")) %>%
-  cross() %>%
-  # make components and add to models
-  modify_depth(1, ~imap(.x, ~pk_component(.y, .x)) %>%
-                 reduce(`+`, .init = pk_model())) %>%
-  # add parameter table
-  map(~.x+pmt) %>%
-  # convert to NONMEM models
-  map(as_model_nm) %>%
-  # generate NMTran code
-  map(render) %>% 
-  # print code
-  walk(cat)
-
-```
-
-Create all possible PK models and write to current working directory
-```{r, eval=F}
-
-list(
-     'absorption-rate' = c("first-order","zero-order"),
-     'absorption-delay' = c("none", "alag"),
-     'distribution'=c("one-compartment", "two-compartment", "three-compartment"),
-     'elimination' = c("linear", "mm")) %>%
-  cross() %>%
-  modify_depth(1, ~imap(.x, ~pk_component(.y, .x)) %>%
-                 reduce(`+`, .init = pk_model())) %>%
-  map(~as_model_nm(.x)) %>%
-  imap(~write_model(.x, paste0("run", .y, ".mod")))
-```
+# Building blocks
