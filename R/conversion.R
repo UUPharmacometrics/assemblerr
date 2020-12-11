@@ -2,12 +2,7 @@
 #' @include pk_model.R
 
 
-#' Convert model to NONMEM model
-#'
-#' @param from Model to convert
 #' @export
-as_nm_model <- function(from) UseMethod("as_nm_model")
-
 setGeneric("as_nm_model",
            def = function(x, options = options_nm()){
              convert(target = nm_model(options = options),
@@ -15,6 +10,8 @@ setGeneric("as_nm_model",
            },
            valueClass = "NmModel"
             )
+
+#' @export
 setMethod(
   f = "as_nm_model",
   signature = signature(x = "PkModel"),
