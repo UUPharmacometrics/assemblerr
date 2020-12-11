@@ -22,8 +22,6 @@ Imports:
     stringr,
     rlang,
     magrittr,
-    dplyr,
-    tibble,
     methods,
     stats,
     glue,
@@ -49,9 +47,7 @@ Collate:
     'meta.R'
     'model-options.R'
     'observation.R'
-    'ode.R'
     'parameter.R'
     'pk_component.R'
     'util.R'
-    'visualize.R'
     'write_model.R'

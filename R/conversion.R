@@ -20,13 +20,3 @@ setMethod(
       convert(nm_model(options = options), .)
   }
 )
-
-#' Convert to a model
-#'
-#' @param from The source
-#' @export
-as_model <- function(from) UseMethod("as_model")
-
-#' @export
-as_model.model <- function(from) return(from)
-

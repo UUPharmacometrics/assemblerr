@@ -17,7 +17,7 @@ assemblerr is an R package to construct pharmacometric models by combining pre-d
 ## Load assemblerr 
 
 ```{r}
-library(assemblerr, warn.conflicts = F)
+library(assemblerr)
 ```
 
 ## Build an Emax dose-response model
