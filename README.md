@@ -21,9 +21,31 @@ devtools::install_github("UUPharmacometrics/assemblerr")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+This is a basic example which shows you how to create an Emax model and
+generate the corresponding NONMEM code:
 
 ``` r
 library(assemblerr)
-## basic example code
+
+m <- model() +
+  prm_log_normal("emax") +
+  prm_normal("ed50") +
+  obs_additive(effect~emax*dose/(ed50+dose)) 
+
+render(m) 
+#> $INPUT ID TIME DV AMT
+#> $DATA data.csv IGNORE=@
+#> 
+#> $PRED
+#> MU_1 = LOG(THETA(1))
+#> EMAX = THETA(1) * EXP(ETA(1))
+#> MU_2 = THETA(2)
+#> ED50 = THETA(2) + ETA(2)
+#> EFFECT = EMAX * DOSE/(ED50 + DOSE)
+#> Y = EFFECT + EPS(1)
+#> $THETA (0, 1, Inf) ; POP_EMAX
+#> $THETA (0, 1, Inf) ; POP_ED50
+#> $OMEGA 0.1; IIV_EMAX
+#> $OMEGA 0.1; IIV_ED50
+#> $SIGMA 0.1
 ```
