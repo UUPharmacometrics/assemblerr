@@ -3,15 +3,11 @@
 
 # assemblerr
 
-<!-- badges: start -->
-
-[![Travis build
-status](https://travis-ci.org/sebastianueckert/assemblerr.svg?branch=master)](https://travis-ci.org/sebastianueckert/assemblerr)
-[![Codecov test
-coverage](https://codecov.io/gh/sebastianueckert/assemblerr/branch/master/graph/badge.svg)](https://codecov.io/gh/sebastianueckert/assemblerr?branch=master)
-<!-- badges: end -->
-
-The goal of assemblerr is to …
+assemblerr is an R package to construct pharmacometric models by
+combining pre-defined model components. It’s intended to simplify the
+specification of complex pharmacometric models and provide a mechanism
+to generate models in an automatic way. With assemblerr, models are
+specified using R code and then converted to a NONMEM control stream.
 
 ## Installation
 

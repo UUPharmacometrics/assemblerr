@@ -64,7 +64,7 @@ setMethod(
 #' @export
 #'
 
-nm_model <- function(options = options){
+nm_model <- function(options = options_nm()){
   NmModel(options = options)
 }
 

@@ -1,5 +1,6 @@
 #' @include facet.R
 #' @include nm_model.R
+#' @include model.R
 PkModel <- setClass("PkModel", contains = "GenericModel")
 
 setMethod(

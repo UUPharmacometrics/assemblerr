@@ -19,3 +19,4 @@ setMethod(
       convert(nm_model(options = options), .)
   }
 )
+

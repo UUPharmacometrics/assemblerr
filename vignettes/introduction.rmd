@@ -34,9 +34,7 @@ m <- model() +
 ## Generate NONMEM code
 
 ```{r}
-m %>% 
-  as_nm_model() %>% 
-  render() 
+render(m) 
 ```
 
 
@@ -46,8 +44,7 @@ The quick start example showed the general workflow in assemblerr:
 
   1. A model object is created using the `model()` function 
   2. Building blocks are added to the model using the `+` operator 
-  3. The model is converted into a NONMEM model using `as_nm_model()`
-  4. The `render()` function generates the NMTRAN code  
+  3. The `render()` function generates the NMTRAN code  
 
 No matter what type of model you are trying to assemble, this workflow will be the same. The difference lies in the creation function being used in step 1 and the building blocks being added in step 2. 
 
@@ -73,9 +70,7 @@ m <- model() +
   obs_additive(conc~C["central"])
 
 # convert to a NONMEM model and generate NMTran code
-as_nm_model(m)  %>% 
-  render()
-
+render(m)
 ```
 
 
@@ -93,9 +88,7 @@ pkm <- pk_model() +
   obs_additive(conc~C["central"]) 
 
 # convert to a NONMEM model and generate NMTran code
-pkm %>% 
-  as_nm_model() %>% 
-  render()
+render(pkm)
 
 ```
 
@@ -107,10 +100,7 @@ pkm2 <- pkm +
   prm_normal("cl")
 
 # convert to a NONMEM model and generate NMTran code
-pkm2 %>% 
-  as_nm_model() %>% 
-  render()
-
+render(pkm2)
 ```
 
 # Building blocks
