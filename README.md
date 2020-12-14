@@ -16,7 +16,7 @@ You can install the development version from
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("sebastianueckert/assemblerr")
+devtools::install_github("UUPharmacometrics/assemblerr")
 ```
 
 ## Example
