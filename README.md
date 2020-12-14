@@ -15,8 +15,8 @@ You can install the development version from
 [GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("UUPharmacometrics/assemblerr")
+# install.packages("remotes")
+remotes::install_github("UUPharmacometrics/assemblerr")
 ```
 
 ## Example
