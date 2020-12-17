@@ -50,7 +50,7 @@ setMethod(
   }
 )
 
-#'@export
+
 setMethod(
   f = "show",
   signature = signature(object = "Facet"),

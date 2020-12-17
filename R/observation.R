@@ -36,7 +36,6 @@ setMethod(f = "initialize",
           })
 
 #' @export
-#' @param prediction Declaration for prediction
 obs_additive <- function(prediction) {
   AdditiveObservation(prediction = as_declaration(prediction))
 }
@@ -60,7 +59,6 @@ setMethod(f = "initialize",
           })
 
 #' @export
-#' @param prediction Declaration for prediction
 obs_proportional <- function(prediction) {
   ProportionalObservation(prediction = as_declaration(prediction))
 }

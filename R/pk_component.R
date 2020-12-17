@@ -127,7 +127,6 @@ setMethod(
 )
 
 #' @export
-#' @rdname pk_component
 pk_distribution_3cmp <- function(
   prm_vc = prm_log_normal("vc"),
   prm_vp1 = prm_log_normal("vp1"),

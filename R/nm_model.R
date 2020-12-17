@@ -92,8 +92,6 @@ setMethod(
 )
 
 #' @export
-#' @param type Column type
-#' @rdname nm_problem
 nm_input <- function(name, type = NA_character_){
   if (!is.character(name)) stop("'name' needs to be a character vector")
   NmInputEntry(name = name, type = type)
