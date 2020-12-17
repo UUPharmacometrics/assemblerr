@@ -15,7 +15,6 @@ Suggests:
     testthat,
     knitr,
     rmarkdown,
-    DiagrammeR,
     covr
 Imports: 
     purrr,
