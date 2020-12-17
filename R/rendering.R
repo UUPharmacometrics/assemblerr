@@ -6,7 +6,7 @@ setGeneric(name = "render_component",
            def = function(x, ...) standardGeneric("render_component"),
            valueClass = "character")
 
-
+#' @export
 render <- function(model,
                    target_tool = "nonmem",
                    options = assemblerr_options()) {
