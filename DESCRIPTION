@@ -18,7 +18,6 @@ Suggests:
     covr
 Imports: 
     purrr,
-    stringr,
     rlang,
     magrittr,
     methods,
@@ -33,6 +32,7 @@ Collate:
     'advans.R'
     'generics.R'
     'facet.R'
+    'conversion.R'
     'model.R'
     'pk_model.R'
     'rendering.R'
@@ -53,7 +53,6 @@ Collate:
     'conversion-observation-nm.R'
     'parameter.R'
     'conversion-parameter-nm.R'
-    'conversion.R'
     'model-options.R'
     'pk_component.R'
     'util.R'
