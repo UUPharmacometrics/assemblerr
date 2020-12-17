@@ -4,7 +4,7 @@
 \alias{nm_model}
 \title{NONMEM model}
 \usage{
-nm_model(options = options_nm())
+nm_model()
 }
 \value{
 An nm_model

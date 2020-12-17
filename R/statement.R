@@ -50,7 +50,7 @@ vec_ptype_full.assemblerr_statement <- function(x, ...) "statement"
 
 
 setMethod(
-  f = "render",
+  f = "render_component",
   signature = c(x = "assemblerr_statement"),
   definition = function(x) {
     vec_data(x) %>%

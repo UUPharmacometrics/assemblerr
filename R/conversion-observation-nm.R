@@ -3,7 +3,7 @@
 setMethod(
   f = "convert",
   signature = c(target = "NmModel", source = "ANY", component = "ObsNormal"),
-  definition = function(target, source, component) {
+  definition = function(target, source, component, options) {
     target <- target + nm_sigma("sigma")
     ipred_dcl <- component@mu
     if (vec_size(source@facets$CompartmentFacet@entries) > 0) {

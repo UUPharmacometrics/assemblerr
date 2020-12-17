@@ -1,4 +1,5 @@
 #' @include facet.R
+#' @include conversion.R
 Model <- setClass("Model", contains = "GenericModel")
 
 setMethod(
@@ -20,7 +21,7 @@ setMethod(
 setMethod(
   f = "convert",
   signature = c(target = "Model", source = "Model", component = "missing"),
-  definition = function(target, source, component) {
+  definition = function(target, source, component, options) {
     source
   }
 )

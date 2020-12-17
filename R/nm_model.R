@@ -26,7 +26,7 @@ setMethod(
 
 
 setMethod(
-  f = "render",
+  f = "render_component",
   signature = c(x = "NmModel"),
   definition = function(x, ...) {
     is_pred <- vec_is_empty(x@facets[['NmCompartmentFacet']]@entries)
@@ -35,7 +35,7 @@ setMethod(
       x@facets[['NmCompartmentFacet']] <- NULL
       x@facets[['NmDesCodeFacet']] <- NULL
     }
-    purrr::map(x@facets, render, is_pred = is_pred) %>%
+    purrr::map(x@facets, render_component, is_pred = is_pred) %>%
       glue::as_glue()
   }
 )
@@ -64,8 +64,8 @@ setMethod(
 #' @export
 #'
 
-nm_model <- function(options = options_nm()){
-  NmModel(options = options)
+nm_model <- function(){
+  NmModel()
 }
 
 
@@ -84,7 +84,7 @@ NmInputEntryFacet <- setClass("NmInputEntryFacet",
                          prototype = prototype(entry_class = "NmInputEntry"))
 
 setMethod(
-  f = "render",
+  f = "render_component",
   signature = c(x = "NmInputEntryFacet"),
   definition = function(x, ...) {
     glue::glue("$INPUT {rcrds}\n", rcrds = paste(toupper(names(x)), collapse = " "))
@@ -114,7 +114,7 @@ NmDataFacet <- setClass("NmDataFacet",
                         prototype = prototype(entry_class = "NmData"))
 
 setMethod(
-  f = "render",
+  f = "render_component",
   signature = c(x = "NmDataFacet"),
   definition = function(x, ...) {
     path <- "data.csv"
@@ -149,7 +149,7 @@ NmSubroutinesFacet <- setClass(
 )
 
 setMethod(
-  f = "render",
+  f = "render_component",
   signature = c(x = "NmSubroutines"),
   definition = function(x, ...) {
     tol <- ifelse(is.na(x@tol), "", paste0("tol=",x@tol))
@@ -159,11 +159,11 @@ setMethod(
 
 
 setMethod(
-  f = "render",
+  f = "render_component",
   signature = c(x = "NmSubroutinesFacet"),
   definition = function(x, ...) {
     if(vec_is_empty(x@entries)) return("")
-    purrr::map_chr(x@entries, render) %>%
+    purrr::map_chr(x@entries, render_component) %>%
       paste(collapse = " ") %>%
       glue::glue(
         "$SUBROUTINES ", .)
@@ -194,7 +194,7 @@ NmCompartmentFacet <- setClass(
 )
 
 setMethod(
-  f = "render",
+  f = "render_component",
   signature = c(x = "NmCompartmentFacet"),
   definition = function(x, ...) {
     glue::glue("COMP=({cmp})", cmp = toupper(names(x))) %>%
@@ -224,13 +224,13 @@ NmAbbriviatedCodeFacet <- setClass(
 
 
 setMethod(
-  f = "render",
+  f = "render_component",
   signature = c(x = "NmAbbriviatedCodeFacet"),
   definition = function(x, ...) {
     if (vec_is_empty(x@entries)) return("")
     purrr::map(x@entries, "statement") %>%
       {vec_c(!!!.)} %>%
-      render()
+      render_component()
   }
 )
 
@@ -251,7 +251,7 @@ NmPkCodeFacet <- setClass(
 )
 
 setMethod(
-  f = "render",
+  f = "render_component",
   signature = c(x = "NmPkCodeFacet"),
   definition = function(x, is_pred, ...) {
     if (is_pred) {
@@ -297,7 +297,7 @@ NmDesCodeFacet <- setClass(
 )
 
 setMethod(
-  f = "render",
+  f = "render_component",
   signature = c(x = "NmDesCodeFacet"),
   definition = function(x, is_pred, ...) {
     if (is_pred || vec_is_empty(x@entries)) {
@@ -335,7 +335,7 @@ NmErrorCodeFacet <- setClass(
 
 
 setMethod(
-  f = "render",
+  f = "render_component",
   signature = c(x = "NmErrorCodeFacet"),
   definition = function(x, is_pred, ...) {
     if (is_pred) {
@@ -367,7 +367,7 @@ NmThetaParameter <- setClass(
 )
 
 setMethod(
-  f = "render",
+  f = "render_component",
   signature = c(x = "NmThetaParameter"),
   definition = function(x, ...) {
     glue::glue("$THETA ({x@lbound}, {x@initial}, {x@ubound}) ; POP_{toupper(x@name)}")
@@ -382,10 +382,10 @@ NmThetaParameterFacet <- setClass(
 )
 
 setMethod(
-  f = "render",
+  f = "render_component",
   signature = c(x = "NmThetaParameterFacet"),
   definition = function(x, ...) {
-    glue::glue_collapse(purrr::map_chr(x@entries, render), sep = "\n")
+    glue::glue_collapse(purrr::map_chr(x@entries, render_component), sep = "\n")
   }
 )
 
@@ -417,7 +417,7 @@ NmOmegaParameter <- setClass(
 )
 
 setMethod(
-  f = "render",
+  f = "render_component",
   signature = c(x = "NmOmegaParameter"),
   definition = function(x, ...) {
     glue::glue("$OMEGA {x@initial}; IIV_{toupper(x@name)}")
@@ -431,10 +431,10 @@ NmOmegaParameterFacet <- setClass(
 )
 
 setMethod(
-  f = "render",
+  f = "render_component",
   signature = c(x = "NmOmegaParameterFacet"),
   definition = function(x, ...) {
-    glue::glue_collapse(purrr::map_chr(x@entries, render), sep = "\n")
+    glue::glue_collapse(purrr::map_chr(x@entries, render_component), sep = "\n")
   }
 )
 
@@ -459,7 +459,7 @@ NmSigmaParameter <- setClass(
 )
 
 setMethod(
-  f = "render",
+  f = "render_component",
   signature = c(x = "NmSigmaParameter"),
   definition = function(x, ...) {
     glue::glue("$SIGMA {x@initial}")
@@ -475,10 +475,10 @@ NmSigmaParameterFacet <- setClass(
 
 
 setMethod(
-  f = "render",
+  f = "render_component",
   signature = c(x = "NmSigmaParameterFacet"),
   definition = function(x, ...) {
-    glue::glue_collapse(purrr::map_chr(x@entries, render), sep = "\n")
+    glue::glue_collapse(purrr::map_chr(x@entries, render_component), sep = "\n")
   }
 )
 

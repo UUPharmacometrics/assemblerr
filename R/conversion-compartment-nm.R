@@ -4,7 +4,7 @@
 setMethod(
   f = "convert",
   signature = c(target = "NmModel", source = "Model", component = "Compartment"),
-  definition = function(target, source, component) {
+  definition = function(target, source, component, options) {
     target + nm_compartment(name = component@name)
   }
 )
@@ -18,7 +18,7 @@ setMethod(
     # detect special advans
     if (all(dcl_linear_in(flows$definition, quote(A[x])))) {
       special_advan_used <- FALSE
-      if (target@options$ode.use_special_advans) {
+      if (options$ode.use_special_advans) {
         m_adj <- construct_adjacency_matrix(
           cmp_names = names(source@facets[["CompartmentFacet"]]),
           flows = flows
@@ -30,11 +30,11 @@ setMethod(
                                     flows = flows,
                                     advan = perm_advan$advan,
                                     permutation = perm_advan$permutation,
-                                    options = target@options
+                                    options = options
           )
         }
       }
-      if (!special_advan_used && target@options$ode.use_general_linear_advans) {
+      if (!special_advan_used && options$ode.use_general_linear_advans) {
         cmp_name_index_map <- name_index_map(source@facets[["CompartmentFacet"]])
         flows$from_index <- cmp_name_index_map[flows$from]
         flows$to_index <- cmp_name_index_map[flows$to]
@@ -45,7 +45,7 @@ setMethod(
           purrr::map(algebraic) %>%
           purrr::reduce(`+`, .init = source)
         source <- source +
-          algebraic(dcl_create_library_function_call(target@options$ode.general_linear_advan, list(quote(.k)), quote(A))) +
+          algebraic(dcl_create_library_function_call(options$ode.general_linear_advan, list(quote(.k)), quote(A))) +
           algebraic(dcl_create_library_function_call("trans1", dcl_id(rate_constants), quote(.k)))
         # remove flow declarations
         source@facets[["FlowFacet"]]@entries <- list()
@@ -59,7 +59,7 @@ setMethod(
 setMethod(
   f = "convert",
   signature = c(target = "NmModel", source = "Model", component = "FlowFacet"),
-  definition = function(target, source, component) {
+  definition = function(target, source, component, options) {
     if (vec_is_empty(component@entries)) return(target)
 
     flows <- collect_flows(component, source)
@@ -73,7 +73,7 @@ setMethod(
       {vec_c(!!!.)} %>%
       replace_compartment_references(target, source)
 
-    advan <- target@options$ode.general_nonlinear_advan
+    advan <- options$ode.general_nonlinear_advan
     target +
       nm_subroutine(advan, tol = 6L) +
       nm_des(as_statement(ode_dcl))

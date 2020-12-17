@@ -58,7 +58,7 @@ pk_distribution_1cmp <- function(prm_vc = prm_log_normal("vc")) {
 setMethod(
   f = "convert",
   signature = c(target = "Model", source = "PkModel", component = "PkDistribution1Cmp"),
-  definition = function(target, source, component) {
+  definition = function(target, source, component, options) {
     target +
       compartment(name = "central", volume = as_declaration(component@prm_names['vc']))
   }
@@ -73,7 +73,7 @@ PkDistribution2Cmp <- setClass("PkDistribution2Cmp",
 setMethod(
   f = "convert",
   signature = c(target = "Model", source = "PkModel", component = "PkDistribution2Cmp"),
-  definition = function(target, source, component) {
+  definition = function(target, source, component, options) {
     dcl_q <- dcl_substitute(declaration(~q*C), substitutions = list(q = sym(component@prm_names['q'])))
     target +
       compartment(name = "central", volume = as_declaration(component@prm_names['vc'])) +
@@ -111,7 +111,7 @@ PkDistribution3Cmp <- setClass("PkDistribution3Cmp",
 setMethod(
   f = "convert",
   signature = c(target = "Model", source = "PkModel", component = "PkDistribution3Cmp"),
-  definition = function(target, source, component) {
+  definition = function(target, source, component, options) {
     dcl_q <- declaration(~q*C)
     dcl_q1 <- dcl_substitute(dcl_q, substitutions = list(q = sym(component@prm_names['q1'])))
     dcl_q2 <- dcl_substitute(dcl_q, substitutions = list(q = sym(component@prm_names['q2'])))
@@ -162,7 +162,7 @@ PkEliminationLinear <- setClass("PkEliminationLinear",
 setMethod(
   f = "convert",
   signature = c(target = "Model", source = "PkModel", component = "PkEliminationLinear"),
-  definition = function(target, source, component) {
+  definition = function(target, source, component, options) {
     dcl <- declaration(~cl*C) %>%
       dcl_substitute(list(cl = sym(component@prm_names['cl'])))
     target +
@@ -190,7 +190,7 @@ PkEliminationMM <- setClass("PkEliminationMM",
 setMethod(
   f = "convert",
   signature = c(target = "Model", source = "PkModel", component = "PkEliminationMM"),
-  definition = function(target, source, component) {
+  definition = function(target, source, component, options) {
     dcl <- declaration(~clmm*km/(km+C)) %>%
       dcl_substitute(list(clmm = sym(component@prm_names['clmm']), km = sym(component@prm_names['km'])))
     target +
@@ -222,7 +222,7 @@ PkAbsorptionRateFO <- setClass("PkAbsorptionRateFO",
 setMethod(
   f = "convert",
   signature = c(target = "Model", source = "PkModel", component = "PkAbsorptionRateFO"),
-  definition = function(target, source, component) {
+  definition = function(target, source, component, options) {
     dcl <- declaration(ka~1/mat) %>%
       dcl_substitute(list(mat = sym(component@prm_names['mat'])))
     if (is(source@facets$PkComponentFacet@entries[['absorption-delay']], "PkAbsorptionDelayTransit")) {
@@ -259,7 +259,7 @@ PkAbsorptionRateZO <- setClass("PkAbsorptionRateZO",
 setMethod(
   f = "convert",
   signature = c(target = "Model", source = "PkModel", component = "PkAbsorptionRateZO"),
-  definition = function(target, source, component) {
+  definition = function(target, source, component, options) {
     dcl <- declaration(r1~amt/mat/2) %>%
       dcl_substitute(list(mat = sym(component@prm_names['mat'])))
     target +
@@ -290,7 +290,7 @@ PkAbsorptionDelayTransit <- setClass(
 setMethod(
   f = "convert",
   signature = c(target = "Model", source = "PkModel", component = "PkAbsorptionDelayTransit"),
-  definition = function(target, source, component) {
+  definition = function(target, source, component, options) {
 
     dcl <- declaration(ktr~n/mdt) %>%
       dcl_substitute(
@@ -336,7 +336,7 @@ PkAbsorptionDelayLagtime <- setClass(
 setMethod(
   f = "convert",
   signature = c(target = "Model", source = "PkModel", component = "PkAbsorptionDelayLagtime"),
-  definition = function(target, source, component) {
+  definition = function(target, source, component, options) {
 
     dcl <- declaration(alag1~mdt) %>%
       dcl_substitute(

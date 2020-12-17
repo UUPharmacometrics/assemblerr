@@ -19,7 +19,7 @@ AlgebraicFacet <- setClass("AlgebraicFacet",
 setMethod(
   f = "convert",
   signature = c(target = "NmModel", source = "ANY", component = "AlgebraicFacet"),
-  definition = function(target, source, component) {
+  definition = function(target, source, component, options) {
     l <- purrr::map(component@entries, "definition") %>%
       purrr::set_names(NULL)
     if (vec_is_empty(l)) return(target)

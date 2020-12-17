@@ -81,7 +81,6 @@ For PK models assemblerr supports a higher level of abstraction to simplify the 
 ```{r}
 # construct one-compartment 1st order elimination model
 pkm <- pk_model() +
-#  pk_absorption_delay_transit(2) +
   pk_absorption_rate_fo() +
   pk_elimination_linear() +
   pk_distribution_1cmp() +

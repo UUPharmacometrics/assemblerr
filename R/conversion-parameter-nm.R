@@ -7,7 +7,7 @@
 setMethod(
   f = "convert",
   signature = c(target = "NmModel", source = "ANY", component = "PrmLogNormal"),
-  definition = function(target, source, component) {
+  definition = function(target, source, component, options) {
     target <- target +
       nm_theta(component@name, lbound = 0) +
       nm_omega(component@name)
@@ -15,7 +15,7 @@ setMethod(
     theta_index <- index_of(target@facets$NmThetaParameterFacet, component@name)
     eta_index <- index_of(target@facets$NmOmegaParameterFacet, component@name)
 
-    if (target@options$prm.use_mu_referencing) {
+    if (options$prm.use_mu_referencing) {
       mu_name <- sym(paste0("mu_",eta_index))
       target <- target + nm_pk(
         statement(
@@ -40,14 +40,14 @@ setMethod(
 setMethod(
   f = "convert",
   signature = c(target = "NmModel", source = "ANY", component = "PrmNormal"),
-  definition = function(target, source, component) {
+  definition = function(target, source, component, options) {
     target <- target +
       nm_theta(component@name, lbound = 0) +
       nm_omega(component@name)
 
     theta_index <- index_of(target@facets$NmThetaParameterFacet, component@name)
     eta_index <- index_of(target@facets$NmOmegaParameterFacet, component@name)
-    if (target@options$prm.use_mu_referencing) {
+    if (options$prm.use_mu_referencing) {
       mu_name <- sym(paste0("mu_",eta_index))
       target <- target + nm_pk(
         statement(
@@ -71,14 +71,14 @@ setMethod(
 setMethod(
   f = "convert",
   signature = c(target = "NmModel", source = "ANY", component = "PrmLogitNormal"),
-  definition = function(target, source, component) {
+  definition = function(target, source, component, options) {
     target <- target +
       nm_theta(component@name, lbound = 0, ubound = 1) +
       nm_omega(component@name)
 
     theta_index <- index_of(target@facets$NmThetaParameterFacet, component@name)
     eta_index <- index_of(target@facets$NmOmegaParameterFacet, component@name)
-    if (target@options$prm.use_mu_referencing) {
+    if (options$prm.use_mu_referencing) {
       mu_name <- sym(paste0("mu_",eta_index))
       target <- target + nm_pk(
         statement(
@@ -103,7 +103,7 @@ setMethod(
 setMethod(
   f = "convert",
   signature = c(target = "NmModel", source = "ANY", component = "PrmNoVar"),
-  definition = function(target, source, component) {
+  definition = function(target, source, component, options) {
     target <- target +
       nm_theta(component@name, lbound = 0)
 

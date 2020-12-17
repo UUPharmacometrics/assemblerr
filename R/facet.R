@@ -191,13 +191,13 @@ setMethod(
 
 setGeneric(
   name = "optimize_for_conversion",
-  def = function(source, target, component, ...) standardGeneric("optimize_for_conversion")
+  def = function(source, target, component, options, ...) standardGeneric("optimize_for_conversion")
 )
 
 setMethod(
   f = "optimize_for_conversion",
   signature = signature(source = "GenericModel", target = "ANY", component = "ANY"),
-  definition = function(source, target, component, ...) {
+  definition = function(source, target, component, options, ...) {
     source
   }
 )
@@ -206,8 +206,8 @@ setMethod(
 setMethod(
   f = "optimize_for_conversion",
   signature = signature(source = "GenericModel", target = "ANY", component = "missing"),
-  definition = function(source, target, component, ...) {
-    purrr::reduce(source@facets, ~optimize_for_conversion(.x, target, .y), .init = source)
+  definition = function(source, target, component, options, ...) {
+    purrr::reduce(source@facets, ~optimize_for_conversion(.x, target, .y, options = options), .init = source)
   }
 )
 
@@ -216,16 +216,6 @@ setMethod(
 setGeneric(name = "combine",
            def = function(x, y) standardGeneric("combine"))
 
-setGeneric(name = "convert",
-           def = function(target, source, component) standardGeneric("convert"))
-
-setMethod(
-  f = "convert",
-  signature = c(target = "ANY", source = "ANY", component = "Facet"),
-  definition = function(target, source, component) {
-    purrr::reduce(component@entries, ~convert(target = .x, source = source, component = .y), .init = target)
-  }
-)
 
 setMethod(
   f = "combine",

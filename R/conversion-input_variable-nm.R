@@ -5,7 +5,7 @@
 setMethod(
   f = "convert",
   signature = c(target = "NmModel", source = "Model", component = "InputVariable"),
-  definition = function(target, source, component) {
+  definition = function(target, source, component, options) {
     target + nm_input(name = component@name)
   }
 )

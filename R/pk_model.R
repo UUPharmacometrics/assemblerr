@@ -32,8 +32,8 @@ pk_model <- function(){
 setMethod(
   f = "convert",
   signature = c(target = "Model", source = "PkModel", component = "missing"),
-  definition = function(target, source, component) {
-    target <- convert(target, source, source@facets[["PkComponentFacet"]])
+  definition = function(target, source, component, options) {
+    target <- convert(target, source, source@facets[["PkComponentFacet"]], options = options)
     purrr::discard(source@facets, ~inherits(.x, "PkComponentFacet")) %>%
       purrr::reduce(combine, .init = target)
   }

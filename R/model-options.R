@@ -1,5 +1,5 @@
 #' @export
-options_nm <- function(prm.use_mu_referencing = TRUE,
+assemblerr_options <- function(prm.use_mu_referencing = TRUE,
                        ode.use_special_advans = TRUE,
                        ode.use_general_linear_advans = TRUE,
                        ode.general_nonlinear_advan = "advan13",
