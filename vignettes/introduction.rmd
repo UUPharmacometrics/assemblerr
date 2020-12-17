@@ -20,13 +20,13 @@ assemblerr is an R package to construct pharmacometric models by combining pre-d
 library(assemblerr)
 ```
 
-## Build an Emax dose-response model
+## Build a simple model
 
 ```{r}
 m <- model() +
-  prm_log_normal("emax") +
-  prm_normal("ed50") +
-  obs_additive(effect~emax*dose/(ed50+dose)) 
+  prm_log_normal("v") +
+  prm_log_normal("cl") +
+  obs_additive(conc~amt/v*exp(-cl/v*time)) 
 
 ```
 
