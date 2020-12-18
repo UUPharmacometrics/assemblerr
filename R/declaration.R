@@ -390,9 +390,7 @@ dcl_linear_in <- function(dcl, variable){
   purrr::map_lgl(dcl_def(dcl), function(expr){
     terms <- collect_multiplications(expr)
     matching <- purrr::map_lgl(terms, ~exprs_match_ignore_index(.x, variable))
-    if (vec_size(terms) == 1) return(matching)
-    if (sum(matching) != 1) return(FALSE)
-    return(!any(purrr::map_lgl(terms, ~!exprs_match_ignore_index(.x, variable) && as.character(variable) %in% all.vars(.x))))
+    return(sum(matching) == 1)
   })
 }
 
