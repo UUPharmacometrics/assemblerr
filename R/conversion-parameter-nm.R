@@ -86,11 +86,13 @@ setMethod(
         )
       )
     }
+    sym_prm_logit <- sym(paste0("logit_", component@name))
+    sym_prm <- sym(component@name)
     target +
       nm_pk(
         statement(
-          bquote(.(sym(paste0("logit_", component@name))) <- log(theta[.(theta_index)])/(1 - log(theta[.(theta_index)])) + eta[.(eta_index)]),
-          bquote(.(sym(component@name)) <- exp(.(sym(paste0("logit_", component@name))))/(1 + exp(.(sym(paste0("logit_", component@name))))))
+          bquote(.(sym_prm_logit) <- log(theta[.(theta_index)]/(1 - theta[.(theta_index)])) + eta[.(eta_index)]),
+          bquote(.(sym_prm) <- exp(.(sym_prm_logit))/(1 + exp(.(sym_prm_logit))))
         )
       )
   }

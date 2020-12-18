@@ -20,6 +20,8 @@ input_variable <- function(name){
   InputVariable(name = name)
 }
 
+#' @importFrom utils read.csv
+#' @importFrom utils read.table
 dataset <- function(path){
   if (grepl(".csv$",path)){
     tab <- read.csv(path, header = TRUE, nrows = 1)

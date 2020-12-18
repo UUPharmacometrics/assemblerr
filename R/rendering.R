@@ -1,7 +1,7 @@
 #' @include model.R
 #' @include pk_model.R
 
-
+#' @importFrom methods .valueClassTest
 setGeneric(name = "render_component",
            def = function(x, ...) standardGeneric("render_component"),
            valueClass = "character")

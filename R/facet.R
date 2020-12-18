@@ -1,3 +1,6 @@
+#' @importFrom methods new
+#' @importFrom methods show
+#' @importFrom methods callNextMethod
 FacetEntry <- setClass("FacetEntry",
          slots = c(facet_class = "character"),
          prototype = prototype(facet_class = "Facet"))
@@ -82,7 +85,6 @@ setMethod(f = "initialize",
             .Object
           })
 
-#'@export
 setMethod(
   f = "show",
   signature = signature(object = "NamedFacet"),

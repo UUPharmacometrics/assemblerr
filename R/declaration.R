@@ -278,11 +278,6 @@ dcl_prod <- function(dcl) {
 }
 
 
-dcl_reduce <- function(dcl, combine_fn = "+"){
-  vec_assert(dcl)
-  if (vec_is_empty(dcl)) return(dcl)
-  purrr::reduce(dcl, dcl_combine, combine_fn = combine_fn)
-}
 
 dcl_substitute_index <- function(dcl, array_name, substitutions){
   substitutions <- as.list(substitutions)

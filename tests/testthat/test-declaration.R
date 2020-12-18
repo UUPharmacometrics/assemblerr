@@ -104,11 +104,7 @@ test_that("devision of declarations", {
 #   expect_equal(dcl_combine(d1, d2, combine_fn = "+"), declaration(cl~theta + eta + b, v~theta[1]*exp(eta[2])+b))
 #   expect_equal(dcl_combine(d1, d3, combine_fn = "+"), declaration(cl~theta + eta + b, v~theta[1]*exp(eta[2])+a))
 # })
-#
-# test_that("reduction of declartions", {
-#   d1 <- declaration(cl~theta + eta, v~theta[1]*exp(eta[2]))
-#   expect_equal(dcl_reduce(d1, combine_fn = "+"), declaration(cl = theta + eta + theta[1]*exp(eta[2])))
-# })
+
 
 test_that("substitution of array indicies", {
   d <- declaration(cl~theta["test"], v~theta["test"]*eta["test"])
