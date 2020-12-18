@@ -36,6 +36,7 @@ setMethod(
       x@facets[['NmDesCodeFacet']] <- NULL
     }
     purrr::map(x@facets, render_component, is_pred = is_pred) %>%
+      purrr::discard(vec_is_empty) %>%
       glue::as_glue()
   }
 )
@@ -160,7 +161,7 @@ setMethod(
   f = "render_component",
   signature = c(x = "NmSubroutinesFacet"),
   definition = function(x, ...) {
-    if(vec_is_empty(x@entries)) return("")
+    if(vec_is_empty(x@entries)) return(character())
     purrr::map_chr(x@entries, render_component) %>%
       paste(collapse = " ") %>%
       glue::glue(
@@ -225,7 +226,7 @@ setMethod(
   f = "render_component",
   signature = c(x = "NmAbbriviatedCodeFacet"),
   definition = function(x, ...) {
-    if (vec_is_empty(x@entries)) return("")
+    if (vec_is_empty(x@entries)) return(character())
     purrr::map(x@entries, "statement") %>%
       {vec_c(!!!.)} %>%
       render_component()
