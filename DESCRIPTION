@@ -1,13 +1,26 @@
 Package: assemblerr
 Title: Assembly of Pharmacometric Models
-Description: Assembly of pharmacometric models from individual components.
+Description: assemblerr is an R package to construct pharmacometric models by
+    combining pre-defined model components. It’s intended to simplify the
+    specification of complex pharmacometric models and provide a mechanism
+    to generate models in an automatic way. 
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "Sebastian",
+    c(person(given = "Sebastian",
            family = "Ueckert",
            role = c("aut", "cre"),
            email = "sebastian.ueckert@gmail.com",
-           comment = c(ORCID = "0000-0002-3712-0255"))
+           comment = c(ORCID = "0000-0002-3712-0255")),
+    person(given = "Mats O.",
+           family = "Karlsson",
+           role = c("sad")),
+    person(given = "Andrew C.",
+           family = "Hooker",
+           role = c("sad")),
+    person(given = "Rikard",
+           family = "Nordgren",
+           role = c("sad"))
+    )
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -56,4 +69,3 @@ Collate:
     'model-options.R'
     'pk_component.R'
     'util.R'
-    'write_model.R'

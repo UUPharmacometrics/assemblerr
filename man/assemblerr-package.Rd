@@ -6,10 +6,20 @@
 \alias{assemblerr-package}
 \title{assemblerr: Assembly of Pharmacometric Models}
 \description{
-Assembly of pharmacometric models from individual components.
+assemblerr is an R package to construct pharmacometric models by
+    combining pre-defined model components. It’s intended to simplify the
+    specification of complex pharmacometric models and provide a mechanism
+    to generate models in an automatic way.
 }
 \author{
 \strong{Maintainer}: Sebastian Ueckert \email{sebastian.ueckert@gmail.com} (0000-0002-3712-0255)
+
+Other contributors:
+\itemize{
+  \item Mats O. Karlsson [scientific advisor]
+  \item Andrew C. Hooker [scientific advisor]
+  \item Rikard Nordgren [scientific advisor]
+}
 
 }
 \keyword{internal}
