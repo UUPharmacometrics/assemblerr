@@ -81,7 +81,7 @@ setMethod(
 )
 
 collect_flows <- function(flow_facet, source_model) {
-  purrr::map_dfr(flow_facet@entries, function(flow){
+  tmp <- purrr::map(flow_facet@entries, function(flow){
     dcl <- flow@definition
     cmp_from <- source_model@facets[["CompartmentFacet"]]@entries[[flow@from]]
     if ("C" %in% dcl_vars_chr(dcl)) {
@@ -89,8 +89,9 @@ collect_flows <- function(flow_facet, source_model) {
       dcl <- dcl_substitute(dcl, list(C = bquote(A/.(volume))))
     }
     dcl <- dcl_substitute(dcl, list(A = bquote(A[.(cmp_from@name)])))
-    list(definition = dcl, from = flow@from, to = flow@to)
+    data_frame(definition = dcl, from = flow@from, to = flow@to)
   })
+  vec_c(!!!tmp)
 }
 
 construct_adjacency_matrix <- function(cmp_names, flows) {
