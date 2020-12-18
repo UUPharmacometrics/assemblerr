@@ -8,13 +8,29 @@ setGeneric(name = "render_component",
 
 #' @export
 render <- function(model,
+                   filename = NULL,
                    target_tool = "nonmem",
                    options = assemblerr_options()) {
+
   if (target_tool == "nonmem") {
-    convert(nm_model(), model, options = options) %>%
+    code <- convert(nm_model(), model, options = options) %>%
       render_component()
   } else {
     cli::cli_alert_danger("Tool '{target_tool}' is currently not supported.")
+    return()
+  }
+  if (is.null(filename)) {
+    return(code)
+  }else{
+    res <- try(silent = TRUE,
+      cat(code, sep = "\n", file = filename)
+    )
+    if (inherits(res, "try-error")) {
+      cli::cli_alert_danger("Could not write model file '{filename}'.")
+    }else{
+      cli::cli_alert_success("Model file '{filename}' successfully written.")
+      return(invisible(code))
+    }
   }
 }
 
