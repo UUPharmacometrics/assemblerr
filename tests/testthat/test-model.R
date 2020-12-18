@@ -1,0 +1,54 @@
+context("test-model")
+
+
+expect_contains <- function(object, str) return(expect_match(object, str, fixed = TRUE, all = FALSE))
+
+simple_model <- function(prm = prm_log_normal("k"), obs = obs_additive(c~conc)) {
+  model() +
+    prm +
+    algebraic(conc~c0*exp(-k*time)) +
+    obs
+}
+
+test_that("prm normal distribution", {
+  simple_model(prm = prm_normal("k")) %>%
+    render(options = assemblerr_options(prm.use_mu_referencing = TRUE)) %>%
+    expect_contains("MU_1 = THETA(1)") %>%
+    expect_contains("K = THETA(1) + ETA(1)") %>%
+    expect_contains("$OMEGA") %>%
+    expect_contains("$THETA")
+})
+
+test_that("prm log-normal distribution", {
+  simple_model(prm = prm_log_normal("k")) %>%
+    render(options = assemblerr_options(prm.use_mu_referencing = TRUE)) %>%
+    expect_contains("MU_1 = LOG(THETA(1))") %>%
+    expect_contains("K = THETA(1) * EXP(ETA(1))") %>%
+    expect_contains("$OMEGA") %>%
+    expect_contains("$THETA")
+})
+
+test_that("prm novar distribution", {
+  simple_model(prm = prm_no_var("k")) %>%
+  render(options = assemblerr_options(prm.use_mu_referencing = TRUE)) %>%
+    expect_contains("K = THETA(1)") %>%
+    expect_contains("$THETA")
+})
+
+
+test_that("obs additive", {
+  simple_model(obs = obs_additive(c ~ conc)) %>%
+    render() %>%
+    expect_contains("C = CONC") %>%
+    expect_contains("Y = C + EPS(1)") %>%
+    expect_contains("$SIGMA")
+})
+
+test_that("obs proportional", {
+  simple_model(obs = obs_proportional(c ~ conc)) %>%
+    render() %>%
+    expect_contains("C = CONC") %>%
+    expect_contains("Y = C + C * EPS(1)") %>%
+    expect_contains("$SIGMA")
+})
+
