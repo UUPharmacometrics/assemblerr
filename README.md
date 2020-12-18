@@ -3,6 +3,14 @@
 
 # assemblerr
 
+<!-- badges: start -->
+
+[![Travis build
+status](https://travis-ci.org/UUPharmacometrics/assemblerr.svg?branch=master)](https://travis-ci.org/UUPharmacometrics/assemblerr)
+[![Codecov test
+coverage](https://codecov.io/gh/UUPharmacometrics/assemblerr/branch/master/graph/badge.svg)](https://codecov.io/gh/UUPharmacometrics/assemblerr?branch=master)
+<!-- badges: end -->
+
 assemblerr is an R package to construct pharmacometric models by
 combining pre-defined model components. It’s intended to simplify the
 specification of complex pharmacometric models and provide a mechanism
