@@ -22,19 +22,20 @@ You can install the development version from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("remotes")
-remotes::install_github("UUPharmacometrics/assemblerr")
+remotes::install_github("UUPharmacometrics/assemblerr", build_opts = c("--no-resave-data", "--no-manual"))
 ```
+
 ## Example
 
-This is a basic example which shows you how to create an Emax model and generate the corresponding NONMEM code:
+This is a basic example which shows you how to create a simple analytic model and generate the corresponding NONMEM code:
 
 ```{r example}
 library(assemblerr)
 
 m <- model() +
-  prm_log_normal("emax") +
-  prm_normal("ed50") +
-  obs_additive(effect~emax*dose/(ed50+dose)) 
+  prm_log_normal("v") +
+  prm_log_normal("cl") +
+  obs_additive(conc~amt/v*exp(-cl/v*time)) 
 
 render(m) 
 

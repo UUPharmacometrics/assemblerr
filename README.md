@@ -16,21 +16,21 @@ You can install the development version from
 
 ``` r
 # install.packages("remotes")
-remotes::install_github("UUPharmacometrics/assemblerr")
+remotes::install_github("UUPharmacometrics/assemblerr", build_opts = c("--no-resave-data", "--no-manual"))
 ```
 
 ## Example
 
-This is a basic example which shows you how to create an Emax model and
-generate the corresponding NONMEM code:
+This is a basic example which shows you how to create a simple analytic
+model and generate the corresponding NONMEM code:
 
 ``` r
 library(assemblerr)
 
 m <- model() +
-  prm_log_normal("emax") +
-  prm_normal("ed50") +
-  obs_additive(effect~emax*dose/(ed50+dose)) 
+  prm_log_normal("v") +
+  prm_log_normal("cl") +
+  obs_additive(conc~amt/v*exp(-cl/v*time)) 
 
 render(m) 
 #> $INPUT ID TIME DV AMT
@@ -38,14 +38,14 @@ render(m)
 #> 
 #> $PRED
 #> MU_1 = LOG(THETA(1))
-#> EMAX = THETA(1) * EXP(ETA(1))
-#> MU_2 = THETA(2)
-#> ED50 = THETA(2) + ETA(2)
-#> EFFECT = EMAX * DOSE/(ED50 + DOSE)
-#> Y = EFFECT + EPS(1)
-#> $THETA (0, 1, Inf) ; POP_EMAX
-#> $THETA (0, 1, Inf) ; POP_ED50
-#> $OMEGA 0.1; IIV_EMAX
-#> $OMEGA 0.1; IIV_ED50
+#> V = THETA(1) * EXP(ETA(1))
+#> MU_2 = LOG(THETA(2))
+#> CL = THETA(2) * EXP(ETA(2))
+#> CONC = AMT/V * EXP(-CL/V * TIME)
+#> Y = CONC + EPS(1)
+#> $THETA (0, 1, Inf) ; POP_V
+#> $THETA (0, 1, Inf) ; POP_CL
+#> $OMEGA 0.1; IIV_V
+#> $OMEGA 0.1; IIV_CL
 #> $SIGMA 0.1
 ```
