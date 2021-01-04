@@ -10,6 +10,14 @@ simple_model <- function(prm = prm_log_normal("k"), obs = obs_additive(c~conc)) 
     obs
 }
 
+test_that("required crtl records", {
+  simple_model() %>%
+    render() %>%
+    expect_contains("$PROBLEM") %>%
+    expect_contains("$INPUT") %>%
+    expect_contains("$PRED")
+})
+
 test_that("prm normal distribution", {
   simple_model(prm = prm_normal("k")) %>%
     render(options = assemblerr_options(prm.use_mu_referencing = TRUE)) %>%

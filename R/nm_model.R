@@ -35,9 +35,13 @@ setMethod(
       x@facets[['NmCompartmentFacet']] <- NULL
       x@facets[['NmDesCodeFacet']] <- NULL
     }
-    purrr::map(x@facets, render_component, is_pred = is_pred) %>%
-      purrr::discard(vec_is_empty) %>%
-      glue::as_glue()
+    vec_c(
+      glue::glue("$PROBLEM"),
+      purrr::map(x@facets, render_component, is_pred = is_pred) %>%
+        purrr::discard(vec_is_empty) %>%
+        glue::as_glue()
+    )
+
   }
 )
 
