@@ -1,3 +1,5 @@
+#' @export
+#' @keywords internal
 local_create_nonmem_test_directory <- function(path = tempdir(), env = parent.frame()) {
   dirname <- tempfile("dir", tmpdir = path)
   dir.create(dirname, showWarnings = TRUE, recursive = FALSE)
@@ -9,6 +11,8 @@ local_create_nonmem_test_directory <- function(path = tempdir(), env = parent.fr
   return(dirname)
 }
 
+#' @export
+#' @keywords internal
 #' @importFrom utils write.csv
 create_dummy_data <- function(model, path = NULL){
   nm <- convert(nm_model(), source = model, options = assemblerr_options())
