@@ -14,26 +14,31 @@ ObservationFacet <- setClass("ObservationFacet",
                           ))
 
 
-setClass("ObsNormal",
-         slots = c(mu = "assemblerr_declaration", sigma = "assemblerr_declaration"),
+ObsNormalCombined = setClass("ObsNormalCombined",
+         slots = c(prediction = "assemblerr_declaration", additive_term = "logical", proportional_term = "logical"),
+         prototype = prototype(additive_term = TRUE, proportional_term = TRUE),
          contains = "Observation")
 
+setMethod("initialize",
+          signature = "ObsNormalCombined",
+          definition = function(.Object, prediction = declaration(), ...){
+            callNextMethod(.Object, name = dcl_id_label(prediction), prediction = prediction, ...)
+          })
+
+#' @export
+obs_combined <- function(prediction) {
+  ObsNormalCombined(prediction = as_declaration(prediction))
+}
 
 
 # additive ----------------------------------------------------------------
 
 
 
-AdditiveObservation <- setClass("AdditiveObservation", contains = "ObsNormal")
-setMethod(f = "initialize",
-          signature = "AdditiveObservation",
-          definition = function(.Object, prediction = declaration(), ...){
-            callNextMethod(.Object,
-                           mu = prediction,
-                           sigma = declaration(~1),
-                           name = dcl_id_label(prediction),
-                           ...)
-          })
+AdditiveObservation <- setClass("AdditiveObservation",
+                                contains = "ObsNormalCombined",
+                                prototype = prototype(additive_term = TRUE, proportional_term = FALSE))
+
 
 #' @export
 obs_additive <- function(prediction) {
@@ -46,22 +51,13 @@ obs_additive <- function(prediction) {
 
 
 
-ProportionalObservation <- setClass("ProportionalObservation", contains = "ObsNormal")
+ProportionalObservation <- setClass("ProportionalObservation",
+                                    contains = "ObsNormalCombined",
+                                    prototype = prototype(additive_term = FALSE, proportional_term = TRUE))
 
-setMethod(f = "initialize",
-          signature = "ProportionalObservation",
-          definition = function(.Object, prediction = declaration(), ...){
-            callNextMethod(.Object,
-                           mu = prediction,
-                           sigma = as_declaration(dcl_id_label(prediction)),
-                           name = dcl_id_label(prediction),
-                           ...)
-          })
 
 #' @export
 obs_proportional <- function(prediction) {
   ProportionalObservation(prediction = as_declaration(prediction))
 }
-
-
 

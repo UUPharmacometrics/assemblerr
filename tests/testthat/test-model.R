@@ -60,3 +60,11 @@ test_that("obs proportional", {
     expect_contains("$SIGMA")
 })
 
+test_that("obs combined", {
+  simple_model(obs = obs_combined(c ~ conc)) %>%
+    render() %>%
+    expect_contains("C = CONC") %>%
+    expect_contains("Y = C + EPS(1) + C * EPS(2)") %>%
+    expect_contains("$SIGMA")
+})
+

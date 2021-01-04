@@ -465,7 +465,7 @@ setMethod(
   f = "render_component",
   signature = c(x = "NmSigmaParameter"),
   definition = function(x, ...) {
-    glue::glue("$SIGMA {x@initial}")
+    glue::glue("$SIGMA {x@initial}; RUV_{toupper(x@name)}")
   }
 )
 

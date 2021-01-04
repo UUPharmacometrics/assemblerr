@@ -269,7 +269,8 @@ combine_declarations <- function(dcl1, dcl2, lhs, fn) {
 
 dcl_sum <- function(dcl) {
   vec_assert(dcl)
-  purrr::reduce(dcl, dcl_add, .init = declaration(~0))
+  if (vec_size(dcl) == 0) return(declaration(~0))
+  purrr::reduce(dcl, dcl_add)
 }
 
 dcl_prod <- function(dcl) {
