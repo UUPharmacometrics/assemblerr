@@ -28,7 +28,8 @@ Suggests:
     testthat,
     knitr,
     rmarkdown,
-    covr
+    covr,
+    withr
 Imports: 
     purrr,
     rlang,
@@ -68,4 +69,5 @@ Collate:
     'conversion-parameter-nm.R'
     'model-options.R'
     'pk_component.R'
+    'test-helpers.R'
     'util.R'

@@ -26,16 +26,3 @@ permutation_matrix <- function(index){
 }
 
 
-create_dummy_data <- function(model){
-  nm <- convert(nm_model(), source = model, options = assemblerr_options())
-  variables <- names(nm@facets$NmInputEntryFacet)
-  values <- list()
-  if ("id" %in% variables) values[["id"]] <- 1:10
-  if ("time" %in% variables) values[["time"]] <- c(0, 1, 2, 4, 8, 16)
-  values[variables[!variables %in% names(values)]] <- 0
-  df <- purrr::cross(values) %>%
-    purrr::transpose() %>%
-    purrr::simplify_all() %>%
-    new_data_frame()
-  vec_sort(df)
-}
