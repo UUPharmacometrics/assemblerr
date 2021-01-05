@@ -27,23 +27,30 @@ You can install the development version from
 remotes::install_github("UUPharmacometrics/assemblerr", build_opts = c("--no-resave-data", "--no-manual"))
 ```
 
-## Example
+## Quick start
 
-This is a basic example which shows you how to create a simple analytic
-model and generate the corresponding NONMEM code:
+**Load assemblerr**
 
 ``` r
 library(assemblerr)
+```
 
+**Build a simple model**
+
+``` r
 m <- model() +
   prm_log_normal("v") +
   prm_log_normal("cl") +
   obs_additive(conc~amt/v*exp(-cl/v*time)) 
+```
 
+**Generate NONMEM code**
+
+``` r
 render(m) 
+#> $PROBLEM
 #> $INPUT ID TIME DV AMT
 #> $DATA data.csv IGNORE=@
-#> 
 #> $PRED
 #> MU_1 = LOG(THETA(1))
 #> V = THETA(1) * EXP(ETA(1))
@@ -55,5 +62,24 @@ render(m)
 #> $THETA (0, 1, Inf) ; POP_CL
 #> $OMEGA 0.1; IIV_V
 #> $OMEGA 0.1; IIV_CL
-#> $SIGMA 0.1
+#> $SIGMA 0.1; RUV_ADD
 ```
+
+## Learning more
+
+The best place to learn how to use assemblerr is the vignette
+“Introduction”. It provides an overview of the concepts underpinning
+assemblerr and helps you assembling your own models. A simple way to
+find it is using the `vignette()` function in R:
+
+``` r
+vignette("introduction", package = "assemblerr")
+```
+
+## Status
+
+assemblerr has reached a status where it can significantly simplify the
+creation of pharmacometric model. Nonetheless, it is still considered in
+its early stages of development. Please use the [GitHub
+issue](https://github.com/UUPharmacometrics/assemblerr/issues) system if
+you run into errors or have improvement suggestions.

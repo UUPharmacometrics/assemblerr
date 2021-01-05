@@ -9,97 +9,157 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-
-assemblerr is an R package to construct pharmacometric models by combining pre-defined model components. It's intended to simplify the specification of complex pharmacometric models and provide a mechanism to generate models in an automatic way. With assemblerr, models are specified using R code and then converted to a NONMEM control stream.   
-
-# Quick start
-
-## Load assemblerr 
-
-```{r}
+```{r, include=FALSE}
 library(assemblerr)
 ```
 
-## Build a simple model
 
-```{r}
+assemblerr is an R package to construct pharmacometric models by combining pre-defined model components. It's intended to simplify the specification of complex pharmacometric models and provide a mechanism to generate models in an automatic way. With assemblerr, models are specified using R code and then converted to a NONMEM control stream.   
+
+The following code snippet builds a simple pharmacometric model
+
+``` r
+# load assemblerr
+library(assemblerr)
+
+# create a model and add components
 m <- model() +
   prm_log_normal("v") +
   prm_log_normal("cl") +
   obs_additive(conc~amt/v*exp(-cl/v*time)) 
 
+# generate NONMEM model file
+render(m, filename = "run1.mod") 
 ```
 
-
-## Generate NONMEM code
-
-```{r}
-render(m) 
-```
-
-
-# Workflow
-
-The quick start example showed the general workflow in assemblerr:
+The example above illustrates the general three-step workflow in assemblerr:
 
   1. A model object is created using the `model()` function 
   2. Building blocks are added to the model using the `+` operator 
-  3. The `render()` function generates the NMTRAN code  
+  3. The `render()` function generates the NMTRAN code   
 
-No matter what type of model you are trying to assemble, this workflow will be the same. The difference lies in the creation function being used in step 1 and the building blocks being added in step 2. 
+No matter what type of model you are trying to assemble, this workflow will be the same. The difference lies in the creation function being used in step 1, the building blocks being added in step 2, and the options selected for the rendering in step 3. 
 
-# Model types
+## Model types
 
-The creation function defines the overal scope of the model by deciding which facets the model possesses. A facet is a particular feature of a model such as the model parameters or the compartments for differential equation models. Currently, assemblerr supports two types of pharmacometric models
+The creation function defines the overal scope of the model by deciding which facets the model possesses. A facet is a particular feature of a model, such as the model parameters or the compartments for differential equation models. Currently, assemblerr supports two types of pharmacometric models
 
-  1. **General pharmacometric models:** The lowest level of abstraction that allows the creation of a wide range of models but requires a more fine-grained definition process.  
-  2. **Pharmacokinetic models:** A higher level of abstraction that allows the definition of pharmacokinetic models with less effort.  
+  1. **General pharmacometric models:** The lowest level of abstraction that allows the creation of a wide range of models but requires a more fine-grained definition process. They are created using the function `model()`. 
+  2. **Pharmacokinetic models:** A higher level of abstraction that allows the definition of pharmacokinetic models with less effort. Pharmacokinetic models are created using the function `pk_model()`.  
 
-
-## General pharmacometric models
+The following two code sections illustrate the differences between these two types of models by specifying the same pharmacokinetic model using both model types.  
 
 ```{r}
-# construct one-compartment 1st order elimination model
+# specification using a general pharmacometric model
 m <- model() +
+  prm_log_normal("mat") +
+  prm_log_normal("vc") +
+  prm_log_normal("cl") +
+  algebraic(ka~1/mat) +
   compartment("dose") +
   compartment("central", volume = ~vc) +
   flow(from = "dose", to = "central", definition = ~ka*A) +
   flow(from = "central", definition = ~cl*C) +
-  prm_log_normal("cl") +
-  prm_log_normal("vc") +
   obs_additive(conc~C["central"])
 
-# convert to a NONMEM model and generate NMTran code
 render(m)
 ```
 
 
-## Pharmacokinetic models
-
-For PK models assemblerr supports a higher level of abstraction to simplify the construction of these types of models.
-
 ```{r}
-# construct one-compartment 1st order elimination model
+# specification using a pharmacokinetic model
 pkm <- pk_model() +
   pk_absorption_rate_fo() +
-  pk_elimination_linear() +
   pk_distribution_1cmp() +
+  pk_elimination_linear() +
   obs_additive(conc~C["central"]) 
 
-# convert to a NONMEM model and generate NMTran code
 render(pkm)
-
 ```
 
-The basic building blocks can still be added to a PK model, allowing to customize the pre-defined structure.
 
-```{r}
-# change the parameter model for clearance
-pkm2 <- pkm +
-  prm_normal("cl")
+## Building blocks
 
-# convert to a NONMEM model and generate NMTran code
-render(pkm2)
+Building blocks are one or more features that are to be added to a model. The blocks are created by calling one of the building block functions and added using the `+` operator. The prefix of the building block functions indicates the type of building block (e.g., `prm_` for model parameters) and, in combination with autocomplete, enables a quick overview of the available blocks of a given type.
+
+```{r, eval=FALSE}
+m <- model() +
+  prm_log_normal("base")
 ```
 
-# Building blocks
+It is also possible to combine several building blocks and add the resulting fragment to a model:
+
+```{r, eval=FALSE}
+prms <- prm_log_normal("base") +
+  prm_normal("slp")
+m <- model() +
+  prms
+```
+
+The order of addition, generally, does not matter unless a building block replaces another one of the same name (e.g., two parameters with the same name).
+
+### Available building blocks
+
+Algebraics
+: Defines an algebraic relationship for a variable
+: Function: algebraics
+: Example: `algebraic(k ~ cl/v)`
+
+Compartments
+: Defines the name and volume for a compartment
+: Function: compartment
+: Example: `compartment("central", volume = ~vc)`
+
+Flows
+: Defines flows between compartments
+: Function: flow
+: Example: `flow(from = "central", definition = ~k*C)`
+
+Observations
+: Defines an observational model for a variable 
+: Functions: `r paste(lsf.str("package:assemblerr", pattern = "^obs_"), collapse = ", ")`
+: Example: `obs_combined(c~C["central"])`
+
+Parameters
+: Defines the name and distribution of a model parameter
+: Functions: `r paste(lsf.str("package:assemblerr", pattern = "^prm_"), collapse = ", ")` 
+: Example: `prm_log_normal("cl")`
+
+PK components
+: Defines pharmacokinetic model components for absorption, distribution and elimination
+: Functions: `r paste(lsf.str("package:assemblerr", pattern = "^pk_"), collapse = ", ")` 
+: Example: `pk_elimination_linear()`
+
+## Rendering
+
+The function `render()` translates the assembled model to NMTRAN and the function arguments control this process. 
+
+### Output code to console
+
+By default the function will output the NMTRAN code to the console.
+
+``` r
+render(m)
+```
+
+### Output to a file
+
+When the `filename` argument is specified, the model will be written to the selected file.
+
+``` r
+render(m, filename = "run1.mod")
+```
+
+### Options
+
+Some aspectes to the rendering process can be controlled using the `options` argument. It is best used in conjunction with the `assemblerr_options()` function. For example, the following snippet produces a mu-referenced version of the model m. 
+
+```{r, eval=FALSE}
+render(m, 
+       options = assemblerr_options(prm.use_mu_referencing = TRUE))
+```
+
+
+writes the NMTRAN code for the provided model to the console
+
+The translation of the specified model to NMTRAN is controlled via arguments to the render function. By default the function will output the NMTRAN code to the console, unless the `filename` argument is specified, in which case the model will be written to the requested file. 
