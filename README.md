@@ -24,7 +24,7 @@ You can install the development version from
 
 ``` r
 # install.packages("remotes")
-remotes::install_github("UUPharmacometrics/assemblerr", build_opts = c("--no-resave-data", "--no-manual"))
+remotes::install_github("UUPharmacometrics/assemblerr", build_vignettes = TRUE)
 ```
 
 ## Quick start
