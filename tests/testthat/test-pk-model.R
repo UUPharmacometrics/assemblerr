@@ -84,7 +84,7 @@ test_that("2cmp linear", {
 
 test_that("1cmp linear 1st order absorption, advan", {
   m <- pk_model() +
-    pk_absorption_rate_fo() +
+    pk_absorption_fo() +
     pk_distribution_1cmp() +
     pk_elimination_linear() +
     obs_additive(conc~C["central"])
@@ -143,7 +143,7 @@ test_that("3cmp linear", {
     expect_contains("CONC = A(1)/VC") %>%
     expect_contains("Y = CONC + EPS(1)")
 
-  # =========== ADVAN 15 ================================
+  # =========== ADVAN 5 ================================
 
   render(m,
          options = assemblerr_options(ode.use_special_advans = FALSE,
@@ -170,8 +170,7 @@ test_that("1cmp linear, transit delay", {
   m <- pk_model() +
     pk_distribution_1cmp() +
     pk_elimination_linear() +
-    pk_absorption_delay_transit(transit_compartments = 3) +
-    pk_absorption_rate_fo() +
+    pk_absorption_fo_transit(transit_compartments = 3) +
     obs_additive(conc~C["central"])
 
   render(m,

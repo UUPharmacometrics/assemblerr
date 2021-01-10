@@ -56,7 +56,10 @@ setMethod(
 #' @export
 algebraic <- function(definition){
   definition <- as_declaration(definition)
-  vec_assert(definition, ptype = declaration(), size = 1)
-  Algebraic(definition = definition)
+  vec_assert(definition, ptype = declaration())
+  vec_chop(definition) %>%
+    purrr::map(Algebraic) %>%
+    purrr::reduce(`+`)
+  #Algebraic(definition = definition)
 }
 

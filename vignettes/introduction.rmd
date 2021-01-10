@@ -69,7 +69,7 @@ render(m)
 ```{r}
 # specification using a pharmacokinetic model
 pkm <- pk_model() +
-  pk_absorption_rate_fo() +
+  pk_absorption_fo() +
   pk_distribution_1cmp() +
   pk_elimination_linear() +
   obs_additive(conc~C["central"]) 

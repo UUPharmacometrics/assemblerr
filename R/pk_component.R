@@ -25,14 +25,9 @@ PkComponentFacet <- setClass(
 )
 
 
-
-setClass("PkAbsorptionRateComponent",
+setClass("PkAbsorptionComponent",
          contains = "PkComponent",
-         prototype = prototype(name = "absorption-rate"))
-
-setClass("PkAbsorptionDelayComponent",
-         contains = "PkComponent",
-         prototype = prototype(name = "absorption-delay"))
+         prototype = prototype(name = "absorption"))
 
 setClass("PkDistributionComponent",
          contains = "PkComponent",
@@ -212,35 +207,28 @@ pk_elimination_mm <- function(prm_clmm = prm_log_normal("clmm"),
 
 
 
-# absorption rate first-order ------------------------------------------------------
 
+# absorption FO -----------------------------------------------------------
 
-PkAbsorptionRateFO <- setClass("PkAbsorptionRateFO",
-         contains = "PkAbsorptionRateComponent")
+PkAbsorptionFO <- setClass("PkAbsorptionFO",
+                               contains = "PkAbsorptionComponent")
 
 setMethod(
   f = "convert",
-  signature = c(target = "Model", source = "PkModel", component = "PkAbsorptionRateFO"),
+  signature = c(target = "Model", source = "PkModel", component = "PkAbsorptionFO"),
   definition = function(target, source, component, options) {
     dcl <- declaration(ka~1/mat) %>%
       dcl_substitute(list(mat = sym(component@prm_names['mat'])))
-    if (is(source@facets$PkComponentFacet@entries[['absorption-delay']], "PkAbsorptionDelayTransit")) {
-      n <- source@facets$PkComponentFacet@entries[['absorption-delay']]@ncompartments
-      target +
-        flow(from = paste0("transit", n), to = "central", definition = ~ka*A) +
-        algebraic(dcl)
-    } else {
       target +
         compartment("depot", volume = ~1) +
         flow(from = "depot", to = "central", definition = ~ka*A) +
         algebraic(dcl)
-    }
   }
 )
 
 #' @export
-pk_absorption_rate_fo <- function(prm_mat = prm_log_normal("mat")) {
-  PkAbsorptionRateFO(
+pk_absorption_fo <- function(prm_mat = prm_log_normal("mat")){
+  PkAbsorptionFO(
     parameters = list(
       mat = prm_mat
     )
@@ -248,54 +236,62 @@ pk_absorption_rate_fo <- function(prm_mat = prm_log_normal("mat")) {
     prm_mat
 }
 
+# absorption FO lagtime-----------------------------------------------------------
 
-# absorption rate zero-order ---------------------------------------------------
-
-
-PkAbsorptionRateZO <- setClass("PkAbsorptionRateZO",
-                               contains = "PkAbsorptionRateComponent")
+PkAbsorptionFOLagtime <- setClass(
+  "PkAbsorptionFOLagtime",
+  contains = "PkAbsorptionComponent"
+)
 
 setMethod(
   f = "convert",
-  signature = c(target = "Model", source = "PkModel", component = "PkAbsorptionRateZO"),
+  signature = c(target = "Model", source = "PkModel", component = "PkAbsorptionFOLagtime"),
   definition = function(target, source, component, options) {
-    dcl <- declaration(r1~amt/mat/2) %>%
-      dcl_substitute(list(mat = sym(component@prm_names['mat'])))
+    dcl <- declaration(alag1~mdt, ka~1/mat) %>%
+      dcl_substitute(
+        list(
+          mdt = sym(component@prm_names['mdt']),
+          mat = sym(component@prm_names['mat'])
+        )
+      )
     target +
+      compartment("depot", volume = ~1) +
+      flow(from = "depot", to = "central", definition = ~ka*A) +
       algebraic(dcl)
   }
 )
 
 #' @export
-pk_absorption_rate_zo <- function(prm_mat = prm_log_normal("mat")) {
-  PkAbsorptionRateZO(
+pk_absorption_fo_lag <- function(prm_mat = prm_log_normal("mat"),
+                                 prm_mdt = prm_log_normal("mdt")) {
+  PkAbsorptionFOLagtime(
     parameters = list(
-      mat = prm_mat
+      mat = prm_mat,
+      mdt = prm_mdt
     )
   ) +
+    prm_mdt +
     prm_mat
 }
 
+# absorption FO transit-----------------------------------------------------------
 
-# absorption delay transit ------------------------------------------------------
-
-
-PkAbsorptionDelayTransit <- setClass(
-  "PkAbsorptionDelayTransit",
+PkAbsorptionFOTransit <- setClass(
+  "PkAbsorptionFOTransit",
   slots = c(ncompartments = "numeric"),
-  contains = "PkAbsorptionDelayComponent"
+  contains = "PkAbsorptionComponent"
 )
 
 setMethod(
   f = "convert",
-  signature = c(target = "Model", source = "PkModel", component = "PkAbsorptionDelayTransit"),
+  signature = c(target = "Model", source = "PkModel", component = "PkAbsorptionFOTransit"),
   definition = function(target, source, component, options) {
-
-    dcl <- declaration(ktr~n/mdt) %>%
+    dcl <- declaration(ktr~n/mdt, ka~1/mat) %>%
       dcl_substitute(
         list(
           mdt = sym(component@prm_names['mdt']),
-          n = component@ncompartments
+          n = component@ncompartments,
+          mat = sym(component@prm_names['mat'])
         )
       )
     cmps <- purrr::map(seq_len(component@ncompartments), ~compartment(paste0("transit", .x)))
@@ -309,52 +305,114 @@ setMethod(
 
     purrr::reduce(cmps, `+`, .init = target) %>%
       purrr::reduce(flows, `+`, .init = . ) +
+      flow(from = paste0("transit", component@ncompartments), to = "central", definition = ~ka*A) +
       algebraic(dcl)
   }
 )
 
 #' @export
-pk_absorption_delay_transit <- function(transit_compartments = 1L, prm_mdt = prm_log_normal("mdt")) {
-  PkAbsorptionDelayTransit(
+pk_absorption_fo_transit <- function(prm_mat = prm_log_normal("mat"),
+                                     transit_compartments = 1L,
+                                     prm_mdt = prm_log_normal("mdt")) {
+  PkAbsorptionFOTransit(
     ncompartments = transit_compartments,
     parameters = list(
+      mat = prm_mat,
       mdt = prm_mdt
     )
   ) +
-    prm_mdt
+    prm_mdt +
+    prm_mat
 }
 
-# absorption delay lagtime ------------------------------------------------------
+# absorption ZO-----------------------------------------------------------
 
-
-PkAbsorptionDelayLagtime <- setClass(
-  "PkAbsorptionDelayLagtime",
-   contains = "PkAbsorptionDelayComponent"
-)
+PkAbsorptionZO <- setClass("PkAbsorptionZO",
+                               contains = "PkAbsorptionComponent")
 
 setMethod(
   f = "convert",
-  signature = c(target = "Model", source = "PkModel", component = "PkAbsorptionDelayLagtime"),
+  signature = c(target = "Model", source = "PkModel", component = "PkAbsorptionZO"),
   definition = function(target, source, component, options) {
-
-    dcl <- declaration(alag1~mdt) %>%
-      dcl_substitute(
-        list(
-          mdt = sym(component@prm_names['mdt'])
-        )
-      )
-
+    dcl <- declaration(r1~amt/mat/2) %>%
+      dcl_substitute(list(mat = sym(component@prm_names['mat'])))
     target +
       algebraic(dcl)
   }
 )
 
 #' @export
-pk_absorption_delay_lagtime <- function(prm_mdt = prm_log_normal("mdt")) {
-  PkAbsorptionDelayLagtime(
-     parameters = list(
+pk_absorption_zo <- function(prm_mat = prm_log_normal("mat")) {
+  PkAbsorptionRateZO(
+    parameters = list(
+      mat = prm_mat
+    )
+  ) +
+    prm_mat
+}
+
+# absorption ZO lagtime-----------------------------------------------------------
+
+PkAbsorptionZOLagtime <- setClass("PkAbsorptionZOLagtime",
+                           contains = "PkAbsorptionComponent")
+
+setMethod(
+  f = "convert",
+  signature = c(target = "Model", source = "PkModel", component = "PkAbsorptionZOLagtime"),
+  definition = function(target, source, component, options) {
+    dcl <- declaration(alag1~mdt, r1~amt/mat/2) %>%
+      dcl_substitute(
+        list(
+          mat = sym(component@prm_names['mat']),
+          mdt = sym(component@prm_names['mdt']),
+        )
+      )
+    target +
+      algebraic(dcl)
+  }
+)
+
+#' @export
+pk_absorption_zo_lag <- function(prm_mat = prm_log_normal("mat"),
+                                 prm_mdt = prm_log_normal("mdt")) {
+  PkAbsorptionZOLagtime(
+    parameters = list(
+      mat = prm_mat,
       mdt = prm_mdt
     )
   ) +
+    prm_mat +
+    prm_mdt
+}
+
+# absorption FO ZO-----------------------------------------------------------
+
+PkAbsorptionFOZO <- setClass("PkAbsorptionFOZO",
+                           contains = "PkAbsorptionComponent")
+
+setMethod(
+  f = "convert",
+  signature = c(target = "Model", source = "PkModel", component = "PkAbsorptionZO"),
+  definition = function(target, source, component, options) {
+    dcl <- declaration(ka~1/mat, r1~amt/mdt/2) %>%
+      dcl_substitute(list(mat = sym(component@prm_names['mat']),
+                          mdt = sym(component@prm_names['mdt'])))
+    target +
+      compartment("depot", volume = ~1) +
+      flow(from = "depot", to = "central", definition = ~ka*A) +
+      algebraic(dcl)
+  }
+)
+
+#' @export
+pk_absorption_fo_zo <- function(prm_mat = prm_log_normal("mat"),
+                                prm_mdt = prm_log_normal("mdt")) {
+  PkAbsorptionRateFOZO(
+    parameters = list(
+      mat = prm_mat,
+      mdt = prm_mdt
+    )
+  ) +
+    prm_mat +
     prm_mdt
 }
