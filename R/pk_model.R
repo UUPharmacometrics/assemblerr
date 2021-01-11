@@ -33,6 +33,9 @@ setMethod(
   f = "convert",
   signature = c(target = "Model", source = "PkModel", component = "missing"),
   definition = function(target, source, component, options) {
+    # ensure to process in alphabetical order (i.e., absorption, distribution, elimination)
+    cmp_order <- order(names(source@facets[["PkComponentFacet"]]@entries))
+    source@facets[["PkComponentFacet"]]@entries <- source@facets[["PkComponentFacet"]]@entries[cmp_order]
     target <- convert(target, source, source@facets[["PkComponentFacet"]], options = options)
     purrr::discard(source@facets, ~inherits(.x, "PkComponentFacet")) %>%
       purrr::reduce(combine, .init = target)

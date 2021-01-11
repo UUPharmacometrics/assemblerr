@@ -187,12 +187,12 @@ test_that("1cmp linear, transit delay", {
     expect_contains("MAT = THETA(4) * EXP(ETA(4))") %>%
     expect_contains("KTR = 3/MDT") %>%
     expect_contains("KA = 1/MAT") %>%
-    expect_contains("K10 = CL * (1/VC)") %>%
+    expect_contains("K12 = KTR") %>%
     expect_contains("K23 = KTR") %>%
     expect_contains("K34 = KTR") %>%
-    expect_contains("K45 = KTR") %>%
-    expect_contains("K51 = KA") %>%
-    expect_contains("CONC = A(1)/VC") %>%
+    expect_contains("K45 = KA") %>%
+    expect_contains("K50 = CL * (1/VC)") %>%
+    expect_contains("CONC = A(5)/VC") %>%
     expect_contains("Y = CONC + EPS(1)")
 })
 
