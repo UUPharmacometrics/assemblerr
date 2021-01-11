@@ -43,6 +43,14 @@ test_that("prm novar distribution", {
     expect_contains("$THETA")
 })
 
+test_that("prm logit distribution", {
+  simple_model(prm = prm_logit_normal("k")) %>%
+    render(options = assemblerr_options(prm.use_mu_referencing = TRUE)) %>%
+    expect_contains("LOGIT_K = LOG(THETA(1)/(1 - THETA(1))) + ETA(1)") %>%
+    expect_contains("K = EXP(LOGIT_K)/(1 + EXP(LOGIT_K))") %>%
+    expect_contains("$THETA")
+})
+
 
 test_that("obs additive", {
   simple_model(obs = obs_additive(c ~ conc)) %>%
