@@ -294,14 +294,11 @@ setMethod(
           mat = sym(component@prm_names['mat'])
         )
       )
-    cmps <- purrr::map(seq_len(component@ncompartments), ~compartment(paste0("transit", .x)))
-    flows <- NULL
-    if (component@ncompartments > 1) {
-      flows <- purrr::map2(.x = seq(1, component@ncompartments - 1),
-                           .y = seq(2, component@ncompartments),
-                           ~flow(paste0("transit", .x), paste0("transit", .y), definition = ~ktr*A))
-
-    }
+    cmp_names <- c("depot", paste0("transit", seq_len(component@ncompartments)))
+    cmps <- purrr::map(cmp_names, compartment)
+    flows <- purrr::map2(.x = cmp_names[-length(cmp_names)],
+                           .y = cmp_names[-1],
+                           ~flow(.x, .y, definition = ~ktr*A))
 
     purrr::reduce(cmps, `+`, .init = target) %>%
       purrr::reduce(flows, `+`, .init = . ) +
