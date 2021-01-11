@@ -18,10 +18,17 @@ test_that("named facet creation and addition of entries", {
   expect_equal(f@entries[["test"]], e)
 })
 
-test_that("printing of facets", {
+test_that("printing of models", {
   m <- model() +
     prm_log_normal("cl") +
     compartment("central") +
     flow(from = "central", definition = ~k*C)
   expect_message(show(m), regexp = "assemblerr model")
+})
+
+test_that("printing of fragments", {
+  f <- prm_log_normal("cl") +
+    compartment("central") +
+    flow(from = "central", definition = ~k*C)
+  expect_message(show(f), regexp = "assemblerr fragment \\(size 3\\)")
 })
