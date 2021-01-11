@@ -17,6 +17,7 @@ setMethod(
                                  NmPkCodeFacet(),
                                  NmDesCodeFacet(),
                                  NmErrorCodeFacet(),
+                                 NmEstimationFacet(),
                                  NmThetaParameterFacet(),
                                  NmOmegaParameterFacet(),
                                  NmSigmaParameterFacet()),
@@ -357,6 +358,32 @@ setMethod(
 nm_error <- function(statement){
   NmErrorCode(statement = statement)
 }
+
+
+# $ESTIMATION -------------------------------------------------------------
+
+
+
+NmEstimation <- setClass(
+  "NmEstimation",
+  contains = "FacetEntry",
+  prototype = prototype(facet_class = "NmEstimationFacet")
+)
+
+
+NmEstimationFacet <- setClass(
+  "NmEstimationFacet",
+  contains = "Facet",
+  prototype = prototype(entry_class = "NmEstimation")
+)
+
+setMethod(
+  f = "render_component",
+  signature = c(x = "NmEstimationFacet"),
+  definition = function(x, ...) {
+    glue::glue("$ESTIMATION METHOD=COND INTERACTION")
+  }
+)
 
 # $THETA ------------------------------------------------------------------
 

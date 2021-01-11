@@ -56,6 +56,7 @@ render(m)
 #> CL = THETA(2) * EXP(ETA(2))
 #> CONC = AMT/V * EXP(-CL/V * TIME)
 #> Y = CONC + EPS(1)
+#> $ESTIMATION METHOD=COND INTERACTION
 #> $THETA (0, 1, Inf) ; POP_V
 #> $THETA (0, 1, Inf) ; POP_CL
 #> $OMEGA 0.1; IIV_V
