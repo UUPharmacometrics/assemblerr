@@ -52,9 +52,7 @@ render(m)
 #> $INPUT ID TIME DV AMT
 #> $DATA data.csv IGNORE=@
 #> $PRED
-#> MU_1 = LOG(THETA(1))
 #> V = THETA(1) * EXP(ETA(1))
-#> MU_2 = LOG(THETA(2))
 #> CL = THETA(2) * EXP(ETA(2))
 #> CONC = AMT/V * EXP(-CL/V * TIME)
 #> Y = CONC + EPS(1)
