@@ -343,7 +343,7 @@ setMethod(
 
 #' @export
 pk_absorption_zo <- function(prm_mat = prm_log_normal("mat")) {
-  PkAbsorptionRateZO(
+  PkAbsorptionZO(
     parameters = list(
       mat = prm_mat
     )
@@ -392,7 +392,7 @@ PkAbsorptionFOZO <- setClass("PkAbsorptionFOZO",
 
 setMethod(
   f = "convert",
-  signature = c(target = "Model", source = "PkModel", component = "PkAbsorptionZO"),
+  signature = c(target = "Model", source = "PkModel", component = "PkAbsorptionFOZO"),
   definition = function(target, source, component, options) {
     dcl <- declaration(ka~1/mat, r1~amt/mdt/2) %>%
       dcl_substitute(list(mat = sym(component@prm_names['mat']),
