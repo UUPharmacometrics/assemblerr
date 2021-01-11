@@ -364,7 +364,7 @@ setMethod(
       dcl_substitute(
         list(
           mat = sym(component@prm_names['mat']),
-          mdt = sym(component@prm_names['mdt']),
+          mdt = sym(component@prm_names['mdt'])
         )
       )
     target +

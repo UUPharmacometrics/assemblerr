@@ -244,3 +244,27 @@ test_that("1cmp, zo", {
     expect_contains("CONC = A(1)/VC") %>%
     expect_contains("Y = CONC + EPS(1)")
 })
+
+test_that("1cmp, zo lag", {
+  m <- pk_model() +
+    pk_distribution_1cmp() +
+    pk_elimination_linear() +
+    pk_absorption_zo_lag() +
+    obs_additive(conc~C["central"])
+
+  render(m,
+         options = assemblerr_options(
+           ode.use_special_advans = TRUE,
+           ode.use_general_linear_advans = TRUE
+         )
+  ) %>%
+    expect_contains(" ADVAN1 ") %>%
+    expect_contains(" TRANS2 ") %>%
+    expect_contains("VC = THETA(1) * EXP(ETA(1))") %>%
+    expect_contains("CL = THETA(2) * EXP(ETA(2))") %>%
+    expect_contains("MAT = THETA(3) * EXP(ETA(3)") %>%
+    expect_contains("R1 = AMT/MAT/2") %>%
+    expect_contains("V = VC")  %>%
+    expect_contains("CONC = A(1)/VC") %>%
+    expect_contains("Y = CONC + EPS(1)")
+})
