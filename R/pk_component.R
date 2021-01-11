@@ -407,7 +407,7 @@ setMethod(
 #' @export
 pk_absorption_fo_zo <- function(prm_mat = prm_log_normal("mat"),
                                 prm_mdt = prm_log_normal("mdt")) {
-  PkAbsorptionRateFOZO(
+  PkAbsorptionFOZO(
     parameters = list(
       mat = prm_mat,
       mdt = prm_mdt
