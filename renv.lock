@@ -16,13 +16,6 @@
       "Repository": "CRAN",
       "Hash": "d4618c4cb36bc46831551c5d85815818"
     },
-    "Rcpp": {
-      "Package": "Rcpp",
-      "Version": "1.0.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "d5ae8445d4972caed1c5517ffae908d7"
-    },
     "askpass": {
       "Package": "askpass",
       "Version": "1.1",
@@ -144,10 +137,10 @@
     },
     "htmltools": {
       "Package": "htmltools",
-      "Version": "0.3.6",
+      "Version": "0.5.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "74aa264d2e3b6214529cd33a5850a07f"
+      "Hash": "7d651b7131794fe007b1ad6f21aaa401"
     },
     "httr": {
       "Package": "httr",
@@ -286,7 +279,8 @@
       "Package": "renv",
       "Version": "0.12.5",
       "Source": "Repository",
-      "Repository": "CRAN"
+      "Repository": "CRAN",
+      "Hash": "5c0cdb37f063c58cdab3c7e9fbb8bd2c"
     },
     "rex": {
       "Package": "rex",
