@@ -6,5 +6,5 @@ test_that("combining of issues", {
 test_that("printing of issues", {
   local_edition(3)
   issues <- IssueList(Issue("test"), CriticalIssue("test2"))
-  expect_snapshot(issues)
+  expect_snapshot(print(issues))
 })
