@@ -67,6 +67,7 @@ Collate:
     'conversion-observation-nm.R'
     'parameter.R'
     'conversion-parameter-nm.R'
+    'issues.R'
     'model-options.R'
     'pk_component.R'
     'test-helpers.R'

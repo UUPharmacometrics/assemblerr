@@ -24,6 +24,20 @@ PkComponentFacet <- setClass(
   prototype = prototype(entry_class = "PkComponent")
 )
 
+setMethod(
+  f = "check",
+  signature = signature(x = "PkComponentFacet"),
+  definition = function(x) {
+    issues <- IssueList()
+    if (!"distribution" %in% names(x@entries)) {
+      issues <- c(issues, CriticalIssue("A distribution component is missing"))
+    }
+    if (!"elimination" %in% names(x@entries)) {
+      issues <- c(issues, CriticalIssue("An elimination component is missing"))
+    }
+  }
+)
+
 
 setClass("PkAbsorptionComponent",
          contains = "PkComponent",

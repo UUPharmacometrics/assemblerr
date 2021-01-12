@@ -13,6 +13,20 @@ ObservationFacet <- setClass("ObservationFacet",
                              label = "observations"
                           ))
 
+setMethod(
+  f = "check",
+  signature = signature(x = "ObservationFacet"),
+  definition = function(x) {
+      if (vec_is_empty(x@entries)) {
+        CriticalIssue("No observation specified")
+      } else if (vec_size(x@entries) > 1) {
+        CriticalIssue("More than one observation specified")
+      }else{
+        NULL
+      }
+    }
+)
+
 
 ObsNormalCombined = setClass("ObsNormalCombined",
          slots = c(prediction = "assemblerr_declaration", additive_term = "logical", proportional_term = "logical"),

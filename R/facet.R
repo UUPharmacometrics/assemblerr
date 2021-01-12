@@ -53,6 +53,18 @@ setMethod(
   }
 )
 
+setGeneric(
+  name = "check",
+  def = function(x, ...) standardGeneric("check")
+)
+
+setMethod(
+  f = "check",
+  signature = signature(x = "Facet"),
+  definition = function(x) {
+    return(IssueList())
+  }
+)
 
 setMethod(
   f = "show",
@@ -151,6 +163,15 @@ setMethod(
     cli::cli_end(dl)
     cli::cli_end(div)
     invisible(NULL)
+  }
+)
+
+setMethod(
+  f = "check",
+  signature = signature(x = "Fragment"),
+  definition = function(x) {
+    issues <- purrr::map(x@facets, check)
+    purrr::reduce(issues, c, .init = IssueList())
   }
 )
 
