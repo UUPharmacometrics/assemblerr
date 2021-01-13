@@ -2,6 +2,12 @@ context("test-pk-model")
 
 expect_contains <- function(object, str) return(expect_match(object, str, fixed = TRUE, all = FALSE))
 
+test_that("check empty pk_model", {
+  local_edition(3)
+  m <- pk_model()
+  expect_snapshot(print(check(m)))
+})
+
 test_that("1cmp linear, advan", {
   m <- pk_model() +
     pk_distribution_1cmp() +
