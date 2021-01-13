@@ -13,3 +13,10 @@
     Message <cliMessage>
         4. No observation specified
 
+# check complete pk_model
+
+    Code
+      print(check(m))
+    Message <cliMessage>
+      SUCCESS! No issues
+

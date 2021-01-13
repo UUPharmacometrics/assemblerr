@@ -8,6 +8,15 @@ test_that("check empty pk_model", {
   expect_snapshot(print(check(m)))
 })
 
+test_that("check complete pk_model", {
+  local_edition(3)
+  m <- pk_model() +
+    pk_distribution_1cmp() +
+    pk_elimination_linear() +
+    obs_additive(conc~C["central"])
+  expect_snapshot(print(check(m)))
+})
+
 test_that("1cmp linear, advan", {
   m <- pk_model() +
     pk_distribution_1cmp() +
