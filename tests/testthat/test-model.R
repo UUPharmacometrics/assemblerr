@@ -91,3 +91,14 @@ test_that("obs combined", {
     expect_contains("$SIGMA")
 })
 
+test_that("adding variables from a dataset", {
+  m <- simple_model()
+  local_create_nonmem_test_directory()
+  df <- data.frame(ID = 1, TIME = 1, DV = 1, DOSE = 1)
+  write.csv(df, "data.csv", quote = FALSE, row.names = FALSE)
+  m <- m +
+    dataset(path = "data.csv")
+  render(m) %>%
+    expect_contains("$INPUT ID TIME DV DOSE") %>%
+    expect_contains("$DATA data.csv IGNORE=@")
+})
