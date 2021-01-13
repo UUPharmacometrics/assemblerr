@@ -1,7 +1,7 @@
 # printing of issues
 
     Code
-      issues
+      print(issues)
     Message <cliMessage>
       [33m![39m 2 issues
     Message <cliMessage>
