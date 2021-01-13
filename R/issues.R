@@ -39,7 +39,7 @@ setMethod(
     if (vec_is_empty(object@.Data)) {
       cli::cli_alert_success("No issues")
     } else{
-      #cli::cli_alert_warning("{length(object)} issue{?s}")
+      cli::cli_alert_warning("{length(object)} issue{?s}")
       div_id <- cli::cli_div(theme = list(
         "ol" = list("margin-left" = 2),
         ".critical" = list(color = "red"),
