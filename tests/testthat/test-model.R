@@ -10,6 +10,21 @@ simple_model <- function(prm = prm_log_normal("k"), obs = obs_additive(c~conc)) 
     obs
 }
 
+test_that("check empty model",{
+  local_edition(3)
+  local_reproducible_output()
+  m <- model()
+  expect_snapshot(print(check(m)))
+})
+
+test_that("check simple model",{
+  local_edition(3)
+  local_reproducible_output()
+  m <- simple_model()
+  expect_snapshot(print(check(m)))
+})
+
+
 test_that("required crtl records", {
   simple_model() %>%
     render() %>%
