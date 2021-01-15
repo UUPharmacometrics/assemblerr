@@ -102,3 +102,12 @@ test_that("adding variables from a dataset", {
     expect_contains("$INPUT ID TIME DV DOSE") %>%
     expect_contains("$DATA data.csv IGNORE=@")
 })
+
+
+test_that("flow error checking", {
+  expect_error(flow(~ka))
+  expect_error(flow(~ka*A, to = "depot"))
+  expect_error(flow(~ka*C, to = "depot"))
+  expect_silent(flow(~ka*C, from = "depot"))
+  expect_silent(flow(~ka, to = "central"))
+})

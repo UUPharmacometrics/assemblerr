@@ -4,21 +4,24 @@
 \alias{flow}
 \title{Flows between compartments}
 \usage{
-flow(from = NA_character_, to = NA_character_, definition)
+flow(definition, from = NA_character_, to = NA_character_)
 }
 \arguments{
-\item{from}{Name of the source compartment or NULL}
+\item{definition}{Declaration of the flow using the variable A (amount in 'from' compartment) and C (concentration in 'from' compartment)}
 
-\item{to}{Name of the sink compartment or NULL}
+\item{from}{Name of the source compartment or NA for an inflow without source}
 
-\item{definition}{Declaration of the flow using the special variable A (amount in 'from' compartment) and C (concentration in 'from' compartment)}
+\item{to}{Name of the sink compartment or NA for an ouflow without sink}
 }
 \value{
-A flow fragment
+A flow building block
 }
 \description{
-Creates a fragment describing a flow from between compartmens.
+Creates a building block describing a flow between compartments.
 }
 \examples{
-f <- flow(from = "depot", to = "central", definition = declaration(~ka*A))
+f <- model() +
+     compartment("depot") +
+     compartment("central", volume = ~V)
+     flow(declaration(~ka*A), from = "depot", to = "central")
 }

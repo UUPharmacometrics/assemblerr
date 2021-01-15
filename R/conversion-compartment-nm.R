@@ -63,7 +63,6 @@ setMethod(
     if (vec_is_empty(component@entries)) return(target)
 
     flows <- collect_flows(component, source)
-
     ode_dcl <- purrr::map(source@facets[["CompartmentFacet"]]@entries, function(cmp){
       outflow <- dcl_sum(flows$definition[flows$from == cmp@name & !is.na(flows$from)])
       inflow <- dcl_sum(flows$definition[flows$to == cmp@name & !is.na(flows$to)])

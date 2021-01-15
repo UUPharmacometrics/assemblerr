@@ -66,20 +66,31 @@ cmp <- compartment
 
 #' Flows between compartments
 #'
-#' Creates a fragment describing a flow from between compartmens.
+#' Creates a building block describing a flow between compartments.
 #'
-#' @param from Name of the source compartment or NULL
-#' @param to Name of the sink compartment or NULL
-#' @param definition Declaration of the flow using the special variable A (amount in 'from' compartment) and C (concentration in 'from' compartment)
+#' @param from Name of the source compartment or NA for an inflow without source
+#' @param to Name of the sink compartment or NA for an ouflow without sink
+#' @param definition Declaration of the flow using the variable A (amount in 'from' compartment) and C (concentration in 'from' compartment)
 #'
-#' @return A flow fragment
+#' @return A flow building block
 #' @export
 #' @examples
-#' f <- flow(from = "depot", to = "central", definition = declaration(~ka*A))
-flow <- function(from = NA_character_, to = NA_character_, definition){
+#' f <- model() +
+#'      compartment("depot") +
+#'      compartment("central", volume = ~V)
+#'      flow(declaration(~ka*A), from = "depot", to = "central")
+flow <- function(definition, from = NA_character_, to = NA_character_){
   if (!is.character(from) && !is.character(to)) stop("'from' or/and 'to' need to be compartment names")
+  if (is.na(from) && is.na(to)) rlang::abort(c("Invalid flow definition", x = "The 'from' or 'to' compartment need to be specified"))
   definition <- as_declaration(definition)
   vec_assert(definition, ptype = declaration(), size = 1)
+  if (is.na(from) && any(c("C", "A") %in% dcl_vars_chr(definition, include_indicies = TRUE, include_lhs = FALSE))) {
+    rlang::abort(
+      c("Invalid flow definition",
+        x = "Flow definitions can not use A/C when 'from' is not specified",
+        i = "A or C refer to the amount or concentration in the 'from' compartment")
+    )
+  }
   Flow(from = from, to = to, definition = definition)
 }
 
