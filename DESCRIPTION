@@ -4,7 +4,7 @@ Description: assemblerr is an R package to construct pharmacometric models by
     combining pre-defined model components. It’s intended to simplify the
     specification of complex pharmacometric models and provide a mechanism
     to generate models in an automatic way. 
-Version: 0.0.0.9000
+Version: 0.0.0.9001
 Authors@R: 
     c(person(given = "Sebastian",
            family = "Ueckert",
