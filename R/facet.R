@@ -260,6 +260,7 @@ setMethod(
   }
 )
 
+#' @importFrom  methods slot slot<- slotNames
 setMethod(
   f = "combine",
   signature = c(x = "Facet", y = "Facet"),

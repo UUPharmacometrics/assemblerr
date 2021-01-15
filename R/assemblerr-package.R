@@ -1,6 +1,6 @@
 #' @keywords internal
 #' @importFrom methods is getFunction
-#' @importFrom rlang .data
+#' @importFrom rlang .data %||%
 "_PACKAGE"
 
 #' Pipe operator

@@ -37,7 +37,7 @@ expect_does_not_contain <- function(object, regexp) {
   stopifnot(is.character(regexp), length(regexp) == 1)
   stopifnot(is.character(act$val))
   if (length(object) == 0) {
-    fail(sprintf("%s is empty.", act$lab))
+    testthat::fail(sprintf("%s is empty.", act$lab))
   }
   matches <- !grepl(regexp, act$val, fixed = TRUE)
   if (length(act$val) == 1) {
@@ -48,7 +48,7 @@ expect_does_not_contain <- function(object, regexp) {
     values <- paste0("Actual values:\n", paste0("* ", encodeString(act$val),
                                                 collapse = "\n"))
   }
-  expect(all(matches), sprintf("%s does contain %s.\n%s", act$lab,
+  testthat::expect(all(matches), sprintf("%s does contain %s.\n%s", act$lab,
                                encodeString(regexp, quote = "\""), values))
   invisible(act$val)
 }

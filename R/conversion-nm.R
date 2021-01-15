@@ -12,6 +12,7 @@ setMethod(
       convert(source, source@facets[["ObservationFacet"]], options) %>%
       convert(source, source@facets[["InputVariableFacet"]], options) %>%
       convert(source, source@facets[["MetaEntryFacet"]], options)
+    if (!is.null(options[["default_record.covariance_step"]])) target <- target + options[["default_record.covariance_step"]]
     if (vec_is_empty(source@facets[["InputVariableFacet"]]@entries)) {
       target  <-    target +
         nm_input("id", "id") +

@@ -3,6 +3,7 @@ context("test-model")
 
 expect_contains <- function(object, str) return(expect_match(object, str, fixed = TRUE, all = FALSE))
 
+
 simple_model <- function(prm = prm_log_normal("k"), obs = obs_additive(c~conc)) {
   model() +
     prm +
@@ -110,4 +111,14 @@ test_that("flow error checking", {
   expect_error(flow(~ka*C, to = "depot"))
   expect_silent(flow(~ka*C, from = "depot"))
   expect_silent(flow(~ka, to = "central"))
+})
+
+
+test_that("addition of default covariance record",{
+  m <- simple_model()
+
+  render(m, options = assemblerr_options(default_record.covariance_step = nm_covariance())) %>%
+    expect_contains("$COVARIANCE")
+  render(m, options = assemblerr_options(default_record.covariance_step = NULL)) %>%
+    expect_does_not_contain("$COVARIANCE")
 })

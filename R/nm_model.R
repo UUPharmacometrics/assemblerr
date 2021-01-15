@@ -18,6 +18,7 @@ setMethod(
                                  NmDesCodeFacet(),
                                  NmErrorCodeFacet(),
                                  NmEstimationFacet(),
+                                 NmCovarianceStepFacet(invisible = TRUE),
                                  NmThetaParameterFacet(),
                                  NmOmegaParameterFacet(),
                                  NmSigmaParameterFacet()),
@@ -74,6 +75,51 @@ nm_model <- function(){
   NmModel()
 }
 
+
+NmRecordOption <- setClass(
+  "NmRecordOption",
+  slots = c(name = "character", value = "character"),
+  contains = "NamedFacetEntry",
+  prototype = prototype(facet_class = "NmRecord")
+)
+
+setMethod(
+  f = "render_component",
+  signature = c(x = "NmRecordOption"),
+  definition = function(x, ...) {
+    glue::glue("{toupper(x@name)}={toupper(x@value)}")
+  }
+)
+
+NmRecord <- setClass("NmRecord",
+                     slots = c(name = "character", invisible = "logical"),
+                      contains = "NamedFacet",
+                      prototype = prototype(entry_class = "NmRecordOption"))
+
+setMethod(
+  f = "initialize",
+  signature = "NmRecord",
+  definition = function(.Object, options = list(), invisible = FALSE, ...) {
+    .Object <- callNextMethod(.Object, invisible = invisible, ...)
+    .Object@entries <- options %>%
+      purrr::compact() %>%
+      purrr::imap(~new(.Object@entry_class, name = .y, value = .x))
+    .Object
+  }
+)
+
+setMethod(
+  f = "render_component",
+  signature = c(x = "NmRecord"),
+  definition = function(x, ...) {
+    if (x@invisible) return(character())
+    options <- ""
+    if (!vec_is_empty(x@entries)) options <- glue::glue_collapse(purrr::map_chr(x@entries, render_component), sep = " ")
+    glue::glue(
+      "${toupper(x@name)}", options, .sep = " "
+    )
+  }
+)
 
 # $INPUT ------------------------------------------------------------------
 
@@ -384,6 +430,27 @@ setMethod(
     glue::glue("$ESTIMATION METHOD=COND INTERACTION")
   }
 )
+
+
+# $COV --------------------------------------------------------------
+
+NmCovarianceStepOption <- setClass(
+  "NmCovarianceStepOption",
+  contains = "NmRecordOption",
+  prototype = prototype(facet_class = "NmCovarianceStepFacet")
+)
+
+
+NmCovarianceStepFacet <- setClass(
+  "NmCovarianceStepFacet",
+  contains = "NmRecord",
+  prototype = prototype(entry_class = "NmCovarianceStepOption", name = "covariance")
+)
+
+#' @export
+nm_covariance <- function(print = 'E', matrix = NULL){
+  NmCovarianceStepFacet(options = list(print = print, matrix = matrix))
+}
 
 # $THETA ------------------------------------------------------------------
 
