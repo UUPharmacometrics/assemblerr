@@ -31,3 +31,24 @@ create_dummy_data <- function(model, path = NULL){
   }
   write.csv(df, path, quote = FALSE, row.names = FALSE)
 }
+
+expect_does_not_contain <- function(object, regexp) {
+  act <- testthat::quasi_label(rlang::enquo(object), label = NULL, arg = "object")
+  stopifnot(is.character(regexp), length(regexp) == 1)
+  stopifnot(is.character(act$val))
+  if (length(object) == 0) {
+    fail(sprintf("%s is empty.", act$lab))
+  }
+  matches <- !grepl(regexp, act$val, fixed = TRUE)
+  if (length(act$val) == 1) {
+    values <- paste0("Actual value: \"", encodeString(act$val),
+                     "\"")
+  }
+  else {
+    values <- paste0("Actual values:\n", paste0("* ", encodeString(act$val),
+                                                collapse = "\n"))
+  }
+  expect(all(matches), sprintf("%s does contain %s.\n%s", act$lab,
+                               encodeString(regexp, quote = "\""), values))
+  invisible(act$val)
+}
