@@ -265,6 +265,12 @@ setMethod(
   signature = c(x = "Facet", y = "Facet"),
   definition = function(x, y){
     if (class(x) == class(y)) {
+      slots <- slotNames(x)
+      slots <- slots[slots != "entries"]
+      x <- purrr::reduce(slots, .init = x, function(obj, s) {
+          slot(obj, s) <- slot(y, s)
+          obj
+      })
       purrr::reduce(y@entries, ~add_entry(.x, .y), .init = x)
     }else{
       combine(Fragment(facets = list(x)), y)
