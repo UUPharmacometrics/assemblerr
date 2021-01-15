@@ -5,7 +5,8 @@ assemblerr_options <- function(prm.use_mu_referencing = FALSE,
                        ode.general_nonlinear_advan = "advan13",
                        ode.general_linear_advan = "advan5",
                        ode.preferred_trans_routines = c("trans2", "trans4"),
-                       default_record.covariance_step = nm_covariance()) {
+                       default_record.covariance_step = nm_covariance(),
+                       default_record.estimation_step = nm_estimation()) {
   return(
     list(
       prm.use_mu_referencing = prm.use_mu_referencing,
@@ -14,7 +15,8 @@ assemblerr_options <- function(prm.use_mu_referencing = FALSE,
       ode.general_nonlinear_advan = ode.general_nonlinear_advan,
       ode.general_linear_advan = ode.general_linear_advan,
       ode.preferred_trans_routines = ode.preferred_trans_routines,
-      default_record.covariance_step = default_record.covariance_step
+      default_record.covariance_step = default_record.covariance_step,
+      default_record.estimation_step = default_record.estimation_step
     )
   )
 }

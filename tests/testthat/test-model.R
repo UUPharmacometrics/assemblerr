@@ -122,3 +122,12 @@ test_that("addition of default covariance record",{
   render(m, options = assemblerr_options(default_record.covariance_step = NULL)) %>%
     expect_does_not_contain("$COVARIANCE")
 })
+
+test_that("addition of default estimation record",{
+  m <- simple_model()
+
+  render(m, options = assemblerr_options(default_record.estimation_step =  nm_estimation())) %>%
+    expect_contains("$ESTIMATION METHOD=COND INTER")
+  render(m, options = assemblerr_options(default_record.estimation_step = NULL)) %>%
+    expect_does_not_contain("$ESTIMATION")
+})

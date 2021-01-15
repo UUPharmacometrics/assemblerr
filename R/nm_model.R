@@ -17,7 +17,7 @@ setMethod(
                                  NmPkCodeFacet(),
                                  NmDesCodeFacet(),
                                  NmErrorCodeFacet(),
-                                 NmEstimationFacet(),
+                                 NmEstimationStepFacet(invisible = TRUE),
                                  NmCovarianceStepFacet(invisible = TRUE),
                                  NmThetaParameterFacet(),
                                  NmOmegaParameterFacet(),
@@ -410,27 +410,23 @@ nm_error <- function(statement){
 
 
 
-NmEstimation <- setClass(
-  "NmEstimation",
-  contains = "FacetEntry",
+NmEstimationStepOption <- setClass(
+  "NmEstimationStepOption",
+  contains = "NmRecordOption",
   prototype = prototype(facet_class = "NmEstimationFacet")
 )
 
 
-NmEstimationFacet <- setClass(
-  "NmEstimationFacet",
-  contains = "Facet",
-  prototype = prototype(entry_class = "NmEstimation")
+NmEstimationStepFacet <- setClass(
+  "NmEstimationStepFacet",
+  contains = "NmRecord",
+  prototype = prototype(entry_class = "NmEstimationStepOption", name = "estimation")
 )
 
-setMethod(
-  f = "render_component",
-  signature = c(x = "NmEstimationFacet"),
-  definition = function(x, ...) {
-    glue::glue("$ESTIMATION METHOD=COND INTERACTION")
-  }
-)
-
+#' @export
+nm_estimation <- function(method = "cond inter"){
+  NmEstimationStepFacet(options = list(method = method))
+}
 
 # $COV --------------------------------------------------------------
 
