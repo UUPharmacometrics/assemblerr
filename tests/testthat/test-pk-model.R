@@ -200,6 +200,61 @@ test_that("3cmp linear", {
     expect_contains("Y = CONC + EPS(1)")
 })
 
+test_that("2cmp linear, fo", {
+  m <- pk_model() +
+    pk_distribution_2cmp() +
+    pk_elimination_linear() +
+    pk_absorption_fo() +
+    obs_additive(conc~C["central"])
+
+  render(m,
+         options = assemblerr_options(ode.use_special_advans = TRUE,
+                                      ode.use_general_linear_advans = FALSE,
+                                      ode.general_nonlinear_advan = "advan13")
+  ) %>%
+    expect_contains("$SUBROUTINES ADVAN4") %>%
+    expect_contains("TRANS4") %>%
+    expect_contains("VC = THETA(1) * EXP(ETA(1))") %>%
+    expect_contains("VP = THETA(2) * EXP(ETA(2))") %>%
+    expect_contains("Q = THETA(3) * EXP(ETA(3))") %>%
+    expect_contains("CL = THETA(4) * EXP(ETA(4))") %>%
+    expect_contains("MAT = THETA(5) * EXP(ETA(5))") %>%
+    expect_contains("KA = 1/MAT") %>%
+    expect_contains("V2 = VC") %>%
+    expect_contains("V3 = VP") %>%
+    expect_contains("CONC = A(2)/VC") %>%
+    expect_contains("Y = CONC + EPS(1)")
+})
+
+test_that("3cmp linear, fo", {
+  m <- pk_model() +
+    pk_distribution_3cmp() +
+    pk_elimination_linear() +
+    pk_absorption_fo() +
+    obs_additive(conc~C["central"])
+
+  render(m,
+         options = assemblerr_options(ode.use_special_advans = TRUE,
+                                      ode.use_general_linear_advans = FALSE,
+                                      ode.general_nonlinear_advan = "advan13")
+  ) %>%
+    expect_contains("$SUBROUTINES ADVAN12") %>%
+    expect_contains("TRANS4") %>%
+    expect_contains("VC = THETA(1) * EXP(ETA(1))") %>%
+    expect_contains("VP1 = THETA(2) * EXP(ETA(2))") %>%
+    expect_contains("VP2 = THETA(3) * EXP(ETA(3))") %>%
+    expect_contains("Q1 = THETA(4) * EXP(ETA(4))") %>%
+    expect_contains("Q2 = THETA(5) * EXP(ETA(5))") %>%
+    expect_contains("CL = THETA(6) * EXP(ETA(6))") %>%
+    expect_contains("MAT = THETA(7) * EXP(ETA(7))") %>%
+    expect_contains("KA = 1/MAT") %>%
+    expect_contains("V2 = VC") %>%
+    expect_contains("V3 = VP1") %>%
+    expect_contains("V4 = VP2") %>%
+    expect_contains("CONC = A(2)/VC") %>%
+    expect_contains("Y = CONC + EPS(1)")
+})
+
 
 test_that("1cmp linear, transit delay", {
   m <- pk_model() +

@@ -121,17 +121,17 @@ advan4 = list(
     },
     trans4 = function(k_depot_central, k_central_peripheral, k_central_output, k_peripheral_central){
       ka <- k_depot_central
-      v1 <- dcl_collect_denominators(k_central_output)
+      v2 <- dcl_collect_denominators(k_central_output)
       cl <- dcl_discard_denominators(k_central_output)
       q <- dcl_discard_denominators(k_peripheral_central)
-      v2 <- dcl_collect_denominators(k_peripheral_central)
+      v3 <- dcl_collect_denominators(k_peripheral_central)
       dcl_id(ka) <- quote(ka)
-      dcl_id(v1) <- quote(v1)
-      dcl_id(cl) <- quote(cl)
       dcl_id(v2) <- quote(v2)
+      dcl_id(cl) <- quote(cl)
+      dcl_id(v3) <- quote(v3)
       dcl_id(q) <- quote(q)
       vec_c(
-        ka, cl, v1, q, v2
+        ka, cl, v2, q, v3
       )
     }
   )
@@ -235,23 +235,23 @@ advan12 = list(
                       k_peripheral2_central,
                       k_central_output){
       ka <- k_depot_central
-      v1 <- dcl_collect_denominators(k_central_output)
+      v2 <- dcl_collect_denominators(k_central_output)
       cl <- dcl_discard_denominators(k_central_output)
       q1 <- dcl_discard_denominators(k_peripheral1_central)
       q2 <- dcl_discard_denominators(k_peripheral2_central)
-      v2 <- dcl_collect_denominators(k_peripheral1_central)
-      v3 <- dcl_collect_denominators(k_peripheral2_central)
+      v3 <- dcl_collect_denominators(k_peripheral1_central)
+      v4 <- dcl_collect_denominators(k_peripheral2_central)
 
       dcl_id(ka) <- quote(ka)
-      dcl_id(v1) <- quote(v1)
-      dcl_id(cl) <- quote(cl)
       dcl_id(v2) <- quote(v2)
-      dcl_id(q1) <- quote(q1)
+      dcl_id(cl) <- quote(cl)
       dcl_id(v3) <- quote(v3)
+      dcl_id(q1) <- quote(q1)
+      dcl_id(v4) <- quote(v4)
       dcl_id(q2) <- quote(q2)
 
       vec_c(
-        ka, v1, cl, v2, q1, v3, q2
+        ka, v2, cl, v3, q1, v4, q2
       )
     }
   )
