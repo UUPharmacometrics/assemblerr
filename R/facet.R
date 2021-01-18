@@ -2,8 +2,8 @@
 #' @importFrom methods show
 #' @importFrom methods callNextMethod
 FacetEntry <- setClass("FacetEntry",
-         slots = c(facet_class = "character"),
-         prototype = prototype(facet_class = "Facet"))
+         slots = c(label = "character", facet_class = "character"),
+         prototype = prototype(label = "unnamed", facet_class = "Facet"))
 
 NamedFacetEntry <- setClass("NamedFacetEntry",
          slots = c(name = "character"),
@@ -179,14 +179,6 @@ setClass("GenericModel",
          slots = c(options = "list"),
          contains = "Fragment")
 
-setMethod(f = "initialize",
-          signature = "GenericModel",
-          definition = function(.Object, facets, options = list(), ...){
-            .Object <- callNextMethod(.Object, options = options, ...)
-            .Object <- purrr::reduce(facets, ~combine(.x, .y), .init = .Object)
-            .Object
-          })
-
 setMethod(
   f = "show",
   signature = signature(object = "GenericModel"),
@@ -292,6 +284,22 @@ setMethod(
   }
 )
 
+setMethod(
+  f = "combine",
+  signature = c(x = "GenericModel", y = "FacetEntry"),
+  definition = function(x, y){
+    if (!y@facet_class %in% names(x@facets)) {
+      facet <- new(y@facet_class)
+      rlang::warn(
+        c(glue::glue("Ignoring '{y@label}' building block"),
+          x = glue::glue("The model does not have a facet '{facet@label}'"),
+          i = "Not all building blocks can be added to a specific model type")
+      )
+      return(x)
+    }
+    callNextMethod(x, y)
+  }
+)
 
 setMethod(
   f = "combine",
@@ -305,6 +313,24 @@ setMethod(
     x
   }
 )
+
+setMethod(
+  f = "combine",
+  signature = c(x = "GenericModel", y = "Facet"),
+  definition = function(x, y){
+    if (!class(y) %in% names(x@facets)) {
+      blk <- y@entries[[1]]
+      rlang::warn(
+        c(cli::pluralize("Ignoring {length(blk)} '{blk@label}' building block{?s}"),
+          x = glue::glue("The model does not have a facet '{y@label}'"),
+          i = "Not all building blocks can be added to a specific model type")
+      )
+      return(x)
+    }
+    callNextMethod(x, y)
+  }
+)
+
 
 setMethod(
   f = "combine",

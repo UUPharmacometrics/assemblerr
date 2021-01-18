@@ -124,3 +124,11 @@ test_that("addition of default estimation record",{
   render(m, options = assemblerr_options(default_record.estimation_step = NULL)) %>%
     expect_does_not_contain("$ESTIMATION")
 })
+
+test_that("adding incompatible building block", {
+  m <- simple_model()
+
+  expect_warning(
+    m + pk_absorption_fo()
+  )
+})

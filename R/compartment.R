@@ -5,7 +5,7 @@ Compartment <- setClass(
   "Compartment",
   slots = c(volume = "assemblerr_declaration"),
   contains = "NamedFacetEntry",
-  prototype = prototype(facet_class = "CompartmentFacet")
+  prototype = prototype(facet_class = "CompartmentFacet", label = "compartment")
 )
 
 CompartmentFacet <- setClass(
@@ -23,7 +23,7 @@ Flow <- setClass(
     definition = "assemblerr_declaration"
   ),
   contains = "FacetEntry",
-  prototype = prototype(facet_class = "FlowFacet")
+  prototype = prototype(facet_class = "FlowFacet", label = "flow")
 )
 
 FlowFacet <- setClass("FlowFacet",

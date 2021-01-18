@@ -5,7 +5,7 @@
 setClass("PkComponent",
          slots = c(prm_names = "character"),
          contains = "NamedFacetEntry",
-         prototype = prototype(facet_class = "PkComponentFacet")
+         prototype = prototype(facet_class = "PkComponentFacet", label = "PK component")
 )
 
 setMethod(
@@ -21,7 +21,7 @@ setMethod(
 PkComponentFacet <- setClass(
   "PkComponentFacet",
   contains = "NamedFacet",
-  prototype = prototype(entry_class = "PkComponent")
+  prototype = prototype(entry_class = "PkComponent", label = "PK components")
 )
 
 setMethod(
