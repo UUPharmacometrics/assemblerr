@@ -42,19 +42,31 @@ setMethod(
 
 #' Compartment
 #'
-#' Defines name and volume of compartment
+#' Defines name and volume of a compartment
 #'
 #' @seealso \code{\link{model}}
 #' @param name Name of the compartment
 #' @param volume Defintion of the compartment volume as a number, formula or declaration
 #'
-#' @return A compartment fragment
+#' @return A compartment building block
 #' @export
 #' @examples
-#' # compartment with name "central" and volume Vc
-#' comp1 <- compartment("central", volume = declaration(~Vc))
-compartment <- function(name, volume = declaration(~1)){
-  if (!is.character(name)) stop("'name' needs to be a character vector")
+#' # add a compartment with name "central" and volume Vc
+#' m <- model() +
+#'  compartment("central", volume = ~vc) +
+#'  flow(~cl*C, from = "central") +
+#'  prm_log_normal("cl") +
+#'  prm_log_normal("vc") +
+#'  obs_additive(conc~C["central"])
+compartment <- function(name, volume = 1){
+  if (!is.character(name) || !grepl(x = name, pattern = "^[a-zA-Z][0-9a-zA-Z_]*$")) {
+    rlang::abort(
+      c(
+        "Invalid compartment name",
+        i = "A compartment name can contain letters and numbers and needs to start with a letter"
+      )
+    )
+  }
   volume <- as_declaration(volume)
   vec_assert(volume, ptype = declaration(), size = 1)
   Compartment(name = name, volume = volume)

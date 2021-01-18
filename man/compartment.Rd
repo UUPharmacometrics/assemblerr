@@ -5,9 +5,9 @@
 \alias{cmp}
 \title{Compartment}
 \usage{
-compartment(name, volume = declaration(~1))
+compartment(name, volume = 1)
 
-cmp(name, volume = declaration(~1))
+cmp(name, volume = 1)
 }
 \arguments{
 \item{name}{Name of the compartment}
@@ -15,10 +15,10 @@ cmp(name, volume = declaration(~1))
 \item{volume}{Defintion of the compartment volume as a number, formula or declaration}
 }
 \value{
-A compartment fragment
+A compartment building block
 }
 \description{
-Defines name and volume of compartment
+Defines name and volume of a compartment
 }
 \section{Functions}{
 \itemize{
@@ -26,8 +26,13 @@ Defines name and volume of compartment
 }}
 
 \examples{
-# compartment with name "central" and volume Vc
-comp1 <- compartment("central", volume = declaration(~Vc))
+# add a compartment with name "central" and volume Vc
+m <- model() +
+ compartment("central", volume = ~vc) +
+ flow(~cl*C, from = "central") +
+ prm_log_normal("cl") +
+ prm_log_normal("vc") +
+ obs_additive(conc~C["central"])
 }
 \seealso{
 \code{\link{model}}
