@@ -1,9 +1,9 @@
 #' @export
 #' @keywords internal
-local_create_nonmem_test_directory <- function(path = tempdir(), env = parent.frame()) {
+local_create_nonmem_test_directory <- function(path = tempdir(), debug = FALSE, env = parent.frame()) {
   dirname <- tempfile("dir", tmpdir = path)
   dir.create(dirname, showWarnings = TRUE, recursive = FALSE)
-  withr::defer(unlink(dirname, recursive = TRUE), envir = env)
+  if (!debug) withr::defer(unlink(dirname, recursive = TRUE), envir = env)
 
   wd <- getwd()
   setwd(dirname)

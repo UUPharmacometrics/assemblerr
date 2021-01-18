@@ -127,6 +127,7 @@ test_that("1cmp linear 1st order absorption, advan", {
   render(m) %>%
     expect_contains(" ADVAN2 ") %>%
     expect_contains(" TRANS2 ") %>%
+    expect_does_not_contain("$MODEL") %>%
     expect_contains("MAT = THETA(1) * EXP(ETA(1))") %>%
     expect_contains("VC = THETA(2) * EXP(ETA(2))") %>%
     expect_contains("CL = THETA(3) * EXP(ETA(3))") %>%
@@ -166,6 +167,7 @@ test_that("3cmp linear", {
                                       ode.use_general_linear_advans = FALSE)
   ) %>%
     expect_contains("$SUBROUTINES ADVAN11") %>%
+    expect_does_not_contain("$MODEL") %>%
     expect_contains("VC = THETA(1) * EXP(ETA(1))") %>%
     expect_contains("VP1 = THETA(2) * EXP(ETA(2))") %>%
     expect_contains("VP2 = THETA(3) * EXP(ETA(3))") %>%
@@ -240,6 +242,7 @@ test_that("3cmp linear, fo", {
   ) %>%
     expect_contains("$SUBROUTINES ADVAN12") %>%
     expect_contains("TRANS4") %>%
+    expect_does_not_contain("$MODEL") %>%
     expect_contains("VC = THETA(1) * EXP(ETA(1))") %>%
     expect_contains("VP1 = THETA(2) * EXP(ETA(2))") %>%
     expect_contains("VP2 = THETA(3) * EXP(ETA(3))") %>%

@@ -5,11 +5,11 @@ skip_on_cran()
 skip_if_not(system("psn -version", intern = FALSE, ignore.stdout = TRUE) == 0, "PsN installation not found.")
 
 
-test_nm_model_execution <- function(model, options = assemblerr_options()) {
-  local_create_nonmem_test_directory()
+test_nm_model_execution <- function(model, options = assemblerr_options(), debug = FALSE, env = parent.frame()) {
+  local_create_nonmem_test_directory(debug = debug, env = env)
   create_dummy_data(model, path = "data.csv")
   render(model, "run1.mod", options = options)
-
+  if (interactive() || debug) print(getwd())
   expect_true(file.exists("run1.mod"))
   system("execute run1.mod", intern = FALSE, ignore.stdout = TRUE, ignore.stderr = TRUE)
   if (interactive() && file.exists("run1.lst")) system("cat run1.lst")
@@ -47,4 +47,14 @@ test_that("1cmp linear, ode", {
   test_nm_model_execution(m,
                           assemblerr_options(ode.use_special_advans = FALSE,
                                              ode.use_general_linear_advans = FALSE))
+})
+
+test_that("2cmp linear, fo absorption", {
+  pkm <- pk_model() +
+    pk_absorption_fo() +
+    pk_distribution_2cmp() +
+    pk_elimination_linear() +
+    obs_additive(conc~C["central"])
+
+  test_nm_model_execution(pkm, assemblerr_options(ode.use_special_advans = TRUE))
 })

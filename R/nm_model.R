@@ -32,8 +32,8 @@ setMethod(
   signature = c(x = "NmModel"),
   definition = function(x, ...) {
     is_pred <- vec_is_empty(x@facets[['NmCompartmentFacet']]@entries)
-    is_advan12 <- any(c("advan1", "advan2") %in% names(x@facets[["NmSubroutinesFacet"]]))
-    if (is_pred || is_advan12) {
+    is_general_advan <- any(paste0("advan", c(5,6,7,8,9,13,14,15)) %in% names(x@facets[["NmSubroutinesFacet"]]))
+    if (is_pred || !is_general_advan) {
       x@facets[['NmCompartmentFacet']] <- NULL
       x@facets[['NmDesCodeFacet']] <- NULL
     }
