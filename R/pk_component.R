@@ -13,7 +13,8 @@ setMethod(
   signature = "PkComponent",
   definition = function(.Object, parameters = list(), ...) {
     callNextMethod(.Object,
-                   prm_names = purrr::map_chr(parameters, "name"),
+                   prm_names = purrr::compact(parameters) %>%
+                     purrr::map_chr("name"),
                    ...)
   }
 )
@@ -192,24 +193,15 @@ pk_elimination_linear <- function(prm_cl = prm_log_normal("cl")) {
 # elimination Michaelis Menten ------------------------------------------------------
 
 
-PkEliminationMM <- setClass("PkEliminationMM",
-         contains = "PkEliminationComponent")
-
-setMethod(
-  f = "convert",
-  signature = c(target = "Model", source = "PkModel", component = "PkEliminationMM"),
-  definition = function(target, source, component, options) {
-    dcl <- declaration(~clmm*km/(km+C)) %>%
-      dcl_substitute(list(clmm = sym(component@prm_names['clmm']), km = sym(component@prm_names['km'])))
-    target +
-      flow(from = "central", definition = dcl)
-  }
-)
-
 #' @export
 pk_elimination_mm <- function(prm_clmm = prm_log_normal("clmm"),
                               prm_km = prm_log_normal("km")) {
-  PkEliminationMM(
+  rlang::warn(
+    c("Function deprecated",
+      x = "`pk_elimination_mm` has been deprecated",
+      i = "Please use `pk_elimination_nl` instead")
+  )
+  PkEliminationNL(
     parameters = list(
       clmm = prm_clmm,
       km = prm_km
@@ -220,7 +212,50 @@ pk_elimination_mm <- function(prm_clmm = prm_log_normal("clmm"),
 }
 
 
+# elimination non-linear --------------------------------------------------
 
+
+PkEliminationNL <- setClass("PkEliminationNL",
+                            contains = "PkEliminationComponent")
+
+setMethod(
+  f = "convert",
+  signature = c(target = "Model", source = "PkModel", component = "PkEliminationNL"),
+  definition = function(target, source, component, options) {
+    if ('vmax' %in% names(component@prm_names)) {
+      dcl <- declaration(~vmax*C/(km+C)) %>%
+        dcl_substitute(list(vmax = sym(component@prm_names['vmax']), km = sym(component@prm_names['km'])))
+    }else{
+      dcl <- declaration(~clmm*km/(km+C)) %>%
+        dcl_substitute(list(clmm = sym(component@prm_names['clmm']), km = sym(component@prm_names['km'])))
+    }
+    target +
+      flow(from = "central", definition = dcl)
+  }
+)
+
+#' @export
+pk_elimination_nl <- function(prm_clmm = prm_log_normal("clmm"),
+                              prm_km = prm_log_normal("km"),
+                              prm_vmax = NULL) {
+  if (!is.null(prm_clmm) && !is.null(prm_vmax)) {
+    prm_clmm <- NULL
+    rlang::warn(
+      c("Ignoring 'clmm' parameter",
+        i = "Only one of 'prm_clmm' and 'prm_vmax' need to be supplied")
+    )
+  }
+  PkEliminationNL(
+    parameters = list(
+      clmm = prm_clmm,
+      km = prm_km,
+      vmax = prm_vmax
+    )
+  ) +
+    prm_clmm +
+    prm_vmax +
+    prm_km
+}
 
 # absorption FO -----------------------------------------------------------
 

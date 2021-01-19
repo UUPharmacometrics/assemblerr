@@ -98,10 +98,10 @@ test_that("2cmp linear", {
     expect_contains("Y = CONC + EPS(1)")
 })
 
-test_that("1cmp mm", {
+test_that("1cmp nonlinear", {
   m <- pk_model() +
     pk_distribution_1cmp() +
-    pk_elimination_mm() +
+    pk_elimination_nl() +
     obs_additive(conc~C["central"])
 
   render(m,
@@ -114,6 +114,25 @@ test_that("1cmp mm", {
     expect_contains("DADT(1) = -(CLMM * KM/(KM + A(1)/VC))") %>%
     expect_contains("CONC = A(1)/VC") %>%
     expect_contains("Y = CONC + EPS(1)")
+
+  m <- pk_model() +
+    pk_distribution_1cmp() +
+    pk_elimination_nl(prm_vmax = prm_log_normal("vmax"), prm_clmm = NULL) +
+    obs_additive(conc~C["central"])
+
+  render(m,
+         options = assemblerr_options(ode.use_special_advans = TRUE,
+                                      ode.use_general_linear_advans = TRUE)
+  ) %>%
+    expect_contains("VC = THETA(1) * EXP(ETA(1))") %>%
+    expect_contains("VMAX = THETA(2) * EXP(ETA(2))") %>%
+    expect_contains("KM = THETA(3) * EXP(ETA(3))") %>%
+    expect_contains("DADT(1) = -(VMAX * (A(1)/VC)/(KM + A(1)/VC))") %>%
+    expect_contains("CONC = A(1)/VC") %>%
+    expect_contains("Y = CONC + EPS(1)")
+
+  expect_warning(pk_elimination_mm())
+  expect_warning(pk_elimination_nl(prm_clmm = prm_log_normal("clmm"), prm_vmax = prm_log_normal("vmax")))
 })
 
 
