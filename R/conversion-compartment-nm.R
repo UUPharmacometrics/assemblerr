@@ -16,7 +16,7 @@ setMethod(
     if (vec_is_empty(component@entries)) return(source)
     flows <- collect_flows(component, source)
     # detect special advans
-    if (all(dcl_linear_in(flows$definition, quote(A[x])))) {
+    if (all(dcl_linear_in(flows$definition, quote(A)))) {
       special_advan_used <- FALSE
       if (options$ode.use_special_advans) {
         m_adj <- construct_adjacency_matrix(

@@ -389,9 +389,11 @@ direct_dependants <- function(dcl, variable){
 
 dcl_linear_in <- function(dcl, variable){
   purrr::map_lgl(dcl_def(dcl), function(expr){
-    terms <- collect_multiplications(expr)
-    matching <- purrr::map_lgl(terms, ~exprs_match_ignore_index(.x, variable))
-    return(sum(matching) == 1)
+    terms <- collect_multiplications(expr) %>%
+      purrr::map(transform_ast, transformer = remove_array_transformer)
+    matching <- terms == variable
+    contains <- purrr::map_lgl(terms, ~as.character(variable) %in% all.vars(.x))
+    return(sum(matching) == 1 && sum(contains) == 1)
   })
 }
 
@@ -449,7 +451,7 @@ collect_multiplications <- function(node){
 
 exprs_match_ignore_index <- function(expr1, expr2) {
   if (expr1 == expr2) return(TRUE)
-  if (length(expr1) > 1 && expr1[[1]] == quote(`[`) && length(expr2) > 1 && expr2[[1]] == quote(`[`)) {
+  if (expr_is_arr(expr1) && expr_is_arr(expr2)) {
     return(expr1[[2]] == expr2[[2]])
   }
   return(FALSE)

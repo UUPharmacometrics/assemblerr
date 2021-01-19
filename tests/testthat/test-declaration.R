@@ -97,6 +97,11 @@ test_that("devision of declarations", {
   expect_equal(dcl_devide(d1, declaration(~1)), d1)
 })
 
+test_that("linearity detection",{
+  expect_true(dcl_linear_in(declaration(~k*A), quote(A)))
+  expect_false(dcl_linear_in(declaration(~vmax*A/(A+km)), quote(A)))
+})
+
 # test_that("combination of declarations", {
 #   d1 <- declaration(cl~theta + eta, v~theta[1]*exp(eta[2]))
 #   d2 <- declaration(t~b)

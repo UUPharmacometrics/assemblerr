@@ -43,3 +43,13 @@ index_transformer <- function(node, array_name, substitutions){
   node
 }
 
+remove_array_transformer <- function(node) {
+  if (expr_is_arr(node)){
+    node <- node[[2]]
+  }
+  node
+}
+
+expr_is_arr <- function(node) {
+  rlang::is_call(node) && rlang::call_name(node) == "["
+}
