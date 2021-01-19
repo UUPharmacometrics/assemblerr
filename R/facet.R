@@ -351,6 +351,14 @@ setMethod(
   }
 )
 
+setMethod(
+  f = "+",
+  signature = c(e1 = "BuildingBlock", e2 = "NULL"),
+  definition =  function(e1, e2) {
+    e1
+  }
+)
+
 
 
 
