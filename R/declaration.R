@@ -387,6 +387,17 @@ direct_dependants <- function(dcl, variable){
     which()
 }
 
+dcl_external_variables <- function(dcl) {
+  sorted <- sort(dcl, decreasing = TRUE)
+  lhs <- dcl_id(sorted)
+  rhs <- dcl_vars(sorted, include_indicies = TRUE, unique = FALSE, include_lhs = FALSE)
+  purrr::reduce2(lhs, rhs, .init = list(), function(external, l, r){
+    external <- external[external != l]
+    vec_unique(vec_c(external, r))
+  }) %>%
+    rev()
+}
+
 dcl_linear_in <- function(dcl, variable){
   purrr::map_lgl(dcl_def(dcl), function(expr){
     terms <- collect_multiplications(expr) %>%

@@ -123,3 +123,8 @@ test_that("", {
   expect_equal(dcl_depends_on(d, "A", include_indicies = FALSE),  c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, TRUE))
 
 })
+
+test_that("external variables are retrieved",{
+  d <- declaration(conc~dose/v*exp(-k*time), k~cl/v, cl~theta[1], v~theta[2])
+  expect_setequal(dcl_external_variables(d) %>% as.character(), c("theta[1]", "theta[2]", "time", "dose"))
+})
