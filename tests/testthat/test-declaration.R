@@ -116,7 +116,7 @@ test_that("substitution of array indicies", {
   expect_equal(dcl_substitute_index(d, "theta", c(test = 1)), declaration(cl~theta[1], v~theta[1]*eta["test"]))
 })
 
-test_that("", {
+test_that("dependencies are identified", {
   d <- declaration(a ~ b, b ~ c, c ~ d, d ~ e, test ~ c, cl ~ theta, conc ~ A[2], depot ~ A[1])
   expect_equal(dcl_depends_on(d, "e"), c(TRUE, TRUE, TRUE, TRUE, TRUE, FALSE, FALSE, FALSE))
   expect_equal(dcl_depends_on(d, "A[2]", include_indicies = TRUE),  c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE))
