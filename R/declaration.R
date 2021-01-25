@@ -81,6 +81,8 @@ as_declaration.numeric <- function(x) new_declaration(vec_rep(list(NULL), vec_si
 
 as_declaration.character <- function(x) new_declaration(vec_rep(list(NULL), vec_size(x)), rlang::syms(x))
 
+as_declaration.name <- function(x) new_declaration(list(NULL), list(x))
+
 #' @export
 as.list.assemblerr_declaration <- function(x, ...) {
   lbls <- purrr::map_if(dcl_id(x), ~!is.null(.x), deparse, .else = ~"")
