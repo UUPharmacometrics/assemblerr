@@ -20,11 +20,16 @@ setMethod(
     if (vec_size(source@facets$CompartmentFacet@entries) > 0) {
       ipred_dcl <- replace_compartment_references(ipred_dcl, target, source)
     }
+    f <- dcl_id(ipred_dcl)
+    if (is.null(f[[1]])) {
+      f <- dcl_def(ipred_dcl)
+      ipred_dcl <- NULL
+    }
     ruv_dcl <- vec_c(declaration(y~f), ruv_add_dcl, ruv_prop_dcl) %>%
       dcl_sum() %>%
       dcl_substitute(
         list(
-          f = dcl_id(ipred_dcl)
+          f = f
         )
       )
     d <- vec_c(ipred_dcl,

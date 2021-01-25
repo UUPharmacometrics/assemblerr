@@ -4,7 +4,7 @@ context("test-model")
 expect_contains <- function(object, str) return(expect_match(object, str, fixed = TRUE, all = FALSE))
 
 
-simple_model <- function(prm = prm_log_normal("k"), obs = obs_additive(c~conc)) {
+simple_model <- function(prm = prm_log_normal("k"), obs = obs_additive(~conc)) {
   model() +
     prm +
     algebraic(conc~c0*exp(-k*time)) +
@@ -89,6 +89,14 @@ test_that("obs combined", {
     render() %>%
     expect_contains("C = CONC") %>%
     expect_contains("Y = C + EPS(1) + C * EPS(2)") %>%
+    expect_contains("$SIGMA")
+})
+
+test_that("obs without lhs", {
+  simple_model(obs = obs_additive(~ conc)) %>%
+    render() %>%
+    expect_does_not_contain("C = CONC") %>%
+    expect_contains("Y = CONC + EPS(1)") %>%
     expect_contains("$SIGMA")
 })
 
