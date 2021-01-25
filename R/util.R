@@ -26,3 +26,6 @@ permutation_matrix <- function(index){
 }
 
 
+is_valid_variable_name <- function(name){
+  grepl(x = name, pattern = "^[a-zA-Z][0-9a-zA-Z_]*$")
+}

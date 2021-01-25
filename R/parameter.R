@@ -22,6 +22,16 @@ setMethod(
   }
 )
 
+assert_valid_parameter_name <- function(name) {
+  if (!is.character(name) || !is_valid_variable_name(name)) {
+    rlang::abort(
+      c(
+        "Invalid parameter name",
+        i = "A parameter name can contain letters and numbers and needs to start with a letter"
+      )
+    )
+  }
+}
 
 # log-normal --------------------------------------------------------------
 
@@ -32,6 +42,7 @@ PrmLogNormal <- setClass("PrmLogNormal",
 
 #' @export
 prm_log_normal <- function(name) {
+  assert_valid_parameter_name(name)
   PrmLogNormal(name = name)
 }
 
@@ -43,6 +54,7 @@ PrmNormal <- setClass("PrmNormal",
 
 #' @export
 prm_normal <- function(name) {
+  assert_valid_parameter_name(name)
   PrmNormal(name = name)
 }
 
@@ -54,6 +66,7 @@ PrmLogitNormal <- setClass("PrmLogitNormal",
 
 #' @export
 prm_logit_normal <- function(name) {
+  assert_valid_parameter_name(name)
   PrmLogitNormal(name = name)
 }
 
@@ -64,6 +77,7 @@ PrmNoVar <- setClass("PrmNoVar",
 
 #' @export
 prm_no_var <- function(name) {
+  assert_valid_parameter_name(name)
   PrmNoVar(name = name)
 }
 

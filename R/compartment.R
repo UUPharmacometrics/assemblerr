@@ -59,7 +59,7 @@ setMethod(
 #'  prm_log_normal("vc") +
 #'  obs_additive(conc~C["central"])
 compartment <- function(name, volume = 1){
-  if (!is.character(name) || !grepl(x = name, pattern = "^[a-zA-Z][0-9a-zA-Z_]*$")) {
+  if (!is.character(name) || !is_valid_variable_name(name)) {
     rlang::abort(
       c(
         "Invalid compartment name",
