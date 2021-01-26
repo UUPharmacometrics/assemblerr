@@ -4,11 +4,12 @@ context("test-model")
 expect_contains <- function(object, str) return(expect_match(object, str, fixed = TRUE, all = FALSE))
 
 
-simple_model <- function(prm = prm_log_normal("k"), obs = obs_additive(~conc)) {
+simple_model <- function(prm = prm_log_normal("k"), obs = obs_additive(~conc), vars = input_variable("time") + input_variable("c0")) {
   model() +
     prm +
     algebraic(conc~c0*exp(-k*time)) +
-    obs
+    obs +
+    vars
 }
 
 test_that("check empty model",{
@@ -101,7 +102,7 @@ test_that("obs without lhs", {
 })
 
 test_that("adding variables from a dataset", {
-  m <- simple_model()
+  m <- simple_model(vars = NULL)
   local_create_nonmem_test_directory()
   df <- data.frame(ID = 1, TIME = 1, DV = 1, DOSE = 1)
   write.csv(df, "data.csv", quote = FALSE, row.names = FALSE)

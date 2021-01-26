@@ -59,6 +59,31 @@ model <- function(){
 
 setOldClass("model")
 
+setMethod(
+  f = "check",
+  signature = signature(x = "Model"),
+  definition = function(x) {
+    issues <- c(IssueList(),
+                callNextMethod(x),
+                check_for_undefined_variables(model = x))
+    return(issues)
+  }
+)
 
+check_for_undefined_variables <- function(model){
+  algebraic_dcls <- purrr::map(model@facets[["AlgebraicFacet"]]@entries, ~.x@definition)
+  if (!vec_is_empty(algebraic_dcls)) {
+    dcl <- vec_c(!!!unname(algebraic_dcls))
+    vars <- dcl_external_variables(dcl) %>% as.character()
+    prms <- names(model@facets[["ParameterFacet"]]@entries)
+    external_vars <- names(model@facets[["InputVariableFacet"]]@entries)
+    missing_vars <- setdiff(vars, union(prms, external_vars))
+    if (!vec_is_empty(missing_vars)) {
+       issue <- CriticalIssue(cli::pluralize("Undefined variable{?s} {missing_vars} in algebraics"))
+       return(issue)
+    }
+  }
+  return(NULL)
+}
 
 

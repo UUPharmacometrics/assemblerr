@@ -52,3 +52,23 @@ expect_does_not_contain <- function(object, regexp) {
                                encodeString(regexp, quote = "\""), values))
   invisible(act$val)
 }
+
+expect_matching_issue <- function(object, regexp) {
+  act <- testthat::quasi_label(rlang::enquo(object), label = NULL, arg = "object")
+  matches <- grepl(pattern = regexp, x = as.character(object))
+  testthat::expect(
+    any(matches),
+    paste(act$lab, "did not contain issues matching", encodeString(regexp, quote = "\""))
+  )
+  return(invisible(object))
+}
+
+expect_no_matching_issue <- function(object, regexp) {
+  act <- testthat::quasi_label(rlang::enquo(object), label = NULL, arg = "issues")
+  matches <- grepl(pattern = regexp, x = as.character(object))
+  testthat::expect(
+    !any(matches),
+    paste(act$lab, "contained issue matching", encodeString(regexp, quote = "\""))
+  )
+  return(invisible(object))
+}

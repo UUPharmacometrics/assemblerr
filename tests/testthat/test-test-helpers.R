@@ -12,3 +12,27 @@ test_that("does_not_contain expectation", {
   expect_success(expect_does_not_contain(c("test", "test2"), "test3"))
   expect_failure(expect_does_not_contain(c("test", "test2"), "test2"))
 })
+
+test_that("expect_matching_issue helper", {
+  issues <- IssueList(
+    Issue("test issue")
+  )
+  expect_success(
+    expect_matching_issue(issues, "test")
+  )
+  expect_failure(
+    expect_matching_issue(issues, "missing")
+  )
+})
+
+test_that("expect_no_matching_issue helper", {
+  issues <- IssueList(
+    Issue("test issue")
+  )
+  expect_success(
+    expect_no_matching_issue(issues, "missing")
+  )
+  expect_failure(
+    expect_no_matching_issue(issues, "test")
+  )
+})
