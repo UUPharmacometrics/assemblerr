@@ -3,7 +3,9 @@
 \name{dcl_id}
 \alias{dcl_id}
 \alias{dcl_def}
-\title{Get declaration fields}
+\title{Get declaration fields
+
+These function get identifier or definition fields of a declaration.}
 \usage{
 dcl_id(dcl)
 
@@ -16,6 +18,8 @@ dcl_def(dcl)
 An expression
 }
 \description{
+Get declaration fields
+
 These function get identifier or definition fields of a declaration.
 }
 \keyword{internal}

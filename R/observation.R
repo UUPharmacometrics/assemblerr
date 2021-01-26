@@ -41,9 +41,18 @@ setMethod("initialize",
 
 #' @export
 obs_combined <- function(prediction, name) {
-  prediction <- as_declaration(prediction)
-  if (missing(name)) name <- dcl_make_obs_names(prediction)
-  ObsNormalCombined(prediction = prediction, name = name)
+  validate_and_create_observation(
+    constructor = ObsNormalCombined,
+    prediction = prediction,
+    name = rlang::maybe_missing(name)
+  )
+}
+
+validate_and_create_observation <- function(constructor, prediction, name) {
+  prediction <- ui_as_declaration(prediction)
+  if (rlang::is_missing(name)) name <- dcl_make_obs_names(prediction)
+  assert_valid_observation_name(name)
+  constructor(prediction = prediction, name = name)
 }
 
 
@@ -58,9 +67,11 @@ AdditiveObservation <- setClass("AdditiveObservation",
 
 #' @export
 obs_additive <- function(prediction, name) {
-  prediction <- as_declaration(prediction)
-  if (missing(name)) name <- dcl_make_obs_names(prediction)
-  AdditiveObservation(prediction = prediction, name = name)
+  validate_and_create_observation(
+    constructor = AdditiveObservation,
+    prediction = prediction,
+    name = rlang::maybe_missing(name)
+  )
 }
 
 
@@ -76,9 +87,11 @@ ProportionalObservation <- setClass("ProportionalObservation",
 
 #' @export
 obs_proportional <- function(prediction, name) {
-  prediction <- as_declaration(prediction)
-  if (missing(name)) name <- dcl_make_obs_names(prediction)
-  ProportionalObservation(prediction = prediction, name = name)
+  validate_and_create_observation(
+    constructor = ProportionalObservation,
+    prediction = prediction,
+    name = rlang::maybe_missing(name)
+  )
 }
 
 
@@ -95,4 +108,15 @@ dcl_make_obs_names <- function(dcl) {
     obs_names[is_null] <- as.character(derived_names)
   }
   obs_names
+}
+
+assert_valid_observation_name <- function(name) {
+  if (!is.character(name) || !is_valid_variable_name(name)) {
+    rlang::abort(
+      c(
+        "Invalid observation name",
+        i = "An observation name can contain letters and numbers and needs to start with a letter."
+      )
+    )
+  }
 }

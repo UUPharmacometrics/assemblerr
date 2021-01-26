@@ -52,6 +52,7 @@ Collate:
     'rendering.R'
     'statement.R'
     'nm_model.R'
+    'declaration-creation.R'
     'declaration.R'
     'algebraics.R'
     'assemblerr-package.R'
