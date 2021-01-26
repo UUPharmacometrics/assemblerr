@@ -3,7 +3,6 @@
 \name{obs_additive}
 \alias{obs_additive}
 \alias{obs_proportional}
-\alias{observation-model}
 \alias{obs_combined}
 \title{Observation model}
 \usage{

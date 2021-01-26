@@ -91,7 +91,6 @@ PrmLogNormal <- setClass("PrmLogNormal",
 #'   prm_no_var("ed50") +
 #'   obs_proportional(effect~emax*dose/(ed50+dose))
 #' @export
-#' @name parameter-model
 #' @rdname parameter-model
 #' @order 3
 #' @md

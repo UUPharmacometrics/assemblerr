@@ -77,7 +77,6 @@ setMethod("initialize",
 #'   prm_no_var("ed50") +
 #'   obs_proportional(effect~emax*dose/(ed50+dose))
 #' @export
-#' @name observation-model
 #' @rdname observation-model
 #' @order 3
 obs_combined <- function(prediction, name) {

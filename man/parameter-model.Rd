@@ -3,7 +3,6 @@
 \name{prm_no_var}
 \alias{prm_no_var}
 \alias{prm_normal}
-\alias{parameter-model}
 \alias{prm_log_normal}
 \alias{prm_logit_normal}
 \title{Parameter model}
