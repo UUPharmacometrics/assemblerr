@@ -71,19 +71,39 @@ setMethod(
 )
 
 check_for_undefined_variables <- function(model){
-  algebraic_dcls <- purrr::map(model@facets[["AlgebraicFacet"]]@entries, ~.x@definition)
-  if (!vec_is_empty(algebraic_dcls)) {
+  issues <- IssueList()
+  external_vars <- names(model@facets[["InputVariableFacet"]]@entries)
+  prms <- names(model@facets[["ParameterFacet"]]@entries)
+  algebraic_vars <- names(model@facets[["AlgebraicFacet"]]@entries)
+  conc_vars <- paste0('C["',names(model@facets[["CompartmentFacet"]]@entries), '"]')
+  a_vars <- paste0('A["',names(model@facets[["CompartmentFacet"]]@entries), '"]')
+  if (!vec_is_empty(algebraic_vars)) {
+    algebraic_dcls <- purrr::map(model@facets[["AlgebraicFacet"]]@entries, ~.x@definition)
     dcl <- vec_c(!!!unname(algebraic_dcls))
-    vars <- dcl_external_variables(dcl) %>% as.character()
-    prms <- names(model@facets[["ParameterFacet"]]@entries)
-    external_vars <- names(model@facets[["InputVariableFacet"]]@entries)
+    vars <- dcl_external_variables(dcl) %>%
+      as.character()
     missing_vars <- setdiff(vars, union(prms, external_vars))
     if (!vec_is_empty(missing_vars)) {
-       issue <- CriticalIssue(cli::pluralize("Undefined variable{?s} {missing_vars} in algebraics"))
-       return(issue)
+      missing_vars <- paste0("'", missing_vars ,"'")
+      issues <- c(issues,
+                   CriticalIssue(cli::pluralize("Undefined variable{?s} {missing_vars} in algebraics"))
+                  )
     }
   }
-  return(NULL)
+  if (!vec_is_empty(names(model@facets[["ObservationFacet"]]@entries))) {
+    obs_dcls <- purrr::map(model@facets[["ObservationFacet"]]@entries, ~.x@prediction)
+    dcl <- vec_c(!!!unname(obs_dcls))
+    vars <- dcl_external_variables(dcl) %>%
+      as.character()
+    missing_vars <- setdiff(vars, c(prms, external_vars, algebraic_vars, conc_vars, a_vars))
+    if (!vec_is_empty(missing_vars)) {
+      missing_vars <- paste0("'", missing_vars ,"'")
+      issues <- c(issues,
+                  CriticalIssue(cli::pluralize("Undefined variable{?s} {missing_vars} in observation model"))
+                )
+    }
+  }
+  return(issues)
 }
 
 
