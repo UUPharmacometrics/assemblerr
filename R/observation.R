@@ -39,10 +39,27 @@ setMethod("initialize",
             callNextMethod(.Object, prediction = prediction, ...)
           })
 
-#' Observation
+#' Observation model
 #'
 #' These building blocks specify an observational model describing the observed variable as well as how an observation is expected to diverge from
-#' the model (i.e, the residual unexplained variability model - RUV model).
+#' the model (i.e, the residual unexplained variability model).
+#'
+#' The RUV model is choosen by selecting one of the predefined functions.
+#' \itemize{
+#'   \item \code{obs_additive}: Observation following an additive error model \eqn{y = f + \epsilon_1}
+#'   \item \code{obs_proportional}: Observation following a proportional error model \eqn{y = f + f \epsilon_1}
+#'   \item \code{obs_combined}: Observation following a combined error model \eqn{y = f + f \epsilon_1 + \epsilon_2}
+#' }
+#' The first argument of these functions requires the definition of the actual prediction from the model. It can be specified in a number of different ways
+#' \itemize{
+#'   \item the name of a variable in the model: \code{obs_additive("effect")}
+#'   \item a compartment concentration: \code{obs_additive(~C["central"])}
+#'   \item an equation: \code{obs_additive(~base+slp*time)}
+#' }
+#' If the definition contains a variable name on the left-hand side (as in \code{conc~C["central"]}), the variable will appear in the generated model code.
+#' The latter is useful to make the model code more readable if the prediction is defined as a long equation.
+#'
+#' The second function argument "name" will be used to support multiple observations but is currently not useful.
 #'
 #' @param prediction A declaration defining the observed variable
 #' @param name A name for the observation (automatically derived if missing)
@@ -60,7 +77,9 @@ setMethod("initialize",
 #'   prm_no_var("ed50") +
 #'   obs_proportional(effect~emax*dose/(ed50+dose))
 #' @export
-#' @describeIn obs_combined Observation following a combined error model \eqn{y = f + f \epsilon_1 + \epsilon_2}
+#' @name observation-model
+#' @rdname observation-model
+#' @order 3
 obs_combined <- function(prediction, name) {
   validate_and_create_observation(
     constructor = ObsNormalCombined,
@@ -86,7 +105,8 @@ AdditiveObservation <- setClass("AdditiveObservation",
 
 
 #' @export
-#' @describeIn obs_combined Observation following an additive error model \eqn{y = f + \epsilon_1}
+#' @rdname observation-model
+#' @order 1
 obs_additive <- function(prediction, name) {
   validate_and_create_observation(
     constructor = AdditiveObservation,
@@ -107,7 +127,8 @@ ProportionalObservation <- setClass("ProportionalObservation",
 
 
 #' @export
-#' @describeIn obs_combined Observation following a proportional error model \eqn{y = f + f \epsilon_1}
+#' @rdname observation-model
+#' @order 2
 obs_proportional <- function(prediction, name) {
   validate_and_create_observation(
     constructor = ProportionalObservation,
