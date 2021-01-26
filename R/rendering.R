@@ -6,6 +6,16 @@ setGeneric(name = "render_component",
            def = function(x, ...) standardGeneric("render_component"),
            valueClass = "character")
 
+#' Generate model code
+#'
+#' This function generates NONMEM code for a model object. The generated code will be written to the file specified by 'filename' or printed to the
+#' console if the argument is set to NULL.
+#'
+#' @param model A model object
+#' @param filename Name of the model file to create or NULL
+#' @param target_tool Name of the target tool (currently only 'nonmem')
+#' @param options List of options for model generation
+#'
 #' @export
 render <- function(model,
                    filename = NULL,
@@ -33,24 +43,3 @@ render <- function(model,
     }
   }
 }
-
-
-# setMethod(
-#   f = "render",
-#   signature = c(x = "Model"),
-#   definition = function(x) {
-#     convert(nm_model(), x) %>%
-#       render()
-#   }
-# )
-#
-#
-# setMethod(
-#   f = "render",
-#   signature = c(x = "PkModel"),
-#   definition = function(x) {
-#     convert(model(), x) %>%
-#     convert(nm_model(), .) %>%
-#       render()
-#   }
-# )

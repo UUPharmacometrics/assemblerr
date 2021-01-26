@@ -10,7 +10,6 @@
 #' @param definition List of expressions
 #'
 #' @return An assemblerr_declaration object
-#' @export
 #' @keywords internal
 new_declaration <- function(identifier = list(), definition = list()){
   vctrs::vec_assert(identifier, ptype = list())
@@ -65,12 +64,12 @@ declaration <- function(...){
 }
 
 
-#' @export
+
 is_declaration <- function(x) {
   return(inherits(x, "assemblerr_declaration"))
 }
 
-#' @export
+
 as_declaration <- function(x) UseMethod("as_declaration")
 
 as_declaration.assemblerr_declaration <- function(x) x
@@ -100,7 +99,7 @@ ui_as_declaration <- function(x) {
   )
 }
 
-#' @export
+
 as.list.assemblerr_declaration <- function(x, ...) {
   lbls <- purrr::map_if(dcl_id(x), ~!is.null(.x), deparse, .else = ~"")
   rlang::set_names(dcl_def(x), lbls)

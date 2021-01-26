@@ -15,3 +15,4 @@ A facet
 \description{
 Create model code entry
 }
+\keyword{internal}

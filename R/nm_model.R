@@ -56,19 +56,9 @@ setMethod(
 #' base object which then needs to be filled with components before it can be rendered. The
 #' following components can be added
 #' to a NONMEM model:
-#' \itemize{
-#'    \item \code{\link{nm_problem}}
-#'    \item \code{\link{nm_input}}
-#'    \item \code{\link{nm_pk}}
-#'    \item \code{\link{nm_des}}
-#'    \item \code{\link{nm_error}}
-#'    \item \code{\link{nm_theta}}
-#'    \item \code{\link{nm_omega}}
-#'    \item \code{\link{nm_sigma}}
-#' }
 #'
 #' @return An nm_model
-#' @export
+#' @keywords internal
 #'
 
 nm_model <- function(){
@@ -174,7 +164,7 @@ setMethod(
   }
 )
 
-#' @export
+
 nm_data <- function(path){
   if (!is.character(path)) stop("'name' needs to be a character vector")
   NmData(path = path)
@@ -221,7 +211,7 @@ setMethod(
 )
 
 
-#' @export
+
 nm_subroutine <- function(name, tol = NA_integer_) {
   NmSubroutines(name = name, tol = tol)
 }
@@ -254,7 +244,6 @@ setMethod(
   }
 )
 
-#' @export
 nm_compartment <- function(name) {
   NmCompartment(name = name)
 }
@@ -324,7 +313,7 @@ setMethod(
 #' @param statement Code statement
 #'
 #' @return A facet
-#' @export
+#' @keywords internal
 nm_pk <- function(statement){
   NmPkCode(statement = statement)
 }
@@ -362,7 +351,7 @@ setMethod(
 )
 
 
-#' @export
+
 nm_des <- function(statement){
   NmDesCode(statement = statement)
 }
@@ -400,7 +389,7 @@ setMethod(
 )
 
 
-#' @export
+
 nm_error <- function(statement){
   NmErrorCode(statement = statement)
 }
@@ -423,7 +412,7 @@ NmEstimationStepFacet <- setClass(
   prototype = prototype(entry_class = "NmEstimationStepOption", name = "estimation")
 )
 
-#' @export
+
 nm_estimation <- function(method = "cond inter"){
   NmEstimationStepFacet(options = list(method = method))
 }
@@ -443,7 +432,7 @@ NmCovarianceStepFacet <- setClass(
   prototype = prototype(entry_class = "NmCovarianceStepOption", name = "covariance")
 )
 
-#' @export
+
 nm_covariance <- function(print = 'E', matrix = NULL){
   NmCovarianceStepFacet(options = list(print = print, matrix = matrix))
 }
@@ -491,7 +480,7 @@ setMethod(
 #' @param ubound Upper bound
 #'
 #' @return A NONMEM Theta parameter
-#' @export
+#' @keywords internal
 nm_theta <- function(name, initial = 1.0, lbound = -Inf, ubound = Inf){
   if (!is.character(name)) stop("'name' needs to be a character vector")
   NmThetaParameter(name = name, initial = initial, lbound = lbound, ubound = ubound)
@@ -533,7 +522,7 @@ setMethod(
 
 
 
-#' @export
+
 nm_omega <- function(name, initial = 0.1){
   if (!is.character(name)) stop("'name' needs to be a character vector")
   NmOmegaParameter(name = name, initial = initial)
@@ -576,7 +565,7 @@ setMethod(
 )
 
 
-#' @export
+
 nm_sigma <- function(name, initial = 0.1){
   if (!is.character(name)) stop("'name' needs to be a character vector")
   NmSigmaParameter(name = name, initial = initial)

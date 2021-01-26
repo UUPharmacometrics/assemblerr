@@ -17,14 +17,6 @@ This function creates a model object, the foundation for a general, software-agn
 The object created is an empty structure. In general, one will want to add components to the model,
 then convert it to a software-specific model object and finally create the model code. The following components can be added
 to a general model:
-\itemize{
-   \item \code{\link{parameter}}
-   \item \code{\link{algebraic}}
-   \item \code{\link{compartment}}
-   \item \code{\link{flow}}
-   \item \code{\link{observation}}
-   \item \code{\link{meta_tag}}
-}
 }
 \examples{
 m <- model()+

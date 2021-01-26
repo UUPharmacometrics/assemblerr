@@ -42,5 +42,6 @@ These functions allow to combine two declarations using addition, substraction, 
 \examples{
 d1 <- declaration(dadt~k12*C)
 d2 <- declaration(data~k21*C)
-dcl_substract(d1, d2)
+assemblerr:::dcl_substract(d1, d2)
 }
+\keyword{internal}

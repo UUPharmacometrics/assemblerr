@@ -19,5 +19,6 @@ Set declaration fields
 }
 \examples{
 d <- declaration(cl~theta*exp(eta))
-dcl_id(d) <- quote(v)
+assemblerr:::dcl_id(d) <- quote(v)
 }
+\keyword{internal}

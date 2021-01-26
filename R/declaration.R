@@ -9,7 +9,6 @@
 #' @param dcl A declaration
 #'
 #' @return An expression
-#' @export
 #' @keywords internal
 dcl_id <- function(dcl){
   vctrs::field(dcl, "identifier")
@@ -27,11 +26,11 @@ dcl_def <- function(dcl){
 #' @param value An expression or a list of expressions
 #'
 #' @return The modified declaration
-#' @export
 #'
+#' @keywords internal
 #' @examples
 #' d <- declaration(cl~theta*exp(eta))
-#' dcl_id(d) <- quote(v)
+#' assemblerr:::dcl_id(d) <- quote(v)
 `dcl_id<-` <- function(dcl, value){
   vec_assert(dcl, ptype = declaration())
   if (rlang::is_expression(value)) value <- list(value)
@@ -121,7 +120,7 @@ dcl_substitute <- function(dcl,
 #' @param lhs List of expressions for the left-hand side of the resulting declaration
 #'
 #' @return A declaration
-#' @export
+#' @keywords internal
 #' @describeIn dcl_add Addition of the declarations
 dcl_add <- function(dcl1, dcl2, lhs = dcl_id(dcl1)){
   add <-  function(e1, e2){
@@ -132,12 +131,11 @@ dcl_add <- function(dcl1, dcl2, lhs = dcl_id(dcl1)){
   combine_declarations(dcl1, dcl2, lhs, add)
 }
 
-#' @export
 #' @describeIn dcl_add Substraction of the declarations
 #' @examples
 #' d1 <- declaration(dadt~k12*C)
 #' d2 <- declaration(data~k21*C)
-#' dcl_substract(d1, d2)
+#' assemblerr:::dcl_substract(d1, d2)
 dcl_substract <- function(dcl1, dcl2, lhs = dcl_id(dcl1)) {
   substract <- function(e1, e2){
     if (e1 == quote(0) && e2 == quote(0)) return(quote(0))
@@ -148,7 +146,6 @@ dcl_substract <- function(dcl1, dcl2, lhs = dcl_id(dcl1)) {
   combine_declarations(dcl1, dcl2, lhs, substract)
 }
 
-#' @export
 #' @describeIn dcl_add Multiplications of the declarations
 dcl_multiply <- function(dcl1, dcl2, lhs = dcl_id(dcl1)) {
   mult <-  function(e1, e2){
@@ -160,7 +157,6 @@ dcl_multiply <- function(dcl1, dcl2, lhs = dcl_id(dcl1)) {
   combine_declarations(dcl1, dcl2, lhs, mult)
 }
 
-#' @export
 #' @describeIn dcl_add Devision of the declarations
 dcl_devide <- function(dcl1, dcl2, lhs = dcl_id(dcl1)) {
   devide <-  function(e1, e2){
@@ -213,6 +209,7 @@ dcl_substitute_index <- function(dcl, array_name, substitutions){
 #' @param expr an expression
 #'
 #' @return TRUE/FALSE
+#' @keywords internal
 is_valid_lhs <- function(expr){
   contains_no_functions <- setdiff(all.names(expr, unique = T), all.vars(expr)) %>% setdiff("[") %>% rlang::is_empty()
   return(contains_no_functions)

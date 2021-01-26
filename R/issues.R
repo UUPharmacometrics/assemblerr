@@ -20,6 +20,10 @@ validIssueList <- function(object) {
 
 setValidity("IssueList", validIssueList)
 
+#' Combine issues
+#' @param x An IssueList
+#' @param ... objects to add to the issue list
+#' @keywords internal
 setMethod(
   f = "c",
   signature = "IssueList",

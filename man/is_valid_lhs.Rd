@@ -15,3 +15,4 @@ TRUE/FALSE
 \description{
 Test if an expression is a valid LHS for a declaration
 }
+\keyword{internal}

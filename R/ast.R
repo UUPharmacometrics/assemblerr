@@ -8,6 +8,7 @@
 #' @param ... Additional arguments to the transformer function
 #'
 #' @return The transformed language node
+#' @keywords internal
 transform_ast <- function(node, transformer, ...){
   if(rlang::is_atomic(node) || rlang::is_symbol(node)) return(transformer(node, ...))
   else if(rlang::is_call(node)){

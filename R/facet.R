@@ -115,6 +115,9 @@ setMethod(
   }
 )
 
+#' Access facet names
+#' @param x a named facet
+#' @keywords internal
 setMethod(
   f = "names",
   signature = c(x = "NamedFacet"),
@@ -343,6 +346,10 @@ setMethod(
 
 setClassUnion("BuildingBlock", members = c("FacetEntry", "Facet", "Fragment"))
 
+#' Add building blocks
+#' @param e1 A building block
+#' @param e2 A building block
+#' @keywords internal
 setMethod(
   f = "+",
   signature = c(e1 = "BuildingBlock", e2 = "BuildingBlock"),
@@ -351,6 +358,10 @@ setMethod(
   }
 )
 
+#' Add building blocks
+#' @param e1 A building block
+#' @param e2 NULL
+#' @keywords internal
 setMethod(
   f = "+",
   signature = c(e1 = "BuildingBlock", e2 = "NULL"),

@@ -1,4 +1,4 @@
-#' @export
+
 #' @keywords internal
 local_create_nonmem_test_directory <- function(path = tempdir(), debug = FALSE, env = parent.frame()) {
   dirname <- tempfile("dir", tmpdir = path)
@@ -11,7 +11,7 @@ local_create_nonmem_test_directory <- function(path = tempdir(), debug = FALSE, 
   return(dirname)
 }
 
-#' @export
+
 #' @keywords internal
 #' @importFrom utils write.csv
 create_dummy_data <- function(model, path = NULL){

@@ -18,14 +18,5 @@ This function creates a NONMEM model object, a software-specific version of the 
 base object which then needs to be filled with components before it can be rendered. The
 following components can be added
 to a NONMEM model:
-\itemize{
-   \item \code{\link{nm_problem}}
-   \item \code{\link{nm_input}}
-   \item \code{\link{nm_pk}}
-   \item \code{\link{nm_des}}
-   \item \code{\link{nm_error}}
-   \item \code{\link{nm_theta}}
-   \item \code{\link{nm_omega}}
-   \item \code{\link{nm_sigma}}
 }
-}
+\keyword{internal}
