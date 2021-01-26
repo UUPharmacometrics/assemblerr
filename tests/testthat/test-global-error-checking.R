@@ -14,10 +14,10 @@ test_that("observation", {
 
 test_that("missing variables", {
   m <- model() +
-    algebraic(k~cl/v)
+    algebraic(auc~dose/cl)
   m2 <- m +
     prm_log_normal("cl") +
-    prm_log_normal("v")
+    input_variable("dose")
   expect_matching_issue(check(m), "Undefined variables")
   expect_no_matching_issue(check(m2), "Undefined variables")
 })
