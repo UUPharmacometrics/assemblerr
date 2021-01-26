@@ -39,7 +39,28 @@ setMethod("initialize",
             callNextMethod(.Object, prediction = prediction, ...)
           })
 
+#' Observation
+#'
+#' These building blocks specify an observational model describing the observed variable as well as how an observation is expected to diverge from
+#' the model (i.e, the residual unexplained variability model - RUV model).
+#'
+#' @param prediction A declaration defining the observed variable
+#' @param name A name for the observation (automatically derived if missing)
+#'
+#' @examples
+#' # additve RUV model for observing the variable WT
+#' m <- model() +
+#'   prm_log_normal("wt") +
+#'   obs_additive(~wt)
+#'
+#' # EMAX dose-response model with proportional RUV
+#' m2 <- model() +
+#'   input_variable("dose") +
+#'   prm_no_var("emax") +
+#'   prm_no_var("ed50") +
+#'   obs_proportional(effect~emax*dose/(ed50+dose))
 #' @export
+#' @describeIn obs_combined Observation following a combined error model \eqn{y = f + f \epsilon_1 + \epsilon_2}
 obs_combined <- function(prediction, name) {
   validate_and_create_observation(
     constructor = ObsNormalCombined,
@@ -59,13 +80,13 @@ validate_and_create_observation <- function(constructor, prediction, name) {
 # additive ----------------------------------------------------------------
 
 
-
 AdditiveObservation <- setClass("AdditiveObservation",
                                 contains = "ObsNormalCombined",
                                 prototype = prototype(additive_term = TRUE, proportional_term = FALSE))
 
 
 #' @export
+#' @describeIn obs_combined Observation following an additive error model \eqn{y = f + \epsilon_1}
 obs_additive <- function(prediction, name) {
   validate_and_create_observation(
     constructor = AdditiveObservation,
@@ -86,6 +107,7 @@ ProportionalObservation <- setClass("ProportionalObservation",
 
 
 #' @export
+#' @describeIn obs_combined Observation following a proportional error model \eqn{y = f + f \epsilon_1}
 obs_proportional <- function(prediction, name) {
   validate_and_create_observation(
     constructor = ProportionalObservation,
