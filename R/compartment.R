@@ -73,7 +73,7 @@ compartment <- function(name, volume = 1){
 }
 
 #' @export
-#' @describeIn compartment Is an simple alias for compartment.
+#' @describeIn compartment Is a simple alias for compartment.
 cmp <- compartment
 
 #' Flows between compartments

@@ -22,7 +22,7 @@ Defines name and volume of a compartment
 }
 \section{Functions}{
 \itemize{
-\item \code{cmp}: Is an simple alias for compartment.
+\item \code{cmp}: Is a simple alias for compartment.
 }}
 
 \examples{
