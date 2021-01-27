@@ -27,32 +27,33 @@ setMethod(
 )
 
 
-# setMethod(
-#   f = "optimize_for_conversion",
-#   signature = signature(source = "Model", target = "NmModel"),
-#   definition = function(source, target, ...) {
-#     return(source)
-#   }
-# )
-
-
 #' General model
 #'
-#' \code{model()} creates the foundation for a general pharmacometric model
+#' This building block creates the basis for a general pharmacometric model, a flexible but verbose model type.
 #'
-#' This function creates a model object, the foundation for a general, software-agnostic description of a pharmacometric model.
-#' The object created is an empty structure. In general, one will want to add components to the model,
-#' then convert it to a software-specific model object and finally create the model code. The following components can be added
-#' to a general model:
+#' The object created is just an empty structure to which different building blocks need to be added. In a general model, each building block
+#' can modify one or more of the following facets
+#'   * [Parameters][parameter-model]
+#'   * [Observations][observation-model]
+#'   * [Algebraic relationships][algebraic()]
+#'   * [Compartments][compartment()]
+#'   * [Flows][flow()]
+#'   * [Input variables][input_variables()]
+#'   * Meta data
+#'
+#' The more specialized [pk_model()] is converted to a general model during the rendering process.
 #'
 #' @return A general pharmacometric model
 #' @export
 #' @importFrom magrittr %>%
 #' @examples
-#' m <- model()+
-#'     obs_additive(eff~emax*dose/(ed50+dose)) +
+#' m <- model() +
+#'     input_variable("dose") +
 #'     prm_log_normal("emax") +
-#'     prm_log_normal("ed50")
+#'     prm_log_normal("ed50") +
+#'     obs_additive(eff~emax*dose/(ed50+dose))
+#' render(m)
+#' @md
 model <- function(){
   Model()
 }

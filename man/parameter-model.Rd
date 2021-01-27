@@ -5,6 +5,7 @@
 \alias{prm_normal}
 \alias{prm_log_normal}
 \alias{prm_logit_normal}
+\alias{parameter-model}
 \title{Parameter model}
 \usage{
 prm_no_var(name)
@@ -24,23 +25,26 @@ These building blocks define a parameter model, declaring a parameter and specif
 \details{
 The parameter building blocks require a name for the parameter by which it can be referenced in a different building
 block. The distribution of the parameter in the population is chosen by selecting among the following predefined
-functions:
-\itemize{
-\item \code{prm_no_var}: A parameter without variability, i.e., without random effects.
-\item \code{prm_normal}: A parameter following the normal distribution.
-\item \code{prm_log_normal}: A parameter following the log-normal distribution.
-\item \code{prm_logit_normal}: A parameter following the logit-normal distribution (the parameter is normally distributed on the logit scale).
-}
+ functions:
+  * `prm_no_var`: A parameter without variability, i.e., without random effects.
+  * `prm_normal`: A parameter following the normal distribution.
+  * `prm_log_normal`: A parameter following the log-normal distribution.
+  * `prm_logit_normal`: A parameter following the logit-normal distribution (the parameter is normally distributed on the logit scale).
 
 Adding a parameter with an already existing name will replace the definition of the parameter. For example, the parameter "base"
-will have a log-normal distribution in the following snippet:\preformatted{m <- model() +
+will have a log-normal distribution in the following snippet:
+```
+m <- model() +
   prm_normal("base") +
   prm_log_normal("base")
-}
-\subsection{MU-referencing}{
+```
 
-\code{assemblerr} can include mu-referencing statements for parameter distributions that support it. The functionality can be
-activated by setting the option \code{prm.use_mu_referencing} to \code{TRUE} as shown in the following snippet:\preformatted{m <- model() +
+## MU-referencing
+
+`assemblerr` can include mu-referencing statements for parameter distributions that support it. The functionality can be
+activated by setting the option `prm.use_mu_referencing` to `TRUE` as shown in the following snippet:
+```
+m <- model() +
    prm_normal("base") +
    prm_log_normal("slp") +
    obs_additive(response~base+slp*time)
@@ -49,8 +53,7 @@ render(
   model = m,
   options = assemblerr_options(prm.use_mu_referencing = TRUE)
 )
-}
-}
+```
 }
 \examples{
 # a log-normal parameter that is directly observed

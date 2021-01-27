@@ -76,6 +76,9 @@ setMethod("initialize",
 #'   prm_no_var("emax") +
 #'   prm_no_var("ed50") +
 #'   obs_proportional(effect~emax*dose/(ed50+dose))
+#' @name observation-model
+NULL
+
 #' @export
 #' @rdname observation-model
 #' @order 3

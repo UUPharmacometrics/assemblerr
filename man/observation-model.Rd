@@ -4,6 +4,7 @@
 \alias{obs_additive}
 \alias{obs_proportional}
 \alias{obs_combined}
+\alias{observation-model}
 \title{Observation model}
 \usage{
 obs_additive(prediction, name)
