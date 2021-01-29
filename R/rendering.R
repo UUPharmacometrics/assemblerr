@@ -24,7 +24,8 @@ render <- function(model,
 
   if (target_tool == "nonmem") {
     code <- convert(nm_model(), model, options = options) %>%
-      render_component()
+      render_component() %>%
+      glue::glue_collapse("\n")
   } else {
     cli::cli_alert_danger("Tool '{target_tool}' is currently not supported.")
     return()
