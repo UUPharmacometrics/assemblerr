@@ -113,6 +113,20 @@ test_that("adding variables from a dataset", {
     expect_contains("$DATA data.csv IGNORE=@")
 })
 
+test_that("adding variables from a dataset with duplicated columns", {
+  m <- simple_model(vars = NULL)
+  local_create_nonmem_test_directory()
+  df <- data.frame(ID = 1, TIME = 1, DV = 1, DOSE = 1, DOSE = 2, check.names = FALSE)
+  write.csv(df, "data.csv", quote = FALSE, row.names = FALSE)
+  expect_warning(
+    m <- m +
+      dataset(path = "data.csv")
+  )
+  render(m) %>%
+    expect_contains("$INPUT ID TIME DV DOSE DOSE_1") %>%
+    expect_contains("$DATA data.csv IGNORE=@")
+})
+
 
 
 

@@ -26,11 +26,22 @@ input_variable <- function(name){
 #' @export
 dataset <- function(path){
   if (grepl(".csv$",path)) {
-    tab <- read.csv(path, header = TRUE, nrows = 1)
+    tab <- read.csv(path, header = TRUE, nrows = 1, check.names = FALSE)
   }else{
-    tab <- read.table(path, header = T, nrows = 1)
+    tab <- read.table(path, header = TRUE, nrows = 1, check.names = FALSE)
   }
-  purrr::map(tolower(colnames(tab)), input_variable) %>%
+  col_names <- colnames(tab)
+  if (any(duplicated(col_names))) {
+    duplicated_names <- col_names[duplicated(col_names)] %>%
+      unique()
+    rlang::warn(
+      c("Duplicated column names",
+        i = cli::pluralize("The column name{?s} {duplicated_names} appeared multiple times and {?was/were} adjusted.")
+      )
+    )
+    col_names <- make.unique(col_names, "_")
+  }
+  purrr::map(tolower(col_names), input_variable) %>%
     purrr::reduce(`+`) +
     meta_entry("dataset", path)
 }
