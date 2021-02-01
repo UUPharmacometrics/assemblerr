@@ -23,11 +23,19 @@ setMethod(
 )
 
 assert_valid_parameter_name <- function(name) {
+  if (rlang::is_missing(name)) {
+    rlang::abort(
+      c(
+        "No parameter name provided",
+        i = "Parameters need to be named."
+      )
+    )
+  }
   if (!is.character(name) || !is_valid_variable_name(name)) {
     rlang::abort(
       c(
         "Invalid parameter name",
-        i = "A parameter name can contain letters and numbers and needs to start with a letter"
+        i = "A parameter name can contain letters and numbers and needs to start with a letter."
       )
     )
   }
@@ -99,7 +107,7 @@ NULL
 #' @order 3
 #' @md
 prm_log_normal <- function(name) {
-  assert_valid_parameter_name(name)
+  assert_valid_parameter_name(rlang::maybe_missing(name))
   PrmLogNormal(name = name)
 }
 
@@ -113,7 +121,7 @@ PrmNormal <- setClass("PrmNormal",
 #' @rdname parameter-model
 #' @order 2
 prm_normal <- function(name) {
-  assert_valid_parameter_name(name)
+  assert_valid_parameter_name(rlang::maybe_missing(name))
   PrmNormal(name = name)
 }
 
@@ -127,7 +135,7 @@ PrmLogitNormal <- setClass("PrmLogitNormal",
 #' @rdname parameter-model
 #' @order 4
 prm_logit_normal <- function(name) {
-  assert_valid_parameter_name(name)
+  assert_valid_parameter_name(rlang::maybe_missing(name))
   PrmLogitNormal(name = name)
 }
 
@@ -140,7 +148,7 @@ PrmNoVar <- setClass("PrmNoVar",
 #' @rdname parameter-model
 #' @order 1
 prm_no_var <- function(name) {
-  assert_valid_parameter_name(name)
+  assert_valid_parameter_name(rlang::maybe_missing(name))
   PrmNoVar(name = name)
 }
 
