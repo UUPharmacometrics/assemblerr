@@ -1,4 +1,5 @@
-# assemblerr (development version)
+# assemblerr 0.0.0.9004
+* added `check()` function to check and list model issues  
 * improved error checking and reporting when creating building blocks, e.g., `prm_normal()`
 * prediction declarations for observations do not longer need a left-hand side, e.g., `obs_additive(~C["central"])` is now valid.
 * `pk_elimination_mm` has been replaced with `pk_elimination_nl` to clarify that the default parameterization is not the classical MM model. Additionally, `pk_elimination_nl` allows selecting the classical parameterization using `pk_elimination_nl(prm_vmax = prm_log_normal("vmax"), prm_clmm = NULL)`
