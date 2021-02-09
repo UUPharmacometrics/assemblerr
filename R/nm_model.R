@@ -412,7 +412,7 @@ NmEstimationStepFacet <- setClass(
   prototype = prototype(entry_class = "NmEstimationStepOption", name = "estimation")
 )
 
-
+#' @export
 nm_estimation <- function(method = "cond inter"){
   NmEstimationStepFacet(options = list(method = method))
 }
@@ -432,7 +432,7 @@ NmCovarianceStepFacet <- setClass(
   prototype = prototype(entry_class = "NmCovarianceStepOption", name = "covariance")
 )
 
-
+#' @export
 nm_covariance <- function(print = 'E', matrix = NULL){
   NmCovarianceStepFacet(options = list(print = print, matrix = matrix))
 }
