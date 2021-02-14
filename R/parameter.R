@@ -3,6 +3,8 @@ Parameter <- setClass("Parameter",
                       contains = "NamedFacetEntry",
                       prototype = prototype(facet_class = "ParameterFacet"))
 
+
+
 ParameterFacet <- setClass("ParameterFacet",
                            contains = "NamedFacet",
                            prototype = prototype(
@@ -19,6 +21,14 @@ setMethod(
     }else{
       NULL
     }
+  }
+)
+
+setMethod(
+  f = "compact_description",
+  signature = "ParameterFacet",
+  definition = function(x) {
+    interp("parameters: {none(names(x@entries))}")
   }
 )
 
@@ -47,6 +57,18 @@ assert_valid_parameter_name <- function(name) {
 
 PrmLogNormal <- setClass("PrmLogNormal",
                          contains = "Parameter")
+
+
+setMethod(
+  f = "description",
+  signature = "PrmLogNormal",
+  definition = function(x) {
+      interp("{x@name}: log-normal")
+  }
+)
+
+
+
 #' Parameter model
 #'
 #' These building blocks define a parameter model, declaring a parameter and specifying how it varies between subjects.
@@ -117,6 +139,14 @@ prm_log_normal <- function(name) {
 PrmNormal <- setClass("PrmNormal",
                       contains = "Parameter")
 
+setMethod(
+  f = "description",
+  signature = "PrmNormal",
+  definition = function(x) {
+      interp("{x@name}: normal")
+  }
+)
+
 #' @export
 #' @rdname parameter-model
 #' @order 2
@@ -131,6 +161,14 @@ prm_normal <- function(name) {
 PrmLogitNormal <- setClass("PrmLogitNormal",
                       contains = "Parameter")
 
+setMethod(
+  f = "description",
+  signature = "PrmLogitNormal",
+  definition = function(x) {
+    interp("{x@name}: logit-normal")
+  }
+)
+
 #' @export
 #' @rdname parameter-model
 #' @order 4
@@ -143,6 +181,16 @@ prm_logit_normal <- function(name) {
 
 PrmNoVar <- setClass("PrmNoVar",
                          contains = "Parameter")
+
+
+
+setMethod(
+  f = "description",
+  signature = "PrmNoVar",
+  definition = function(x) {
+    interp("{x@name}: no variability")
+  }
+)
 
 #' @export
 #' @rdname parameter-model

@@ -1,7 +1,3 @@
-ui_warning <- function(...){
-  rlang::warn(paste(..., sep = ""))
-}
-
 sym <- function(x) rlang::sym(x)
 
 
@@ -28,4 +24,41 @@ permutation_matrix <- function(index){
 
 is_valid_variable_name <- function(name){
   grepl(x = name, pattern = "^[a-zA-Z][0-9a-zA-Z_]*$")
+}
+
+#' Convert facet class names to labels
+#'
+#' @param names Character vector of facet class names
+#'
+#' @return Character vector with class names translated to labels
+#'
+#' @examples
+#' assemblerr:::facet_names_to_labels(c("ParameterFacet", "InputVariableFacet"))
+facet_names_to_labels <- function(names) {
+  names[grepl("Facet$", names)] <- names[grepl("Facet$", names)] %>%
+    gsub("Facet$","", x = .) %>%
+    gsub("\\B([A-Z])", " \\1", x = .) %>%
+    tolower()
+  names
+}
+
+
+#' Perform string interpolation with pluralization
+#'
+#' @param ... Character vectors to interpolate
+#' @param .envir Environment for lookup
+#'
+#' @return A character vector
+#'
+#' @examples
+#' x <- 1:10
+#' assemblerr:::interp("x has elements {x}")
+interp <- function(..., .envir = parent.frame()) {
+  res <- cli::pluralize(..., .envir = .envir)
+  as.character(res)
+}
+
+none <- function(x) {
+  if (vec_is_empty(x)) return(cli::col_grey("none"))
+  x
 }

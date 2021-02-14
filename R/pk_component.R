@@ -25,6 +25,7 @@ PkComponentFacet <- setClass(
   prototype = prototype(entry_class = "PkComponent", label = "PK components")
 )
 
+
 setMethod(
   f = "check",
   signature = signature(x = "PkComponentFacet"),
@@ -36,6 +37,19 @@ setMethod(
     if (!"elimination" %in% names(x@entries)) {
       issues <- c(issues, CriticalIssue("An elimination component is missing"))
     }
+    return(issues)
+  }
+)
+
+setMethod(
+  f = "compact_description",
+  signature = "PkComponentFacet",
+  definition = function(x) {
+    desc <- list(distribution = character(), elimination = character(), absorption = character())
+    desc_children <- purrr::map(x@entries, compact_description)
+    desc[names(desc_children)] <- desc_children
+    desc <- purrr::compact(desc)
+    interp("pk components: {none(desc)}")
   }
 )
 
@@ -58,6 +72,23 @@ setClass("PkEliminationComponent",
 PkDistribution1Cmp <- setClass("PkDistribution1Cmp",
          contains = "PkDistributionComponent")
 
+setMethod(
+  f = "description",
+  signature = "PkDistribution1Cmp",
+  definition = function(x) {
+    interp("{x@name}: 1 compartment")
+  }
+)
+
+setMethod(
+  f = "compact_description",
+  signature = "PkDistribution1Cmp",
+  definition = function(x) {
+    "1 cmp"
+  }
+)
+
+
 #' @export
 pk_distribution_1cmp <- function(prm_vc = prm_log_normal("vc")) {
   PkDistribution1Cmp(parameters = list(vc = prm_vc)) +
@@ -79,6 +110,23 @@ setMethod(
 
 PkDistribution2Cmp <- setClass("PkDistribution2Cmp",
          contains = "PkDistributionComponent")
+
+setMethod(
+  f = "description",
+  signature = "PkDistribution2Cmp",
+  definition = function(x) {
+    interp("{x@name}: 2 compartment")
+  }
+)
+
+setMethod(
+  f = "compact_description",
+  signature = "PkDistribution2Cmp",
+  definition = function(x) {
+    "2 cmp"
+  }
+)
+
 
 setMethod(
   f = "convert",
@@ -117,6 +165,24 @@ pk_distribution_2cmp <- function(
 
 PkDistribution3Cmp <- setClass("PkDistribution3Cmp",
          contains = "PkDistributionComponent")
+
+setMethod(
+  f = "description",
+  signature = "PkDistribution3Cmp",
+  definition = function(x) {
+    interp("{x@name}: 3 compartment")
+  }
+)
+
+setMethod(
+  f = "compact_description",
+  signature = "PkDistribution3Cmp",
+  definition = function(x) {
+    "3 cmp"
+  }
+)
+
+
 
 setMethod(
   f = "convert",
@@ -169,6 +235,24 @@ PkEliminationLinear <- setClass("PkEliminationLinear",
          contains = "PkEliminationComponent")
 
 setMethod(
+  f = "description",
+  signature = "PkEliminationLinear",
+  definition = function(x) {
+    interp("{x@name}: linear")
+  }
+)
+
+setMethod(
+  f = "compact_description",
+  signature = "PkEliminationLinear",
+  definition = function(x) {
+    "linear elim."
+  }
+)
+
+
+
+setMethod(
   f = "convert",
   signature = c(target = "Model", source = "PkModel", component = "PkEliminationLinear"),
   definition = function(target, source, component, options) {
@@ -219,6 +303,23 @@ PkEliminationNL <- setClass("PkEliminationNL",
                             contains = "PkEliminationComponent")
 
 setMethod(
+  f = "description",
+  signature = "PkEliminationNL",
+  definition = function(x) {
+    interp("{x@name}: nonlinear")
+  }
+)
+
+setMethod(
+  f = "compact_description",
+  signature = "PkEliminationNL",
+  definition = function(x) {
+    "nonlinear elim."
+  }
+)
+
+
+setMethod(
   f = "convert",
   signature = c(target = "Model", source = "PkModel", component = "PkEliminationNL"),
   definition = function(target, source, component, options) {
@@ -263,6 +364,23 @@ PkAbsorptionFO <- setClass("PkAbsorptionFO",
                                contains = "PkAbsorptionComponent")
 
 setMethod(
+  f = "description",
+  signature = "PkAbsorptionFO",
+  definition = function(x) {
+    interp("{x@name}: first-order")
+  }
+)
+
+setMethod(
+  f = "compact_description",
+  signature = "PkAbsorptionFO",
+  definition = function(x) {
+    "FO abs."
+  }
+)
+
+
+setMethod(
   f = "convert",
   signature = c(target = "Model", source = "PkModel", component = "PkAbsorptionFO"),
   definition = function(target, source, component, options) {
@@ -290,6 +408,22 @@ pk_absorption_fo <- function(prm_mat = prm_log_normal("mat")){
 PkAbsorptionFOLagtime <- setClass(
   "PkAbsorptionFOLagtime",
   contains = "PkAbsorptionComponent"
+)
+
+setMethod(
+  f = "description",
+  signature = "PkAbsorptionFOLagtime",
+  definition = function(x) {
+    interp("{x@name}: first-order, lag-time ")
+  }
+)
+
+setMethod(
+  f = "compact_description",
+  signature = "PkAbsorptionFOLagtime",
+  definition = function(x) {
+    "FO abs. lag-time"
+  }
 )
 
 setMethod(
@@ -329,6 +463,23 @@ PkAbsorptionFOTransit <- setClass(
   "PkAbsorptionFOTransit",
   slots = c(ncompartments = "numeric"),
   contains = "PkAbsorptionComponent"
+)
+
+setMethod(
+  f = "description",
+  signature = "PkAbsorptionFOTransit",
+  definition = function(x) {
+    interp("{x@name}: first-order, transit-compartments ({x@ncompartments}) ")
+  }
+)
+
+
+setMethod(
+  f = "compact_description",
+  signature = "PkAbsorptionFOTransit",
+  definition = function(x) {
+    interp("FO abs. transit-cmps({x@ncompartments})")
+  }
 )
 
 setMethod(
@@ -377,6 +528,22 @@ PkAbsorptionZO <- setClass("PkAbsorptionZO",
                                contains = "PkAbsorptionComponent")
 
 setMethod(
+  f = "description",
+  signature = "PkAbsorptionZO",
+  definition = function(x) {
+    interp("{x@name}: zero-order")
+  }
+)
+
+setMethod(
+  f = "compact_description",
+  signature = "PkAbsorptionZO",
+  definition = function(x) {
+    "ZO abs."
+  }
+)
+
+setMethod(
   f = "convert",
   signature = c(target = "Model", source = "PkModel", component = "PkAbsorptionZO"),
   definition = function(target, source, component, options) {
@@ -401,6 +568,23 @@ pk_absorption_zo <- function(prm_mat = prm_log_normal("mat")) {
 
 PkAbsorptionZOLagtime <- setClass("PkAbsorptionZOLagtime",
                            contains = "PkAbsorptionComponent")
+
+setMethod(
+  f = "description",
+  signature = "PkAbsorptionZOLagtime",
+  definition = function(x) {
+    interp("{x@name}: zero-order, lag-time")
+  }
+)
+
+setMethod(
+  f = "compact_description",
+  signature = "PkAbsorptionZOLagtime",
+  definition = function(x) {
+    "ZO abs. lag-time"
+  }
+)
+
 
 setMethod(
   f = "convert",
@@ -435,6 +619,23 @@ pk_absorption_zo_lag <- function(prm_mat = prm_log_normal("mat"),
 
 PkAbsorptionFOZO <- setClass("PkAbsorptionFOZO",
                            contains = "PkAbsorptionComponent")
+
+setMethod(
+  f = "description",
+  signature = "PkAbsorptionFOZO",
+  definition = function(x) {
+    interp("{x@name}: first-order, zero-order delay")
+  }
+)
+
+setMethod(
+  f = "compact_description",
+  signature = "PkAbsorptionFOZO",
+  definition = function(x) {
+    "FO abs. ZO delay"
+  }
+)
+
 
 setMethod(
   f = "convert",

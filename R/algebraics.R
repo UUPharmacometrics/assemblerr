@@ -6,6 +6,16 @@ Algebraic <- setClass("Algebraic",
                       contains = "NamedFacetEntry",
                       prototype = prototype(facet_class = "AlgebraicFacet"))
 
+setMethod(
+  f = "description",
+  signature = "Algebraic",
+  definition = function(x) {
+    format(x@definition)
+  }
+)
+
+
+
 setMethod(f = "initialize",
           signature = "Algebraic",
           definition = function(.Object, definition = declaration(), ...){
@@ -15,6 +25,14 @@ setMethod(f = "initialize",
 AlgebraicFacet <- setClass("AlgebraicFacet",
                            contains = "NamedFacet",
                            prototype = prototype(entry_class = "Algebraic", label = "algebraics"))
+
+setMethod(
+  f = "compact_description",
+  signature = "AlgebraicFacet",
+  definition = function(x) {
+    interp("algebraics: {none(names(x@entries))}")
+  }
+)
 
 setMethod(
   f = "convert",

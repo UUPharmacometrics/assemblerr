@@ -27,11 +27,36 @@ setMethod(
     }
 )
 
+setMethod(
+  f = "compact_description",
+  signature = "ObservationFacet",
+  definition = function(x) {
+    cdesc <- purrr::map_chr(x@entries, compact_description)
+    interp("observations: {none(cdesc)}")
+  }
+)
+
 
 ObsNormalCombined = setClass("ObsNormalCombined",
          slots = c(prediction = "assemblerr_declaration", additive_term = "logical", proportional_term = "logical"),
          prototype = prototype(additive_term = TRUE, proportional_term = TRUE),
          contains = "Observation")
+
+setMethod(
+  f = "description",
+  signature = "ObsNormalCombined",
+  definition = function(x) {
+      interp("{x@name}: ", format(x@prediction))
+  }
+)
+
+setMethod(
+  f = "compact_description",
+  signature = "ObsNormalCombined",
+  definition = function(x) {
+    interp("{format(x@prediction)} (combined)")
+  }
+)
 
 setMethod("initialize",
           signature = "ObsNormalCombined",
@@ -105,6 +130,13 @@ AdditiveObservation <- setClass("AdditiveObservation",
                                 contains = "ObsNormalCombined",
                                 prototype = prototype(additive_term = TRUE, proportional_term = FALSE))
 
+setMethod(
+  f = "compact_description",
+  signature = "AdditiveObservation",
+  definition = function(x) {
+    interp("{format(x@prediction)} (additive)")
+  }
+)
 
 #' @export
 #' @rdname observation-model
@@ -126,6 +158,14 @@ obs_additive <- function(prediction, name) {
 ProportionalObservation <- setClass("ProportionalObservation",
                                     contains = "ObsNormalCombined",
                                     prototype = prototype(additive_term = FALSE, proportional_term = TRUE))
+
+setMethod(
+  f = "compact_description",
+  signature = "ProportionalObservation",
+  definition = function(x) {
+    interp("{format(x@prediction)} (proportional)")
+  }
+)
 
 
 #' @export

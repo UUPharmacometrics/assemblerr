@@ -43,5 +43,5 @@ dataset <- function(path){
   }
   purrr::map(tolower(col_names), input_variable) %>%
     purrr::reduce(`+`) +
-    meta_entry("dataset", path)
+    metadata("dataset", path)
 }

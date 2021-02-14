@@ -1,3 +1,6 @@
+# assemblerr (development version)
+* improved console printing of building blocks and models
+
 # assemblerr 0.0.0.9004
 * added `check()` function to check and list model issues  
 * improved error checking and reporting when creating building blocks, e.g., `prm_normal()`

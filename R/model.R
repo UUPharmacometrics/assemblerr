@@ -13,8 +13,22 @@ setMethod(
                                  FlowFacet(),
                                  ObservationFacet(),
                                  InputVariableFacet(),
-                                 MetaEntryFacet()),
+                                 MetadataFacet()),
                    ...)
+  }
+)
+
+setMethod(
+  f = "show",
+  signature = "Model",
+  definition = function(object) {
+    print_shortened_tree_description(
+      tree_description =  compact_description(object),
+      type = "model",
+      child_type = "facet{?s}",
+      show = c("ParameterFacet", "AlgebraicFacet", "CompartmentFacet", "FlowFacet", "ObservationFacet")
+    )
+    print_issues_warning(check(object))
   }
 )
 
@@ -25,7 +39,6 @@ setMethod(
     source
   }
 )
-
 
 #' General model
 #'

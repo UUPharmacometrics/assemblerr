@@ -5,10 +5,55 @@ FacetEntry <- setClass("FacetEntry",
          slots = c(label = "character", facet_class = "character"),
          prototype = prototype(label = "unnamed", facet_class = "Facet"))
 
+
+setGeneric(
+  name = "description",
+  def = function(x) standardGeneric("description")
+)
+
+setMethod(
+  f = "description",
+  signature = "FacetEntry",
+  definition = function(x) {
+      x@label
+  }
+)
+
+setGeneric(
+  name = "compact_description",
+  def = function(x, compact) standardGeneric("compact_description")
+)
+
+setMethod(
+  f = "compact_description",
+  signature = "ANY",
+  definition = function(x) description(x)
+)
+
+setMethod(
+  f = "show",
+  signature = "FacetEntry",
+  definition = function(object) {
+    print_shortened_tree_description(
+      tree_description = description(object),
+      skip_root = FALSE
+    )
+  }
+)
+
 NamedFacetEntry <- setClass("NamedFacetEntry",
          slots = c(name = "character"),
          contains = "FacetEntry",
          prototype = prototype(facet_class = "NamedFacet"))
+
+setMethod(
+  f = "description",
+  signature = "NamedFacetEntry",
+  definition = function(x) {
+    x@name
+  }
+)
+
 
 setMethod(f = "initialize",
           signature = "NamedFacetEntry",
@@ -17,6 +62,8 @@ setMethod(f = "initialize",
             if (rlang::is_empty(.Object@name)) stop("The facet entry needs to be named", call. = FALSE)
             .Object
           })
+
+
 
 
 Facet <- setClass("Facet",
@@ -39,6 +86,25 @@ setMethod(f = "initialize",
             .Object
           })
 
+
+setMethod(
+  f = "description",
+  signature = "Facet",
+  definition = function(x) {
+    TreeDescription(facet_names_to_labels(class(x)), purrr::map_chr(x@entries, description))
+  }
+)
+
+setMethod(
+  f = "show",
+  signature = "Facet",
+  definition = function(object) {
+    print_shortened_tree_description(
+      tree_description = compact_description(object),
+      skip_root = FALSE
+    )
+  }
+)
 
 setGeneric(
   name = "index_of",
@@ -66,14 +132,6 @@ setMethod(
   }
 )
 
-setMethod(
-  f = "show",
-  signature = signature(object = "Facet"),
-  definition = function(object){
-    cli::cli_text("{object@label}: {cli::no(length(object@entries))} entr{?y/ies}")
-    invisible(NULL)
-  }
-)
 
 setGeneric(name = "add_entry",
            def = function(x, y) standardGeneric("add_entry"))
@@ -97,14 +155,6 @@ setMethod(f = "initialize",
             .Object
           })
 
-setMethod(
-  f = "show",
-  signature = signature(object = "NamedFacet"),
-  definition = function(object){
-    cli::cli_text("{object@label}: {names(object@entries)}{?none//}")
-    invisible(NULL)
-  }
-)
 
 
 setMethod(
@@ -149,25 +199,22 @@ setMethod(f = "initialize",
             .Object
           })
 
-
 setMethod(
-  f = "show",
-  signature = signature(object = "Fragment"),
-  definition = function(object){
-    nfacets <- length(object@facets)
-    cli::cli_text("assemblerr fragment (size {nfacets})")
-    div <- cli::cli_div()
-    dl <- cli::cli_dl()
-    purrr::walk(object@facets, function(x) {
-      li <- cli::cli_li()
-      show(x)
-      cli::cli_end(li)
-    })
-    cli::cli_end(dl)
-    cli::cli_end(div)
-    invisible(NULL)
+  f = "description",
+  signature = "Fragment",
+  definition = function(x) {
+    TreeDescription(class(x), purrr::map(x@facets, description))
   }
 )
+
+setMethod(
+  f = "compact_description",
+  signature = "Fragment",
+  definition = function(x) {
+    TreeDescription(class(x), purrr::map(x@facets, compact_description))
+  }
+)
+
 
 setMethod(
   f = "check",
@@ -182,30 +229,6 @@ setClass("GenericModel",
          slots = c(options = "list"),
          contains = "Fragment")
 
-setMethod(
-  f = "show",
-  signature = signature(object = "GenericModel"),
-  definition = function(object){
-    nfacets <- length(object@facets)
-    cli::cli_text("assemblerr model")
-    div <- cli::cli_div()
-    dl <- cli::cli_dl()
-    purrr::discard(object@facets, ~length(.x@entries)==0) %>%
-    purrr::walk(function(x) {
-      li <- cli::cli_li()
-      show(x)
-      cli::cli_end(li)
-    })
-    nempty <- purrr::map_int(object@facets, ~as.integer(length(.x@entries)==0)) %>%
-      sum()
-    li <- cli::cli_li()
-    cli::cli_text("({nempty} additional empty facet{?s})")
-    cli::cli_end(li)
-    cli::cli_end(dl)
-    cli::cli_end(div)
-    invisible(NULL)
-  }
-)
 
 setGeneric(
   name = "optimize_for_conversion",
@@ -334,6 +357,18 @@ setMethod(
   }
 )
 
+setMethod(
+  f = "show",
+  signature = "GenericModel",
+  definition = function(object) {
+    compact_description(object) %>%
+      print_tdesc_as_list()
+    issues <- check(object)
+    if (length(issues) > 0) {
+      cli::cli_text("{length(issues)} issue{?s}")
+    }
+  }
+)
 
 setMethod(
   f = "combine",
@@ -371,6 +406,13 @@ setMethod(
 )
 
 
-
-
+setMethod(
+  f = "show",
+  signature = "BuildingBlock",
+  definition = function(object) {
+    print_shortened_tree_description(
+      tree_description = compact_description(object)
+    )
+  }
+)
 

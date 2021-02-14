@@ -8,12 +8,27 @@ Compartment <- setClass(
   prototype = prototype(facet_class = "CompartmentFacet", label = "compartment")
 )
 
+setMethod(
+  f = "description",
+  signature = "Compartment",
+  definition = function(x) {
+      interp("{x@name}: {format(x@volume)}")
+  }
+)
+
 CompartmentFacet <- setClass(
   "CompartmentFacet",
   contains = "NamedFacet",
   prototype = prototype(entry_class = "Compartment", label = "compartments")
 )
 
+setMethod(
+  f = "description",
+  signature = "CompartmentFacet",
+  definition = function(x) {
+    interp("compartments: {none(names(x@entries))}")
+  }
+)
 
 Flow <- setClass(
   "Flow",
@@ -26,19 +41,38 @@ Flow <- setClass(
   prototype = prototype(facet_class = "FlowFacet", label = "flow")
 )
 
+setMethod(
+  f = "description",
+  signature = "Flow",
+  definition = function(x) {
+    interp("{x@from}{cli::symbol[['arrow_right']]}{ifelse(is.na(x@to), '<out>', x@to)}: {format(x@definition)}")
+  }
+)
+
+setMethod(
+  f = "compact_description",
+  signature = "Flow",
+  definition = function(x) {
+    interp("{x@from}{cli::symbol[['arrow_right']]}{ifelse(is.na(x@to), '<out>', x@to)}")
+  }
+)
+
+
 FlowFacet <- setClass("FlowFacet",
                              contains = "Facet",
                              prototype = prototype(entry_class = "Flow", label = "flows"))
 
+
+
+
 setMethod(
-  f = "show",
-  signature = signature(object = "FlowFacet"),
-  definition = function(object){
-    flows <- purrr::map_chr(object@entries, ~paste0(.x@from, "-->", .x@to))
-    cli::cli_text("{object@label}: {flows}{?none//}")
-    invisible(NULL)
+  f = "compact_description",
+  signature = "FlowFacet",
+  definition = function(x) {
+    interp("flows: {none(purrr::map_chr(x@entries, compact_description))}")
   }
 )
+
 
 #' Compartment
 #'

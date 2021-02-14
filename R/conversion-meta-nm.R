@@ -5,9 +5,9 @@
 
 setMethod(
   f = "convert",
-  signature = c(target = "NmModel", source = "Model", component = "MetaEntry"),
+  signature = c(target = "NmModel", source = "Model", component = "Metadata"),
   definition = function(target, source, component, options) {
-    if(component@name == "dataset") {
+    if (component@name == "dataset") {
       target <- target + nm_data(path = component@value)
     }
     target

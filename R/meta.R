@@ -2,23 +2,23 @@
 #' @include nm_model.R
 #' @include model.R
 #'
-MetaEntry <- setClass(
-  "MetaEntry",
+Metadata <- setClass(
+  "Metadata",
   slots = c(value = "character"),
   contains = "NamedFacetEntry",
-  prototype = prototype(facet_class = "MetaEntryFacet")
+  prototype = prototype(facet_class = "MetadataFacet")
 )
 
-MetaEntryFacet <- setClass(
-  "MetaEntryFacet",
+MetadataFacet <- setClass(
+  "MetadataFacet",
   contains = "NamedFacet",
-  prototype = prototype(entry_class = "MetaEntry", "meta entries")
+  prototype = prototype(entry_class = "Metadata")
 )
 
 
 
-meta_entry <- function(name, value){
+metadata <- function(name, value){
   if (!is.character(name)) stop("'name' needs to be a character vector")
-  MetaEntry(name = name, value = value)
+  Metadata(name = name, value = value)
 }
 

@@ -60,7 +60,7 @@ m <- model() +
   compartment("central", volume = ~vc) +
   flow(from = "dose", to = "central", definition = ~ka*A) +
   flow(from = "central", definition = ~cl*C) +
-  obs_additive(conc~C["central"])
+  obs_additive(conc~C["central"]) 
 
 render(m)
 ```

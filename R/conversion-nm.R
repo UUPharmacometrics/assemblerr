@@ -11,7 +11,7 @@ setMethod(
       convert(source, source@facets[["AlgebraicFacet"]], options) %>%
       convert(source, source@facets[["ObservationFacet"]], options) %>%
       convert(source, source@facets[["InputVariableFacet"]], options) %>%
-      convert(source, source@facets[["MetaEntryFacet"]], options)
+      convert(source, source@facets[["MetadataFacet"]], options)
     if (!is.null(options[["default_record.covariance_step"]])) target <- target + options[["default_record.covariance_step"]]
     if (!is.null(options[["default_record.estimation_step"]])) target <- target + options[["default_record.estimation_step"]]
     if (vec_is_empty(source@facets[["InputVariableFacet"]]@entries)) {

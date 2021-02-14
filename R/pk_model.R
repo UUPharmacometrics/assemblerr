@@ -13,11 +13,24 @@ setMethod(
                                  PkComponentFacet(),
                                  ObservationFacet(),
                                  InputVariableFacet(),
-                                 MetaEntryFacet()),
+                                 MetadataFacet()),
                    ...)
   }
 )
 
+setMethod(
+  f = "show",
+  signature = "PkModel",
+  definition = function(object) {
+    print_shortened_tree_description(
+      tree_description = compact_description(object),
+      type = "pk_model",
+      child_type = "facet{?s}",
+      show = c("PkComponentFacet","ParameterFacet", "AlgebraicFacet", "ObservationFacet")
+    )
+    print_issues_warning(check(object))
+  }
+)
 
 
 #' Create a PK model
