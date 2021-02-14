@@ -16,7 +16,7 @@ ObservationFacet <- setClass("ObservationFacet",
 setMethod(
   f = "check",
   signature = signature(x = "ObservationFacet"),
-  definition = function(x) {
+  definition = function(x, ...) {
       if (vec_is_empty(x@entries)) {
         CriticalIssue("No observation specified")
       } else if (vec_size(x@entries) > 1) {

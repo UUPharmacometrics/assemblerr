@@ -15,7 +15,7 @@ ParameterFacet <- setClass("ParameterFacet",
 setMethod(
   f = "check",
   signature = signature(x = "ParameterFacet"),
-  definition = function(x) {
+  definition = function(x, ...) {
     if (vec_is_empty(x@entries)) {
       CriticalIssue("No parameters specified")
     }else{

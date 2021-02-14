@@ -127,7 +127,7 @@ setGeneric(
 setMethod(
   f = "check",
   signature = signature(x = "Facet"),
-  definition = function(x) {
+  definition = function(x, ...) {
     return(IssueList())
   }
 )
@@ -216,19 +216,19 @@ setMethod(
 )
 
 
-setMethod(
-  f = "check",
-  signature = signature(x = "Fragment"),
-  definition = function(x) {
-    issues <- purrr::map(x@facets, check)
-    purrr::reduce(issues, c, .init = IssueList())
-  }
-)
 
 setClass("GenericModel",
          slots = c(options = "list"),
          contains = "Fragment")
 
+setMethod(
+  f = "check",
+  signature = signature(x = "GenericModel"),
+  definition = function(x) {
+    issues <- purrr::map(x@facets, check, model = x)
+    purrr::reduce(issues, c, .init = IssueList())
+  }
+)
 
 setGeneric(
   name = "optimize_for_conversion",

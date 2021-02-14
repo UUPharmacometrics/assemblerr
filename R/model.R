@@ -76,7 +76,7 @@ setOldClass("model")
 setMethod(
   f = "check",
   signature = signature(x = "Model"),
-  definition = function(x) {
+  definition = function(x, ...) {
     issues <- c(IssueList(),
                 callNextMethod(x),
                 check_for_undefined_variables(model = x))

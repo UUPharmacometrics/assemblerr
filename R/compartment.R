@@ -73,6 +73,39 @@ setMethod(
   }
 )
 
+setMethod(
+  f = "check",
+  signature = "FlowFacet",
+  definition = function(x, model, ...) {
+    issues <- IssueList()
+    # - to and from compartment names need to exist
+    issues <- c(issues, check_for_undefined_compartments(x, model@facets[['CompartmentFacet']]))
+    # - variables used in flow definition need to be defined
+    return(issues)
+  }
+)
+
+check_for_undefined_compartments <- function(flow_facet, compartment_facet){
+  cmps <- names(compartment_facet)
+  undefined_cmps <- purrr::map(flow_facet@entries, function(flow){
+    ret <- c()
+    if (!is.na(flow@from) & !flow@from %in% cmps) ret <- flow@from
+    if (!is.na(flow@to) & !flow@to %in% cmps) ret <- vec_c(ret, flow@to)
+    return(ret)
+  }) %>%
+    purrr::flatten_chr()
+  if (!vec_is_empty(undefined_cmps)) {
+    return(
+      CriticalIssue(
+        interp("Undefined compartment name{?s} {sq(undefined_cmps)} in flow definition")
+      )
+    )
+  } else {
+    return(NULL)
+  }
+
+}
+
 
 #' Compartment
 #'

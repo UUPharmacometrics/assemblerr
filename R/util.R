@@ -62,3 +62,7 @@ none <- function(x) {
   if (vec_is_empty(x)) return(cli::col_grey("none"))
   x
 }
+
+sq <- function(x) {
+  return(paste0("'",x,"'"))
+}

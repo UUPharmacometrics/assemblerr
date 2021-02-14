@@ -29,7 +29,7 @@ PkComponentFacet <- setClass(
 setMethod(
   f = "check",
   signature = signature(x = "PkComponentFacet"),
-  definition = function(x) {
+  definition = function(x, ...) {
     issues <- IssueList()
     if (!"distribution" %in% names(x@entries)) {
       issues <- c(issues, CriticalIssue("A distribution component is missing"))
