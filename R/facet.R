@@ -119,6 +119,7 @@ setMethod(
   }
 )
 
+#'@export
 setGeneric(
   name = "check",
   def = function(x, ...) standardGeneric("check")
