@@ -104,7 +104,7 @@ test_that("obs without lhs", {
 test_that("adding variables from a dataset", {
   m <- simple_model(vars = NULL)
   local_create_nonmem_test_directory()
-  df <- data.frame(ID = 1, TIME = 1, DV = 1, DOSE = 1)
+  df <- data.frame(ID = 1, TIME = 1, DV = 1, DOSE = 1, C0 = 1)
   write.csv(df, "data.csv", quote = FALSE, row.names = FALSE)
   m <- m +
     dataset(path = "data.csv")
@@ -116,7 +116,7 @@ test_that("adding variables from a dataset", {
 test_that("adding variables from a dataset with duplicated columns", {
   m <- simple_model(vars = NULL)
   local_create_nonmem_test_directory()
-  df <- data.frame(ID = 1, TIME = 1, DV = 1, DOSE = 1, DOSE = 2, check.names = FALSE)
+  df <- data.frame(ID = 1, TIME = 1, DV = 1, DOSE = 1, DOSE = 2, C0 = 1, check.names = FALSE)
   write.csv(df, "data.csv", quote = FALSE, row.names = FALSE)
   expect_warning(
     m <- m +

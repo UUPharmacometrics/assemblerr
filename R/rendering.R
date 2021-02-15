@@ -21,8 +21,17 @@ render <- function(model,
                    filename = NULL,
                    target_tool = "nonmem",
                    options = assemblerr_options()) {
-
+  model_arg_label <- rlang::as_label(rlang::enexpr(model))
   if (target_tool == "nonmem") {
+    issues <- check(model)
+    if (length(issues) > 0) {
+      rlang::abort(
+        c("Critical issues found",
+          x = interp("The model contains {length(issues)} issue{?s} that need to be fixed before rendering it."),
+          i = interp("Get a list of issue by running: `check({model_arg_label})`")
+        )
+      )
+    }
     code <- convert(nm_model(), model, options = options) %>%
       render_component() %>%
       glue::glue_collapse("\n")

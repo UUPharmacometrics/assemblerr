@@ -1,4 +1,5 @@
 # assemblerr (development version)
+* models are now check for issues before rendering
 * improved console printing of building blocks and models
 
 # assemblerr 0.0.0.9004
