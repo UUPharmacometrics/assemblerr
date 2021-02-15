@@ -399,6 +399,61 @@ pk_elimination_nl <- function(prm_clmm = prm_log_normal("clmm"),
     prm_km
 }
 
+# elimination linear/non-linear --------------------------------------------------
+
+
+PkEliminationLinearNL <- setClass("PkEliminationLinearNL",
+                            contains = "PkEliminationComponent")
+
+setMethod(
+  f = "description",
+  signature = "PkEliminationLinearNL",
+  definition = function(x) {
+    interp("{x@name}: linear & nonlinear")
+  }
+)
+
+setMethod(
+  f = "compact_description",
+  signature = "PkEliminationLinearNL",
+  definition = function(x) {
+    "lin. + nonlin. elim."
+  }
+)
+
+
+setMethod(
+  f = "convert",
+  signature = c(target = "Model", source = "PkModel", component = "PkEliminationLinearNL"),
+  definition = function(target, source, component, options) {
+    dcl_nl_elim <- declaration(~vmax*C/(km+C)) %>%
+        dcl_substitute(list(vmax = sym(component@prm_names['vmax']), km = sym(component@prm_names['km'])))
+
+    dcl_lin_elim <- declaration(~cllin*C) %>%
+      dcl_substitute(list(cllin = sym(component@prm_names['cllin'])))
+
+    target +
+      flow(from = "central", definition = dcl_nl_elim) +
+      flow(from = "central", definition = dcl_lin_elim)
+  }
+)
+
+#' @export
+pk_elimination_linear_mm <- function(prm_cllin = prm_log_normal("clin"),
+                              prm_vmax = prm_log_normal("vmax"),
+                              prm_km = prm_log_normal("km")) {
+  PkEliminationLinearNL(
+    parameters = list(
+      cllin = prm_cllin,
+      vmax = prm_vmax,
+      km = prm_km
+    )
+  ) +
+    prm_cllin +
+    prm_vmax +
+    prm_km
+}
+
 # absorption FO -----------------------------------------------------------
 
 PkAbsorptionFO <- setClass("PkAbsorptionFO",

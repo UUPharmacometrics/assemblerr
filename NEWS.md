@@ -1,5 +1,6 @@
 # assemblerr (development version)
-* models are now check for issues before rendering
+* added `pk_elimination_linear_mm` for mixed linear-mm elimination
+* models are now checked for issues before rendering
 * improved console printing of building blocks and models
 
 # assemblerr 0.0.0.9004
