@@ -1,5 +1,5 @@
-context("test-model")
-
+local_edition(3)
+local_reproducible_output()
 
 expect_contains <- function(object, str) return(expect_match(object, str, fixed = TRUE, all = FALSE))
 
@@ -13,17 +13,11 @@ simple_model <- function(prm = prm_log_normal("k"), obs = obs_additive(~conc), v
 }
 
 test_that("check empty model",{
-  local_edition(3)
-  local_reproducible_output()
-  m <- model()
-  expect_snapshot(print(check(m)))
+  expect_snapshot(check(model()))
 })
 
 test_that("check simple model",{
-  local_edition(3)
-  local_reproducible_output()
-  m <- simple_model()
-  expect_snapshot(print(check(m)))
+  expect_snapshot(check(simple_model()))
 })
 
 

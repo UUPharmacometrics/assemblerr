@@ -1,7 +1,7 @@
 # check empty model
 
     Code
-      print(check(m))
+      check(model())
     Message <cliMessage>
       WARNING! 2 issues
     Message <cliMessage>
@@ -12,7 +12,7 @@
 # check simple model
 
     Code
-      print(check(m))
+      check(simple_model())
     Message <cliMessage>
       SUCCESS! No issues
 

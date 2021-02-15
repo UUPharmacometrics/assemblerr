@@ -1,7 +1,7 @@
 # check empty pk_model
 
     Code
-      print(check(m))
+      check(pk_model())
     Message <cliMessage>
       WARNING! 4 issues
     Message <cliMessage>
@@ -16,7 +16,8 @@
 # check complete pk_model
 
     Code
-      print(check(m))
+      check(pk_model() + pk_distribution_1cmp() + pk_elimination_linear() +
+        obs_additive(conc ~ C["central"]))
     Message <cliMessage>
       SUCCESS! No issues
 
