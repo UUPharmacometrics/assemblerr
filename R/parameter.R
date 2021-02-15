@@ -51,6 +51,12 @@ assert_valid_parameter_name <- function(name) {
   }
 }
 
+setMethod(
+  f = "defined_variables",
+  signature = "ParameterFacet",
+  definition = function(x) names(x@entries)
+)
+
 # log-normal --------------------------------------------------------------
 
 

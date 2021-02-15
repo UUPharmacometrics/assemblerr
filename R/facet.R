@@ -132,6 +132,18 @@ setMethod(
   }
 )
 
+setGeneric(
+  name = "defined_variables",
+  def = function(x) standardGeneric("defined_variables")
+)
+
+setMethod(
+  f = "defined_variables",
+  signature = signature(x = "Facet"),
+  definition = function(x) {
+    return(character(0))
+  }
+)
 
 setGeneric(name = "add_entry",
            def = function(x, y) standardGeneric("add_entry"))

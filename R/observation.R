@@ -16,16 +16,46 @@ ObservationFacet <- setClass("ObservationFacet",
 setMethod(
   f = "check",
   signature = signature(x = "ObservationFacet"),
-  definition = function(x, ...) {
-      if (vec_is_empty(x@entries)) {
-        CriticalIssue("No observation specified")
-      } else if (vec_size(x@entries) > 1) {
-        CriticalIssue("More than one observation specified")
-      }else{
-        NULL
-      }
-    }
+  definition = function(x, model) {
+    issues <- c(
+      IssueList(),
+      check_for_number_of_observations(x),
+      check_for_undefined_observations_variables(x, model = model)
+      )
+    return(issues)
+  }
 )
+
+check_for_number_of_observations <- function(observation_facet) {
+  if (vec_is_empty(observation_facet@entries)) {
+    CriticalIssue("No observation specified")
+  } else if (vec_size(observation_facet@entries) > 1) {
+    CriticalIssue("More than one observation specified")
+  }else{
+    NULL
+  }
+}
+
+check_for_undefined_observations_variables <- function(observation_facet, model){
+  issues <- IssueList()
+  if (!vec_is_empty(names(observation_facet@entries))) {
+    obs_dcls <- purrr::map(observation_facet@entries, ~.x@prediction)
+    dcl <- vec_c(!!!unname(obs_dcls))
+    defined_vars <- collect_defined_variables(
+      model,
+      c("ParameterFacet", "InputVariableFacet", "AlgebraicFacet", "CompartmentFacet", "PkComponentFacet")
+    )
+    issues <- c(
+      issues,
+      check_for_undefined_variables2(
+        dcls = dcl,
+        defined_vars = defined_vars,
+        facet_label = "observation"
+      )
+    )
+  }
+  return(issues)
+}
 
 setMethod(
   f = "compact_description",

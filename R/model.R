@@ -78,46 +78,29 @@ setMethod(
   signature = signature(x = "Model"),
   definition = function(x, ...) {
     issues <- c(IssueList(),
-                callNextMethod(x),
-                check_for_undefined_variables(model = x))
+                callNextMethod(x))
     return(issues)
   }
 )
 
-check_for_undefined_variables <- function(model){
-  issues <- IssueList()
-  external_vars <- names(model@facets[["InputVariableFacet"]]@entries)
-  prms <- names(model@facets[["ParameterFacet"]]@entries)
-  algebraic_vars <- names(model@facets[["AlgebraicFacet"]]@entries)
-  conc_vars <- paste0('C["',names(model@facets[["CompartmentFacet"]]@entries), '"]')
-  a_vars <- paste0('A["',names(model@facets[["CompartmentFacet"]]@entries), '"]')
-  if (!vec_is_empty(algebraic_vars)) {
-    algebraic_dcls <- purrr::map(model@facets[["AlgebraicFacet"]]@entries, ~.x@definition)
-    dcl <- vec_c(!!!unname(algebraic_dcls))
-    vars <- dcl_external_variables(dcl) %>%
-      as.character()
-    missing_vars <- setdiff(vars, union(prms, external_vars))
-    if (!vec_is_empty(missing_vars)) {
-      missing_vars <- paste0("'", missing_vars ,"'")
-      issues <- c(issues,
-                   CriticalIssue(cli::pluralize("Undefined variable{?s} {missing_vars} in algebraics"))
-                  )
-    }
+
+
+check_for_undefined_variables2 <- function(dcls, defined_vars, facet_label) {
+  required_vars <- dcl_external_variables(dcls) %>%
+    as.character()
+  missing_vars <- setdiff(required_vars, defined_vars)
+  if (!vec_is_empty(missing_vars)) {
+    return(
+      CriticalIssue(interp("Undefined {qty(length(missing_vars))}variable{?s} {sq(missing_vars)} in {facet_label}"))
+    )
+  } else{
+    return(NULL)
   }
-  if (!vec_is_empty(names(model@facets[["ObservationFacet"]]@entries))) {
-    obs_dcls <- purrr::map(model@facets[["ObservationFacet"]]@entries, ~.x@prediction)
-    dcl <- vec_c(!!!unname(obs_dcls))
-    vars <- dcl_external_variables(dcl) %>%
-      as.character()
-    missing_vars <- setdiff(vars, c(prms, external_vars, algebraic_vars, conc_vars, a_vars))
-    if (!vec_is_empty(missing_vars)) {
-      missing_vars <- paste0("'", missing_vars ,"'")
-      issues <- c(issues,
-                  CriticalIssue(cli::pluralize("Undefined variable{?s} {missing_vars} in observation model"))
-                )
-    }
-  }
-  return(issues)
 }
 
-
+collect_defined_variables <- function(model, facets, additional_variables = character(0)) {
+  existing_facets <- facets[facets %in% names(model@facets)]
+  purrr::map(model@facets[existing_facets], defined_variables) %>%
+    purrr::flatten_chr() %>%
+    c(additional_variables)
+}

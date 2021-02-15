@@ -23,12 +23,60 @@ CompartmentFacet <- setClass(
 )
 
 setMethod(
+  f = "check",
+  signature = "CompartmentFacet",
+  definition = function(x, model, ...) {
+    issues <- c(
+      IssueList(),
+      # 1. variable names in volume definition need to be defined
+      check_for_undefined_volume_variables(x, model)
+    )
+    return(issues)
+  }
+)
+
+check_for_undefined_volume_variables <- function(compartment_facet, model) {
+  if (length(compartment_facet@entries) > 0) {
+    v_dcls <- purrr::map(compartment_facet@entries, ~.x@volume)
+    dcl <- vec_c(!!!unname(v_dcls))
+    defined_vars <-  collect_defined_variables(
+      model = model,
+      facets = c("ParameterFacet", "InputVariableFacet", "AlgebraicFacet")
+    )
+    return(
+      check_for_undefined_variables2(
+        dcls = dcl,
+        defined_vars = defined_vars,
+        facet_label = "compartment"
+      )
+    )
+  }
+  return(NULL)
+}
+
+
+setMethod(
   f = "description",
   signature = "CompartmentFacet",
   definition = function(x) {
     interp("compartments: {none(names(x@entries))}")
   }
 )
+
+setMethod(
+  f = "defined_variables",
+  signature = "CompartmentFacet",
+  definition = function(x) {
+    compartment_names_to_defined_variables(names(x@entries))
+  }
+)
+
+compartment_names_to_defined_variables <- function(cmp_names) {
+  vec_c(
+    paste0('C["',cmp_names, '"]'),
+    paste0('A["',cmp_names, '"]')
+  )
+}
 
 Flow <- setClass(
   "Flow",
@@ -77,10 +125,13 @@ setMethod(
   f = "check",
   signature = "FlowFacet",
   definition = function(x, model, ...) {
-    issues <- IssueList()
-    # - to and from compartment names need to exist
-    issues <- c(issues, check_for_undefined_compartments(x, model@facets[['CompartmentFacet']]))
-    # - variables used in flow definition need to be defined
+    issues <- c(
+      IssueList(),
+      # 1. to and from compartment names need to exist
+      check_for_undefined_compartments(x, model@facets[['CompartmentFacet']]),
+      # 2. variables used in flow definition need to be defined
+      check_for_undefined_flow_variables(x, model)
+    )
     return(issues)
   }
 )
@@ -103,7 +154,26 @@ check_for_undefined_compartments <- function(flow_facet, compartment_facet){
   } else {
     return(NULL)
   }
+}
 
+check_for_undefined_flow_variables <- function(flow_facet, model) {
+  if (length(flow_facet@entries) > 0) {
+    flow_dcls <- purrr::map(flow_facet@entries, ~.x@definition)
+    dcl <- vec_c(!!!unname(flow_dcls))
+    defined_vars <-  collect_defined_variables(
+      model = model,
+      facets = c("ParameterFacet", "InputVariableFacet", "AlgebraicFacet", "CompartmentFacet"),
+      additional_variables = c("C", "A")
+    )
+    return(
+      check_for_undefined_variables2(
+        dcls = dcl,
+        defined_vars = defined_vars,
+        facet_label = "flows"
+      )
+    )
+  }
+  return(NULL)
 }
 
 

@@ -19,6 +19,10 @@ dcl_def <- function(dcl){
   vctrs::field(dcl, "definition")
 }
 
+dcl_is_anonymous <- function(dcl) {
+  purrr::map_lgl(dcl_id(dcl), is.null)
+}
+
 
 #' Set declaration fields
 #'
@@ -300,6 +304,8 @@ direct_dependants <- function(dcl, variable){
 }
 
 dcl_external_variables <- function(dcl) {
+  pseudo_names <- paste0(".v", seq_len(sum(dcl_is_anonymous(dcl))))
+  dcl_id(dcl[dcl_is_anonymous(dcl)]) <- rlang::syms(pseudo_names)
   sorted <- sort(dcl, decreasing = TRUE)
   lhs <- dcl_id(sorted)
   rhs <- dcl_vars(sorted, include_indicies = TRUE, unique = FALSE, include_lhs = FALSE)

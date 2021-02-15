@@ -15,6 +15,12 @@ InputVariableFacet <- setClass(
                         label = "input variables")
 )
 
+setMethod(
+  f = "defined_variables",
+  signature = "InputVariableFacet",
+  definition = function(x) names(x@entries)
+)
+
 #' @export
 input_variable <- function(name){
   if (!is.character(name)) stop("'name' needs to be a character vector")

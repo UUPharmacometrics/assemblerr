@@ -35,6 +35,36 @@ setMethod(
 )
 
 setMethod(
+  f = "check",
+  signature = signature(x = "AlgebraicFacet"),
+  definition = function(x, model) {
+    issues <- c(IssueList(),
+                check_for_undefined_algebraics_variables(x, model = model))
+    return(issues)
+  }
+)
+
+check_for_undefined_algebraics_variables <- function(algebraics_facet, model){
+  if (!vec_is_empty(names(algebraics_facet))) {
+    algebraic_dcls <- purrr::map(algebraics_facet@entries, ~.x@definition)
+    dcl <- vec_c(!!!unname(algebraic_dcls))
+    defined_vars <- collect_defined_variables(
+      model = model,
+      facets = c("ParameterFacet", "InputVariableFacet", "CompartmentFacet", "PkComponentFacet")
+    )
+    return(
+      check_for_undefined_variables2(
+        dcls = dcl,
+        defined_vars = defined_vars,
+        facet_label = "algebraics"
+      )
+    )
+  }
+  return(NULL)
+}
+
+
+setMethod(
   f = "convert",
   signature = c(target = "NmModel", source = "ANY", component = "AlgebraicFacet"),
   definition = function(target, source, component, options) {
@@ -65,6 +95,11 @@ setMethod(
   }
 )
 
+setMethod(
+  f = "defined_variables",
+  signature = "AlgebraicFacet",
+  definition = function(x) names(x@entries)
+)
 
 #' Create an algebraic relationship
 #'

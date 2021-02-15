@@ -44,3 +44,18 @@ test_that("missing compartment names in flow definition", {
     flow(~ka, from = "test")
   expect_matching_issue(check(m), "Undefined compartment name 'test' in flow definition")
 })
+
+
+
+test_that("missing variables in flow definition", {
+  m <- model() +
+    flow(~ka, from = "test")
+  expect_matching_issue(check(m), "Undefined variable.*flows")
+})
+
+
+test_that("missing volume variables in compartment", {
+  m <- model() +
+    compartment("central", ~v)
+  expect_matching_issue(check(m), "Undefined variable.*compartment")
+})

@@ -9,6 +9,12 @@ setClass("PkComponent",
 )
 
 setMethod(
+  f = "defined_variables",
+  signature = "PkComponent",
+  definition = function(x) character(0)
+)
+
+setMethod(
   f = "initialize",
   signature = "PkComponent",
   definition = function(.Object, parameters = list(), ...) {
@@ -23,6 +29,16 @@ PkComponentFacet <- setClass(
   "PkComponentFacet",
   contains = "NamedFacet",
   prototype = prototype(entry_class = "PkComponent", label = "PK components")
+)
+
+setMethod(
+  f = "defined_variables",
+  signature = "PkComponentFacet",
+  definition = function(x) {
+    purrr::map(x@entries, defined_variables) %>%
+      purrr::flatten_chr() %>%
+      unique()
+  }
 )
 
 
@@ -73,6 +89,14 @@ PkDistribution1Cmp <- setClass("PkDistribution1Cmp",
          contains = "PkDistributionComponent")
 
 setMethod(
+  f = "defined_variables",
+  signature = "PkDistribution1Cmp",
+  definition = function(x) {
+    compartment_names_to_defined_variables("central")
+  }
+)
+
+setMethod(
   f = "description",
   signature = "PkDistribution1Cmp",
   definition = function(x) {
@@ -110,6 +134,14 @@ setMethod(
 
 PkDistribution2Cmp <- setClass("PkDistribution2Cmp",
          contains = "PkDistributionComponent")
+
+setMethod(
+  f = "defined_variables",
+  signature = "PkDistribution2Cmp",
+  definition = function(x) {
+    compartment_names_to_defined_variables(c("central", "peripheral"))
+  }
+)
 
 setMethod(
   f = "description",
@@ -165,6 +197,15 @@ pk_distribution_2cmp <- function(
 
 PkDistribution3Cmp <- setClass("PkDistribution3Cmp",
          contains = "PkDistributionComponent")
+
+setMethod(
+  f = "defined_variables",
+  signature = "PkDistribution3Cmp",
+  definition = function(x) {
+    compartment_names_to_defined_variables(c("central", "peripheral1", "peripheral2"))
+  }
+)
+
 
 setMethod(
   f = "description",
