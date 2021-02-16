@@ -25,7 +25,7 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Suggests: 
-    testthat (>= 3.0.1),
+    testthat (>= 3.0.2),
     knitr,
     rmarkdown,
     covr,
