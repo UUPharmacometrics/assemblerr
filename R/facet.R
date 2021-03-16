@@ -193,6 +193,14 @@ setMethod(
   f = "add_entry",
   signature = c(x = "NamedFacet", y = "NamedFacetEntry"),
   definition = function(x, y){
+    if (y@name %in% names(x)) {
+      rlang::warn(
+        c(
+          "Building block replaced",
+          x = glue::glue("The building block [{compact_description(x@entries[[y@name]])}] has been replaced with [{compact_description(y)}]")
+        )
+      )
+    }
     x@entries[[y@name]] <- y
     x
   }

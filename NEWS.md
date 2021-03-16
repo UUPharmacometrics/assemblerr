@@ -1,4 +1,5 @@
 # assemblerr (development version)
+* added warning when a new building block replaces an existing one
 
 # assemblerr 0.0.0.9005 (development version)
 * added `pk_elimination_linear_mm` for mixed linear-mm elimination

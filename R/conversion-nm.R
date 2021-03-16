@@ -20,16 +20,16 @@ setMethod(
         nm_input("time", "time") +
         nm_input("dv", "dv") +
         nm_input("amt", "amt")
-    }
-    if (!"id" %in% names(source@facets[["InputVariableFacet"]]@entries)) {
-      target <- target +
-        nm_input("id", "id")
-    }
-    if (!"dv" %in% names(source@facets[["InputVariableFacet"]]@entries)) {
-      target <- target +
-        nm_input("dv", "dv")
+    } else {
+      if (!"id" %in% names(source@facets[["InputVariableFacet"]]@entries)) {
+        target <- target +
+          nm_input("id", "id")
+      }
+      if (!"dv" %in% names(source@facets[["InputVariableFacet"]]@entries)) {
+        target <- target +
+          nm_input("dv", "dv")
+      }
     }
     target
-
   }
 )
