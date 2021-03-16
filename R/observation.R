@@ -47,7 +47,7 @@ check_for_undefined_observations_variables <- function(observation_facet, model)
     )
     issues <- c(
       issues,
-      check_for_undefined_variables2(
+      check_for_undefined_variables(
         dcls = dcl,
         defined_vars = defined_vars,
         facet_label = "observation"

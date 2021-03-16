@@ -44,7 +44,7 @@ check_for_undefined_volume_variables <- function(compartment_facet, model) {
       facets = c("ParameterFacet", "InputVariableFacet", "AlgebraicFacet")
     )
     return(
-      check_for_undefined_variables2(
+      check_for_undefined_variables(
         dcls = dcl,
         defined_vars = defined_vars,
         facet_label = "compartment"
@@ -166,7 +166,7 @@ check_for_undefined_flow_variables <- function(flow_facet, model) {
       additional_variables = c("C", "A")
     )
     return(
-      check_for_undefined_variables2(
+      check_for_undefined_variables(
         dcls = dcl,
         defined_vars = defined_vars,
         facet_label = "flows"

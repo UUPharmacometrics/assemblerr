@@ -53,7 +53,7 @@ check_for_undefined_algebraics_variables <- function(algebraics_facet, model){
       facets = c("ParameterFacet", "InputVariableFacet", "CompartmentFacet", "PkComponentFacet")
     )
     return(
-      check_for_undefined_variables2(
+      check_for_undefined_variables(
         dcls = dcl,
         defined_vars = defined_vars,
         facet_label = "algebraics"

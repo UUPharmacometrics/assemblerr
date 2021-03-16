@@ -85,7 +85,7 @@ setMethod(
 
 
 
-check_for_undefined_variables2 <- function(dcls, defined_vars, facet_label) {
+check_for_undefined_variables <- function(dcls, defined_vars, facet_label) {
   required_vars <- dcl_external_variables(dcls) %>%
     as.character()
   missing_vars <- setdiff(required_vars, defined_vars)
