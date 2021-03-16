@@ -41,7 +41,7 @@ setMethod(
 
 
 replace_compartment_references <- function(dcl, target, source){
-  if (any(c("C","A") %in% dcl_vars_chr(dcl))) {
+  if (any(c("C","A","dadt") %in% dcl_vars_chr(dcl))) {
     conc_dcls <- as.list(generate_concentration_substitutions(source@facets[["CompartmentFacet"]]@entries))
     compartment_indicies <- name_index_map(target@facets$NmCompartmentFacet)
     dcl <- dcl %>%

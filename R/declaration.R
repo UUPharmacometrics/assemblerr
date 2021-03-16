@@ -63,18 +63,18 @@ dcl_vars_chr <- function(dcl, include_indicies = FALSE, include_lhs = TRUE, uniq
 }
 
 dcl_vars <- function(dcl, include_indicies = FALSE, include_lhs = TRUE, unique = TRUE){
-  lhs_vars <- list()
-  if (include_lhs) {
-    lhs_vars <- dcl_id(dcl)
-  }
   if (include_indicies) {
     rhs_vars <- purrr::map(dcl_def(dcl), find_vars_with_indicies)
+    lhs_vars <- purrr::map(dcl_id(dcl), find_vars_with_indicies)
   }else{
     rhs_vars <- purrr::map(dcl_def(dcl), all.vars) %>%
       purrr::map(rlang::syms)
+    lhs_vars <- purrr::map(dcl_id(dcl), all.vars) %>%
+      purrr::map(rlang::syms)
   }
+  if (!include_lhs) lhs_vars <- list()
   if (unique) {
-    vars <- vec_c(lhs_vars, purrr::flatten(rhs_vars))
+    vars <- vec_c(purrr::flatten(lhs_vars), purrr::flatten(rhs_vars))
     unique(vars)
   }else{
     vec_c(lhs_vars, rhs_vars)
