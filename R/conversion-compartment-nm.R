@@ -156,17 +156,30 @@ parameterize_advan <- function(compartment_names, flows, advan, permutation, opt
     purrr::set_names(nm = paste("k", flows[["from"]], flows[["to"]], sep = "_"))
   suitable_trans <- names(advan_definitions[[advan]][["parameterizations"]])
   preferred_trans <- options$ode.preferred_trans_routines
-  trans <- preferred_trans[preferred_trans %in% suitable_trans]
-  if (vec_is_empty(trans)) {
-    warning("None of the preferred TRANS routines was suitable, resorting to TRANS1.")
-    trans <- "trans1"
-  }else{
-    trans <- trans[1]
+  trans_routines <- preferred_trans[preferred_trans %in% suitable_trans]
+  names(trans_routines) <- ""
+  if (!"trans1" %in% trans_routines) {
+    trans_routines <- append(trans_routines, "trans1")
+    names(trans_routines)[length(trans_routines)] <- "default"
   }
-  repar_function <- advan_definitions[[advan]][["parameterizations"]][[trans]]
-  list(
-    routine = trans,
-    prms = do.call(repar_function, args = definitions)
-  )
+  reparameterization <- NULL
+  for (i in seq_along(trans_routines)) {
+    repar_function <- advan_definitions[[advan]][["parameterizations"]][[trans_routines[i]]]
+    if (names(trans_routines[i]) == "default") {
+      rlang::warn(
+        c("Preferred TRANS routines unsuitable",
+          x = "None of the preferred TRANS routines was suitable, TRANS1 was used instead.")
+      )
+    }
+    reparameterization <- try(
+      list(
+        routine = trans_routines[i],
+        prms = do.call(repar_function, args = definitions)
+      ),
+      silent = TRUE
+    )
+    if (!inherits(reparameterization, "try-error")) break
+  }
+  return(reparameterization)
 }
 

@@ -81,9 +81,16 @@ advan_definitions <- list(
     },
     trans4 = function(k_central_peripheral, k_central_output, k_peripheral_central){
       v1 <- dcl_collect_denominators(k_central_output)
+      v1_alt <- dcl_collect_denominators(k_central_peripheral)
+      if (v1 != v1_alt) rlang::signal("Model can not be parameterized as TRANS4.", "reparameterization_error")
+
       cl <- dcl_discard_denominators(k_central_output)
       q <- dcl_discard_denominators(k_peripheral_central)
+      q_alt <- dcl_discard_denominators(k_central_peripheral)
+      if (q != q_alt) rlang::signal("Model can not be parameterized as TRANS4.", "reparameterization_error")
+
       v2 <- dcl_collect_denominators(k_peripheral_central)
+
       dcl_id(v1) <- quote(v1)
       dcl_id(cl) <- quote(cl)
       dcl_id(v2) <- quote(v2)
@@ -122,8 +129,12 @@ advan4 = list(
     trans4 = function(k_depot_central, k_central_peripheral, k_central_output, k_peripheral_central){
       ka <- k_depot_central
       v2 <- dcl_collect_denominators(k_central_output)
+      v2_alt <- dcl_collect_denominators(k_central_peripheral)
+      if (v2 != v2_alt) rlang::signal("Model can not be parameterized as TRANS4.", "reparameterization_error")
       cl <- dcl_discard_denominators(k_central_output)
       q <- dcl_discard_denominators(k_peripheral_central)
+      q_alt <- dcl_discard_denominators(k_central_peripheral)
+      if (q != q_alt) rlang::abort("Model can not be parameterized as TRANS4.","reparameterization_error")
       v3 <- dcl_collect_denominators(k_peripheral_central)
       dcl_id(ka) <- quote(ka)
       dcl_id(v2) <- quote(v2)
@@ -174,8 +185,15 @@ advan11 = list(
                       k_central_output){
       v1 <- dcl_collect_denominators(k_central_output)
       cl <- dcl_discard_denominators(k_central_output)
+      v1_alt1 <- dcl_collect_denominators(k_central_peripheral1)
+      v1_alt2 <- dcl_collect_denominators(k_central_peripheral2)
+      if (v1 != v1_alt1 || v1 != v1_alt2) rlang::signal("Model can not be parameterized as TRANS4.", "reparameterization_error")
       q1 <- dcl_discard_denominators(k_peripheral1_central)
+      q1_alt <- dcl_discard_denominators(k_central_peripheral1)
+      if (q1 != q1_alt) rlang::signal("Model can not be parameterized as TRANS4.", "reparameterization_error")
       q2 <- dcl_discard_denominators(k_peripheral2_central)
+      q2_alt <- dcl_discard_denominators(k_central_peripheral2)
+      if (q2 != q2_alt) rlang::signal("Model can not be parameterized as TRANS4.", "reparameterization_error")
       v2 <- dcl_collect_denominators(k_peripheral1_central)
       v3 <- dcl_collect_denominators(k_peripheral2_central)
 
@@ -236,9 +254,19 @@ advan12 = list(
                       k_central_output){
       ka <- k_depot_central
       v2 <- dcl_collect_denominators(k_central_output)
+      v2_alt1 <- dcl_collect_denominators(k_central_peripheral1)
+      v2_alt2 <- dcl_collect_denominators(k_central_peripheral2)
+      if (v2 != v2_alt1 || v2 != v2_alt2) rlang::signal("Model can not be parameterized as TRANS4.", "reparameterization_error")
+
       cl <- dcl_discard_denominators(k_central_output)
       q1 <- dcl_discard_denominators(k_peripheral1_central)
+      q1_alt <- dcl_discard_denominators(k_central_peripheral1)
+      if (q1 != q1_alt) rlang::signal("Model can not be parameterized as TRANS4.", "reparameterization_error")
+
       q2 <- dcl_discard_denominators(k_peripheral2_central)
+      q2_alt <- dcl_discard_denominators(k_central_peripheral2)
+      if (q2 != q2_alt) rlang::signal("Model can not be parameterized as TRANS4.", "reparameterization_error")
+
       v3 <- dcl_collect_denominators(k_peripheral1_central)
       v4 <- dcl_collect_denominators(k_peripheral2_central)
 

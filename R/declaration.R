@@ -343,12 +343,14 @@ dcl_factor_out <- function(dcl, variable){
 
 dcl_collect_denominators <- function(dcl){
   new_def <- purrr::map(dcl_def(dcl), function(expr) {
-    terms <- collect_multiplications(expr)
-    if (vec_size(terms) == 1) return(expr)
-    terms %>%
+    terms <- collect_multiplications(expr) %>%
       purrr::keep(~length(.x)>1 && .x[[1]] == quote(`/`) && .x[[2]] == 1) %>%
-      purrr::map(~.x[[3]]) %>%
-      purrr::reduce(~call("*", .x, .y))
+      purrr::map(~.x[[3]])
+    if (rlang::is_empty(terms)) {
+      return(quote(1))
+    } else {
+      purrr::reduce(terms, ~call("*", .x, .y))
+    }
   })
   new_id <- vec_rep(list(NULL), vec_size(new_def))
   new_declaration(new_id, new_def)
