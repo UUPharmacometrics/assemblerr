@@ -91,7 +91,7 @@ check_for_undefined_variables <- function(dcls, defined_vars, facet_label) {
   missing_vars <- setdiff(required_vars, defined_vars)
   if (!vec_is_empty(missing_vars)) {
     return(
-      CriticalIssue(interp("Undefined {qty(length(missing_vars))}variable{?s} {sq(missing_vars)} in {facet_label}"))
+      MissingVariableIssue(interp("Undefined {qty(length(missing_vars))}variable{?s} {sq(missing_vars)} in {facet_label}"), variables = missing_vars)
     )
   } else{
     return(NULL)

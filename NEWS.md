@@ -1,4 +1,5 @@
 # assemblerr (development version)
+* variables that are not defined in the model are automatically added as input variables 
 * added warning when a new building block replaces an existing one
 
 # assemblerr 0.0.0.9005 (development version)

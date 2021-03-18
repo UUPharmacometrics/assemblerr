@@ -51,3 +51,21 @@ dataset <- function(path){
     purrr::reduce(`+`) +
     metadata("dataset", path)
 }
+
+
+add_missing_variables <- function(model, issues, warn = TRUE) {
+  variables <- purrr::keep(issues, ~is(.x, "MissingVariableIssue")) %>%
+    purrr::map(~.x@variables) %>%
+    purrr::flatten_chr()
+  if (warn) {
+    rlang::warn(
+      c(
+        "Undefined variables added",
+        x = interp("The variable{?s} {sq(variables)} were not defined and have been added as input variable{?s}.")
+      )
+    )
+  }
+  variables %>%
+    purrr::map(input_variable) %>%
+    purrr::reduce(`+`, .init = model)
+}

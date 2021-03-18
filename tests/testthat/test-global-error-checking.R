@@ -1,3 +1,5 @@
+expect_contains <- function(object, str) return(expect_match(object, str, fixed = TRUE, all = FALSE))
+
 test_that("parameters", {
   m <- model()
   m2 <- m + prm_log_normal("test")
@@ -58,4 +60,28 @@ test_that("missing volume variables in compartment", {
   m <- model() +
     compartment("central", ~v)
   expect_matching_issue(check(m), "Undefined variable.*compartment")
+})
+
+test_that("adding of missing variables", {
+  m <- model() +
+    prm_log_normal("v") +
+    prm_log_normal("cl") +
+    algebraic(d~dose) +
+    obs_additive(conc~d/v*exp(-cl/v*time))
+  expect_warning(
+    code <- render(m)
+  )
+  expect_match(code, "\\$INPUT DOSE TIME")
+  expect_silent(
+    code <- render(m, options = assemblerr_options(issues.missing_variables = "fix"))
+  )
+  expect_match(code, "\\$INPUT DOSE TIME")
+  expect_error(
+    code <- render(m, options = assemblerr_options(issues.missing_variables = "fail"))
+  )
+  expect_silent(
+    code <- render(m, options = assemblerr_options(issues.missing_variables = "ignore"))
+  )
+  expect_match(code, "\\$INPUT ((?!DOSE).)*", perl = TRUE)
+
 })

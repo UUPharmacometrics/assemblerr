@@ -4,6 +4,11 @@ Issue <- setClass("Issue", contains = "character")
 CriticalIssue <- setClass("CriticalIssue",
                           contains = "Issue")
 
+MissingVariableIssue <- setClass("MissingVariableIssue",
+                                 slots = c(variables = "character"),
+                          contains = "CriticalIssue")
+
+
 IssueList <- setClass("IssueList", contains = "list")
 
 setMethod(f = "initialize",
@@ -55,4 +60,15 @@ setMethod(
     }
     invisible(NULL)
   }
+)
+
+setGeneric(
+  name = "issue_types",
+  def = function(x) standardGeneric("issue_types")
+)
+
+setMethod(
+  f = "issue_types",
+  signature = "IssueList",
+  definition = function(x) purrr::map_chr(x, class)
 )
