@@ -61,7 +61,7 @@ add_missing_variables <- function(model, issues, warn = TRUE) {
     rlang::warn(
       c(
         "Undefined variables added",
-        x = interp("The variable{?s} {sq(variables)} were not defined and have been added as input variable{?s}.")
+        x = interp("The variable{?s} {sq(variables)} {?was/were} not defined and {?has/have} been added as input variable{?s}.")
       )
     )
   }
