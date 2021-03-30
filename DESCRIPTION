@@ -71,6 +71,7 @@ Collate:
     'description.R'
     'issues.R'
     'model-options.R'
+    'parameter-values.R'
     'pk_component.R'
     'test-helpers.R'
     'util.R'
