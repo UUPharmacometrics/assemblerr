@@ -1,11 +1,13 @@
 # assemblerr (development version)
+
+# assemblerr 0.0.0.9006 
 * RUV variance can be specified in the observation model `obs_additive(~conc, var_add = 2)`
 * default parameter values for PK components
 * parameter values can be defined when specifying parameters `prm_normal("k", mean = 1, var = 1)`
 * variables that are not defined in the model are automatically added as input variables 
 * added warning when a new building block replaces an existing one
 
-# assemblerr 0.0.0.9005 (development version)
+# assemblerr 0.0.0.9005 
 * added `pk_elimination_linear_mm` for mixed linear-mm elimination
 * models are now checked for issues before rendering
 * improved console printing of building blocks and models
