@@ -1,4 +1,5 @@
 # assemblerr (development version)
+* RUV variance can be specified in the observation model `obs_additive(~conc, var_add = 2)`
 * default parameter values for PK components
 * parameter values can be defined when specifying parameters `prm_normal("k", mean = 1, var = 1)`
 * variables that are not defined in the model are automatically added as input variables 

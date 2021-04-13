@@ -63,7 +63,15 @@ setMethod(f = "initialize",
             .Object
           })
 
+setGeneric("parameter_values", def = function(x) standardGeneric("parameter_values"))
 
+setMethod(
+  "parameter_values",
+  signature = "NamedFacetEntry",
+  definition = function(x) {
+    return(x@values)
+  }
+)
 
 
 Facet <- setClass("Facet",

@@ -7,11 +7,11 @@
 \alias{observation-model}
 \title{Observation model}
 \usage{
-obs_additive(prediction, name)
+obs_additive(prediction, name, var_add = 1)
 
-obs_proportional(prediction, name)
+obs_proportional(prediction, name, var_prop = 0.1)
 
-obs_combined(prediction, name)
+obs_combined(prediction, name, var_prop = 0.1, var_add = 1)
 }
 \arguments{
 \item{prediction}{A declaration defining the observed variable}

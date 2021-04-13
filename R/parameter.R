@@ -13,15 +13,7 @@ ParameterFacet <- setClass("ParameterFacet",
                              label = "parameters"
                             ))
 
-setGeneric("parameter_values", def = function(x) standardGeneric("parameter_values"))
 
-setMethod(
-  "parameter_values",
-  signature = "Parameter",
-  definition = function(x) {
-    return(x@values)
-  }
-)
 
 setMethod(
   f = "check",

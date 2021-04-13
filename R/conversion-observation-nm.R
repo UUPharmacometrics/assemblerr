@@ -6,13 +6,14 @@ setMethod(
   definition = function(target, source, component, options) {
     ruv_add_dcl <- declaration(~0)
     ruv_prop_dcl <- declaration(~0)
+    values <- parameter_values(component)
     if (component@additive_term) {
-      target <- target + nm_sigma("add")
+      target <- target + nm_sigma("add", initial = values["var_add"])
       eps_index <- index_of(target@facets$NmSigmaParameterFacet, "add")
       ruv_add_dcl <- dcl_substitute(declaration(~eps[i]), c(i = eps_index))
     }
     if (component@proportional_term) {
-      target <- target + nm_sigma("prop")
+      target <- target + nm_sigma("prop", initial = values["var_prop"])
       eps_index <- index_of(target@facets$NmSigmaParameterFacet, "prop")
       ruv_prop_dcl <- dcl_substitute(declaration(~f*eps[i]), c(i = eps_index))
     }

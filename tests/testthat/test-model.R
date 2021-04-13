@@ -65,27 +65,29 @@ test_that("prm logit distribution", {
 
 
 test_that("obs additive", {
-  simple_model(obs = obs_additive(c ~ conc)) %>%
+  simple_model(obs = obs_additive(c ~ conc, var_add = 2)) %>%
     render() %>%
     expect_contains("C = CONC") %>%
     expect_contains("Y = C + EPS(1)") %>%
-    expect_contains("$SIGMA")
+    expect_contains("$SIGMA 2")
 })
 
 test_that("obs proportional", {
-  simple_model(obs = obs_proportional(c ~ conc)) %>%
+  simple_model(obs = obs_proportional(c ~ conc, var_prop = 0.2)) %>%
     render() %>%
     expect_contains("C = CONC") %>%
     expect_contains("Y = C + C * EPS(1)") %>%
-    expect_contains("$SIGMA")
+    expect_contains("$SIGMA 0.2")
 })
 
 test_that("obs combined", {
-  simple_model(obs = obs_combined(c ~ conc)) %>%
+  simple_model(obs = obs_combined(c ~ conc, var_prop = 0.2, var_add = 2)) %>%
     render() %>%
     expect_contains("C = CONC") %>%
     expect_contains("Y = C + EPS(1) + C * EPS(2)") %>%
-    expect_contains("$SIGMA")
+    expect_contains("$SIGMA 0.2") %>%
+    expect_contains("$SIGMA 2")
+
 })
 
 test_that("obs without lhs", {

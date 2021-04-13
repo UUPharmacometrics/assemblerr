@@ -3,6 +3,7 @@
 
 Observation <-  setClass("Observation",
          contains = "NamedFacetEntry",
+         slots = c(values = "numeric"),
          prototype = prototype(facet_class = "ObservationFacet"))
 
 
@@ -137,19 +138,20 @@ NULL
 #' @export
 #' @rdname observation-model
 #' @order 3
-obs_combined <- function(prediction, name) {
+obs_combined <- function(prediction, name, var_prop = 0.1, var_add = 1) {
   validate_and_create_observation(
     constructor = ObsNormalCombined,
     prediction = prediction,
-    name = rlang::maybe_missing(name)
+    name = rlang::maybe_missing(name),
+    values = c(var_prop = var_prop, var_add = var_add)
   )
 }
 
-validate_and_create_observation <- function(constructor, prediction, name) {
+validate_and_create_observation <- function(constructor, prediction, name, values) {
   prediction <- ui_as_declaration(prediction)
   if (rlang::is_missing(name)) name <- dcl_make_obs_names(prediction)
   assert_valid_observation_name(name)
-  constructor(prediction = prediction, name = name)
+  constructor(prediction = prediction, name = name, values = values)
 }
 
 
@@ -171,11 +173,12 @@ setMethod(
 #' @export
 #' @rdname observation-model
 #' @order 1
-obs_additive <- function(prediction, name) {
+obs_additive <- function(prediction, name, var_add = 1) {
   validate_and_create_observation(
     constructor = AdditiveObservation,
     prediction = prediction,
-    name = rlang::maybe_missing(name)
+    name = rlang::maybe_missing(name),
+    values = c(var_add = var_add, var_prop = 0)
   )
 }
 
@@ -201,11 +204,12 @@ setMethod(
 #' @export
 #' @rdname observation-model
 #' @order 2
-obs_proportional <- function(prediction, name) {
+obs_proportional <- function(prediction, name, var_prop = 0.1) {
   validate_and_create_observation(
     constructor = ProportionalObservation,
     prediction = prediction,
-    name = rlang::maybe_missing(name)
+    name = rlang::maybe_missing(name),
+    values = c(var_prop = var_prop, var_add = 0)
   )
 }
 
