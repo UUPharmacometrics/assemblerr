@@ -1,6 +1,7 @@
 
 Parameter <- setClass("Parameter",
                       contains = "NamedFacetEntry",
+                      slots = c(values = "numeric"),
                       prototype = prototype(facet_class = "ParameterFacet"))
 
 
@@ -11,6 +12,16 @@ ParameterFacet <- setClass("ParameterFacet",
                              entry_class = "Parameter",
                              label = "parameters"
                             ))
+
+setGeneric("parameter_values", def = function(x) standardGeneric("parameter_values"))
+
+setMethod(
+  "parameter_values",
+  signature = "Parameter",
+  definition = function(x) {
+    return(x@values)
+  }
+)
 
 setMethod(
   f = "check",
@@ -134,9 +145,9 @@ NULL
 #' @rdname parameter-model
 #' @order 3
 #' @md
-prm_log_normal <- function(name) {
+prm_log_normal <- function(name, median = 1, var_log = 0.1) {
   assert_valid_parameter_name(rlang::maybe_missing(name))
-  PrmLogNormal(name = name)
+  PrmLogNormal(name = name, values = c(median = median, var_log = var_log))
 }
 
 # normal ------------------------------------------------------------------
@@ -156,9 +167,9 @@ setMethod(
 #' @export
 #' @rdname parameter-model
 #' @order 2
-prm_normal <- function(name) {
+prm_normal <- function(name, mean = 1, var = 0.1) {
   assert_valid_parameter_name(rlang::maybe_missing(name))
-  PrmNormal(name = name)
+  PrmNormal(name = name, values = c(mean = mean, var = var))
 }
 
 # logit ------------------------------------------------------------------
@@ -178,9 +189,9 @@ setMethod(
 #' @export
 #' @rdname parameter-model
 #' @order 4
-prm_logit_normal <- function(name) {
+prm_logit_normal <- function(name, mean_logit = 0,  var_logit = 1) {
   assert_valid_parameter_name(rlang::maybe_missing(name))
-  PrmLogitNormal(name = name)
+  PrmLogitNormal(name = name, values = c(mean_logit = mean_logit, var_logit = var_logit))
 }
 
 # no-var --------------------------------------------------------------
@@ -201,9 +212,9 @@ setMethod(
 #' @export
 #' @rdname parameter-model
 #' @order 1
-prm_no_var <- function(name) {
+prm_no_var <- function(name, value = 1) {
   assert_valid_parameter_name(rlang::maybe_missing(name))
-  PrmNoVar(name = name)
+  PrmNoVar(name = name, values = c(value = value))
 }
 
 

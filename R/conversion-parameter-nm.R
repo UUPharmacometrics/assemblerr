@@ -8,9 +8,10 @@ setMethod(
   f = "convert",
   signature = c(target = "NmModel", source = "ANY", component = "PrmLogNormal"),
   definition = function(target, source, component, options) {
+    values <- parameter_values(component)
     target <- target +
-      nm_theta(component@name, lbound = 0) +
-      nm_omega(component@name)
+      nm_theta(component@name, initial = values["median"], lbound = 0) +
+      nm_omega(component@name, initial = values["var_log"])
 
     theta_index <- index_of(target@facets$NmThetaParameterFacet, component@name)
     eta_index <- index_of(target@facets$NmOmegaParameterFacet, component@name)
@@ -41,9 +42,10 @@ setMethod(
   f = "convert",
   signature = c(target = "NmModel", source = "ANY", component = "PrmNormal"),
   definition = function(target, source, component, options) {
+    values <- parameter_values(component)
     target <- target +
-      nm_theta(component@name, lbound = 0) +
-      nm_omega(component@name)
+      nm_theta(component@name, initial = values["mean"], lbound = 0) +
+      nm_omega(component@name, initial = values["var"])
 
     theta_index <- index_of(target@facets$NmThetaParameterFacet, component@name)
     eta_index <- index_of(target@facets$NmOmegaParameterFacet, component@name)
@@ -72,9 +74,10 @@ setMethod(
   f = "convert",
   signature = c(target = "NmModel", source = "ANY", component = "PrmLogitNormal"),
   definition = function(target, source, component, options) {
+    values <- parameter_values(component)
     target <- target +
-      nm_theta(component@name, lbound = 0, ubound = 1) +
-      nm_omega(component@name)
+      nm_theta(component@name, initial = values["mean_logit"], lbound = 0, ubound = 1) +
+      nm_omega(component@name, initial = values["var_logit"])
 
     theta_index <- index_of(target@facets$NmThetaParameterFacet, component@name)
     eta_index <- index_of(target@facets$NmOmegaParameterFacet, component@name)
@@ -106,8 +109,9 @@ setMethod(
   f = "convert",
   signature = c(target = "NmModel", source = "ANY", component = "PrmNoVar"),
   definition = function(target, source, component, options) {
+    values <- parameter_values(component)
     target <- target +
-      nm_theta(component@name, lbound = 0)
+      nm_theta(component@name, initial = values["value"], lbound = 0)
 
     theta_index <- index_of(target@facets$NmThetaParameterFacet, component@name)
 

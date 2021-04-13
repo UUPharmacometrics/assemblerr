@@ -8,13 +8,13 @@
 \alias{parameter-model}
 \title{Parameter model}
 \usage{
-prm_no_var(name)
+prm_no_var(name, value = 1)
 
-prm_normal(name)
+prm_normal(name, mean = 1, var = 0.1)
 
-prm_log_normal(name)
+prm_log_normal(name, median = 1, var_log = 0.1)
 
-prm_logit_normal(name)
+prm_logit_normal(name, mean_logit = 0, var_logit = 1)
 }
 \arguments{
 \item{name}{A name for the parameter}
