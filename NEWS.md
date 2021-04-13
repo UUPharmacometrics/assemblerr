@@ -1,4 +1,5 @@
 # assemblerr (development version)
+* default parameter values for PK components
 * parameter values can be defined when specifying parameters `prm_normal("k", mean = 1, var = 1)`
 * variables that are not defined in the model are automatically added as input variables 
 * added warning when a new building block replaces an existing one

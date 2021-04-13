@@ -114,7 +114,7 @@ setMethod(
 
 
 #' @export
-pk_distribution_1cmp <- function(prm_vc = prm_log_normal("vc")) {
+pk_distribution_1cmp <- function(prm_vc = prm_log_normal("vc", median = 100, var_log = 0.1)) {
   PkDistribution1Cmp(parameters = list(vc = prm_vc)) +
     prm_vc
 }
@@ -175,9 +175,9 @@ setMethod(
 
 #' @export
 pk_distribution_2cmp <- function(
-  prm_vc = prm_log_normal("vc"),
-  prm_vp = prm_log_normal("vp"),
-  prm_q = prm_log_normal("q")
+  prm_vc = prm_log_normal("vc", median = 100, var_log = 0.1),
+  prm_vp = prm_log_normal("vp", median = 5, var_log = 0.1),
+  prm_q = prm_log_normal("q", median = 50, var_log = 0.1)
 ) {
   PkDistribution2Cmp(
     parameters = list(
@@ -245,11 +245,11 @@ setMethod(
 
 #' @export
 pk_distribution_3cmp <- function(
-  prm_vc = prm_log_normal("vc"),
-  prm_vp1 = prm_log_normal("vp1"),
-  prm_vp2 = prm_log_normal("vp2"),
-  prm_q1 = prm_log_normal("q1"),
-  prm_q2 = prm_log_normal("q2")
+  prm_vc = prm_log_normal("vc", median = 100, var_log = 0.1),
+  prm_vp1 = prm_log_normal("vp1", median = 5, var_log = 0.1),
+  prm_vp2 = prm_log_normal("vp2", median = 5, var_log = 0.1),
+  prm_q1 = prm_log_normal("q1", median = 25, var_log = 0.1),
+  prm_q2 = prm_log_normal("q2", median = 25, var_log = 0.1)
 ) {
   PkDistribution3Cmp(
     parameters = list(
@@ -305,7 +305,7 @@ setMethod(
 )
 
 #' @export
-pk_elimination_linear <- function(prm_cl = prm_log_normal("cl")) {
+pk_elimination_linear <- function(prm_cl = prm_log_normal("cl", median = 50, var_log = 0.1)) {
   PkEliminationLinear(
     parameters = list(
       cl = prm_cl
@@ -319,8 +319,8 @@ pk_elimination_linear <- function(prm_cl = prm_log_normal("cl")) {
 
 
 #' @export
-pk_elimination_mm <- function(prm_clmm = prm_log_normal("clmm"),
-                              prm_km = prm_log_normal("km")) {
+pk_elimination_mm <- function(prm_clmm = prm_log_normal("clmm", median = 50, var_log = 0.1),
+                              prm_km = prm_log_normal("km", median = 0.5, var_log = 0.1)) {
   rlang::warn(
     c("Function deprecated",
       x = "`pk_elimination_mm` has been deprecated",
@@ -377,8 +377,8 @@ setMethod(
 )
 
 #' @export
-pk_elimination_nl <- function(prm_clmm = prm_log_normal("clmm"),
-                              prm_km = prm_log_normal("km"),
+pk_elimination_nl <- function(prm_clmm = prm_log_normal("clmm", median = 25, var_log = 0.1),
+                              prm_km = prm_log_normal("km", median = 0.5, var_log = 0.1),
                               prm_vmax = NULL) {
   if (!is.null(prm_clmm) && !is.null(prm_vmax)) {
     prm_clmm <- NULL
@@ -439,9 +439,9 @@ setMethod(
 )
 
 #' @export
-pk_elimination_linear_mm <- function(prm_cllin = prm_log_normal("clin"),
-                              prm_vmax = prm_log_normal("vmax"),
-                              prm_km = prm_log_normal("km")) {
+pk_elimination_linear_mm <- function(prm_cllin = prm_log_normal("clin", median = 50, var_log = 0.1),
+                              prm_vmax = prm_log_normal("vmax", median = 10, var_log = 0.1),
+                              prm_km = prm_log_normal("km", median = 0.5, var_log = 0.1)) {
   PkEliminationLinearNL(
     parameters = list(
       cllin = prm_cllin,
@@ -490,7 +490,7 @@ setMethod(
 )
 
 #' @export
-pk_absorption_fo <- function(prm_mat = prm_log_normal("mat")){
+pk_absorption_fo <- function(prm_mat = prm_log_normal("mat", median = 0.5, var_log = 0.1)){
   PkAbsorptionFO(
     parameters = list(
       mat = prm_mat
@@ -541,8 +541,8 @@ setMethod(
 )
 
 #' @export
-pk_absorption_fo_lag <- function(prm_mat = prm_log_normal("mat"),
-                                 prm_mdt = prm_log_normal("mdt")) {
+pk_absorption_fo_lag <- function(prm_mat = prm_log_normal("mat", median = 0.5, var_log = 0.1),
+                                 prm_mdt = prm_log_normal("mdt", median = 0.5, var_log = 0.1)) {
   PkAbsorptionFOLagtime(
     parameters = list(
       mat = prm_mat,
@@ -604,9 +604,9 @@ setMethod(
 )
 
 #' @export
-pk_absorption_fo_transit <- function(prm_mat = prm_log_normal("mat"),
+pk_absorption_fo_transit <- function(prm_mat = prm_log_normal("mat", median = 0.5, var_log = 0.1),
                                      transit_compartments = 1L,
-                                     prm_mdt = prm_log_normal("mdt")) {
+                                     prm_mdt = prm_log_normal("mdt", median = 0.5, var_log = 0.1)) {
   PkAbsorptionFOTransit(
     ncompartments = transit_compartments,
     parameters = list(
@@ -651,7 +651,7 @@ setMethod(
 )
 
 #' @export
-pk_absorption_zo <- function(prm_mat = prm_log_normal("mat")) {
+pk_absorption_zo <- function(prm_mat = prm_log_normal("mat", median = 0.5, var_log = 0.1)) {
   PkAbsorptionZO(
     parameters = list(
       mat = prm_mat
@@ -699,8 +699,8 @@ setMethod(
 )
 
 #' @export
-pk_absorption_zo_lag <- function(prm_mat = prm_log_normal("mat"),
-                                 prm_mdt = prm_log_normal("mdt")) {
+pk_absorption_zo_lag <- function(prm_mat = prm_log_normal("mat", median = 0.5, var_log = 0.1),
+                                 prm_mdt = prm_log_normal("mdt", median = 0.5, var_log = 0.1)) {
   PkAbsorptionZOLagtime(
     parameters = list(
       mat = prm_mat,
@@ -748,8 +748,8 @@ setMethod(
 )
 
 #' @export
-pk_absorption_fo_zo <- function(prm_mat = prm_log_normal("mat"),
-                                prm_mdt = prm_log_normal("mdt")) {
+pk_absorption_fo_zo <- function(prm_mat = prm_log_normal("mat", median = 0.5, var_log = 0.1),
+                                prm_mdt = prm_log_normal("mdt", median = 0.5, var_log = 0.1)) {
   PkAbsorptionFOZO(
     parameters = list(
       mat = prm_mat,
