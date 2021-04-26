@@ -1,4 +1,4 @@
-sym <- function(x) rlang::sym(x)
+sym <- function(...) rlang::sym(do.call(paste0, args = list(...)))
 
 
 name_index_map <- function(x){

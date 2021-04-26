@@ -7,6 +7,18 @@ test_that("creation", {
   expect_length(s, 2)
 })
 
+test_that("creation from character", {
+  expect_equal(
+    statement("cl <- theta"),
+    statement(quote(cl <- theta))
+  )
+  index <- 5
+  expect_equal(
+    statement("cl <- theta[{index}]"),
+    statement(quote(cl <- theta[5]))
+  )
+})
+
 test_that("creation with quoting works", {
   a <- 10
   s <- statement(bquote(cl <- theta[.(a)]*exp(eta[.(a)])))

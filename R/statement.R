@@ -8,9 +8,10 @@ new_statement <- function(expr = list()){
   new_vctr(expr, class = "assemblerr_statement")
 }
 
-statement <- function(...){
+statement <- function(..., .envir = parent.frame()){
   dots <- rlang::dots_list(..., .named = FALSE) %>%
-    rlang::set_names(NULL)
+    rlang::set_names(NULL) %>%
+    purrr::map_if(is.character, ~rlang::parse_expr(glue::glue(.x, .envir = .envir)))
   new_statement(expr = dots)
 }
 
