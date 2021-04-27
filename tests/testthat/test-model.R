@@ -33,7 +33,7 @@ test_that("prm normal distribution", {
   simple_model(prm = prm_normal("k", mean = 2, var = 0.5)) %>%
     render(options = assemblerr_options(prm.use_mu_referencing = TRUE)) %>%
     expect_contains("MU_1 = THETA(1)") %>%
-    expect_contains("K = THETA(1) + ETA(1)") %>%
+    expect_contains("K = MU_1 + ETA(1)") %>%
     expect_contains("$OMEGA 0.5") %>%
     expect_match("\\$THETA .*2")
 })
@@ -42,7 +42,7 @@ test_that("prm log-normal distribution", {
   simple_model(prm = prm_log_normal("k", median = 2, var_log = 0.09)) %>%
     render(options = assemblerr_options(prm.use_mu_referencing = TRUE)) %>%
     expect_contains("MU_1 = LOG(THETA(1))") %>%
-    expect_contains("K = THETA(1) * EXP(ETA(1))") %>%
+    expect_contains("K = EXP(MU_1 + ETA(1))") %>%
     expect_contains("$OMEGA 0.09") %>%
     expect_match("\\$THETA .*2")
 })
@@ -57,7 +57,8 @@ test_that("prm novar distribution", {
 test_that("prm logit distribution", {
   simple_model(prm = prm_logit_normal("k", mean_logit = 1, var_logit = 2)) %>%
     render(options = assemblerr_options(prm.use_mu_referencing = TRUE)) %>%
-    expect_contains("LOGIT_K = LOG(THETA(1)/(1 - THETA(1))) + ETA(1)") %>%
+    expect_contains("MU_1 = LOG(THETA(1))/(1 - LOG(THETA(1)))") %>%
+    expect_contains("LOGIT_K = MU_1 + ETA(1)") %>%
     expect_contains("K = EXP(LOGIT_K)/(1 + EXP(LOGIT_K))") %>%
     expect_match("\\$THETA .*1") %>%
     expect_contains("$OMEGA 2")

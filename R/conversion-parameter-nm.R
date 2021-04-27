@@ -17,18 +17,17 @@ setMethod(
     eta_index <- index_of(target@facets$NmOmegaParameterFacet, component@name)
 
     if (options$prm.use_mu_referencing) {
-      target <- target + nm_pk(
-        statement(
-          "{paste0('mu_',eta_index)} <- log(theta[{theta_index}])"
+      mu_name <- paste0('mu_',eta_index)
+      stm <- statement(
+          "{mu_name} <- log(theta[{theta_index}])",
+          "{component@name} <- exp({mu_name} + eta[{eta_index}])"
         )
+    } else {
+      stm <- statement(
+        "{component@name} <- theta[{theta_index}]*exp(eta[{eta_index}])"
       )
     }
-    target +
-      nm_pk(
-        statement(
-          "{component@name} <- theta[{theta_index}]*exp(eta[{eta_index}])"
-        )
-      )
+    target + nm_pk(stm)
   }
 )
 
@@ -50,18 +49,16 @@ setMethod(
     eta_index <- index_of(target@facets$NmOmegaParameterFacet, component@name)
     if (options$prm.use_mu_referencing) {
       mu_name <- sym(paste0("mu_",eta_index))
-      target <- target + nm_pk(
-        statement(
-          "{paste0('mu_',eta_index)} <- theta[{theta_index}]"
-        )
+      stm <- statement(
+        "{mu_name} <- theta[{theta_index}]",
+        "{component@name} <- {mu_name} + eta[{eta_index}]"
+      )
+    } else {
+      stm <- statement(
+        "{component@name} <- theta[{theta_index}] + eta[{eta_index}]"
       )
     }
-    target +
-      nm_pk(
-        statement(
-          "{component@name} <- theta[{theta_index}] + eta[{eta_index}]"
-        )
-      )
+    target + nm_pk(stm)
   }
 )
 
@@ -80,22 +77,22 @@ setMethod(
 
     theta_index <- index_of(target@facets$NmThetaParameterFacet, component@name)
     eta_index <- index_of(target@facets$NmOmegaParameterFacet, component@name)
-    if (options$prm.use_mu_referencing) {
-      target <- target + nm_pk(
-        statement(
-          "{paste0('mu_',eta_index)} <- log(theta[{theta_index}])/(1 - log(theta[{theta_index}]))"
-        )
-      )
-    }
     prm_logit <- paste0("logit_", component@name)
     prm <- component@name
-    target +
-      nm_pk(
-        statement(
-          "{prm_logit} <- log(theta[{theta_index}]/(1 - theta[{theta_index}])) + eta[{eta_index}]",
-          "{prm} <- exp({prm_logit})/(1 + exp({prm_logit}))"
-        )
+    if (options$prm.use_mu_referencing) {
+      mu_name <- paste0('mu_',eta_index)
+      stm <- statement(
+        "{mu_name} <- log(theta[{theta_index}])/(1 - log(theta[{theta_index}]))",
+        "{prm_logit} <- {mu_name} + eta[{eta_index}]",
+        "{prm} <- exp({prm_logit})/(1 + exp({prm_logit}))"
       )
+    } else {
+      stm <- statement(
+        "{prm_logit} <- log(theta[{theta_index}]/(1 - theta[{theta_index}])) + eta[{eta_index}]",
+        "{prm} <- exp({prm_logit})/(1 + exp({prm_logit}))"
+      )
+    }
+    target + nm_pk(stm)
   }
 )
 
