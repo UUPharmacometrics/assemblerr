@@ -502,7 +502,7 @@ setMethod(
   f = "render_component",
   signature = c(x = "NmOmegaParameter"),
   definition = function(x, ...) {
-    glue::glue("$OMEGA {x@initial}; IIV_{toupper(x@name)}")
+    glue::glue("$OMEGA {x@initial} {ifelse(x@initial == 0, 'FIX', '')}; IIV_{toupper(x@name)}")
   }
 )
 
