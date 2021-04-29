@@ -2,16 +2,21 @@
 #' @importFrom methods show
 #' @importFrom methods callNextMethod
 
+
+# TODO: Need to implement fragment as a node list accepting everything
+
+
+
 setGeneric(
-  name = "appendNode",
-  def = function(x, y) standardGeneric("appendNode")
+  name = "combine",
+  def = function(x, y) standardGeneric("combine")
 )
 
 Node <- setClass("Node")
 
 
 setMethod(
-  f = "appendNode",
+  f = "combine",
   signature = signature(x = "Node"),
   definition = function(x, y) {
     slots <- getSlots(class(x))
@@ -20,11 +25,18 @@ setMethod(
         slot(x, s) <- y
         break
       } else if (is(slot(x, s), "NodeList")) {
-        slot(x, s) <- appendNode(slot(x, s), y)
+        slot(x, s) <- combine(slot(x, s), y)
+        break
       }
     }
     return(x)
   }
+)
+
+NamedNode <- setClass(
+  "NamedNode",
+  contains = "Node",
+  slots = c(name = "character")
 )
 
 
@@ -35,7 +47,7 @@ NodeList <- setClass("NodeList",
                      prototype = prototype(node_class = "Node"))
 
 setMethod(
-  f = "appendNode",
+  f = "combine",
   signature = signature(x = "NodeList"),
   definition = function(x, y) {
     if (is(y, x@node_class)) {
@@ -45,13 +57,21 @@ setMethod(
   }
 )
 
-Distribution <- setClass("Distribution",
-                         slots = c(parameters = "character"),
-                         contains = "Node")
+NamedNodeList <- setClass(
+  "NamedNodeList",
+  contains = "NodeList",
+  prototype = prototype(node_class = "NamedNode")
+)
 
-ParameterList
+setMethod(
+  f = "combine",
+  signature = signature(x = "NamedNodeList", y = "NamedNode"),
+  definition = function(x, y) {
+    if (is(y, x@node_class)) {
+      x@.Data[[y@name]] <- y
+    }
+    return(x)
+  }
+)
 
-PKM <- setClass("PKM",
-                slots = c(distribution = "Distribution", parameters = "NodeList"),
-                contains = "Node")
 
