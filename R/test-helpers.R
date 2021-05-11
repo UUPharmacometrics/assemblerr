@@ -12,6 +12,15 @@ local_create_nonmem_test_directory <- function(path = tempdir(), debug = FALSE, 
 }
 
 
+simple_model <- function(prm = prm_log_normal("k"), obs = obs_additive(~conc), vars = input_variable("time") + input_variable("c0")) {
+  model() +
+    prm +
+    algebraic(conc~c0*exp(-k*time)) +
+    obs +
+    vars
+}
+
+
 #' @keywords internal
 #' @importFrom utils write.csv
 create_dummy_data <- function(model, path = NULL){
@@ -30,6 +39,10 @@ create_dummy_data <- function(model, path = NULL){
     return(df)
   }
   write.csv(df, path, quote = FALSE, row.names = FALSE)
+}
+
+expect_contains <- function(object, str) {
+  return(expect_match(object, str, fixed = TRUE, all = FALSE))
 }
 
 expect_does_not_contain <- function(object, regexp) {

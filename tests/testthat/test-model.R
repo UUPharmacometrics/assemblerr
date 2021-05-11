@@ -1,16 +1,7 @@
 local_edition(3)
 local_reproducible_output()
 
-expect_contains <- function(object, str) return(expect_match(object, str, fixed = TRUE, all = FALSE))
 
-
-simple_model <- function(prm = prm_log_normal("k"), obs = obs_additive(~conc), vars = input_variable("time") + input_variable("c0")) {
-  model() +
-    prm +
-    algebraic(conc~c0*exp(-k*time)) +
-    obs +
-    vars
-}
 
 test_that("check empty model",{
   expect_snapshot(check(model()))
@@ -126,25 +117,6 @@ test_that("adding variables from a dataset with duplicated columns", {
 })
 
 
-
-
-test_that("addition of default covariance record",{
-  m <- simple_model()
-
-  render(m, options = assemblerr_options(default_record.covariance_step = nm_covariance())) %>%
-    expect_contains("$COVARIANCE")
-  render(m, options = assemblerr_options(default_record.covariance_step = NULL)) %>%
-    expect_does_not_contain("$COVARIANCE")
-})
-
-test_that("addition of default estimation record",{
-  m <- simple_model()
-
-  render(m, options = assemblerr_options(default_record.estimation_step =  nm_estimation())) %>%
-    expect_contains("$ESTIMATION METHOD=COND INTER")
-  render(m, options = assemblerr_options(default_record.estimation_step = NULL)) %>%
-    expect_does_not_contain("$ESTIMATION")
-})
 
 test_that("adding incompatible building block", {
   m <- simple_model()

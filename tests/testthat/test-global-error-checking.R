@@ -1,4 +1,3 @@
-expect_contains <- function(object, str) return(expect_match(object, str, fixed = TRUE, all = FALSE))
 
 test_that("parameters", {
   m <- model()

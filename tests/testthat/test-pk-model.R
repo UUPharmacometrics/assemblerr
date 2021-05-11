@@ -2,8 +2,6 @@ local_edition(3)
 local_reproducible_output()
 
 
-expect_contains <- function(object, str) return(expect_match(object, str, fixed = TRUE, all = FALSE))
-
 test_that("check empty pk_model", {
   expect_snapshot(check(pk_model()))
 })

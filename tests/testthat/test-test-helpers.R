@@ -36,3 +36,11 @@ test_that("expect_no_matching_issue helper", {
     expect_no_matching_issue(issues, "test")
   )
 })
+
+
+
+test_that("simple model helper", {
+  m <- simple_model(prm = prm_normal("test"))
+  expect_s4_class(m, "Model")
+  expect_s4_class(m@facets$ParameterFacet@entries[[1]], "PrmNormal")
+})
