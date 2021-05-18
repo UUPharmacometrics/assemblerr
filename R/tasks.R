@@ -69,7 +69,7 @@ OutputTask <- setClass(
   slots = c(filename = "character", items = "ModelElementSelectorList")
 )
 
-
+#' @export
 tsk_estimation <- function(algorithm = c("foce", "foce-inter", "foce-no-inter", "fo", "imp", "saem"),
                            se = FALSE,
                            target_options = list()) {
@@ -80,6 +80,7 @@ tsk_estimation <- function(algorithm = c("foce", "foce-inter", "foce-no-inter", 
                    target_options = target_options)
 }
 
+#' @export
 tsk_output <- function(filename = "sdtab", items = select_prms()) {
   ModelingTasks() +
     OutputTask(filename = filename, items = items)
