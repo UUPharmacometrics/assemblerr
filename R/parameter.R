@@ -57,7 +57,10 @@ assert_valid_parameter_name <- function(name) {
 setMethod(
   f = "defined_variables",
   signature = "ParameterFacet",
-  definition = function(x) names(x@entries)
+  definition = function(x)  {
+    purrr::map(x@entries, ~ParameterVariable(.x@name)) %>%
+      purrr::reduce(.init = VariableList(), .f = combine)
+  }
 )
 
 # log-normal --------------------------------------------------------------

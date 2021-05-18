@@ -58,6 +58,16 @@ check_for_undefined_observations_variables <- function(observation_facet, model)
   return(issues)
 }
 
+
+setMethod(
+  f = "defined_variables",
+  signature = "ObservationFacet",
+  definition = function(x)  {
+    purrr::map(x@entries, ~ObservationVariable(.x@name)) %>%
+      purrr::reduce(.init = VariableList(), .f = combine)
+  }
+)
+
 setMethod(
   f = "compact_description",
   signature = "ObservationFacet",

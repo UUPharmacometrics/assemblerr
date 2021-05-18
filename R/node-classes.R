@@ -50,6 +50,15 @@ NodeList <- setClass("NodeList",
                      slots = c(node_class = "character"),
                      prototype = prototype(node_class = "Node"))
 
+setMethod(
+  f = "initialize",
+  signature = "NodeList",
+  definition = function(.Object, ...){
+    dots <- rlang::list2(...)
+    callNextMethod(.Object, dots)
+  }
+)
+
 setIs("NodeList", "BuildingBlock")
 
 setMethod(
@@ -88,13 +97,27 @@ NamedNodeList <- setClass(
   prototype = prototype(node_class = "NamedNode")
 )
 
+setMethod(
+  f = "initialize",
+  signature = "NamedNodeList",
+  definition = function(.Object, ...){
+    .Object <- callNextMethod(.Object, ...)
+    if (length(.Object) > 0) {
+      nms <- purrr::map_chr(.Object, "name")
+      names(.Object) <- nms
+    }
+    return(.Object)
+  }
+)
+
+
 
 setMethod(
   f = "combine",
   signature = signature(x = "NamedNodeList", y = "NamedNode"),
   definition = function(x, y) {
     if (is(y, x@node_class)) {
-      x@.Data[[y@name]] <- y
+      x[[y@name]] <- y
     }
     return(x)
   }

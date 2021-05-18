@@ -72,10 +72,16 @@ setMethod(
 )
 
 compartment_names_to_defined_variables <- function(cmp_names) {
-  vec_c(
-    paste0('C["',cmp_names, '"]'),
-    paste0('A["',cmp_names, '"]')
+  a_vars <- purrr::map(
+    .x = cmp_names,
+    .f = ~CompartmentAmountVariable(paste0('A["',.x, '"]'))
   )
+  c_vars <- purrr::map(
+    .x = cmp_names,
+    .f = ~CompartmentAmountVariable(paste0('C["',.x, '"]'))
+  )
+  vars <- vec_c(a_vars, c_vars)
+  VariableList(!!!vars)
 }
 
 Flow <- setClass(
@@ -163,7 +169,7 @@ check_for_undefined_flow_variables <- function(flow_facet, model) {
     defined_vars <-  collect_defined_variables(
       model = model,
       facets = c("ParameterFacet", "InputVariableFacet", "AlgebraicFacet", "CompartmentFacet"),
-      additional_variables = c("C", "A")
+      additional_variables = VariableList(CompartmentAmountVariable("C"), CompartmentAmountVariable("A"))
     )
     return(
       check_for_undefined_variables(

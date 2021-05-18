@@ -98,7 +98,10 @@ setMethod(
 setMethod(
   f = "defined_variables",
   signature = "AlgebraicFacet",
-  definition = function(x) names(x@entries)
+  definition = function(x) {
+    purrr::map(x@entries, ~AlgebraicVariable(.x@name)) %>%
+      purrr::reduce(.init = VariableList(), .f = combine)
+  }
 )
 
 #' Create an algebraic relationship

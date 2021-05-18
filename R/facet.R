@@ -150,7 +150,7 @@ setMethod(
   f = "defined_variables",
   signature = signature(x = "Facet"),
   definition = function(x) {
-    return(character(0))
+    return(VariableList())
   }
 )
 
@@ -244,6 +244,17 @@ setMethod(
   }
 )
 
+setMethod(
+  f = "defined_variables",
+  signature = signature(x = "Fragment"),
+  definition = function(x) {
+    purrr::reduce(
+      .x = x@facets,
+      .f = ~combine(defined_variables(.y), .x),
+      .init = VariableList()
+    )
+  }
+)
 
 
 setClass("GenericModel",

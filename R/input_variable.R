@@ -18,7 +18,10 @@ InputVariableFacet <- setClass(
 setMethod(
   f = "defined_variables",
   signature = "InputVariableFacet",
-  definition = function(x) names(x@entries)
+  definition = function(x) {
+    purrr::map(x@entries, ~DataDefinedVariable(.x@name)) %>%
+      purrr::reduce(.init = VariableList(), .f = combine)
+  }
 )
 
 #' @export

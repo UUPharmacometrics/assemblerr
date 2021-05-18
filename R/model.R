@@ -88,7 +88,7 @@ setMethod(
 check_for_undefined_variables <- function(dcls, defined_vars, facet_label) {
   required_vars <- dcl_external_variables(dcls) %>%
     as.character()
-  missing_vars <- setdiff(required_vars, defined_vars)
+  missing_vars <- setdiff(required_vars, names(defined_vars))
   if (!vec_is_empty(missing_vars)) {
     return(
       MissingVariableIssue(interp("Undefined {qty(length(missing_vars))}variable{?s} {sq(missing_vars)} in {facet_label}"), variables = missing_vars)
@@ -98,9 +98,9 @@ check_for_undefined_variables <- function(dcls, defined_vars, facet_label) {
   }
 }
 
-collect_defined_variables <- function(model, facets, additional_variables = character(0)) {
+collect_defined_variables <- function(model, facets, additional_variables = list()) {
   existing_facets <- facets[facets %in% names(model@facets)]
   purrr::map(model@facets[existing_facets], defined_variables) %>%
-    purrr::flatten_chr() %>%
+    purrr::reduce(.init = VariableList(), combine) %>%
     c(additional_variables)
 }

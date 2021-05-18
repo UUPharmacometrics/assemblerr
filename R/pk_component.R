@@ -11,7 +11,7 @@ setClass("PkComponent",
 setMethod(
   f = "defined_variables",
   signature = "PkComponent",
-  definition = function(x) character(0)
+  definition = function(x) VariableList()
 )
 
 setMethod(
@@ -35,9 +35,11 @@ setMethod(
   f = "defined_variables",
   signature = "PkComponentFacet",
   definition = function(x) {
-    purrr::map(x@entries, defined_variables) %>%
-      purrr::flatten_chr() %>%
-      unique()
+    purrr::reduce(
+      .x = x@entries,
+      .f = ~combine(defined_variables(.y), .x),
+      .init = VariableList()
+      )
   }
 )
 
