@@ -19,9 +19,9 @@ setMethod(
     if (options$prm.use_mu_referencing) {
       mu_name <- paste0('mu_',eta_index)
       stm <- statement(
-          "{mu_name} <- log(theta[{theta_index}])",
-          "{component@name} <- exp({mu_name} + eta[{eta_index}])"
-        )
+        "{mu_name} <- log(theta[{theta_index}])",
+        "{component@name} <- exp({mu_name} + eta[{eta_index}])"
+      )
     } else {
       stm <- statement(
         "{component@name} <- theta[{theta_index}]*exp(eta[{eta_index}])"

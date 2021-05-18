@@ -42,7 +42,7 @@ create_dummy_data <- function(model, path = NULL){
 }
 
 expect_contains <- function(object, str) {
-  return(expect_match(object, str, fixed = TRUE, all = FALSE))
+  return(testthat::expect_match(object, str, fixed = TRUE, all = FALSE))
 }
 
 expect_does_not_contain <- function(object, regexp) {

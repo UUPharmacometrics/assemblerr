@@ -3,7 +3,7 @@ sym <- function(...) rlang::sym(do.call(paste0, args = list(...)))
 
 name_index_map <- function(x){
   names(x) %>%
-  {purrr::set_names(seq_along(.),.)}
+    {purrr::set_names(seq_along(.),.)}
 }
 
 generate_permutations <- function(indicies){
@@ -11,7 +11,7 @@ generate_permutations <- function(indicies){
   permutations <- matrix(nrow = 0, ncol = length(indicies))
   for (i in seq_along(indicies)) {
     permutations <- rbind(permutations,
-                        cbind(indicies[i], generate_permutations(indicies[-i])))
+                          cbind(indicies[i], generate_permutations(indicies[-i])))
   }
   return(permutations)
 }
@@ -37,10 +37,12 @@ is_valid_variable_name <- function(name){
 facet_names_to_labels <- function(names) {
   names[grepl("Facet$", names)] <- names[grepl("Facet$", names)] %>%
     gsub("Facet$","", x = .) %>%
-    gsub("\\B([A-Z])", " \\1", x = .) %>%
+    split_camelcase() %>%
     tolower()
   names
 }
+
+split_camelcase <- function(x) gsub("\\B([A-Z])", " \\1", x = x)
 
 
 #' Perform string interpolation with pluralization

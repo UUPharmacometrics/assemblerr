@@ -8,6 +8,7 @@ render(
   model,
   filename = NULL,
   target_tool = "nonmem",
+  tasks = tsk_estimation(),
   options = assemblerr_options()
 )
 }

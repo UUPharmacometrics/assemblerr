@@ -72,7 +72,7 @@ setMethod(
   f = "description",
   signature = "PrmLogNormal",
   definition = function(x) {
-      interp("{x@name}: log-normal")
+    interp("{x@name}: log-normal")
   }
 )
 

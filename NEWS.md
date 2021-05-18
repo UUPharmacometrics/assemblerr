@@ -1,5 +1,7 @@
 # assemblerr (development version)
 
+* added `task` option to `render` function allowing to customize estimation and covariance records, e.g., `render(m, tasks = tsk_estimation(method = "foce"))`
+
 # assemblerr 0.0.0.9006 
 * RUV variance can be specified in the observation model `obs_additive(~conc, var_add = 2)`
 * default parameter values for PK components

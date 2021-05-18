@@ -1,7 +1,7 @@
 #' @importFrom methods new
 #' @importFrom methods show
 #' @importFrom methods callNextMethod
-
+#' @importFrom methods getSlots
 
 # TODO: Need to implement fragment as a node list accepting everything
 

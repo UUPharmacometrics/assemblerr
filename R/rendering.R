@@ -20,6 +20,7 @@ setGeneric(name = "render_component",
 render <- function(model,
                    filename = NULL,
                    target_tool = "nonmem",
+                   tasks = tsk_estimation(),
                    options = assemblerr_options()) {
   model_arg_label <- rlang::as_label(rlang::enexpr(model))
   if (target_tool == "nonmem") {
@@ -30,7 +31,7 @@ render <- function(model,
           model = model,
           issues = issues,
           warn = options$issues.missing_variables == "fix-warn"
-          )
+        )
       }
       if (options$issues.missing_variables %in% c("fix", "fix-warn", "warn", "ignore")) {
         issues <- purrr::discard(issues, ~is(.x, "MissingVariableIssue"))
@@ -45,6 +46,7 @@ render <- function(model,
       )
     }
     code <- convert(nm_model(), model, options = options) %>%
+      convert(source = model, component = tasks, options = options) %>%
       render_component() %>%
       glue::glue_collapse("\n")
   } else {
@@ -55,7 +57,7 @@ render <- function(model,
     return(code)
   }else{
     res <- try(silent = TRUE,
-      cat(code, sep = "\n", file = filename)
+               cat(code, sep = "\n", file = filename)
     )
     if (inherits(res, "try-error")) {
       cli::cli_alert_danger("Could not write model file '{filename}'.")

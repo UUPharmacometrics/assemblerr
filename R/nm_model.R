@@ -17,8 +17,9 @@ setMethod(
                                  NmPkCodeFacet(),
                                  NmDesCodeFacet(),
                                  NmErrorCodeFacet(),
-                                 NmEstimationStepFacet(invisible = TRUE),
+                                 NmEstimationRecordFacet(),
                                  NmCovarianceStepFacet(invisible = TRUE),
+                                 NmTableRecordFacet(),
                                  NmThetaParameterFacet(),
                                  NmOmegaParameterFacet(),
                                  NmSigmaParameterFacet()),
@@ -108,6 +109,50 @@ setMethod(
     glue::glue(
       "${toupper(x@name)}", options, .sep = " "
     )
+  }
+)
+
+
+# OptionSet ---------------------------------------------------------------
+
+
+
+NmOptionSet <- setClass("NmOptionSet", contains = "list")
+
+setGeneric("append")
+
+setMethod(
+  f = "initialize",
+  signature = "NmOptionSet",
+  function(.Object, ...) {
+    callNextMethod(.Object, list(...))
+  }
+)
+
+setMethod(
+  f = "append",
+  signature = "NmOptionSet",
+  function(x, values, after) {
+    x@.Data <- callNextMethod(x@.Data, values, after)
+    x
+  }
+)
+
+setMethod(
+  f = "render_component",
+  signature = c(x = "NmOptionSet"),
+  definition = function(x, ...) {
+    purrr::imap(x, function(v,k){
+      if (is.logical(v)) v <- as.integer(v)
+      if (is.na(v)) return(character())
+      if (is.na(k) || k == "") {
+        toupper(v)
+      } else {
+        glue::glue("{toupper(k)}={toupper(v)}")
+      }
+    }) %>%
+      purrr::compact() %>%
+      paste(collapse = " ")
   }
 )
 
@@ -398,23 +443,65 @@ nm_error <- function(statement){
 # $ESTIMATION -------------------------------------------------------------
 
 
+NmEstimationRecord <- setClass(
+  "NmEstimationRecord",
+  contains = "FacetEntry",
+  slots = c(
+    method = "character",
+    maxeval = "integer",
+    interaction = "logical",
+    auto = "logical",
+    target_options = "list"
+  ),
+  prototype = prototype(
+    facet_class = "NmEstimationRecordFacet",
+    method = "cond",
+    interaction = TRUE,
+    maxeval = 999999L,
+    auto = NA
+  )
+)
 
-NmEstimationStepOption <- setClass(
-  "NmEstimationStepOption",
-  contains = "NmRecordOption",
-  prototype = prototype(facet_class = "NmEstimationFacet")
+setMethod(
+  f = "render_component",
+  signature = c(x = "NmEstimationRecord"),
+  definition = function(x, ...) {
+    options <- NmOptionSet(
+        method = x@method,
+        auto = as.integer(x@auto),
+        maxeval = x@maxeval
+    )
+    if (!is.na(x@interaction) && x@interaction) options$method <- paste(options$method, "INTERACTION")
+    options <- purrr::update_list(options, !!!x@target_options)
+    glue::glue("$ESTIMATION {render_component(options)}")
+  }
 )
 
 
-NmEstimationStepFacet <- setClass(
-  "NmEstimationStepFacet",
-  contains = "NmRecord",
-  prototype = prototype(entry_class = "NmEstimationStepOption", name = "estimation")
+NmEstimationRecordFacet <- setClass(
+  "NmEstimationRecordFacet",
+  contains = "Facet",
+  prototype = prototype(entry_class = "NmEstimationRecord")
 )
+
+setMethod(
+  f = "render_component",
+  signature = c(x = "NmEstimationRecordFacet"),
+  definition = function(x, ...) {
+    glue::glue_collapse(purrr::map_chr(x@entries, render_component), sep = "\n")
+  }
+)
+
 
 #' @export
-nm_estimation <- function(method = "cond inter"){
-  NmEstimationStepFacet(options = list(method = method))
+nm_estimation <- function(method = "cond", interaction = TRUE, maxeval = 999999L, auto = NA, target_options = list()){
+  NmEstimationRecord(
+    method = method,
+    interaction = interaction,
+    maxeval = maxeval,
+    auto = auto,
+    target_options = target_options
+  )
 }
 
 # $COV --------------------------------------------------------------
@@ -436,6 +523,53 @@ NmCovarianceStepFacet <- setClass(
 nm_covariance <- function(print = 'E', matrix = NULL){
   NmCovarianceStepFacet(options = list(print = print, matrix = matrix))
 }
+
+# $TABLE ------------------------------------------------------------------
+
+NmTableRecord <- setClass(
+  "NmTableRecord",
+  contains = "NamedFacetEntry",
+  slots = c(filename = "character", items = "character"),
+  prototype = prototype(facet_class = "NmTableRecordFacet")
+)
+
+
+setMethod(
+  f = "initialize",
+  signature = "NmTableRecord",
+  definition = function(.Object, filename, ...) {
+    callNextMethod(.Object, name = filename, filename = filename,
+                   ...)
+  }
+)
+
+
+setMethod(
+  f = "render_component",
+  signature = c(x = "NmTableRecord"),
+  definition = function(x, ...) {
+    glue::glue("$TABLE {toupper(paste(x@items, collapse = ' '))} FILE={x@filename} NOAPPEND NOPRINT")
+  }
+)
+
+NmTableRecordFacet <- setClass(
+  "NmTableRecordFacet",
+  contains = "NamedFacet",
+  prototype = prototype(entry_class = "NmTableRecord")
+)
+
+setMethod(
+  f = "render_component",
+  signature = c(x = "NmTableRecordFacet"),
+  definition = function(x, ...) {
+    glue::glue_collapse(purrr::map_chr(x@entries, render_component), sep = "\n")
+  }
+)
+
+nm_table <- function(filename, items) {
+  NmTableRecord(filename = filename, items = items)
+}
+
 
 # $THETA ------------------------------------------------------------------
 
