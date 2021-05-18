@@ -381,7 +381,7 @@ collect_multiplications <- function(node){
 }
 
 exprs_match_ignore_index <- function(expr1, expr2) {
-  if (expr1 == expr2) return(TRUE)
+  if (identical(expr1, expr2)) return(TRUE)
   if (expr_is_arr(expr1) && expr_is_arr(expr2)) {
     return(expr1[[2]] == expr2[[2]])
   }
