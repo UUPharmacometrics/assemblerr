@@ -63,13 +63,54 @@ ModelElementSelectorList <- setClass(
   prototype = prototype(node_class = "ModelElementSelector")
 )
 
+setOldClass("quosure")
 OutputTask <- setClass(
   "OutputTask",
   contains = "Task",
-  slots = c(filename = "character", items = "ModelElementSelectorList")
+  slots = c(
+    filename = "character",
+    selector = "quosure"
+  )
 )
 
+#' Model tasks
+#'
+#' These functions define model tasks that be combined using `+` and included during rendering.
+#'  * `tsk_estimation()` adds a parameter estimation task allowing to specify
+#'  the estimation algorithm to be used and whether a $COV step should be run.
+#'  * `tsk_ouput()` adds an output task allowing to display model variables
+#'  in a table.
+#'  * `tsk_ouput_xpose()` adds several tables as output following the xpose4 output
+#'  standard.
+#'
+#'
+#' @param algorithm The estimation algorithm to use for the task
+#' @param se Whether to calculate parameter uncertainties
+#' @param target_options List of additional options that should be passed to
+#' NONMEM
+#'
+#' @examples
+#'
+#' m <- model() +
+#'   input_variable("dose") +
+#'   prm_log_normal("emax", median = 10, var_log = 0.09) +
+#'   prm_log_normal("ed50", median = 50, var_log = 0.09) +
+#'   algebraic(effect~emax*dose/(ed50 + dose)) +
+#'   obs_proportional(~effect, var_prop = 1)
+#'
+#' # add estimation task using importance sampling, covariance step
+#' # and user-defined ISAMPLE option
+#' render(
+#'   model = m,
+#'   tasks = tsk_estimation(
+#'     algorithm = "imp",
+#'     se = TRUE,
+#'     target_options = list(isample=1000)
+#'   )
+#' )
+#'
 #' @export
+#' @md
 tsk_estimation <- function(algorithm = c("foce", "foce-inter", "foce-no-inter", "fo", "imp", "saem"),
                            se = FALSE,
                            target_options = list()) {
@@ -80,18 +121,24 @@ tsk_estimation <- function(algorithm = c("foce", "foce-inter", "foce-no-inter", 
                    target_options = target_options)
 }
 
+#' @param filename The filename for the output file
+#' @param variables The model variables that should be output
+#'
+#' @examples
+#' # output model parameters to file 'prms'
+#' render(m, tasks = tsk_output("prms", variables = vars_prms()))
+#' @rdname tsk_estimation
 #' @export
-tsk_output <- function(filename = "sdtab", items = select_prms()) {
+tsk_output <- function(filename = "sdtab", variables) {
+  expr <- rlang::enquo(variables)
   ModelingTasks() +
-    OutputTask(filename = filename, items = items)
+    OutputTask(filename = filename, selector = expr)
 }
 
-select_prms <- function() {
-  ModelElementSelectorList() +
-    ParametersSelector()
-}
-
-select_input_vars <- function() {
-  ModelElementSelectorList() +
-    InputVariablesSelector()
+#' @rdname tsk_estimation
+#' @export
+tsk_output_xpose4 <- function() {
+  ModelingTasks() +
+    OutputTask(filename = "sdtab", selector = rlang::quo(vars_nm_std())) +
+    OutputTask(filename = "patab", selector = rlang::quo(vars_prms() | vars_eta()))
 }

@@ -63,21 +63,15 @@ setMethod(
   f = "convert",
   signature = c(target = "NmModel", source = "GenericModel", component = "OutputTask"),
   definition = function(target, source, component, options) {
-    items <- component@items %>%
-      purrr::map_if(
-        ~is(.x, "ParametersSelector"),
-        ~names(source@facets[["ParameterFacet"]])
-      ) %>%
-      purrr::map_if(
-        ~is(.x, "InputVariablesSelector"),
-        ~names(source@facets[["InputVariableFacet"]])
-      ) %>%
-      purrr::flatten_chr() %>%
-      unique()
+    available_variables <- c(
+      defined_variables(source),
+      defined_variables(target)
+    )
+    selected_variables <- select_variables(available_variables, !!component@selector)
     target +
       nm_table(
         filename = component@filename,
-        items = items
+        items = names(selected_variables)
       )
   }
 )

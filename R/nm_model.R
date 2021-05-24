@@ -27,6 +27,39 @@ setMethod(
   }
 )
 
+setMethod(
+  f = "defined_variables",
+  signature = "NmModel",
+  definition = function(x) {
+    eta_vars <- create_variable_list(
+      variable_names = sprintf("ETA(%i)",seq_along(x@facets$NmOmegaParameterFacet@entries)),
+      variable_types = "RandomEffectVariable"
+    )
+    predictions <- create_variable_list(
+      variable_names = c("PRED", "NPRED", "PREDI", "CPRED", "CPREDI", "CIPRED", "CIPREDI", "NIPRED", "IPREDI", "IPRD", "EPRED", "EIPRED"),
+      variable_types = "PredictionVariable"
+    )
+    residuals <- create_variable_list(
+      variable_names = c("RES", "NRES", "RESI", "CRES", "CRESI", "CIRES", "CIRESI", "NIRES", "IRESI", "IRS", "ERES", "EIRES"),
+      variable_types = "ResidualVariable"
+    )
+    weighted_residuals <- create_variable_list(
+      variable_names = c("WRES", "NWRES", "WRESI", "CWRES", "CWRESI", "CIWRESI", "NIWRES", "IWRESI", "IWRS", "EWRES", "ECWRES", "EIWRES"),
+      variable_types =  "WeightedResidualVariable"
+    )
+    additional_vars <- create_variable_list(
+      variable_names = c("NPDE", "NPD", "OBJI", "DV"),
+      variable_types = "PredefinedVariable"
+    )
+    c(eta_vars,
+      predictions,
+      residuals,
+      weighted_residuals,
+      additional_vars
+    )
+  }
+)
+
 
 setMethod(
   f = "render_component",
