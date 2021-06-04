@@ -29,3 +29,4 @@ The function prints to the console
 \description{
 Print tree description in compact format
 }
+\keyword{internal}

@@ -29,7 +29,7 @@ NONMEM}
 \item{variables}{The model variables that should be output}
 }
 \description{
-These functions define model tasks that be combined using \code{+} and included during rendering.
+These functions define model tasks that can be combined using \code{+} and then be included during rendering.
 \itemize{
 \item \code{tsk_estimation()} adds a parameter estimation task allowing to specify
 the estimation algorithm to be used and whether a $COV step should be run.

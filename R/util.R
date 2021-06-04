@@ -34,6 +34,7 @@ is_valid_variable_name <- function(name){
 #'
 #' @examples
 #' assemblerr:::facet_names_to_labels(c("ParameterFacet", "InputVariableFacet"))
+#' @keywords internal
 facet_names_to_labels <- function(names) {
   names[grepl("Facet$", names)] <- names[grepl("Facet$", names)] %>%
     gsub("Facet$","", x = .) %>%
@@ -43,7 +44,6 @@ facet_names_to_labels <- function(names) {
 }
 
 split_camelcase <- function(x) gsub("\\B([A-Z])", " \\1", x = x)
-
 
 #' Perform string interpolation with pluralization
 #'
@@ -55,6 +55,7 @@ split_camelcase <- function(x) gsub("\\B([A-Z])", " \\1", x = x)
 #' @examples
 #' x <- 1:10
 #' assemblerr:::interp("x has elements {x}")
+#' @keywords internal
 interp <- function(..., .envir = parent.frame()) {
   res <- cli::pluralize(..., .envir = .envir)
   as.character(res)

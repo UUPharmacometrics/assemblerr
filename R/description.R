@@ -83,6 +83,7 @@ print_type_header <- function(type) {
 #' @importFrom methods as
 #'
 #' @return The function prints to the console
+#' @keywords internal
 print_shortened_tree_description <- function(tree_description,
                                              type = "building block",
                                              show = 'all',

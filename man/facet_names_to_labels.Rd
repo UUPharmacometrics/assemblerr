@@ -18,3 +18,4 @@ Convert facet class names to labels
 \examples{
 assemblerr:::facet_names_to_labels(c("ParameterFacet", "InputVariableFacet"))
 }
+\keyword{internal}

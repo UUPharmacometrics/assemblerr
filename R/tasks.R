@@ -75,7 +75,7 @@ OutputTask <- setClass(
 
 #' Model tasks
 #'
-#' These functions define model tasks that be combined using `+` and included during rendering.
+#' These functions define model tasks that can be combined using `+` and then be included during rendering.
 #'  * `tsk_estimation()` adds a parameter estimation task allowing to specify
 #'  the estimation algorithm to be used and whether a $COV step should be run.
 #'  * `tsk_ouput()` adds an output task allowing to display model variables

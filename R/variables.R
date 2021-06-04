@@ -151,6 +151,7 @@ create_variable_list <- function(variable_names, variable_types) {
 #' render(m, tasks = tsk_output("prms", variables = vars_prms() | vars_eta()))
 #' @export
 #' @md
+#' @name model-variable-selection
 vars_prms <- function(vars) {
   if (rlang::is_missing(vars)) vars <- tidyselect::peek_data(fn = "vars_prms")
   sel <- purrr::map_lgl(vars, ~is(.x, "ParameterVariable"))
@@ -158,7 +159,7 @@ vars_prms <- function(vars) {
 }
 
 #' @export
-#' @rdname vars_prms
+#' @rdname model-variable-selection
 vars_data <- function(vars) {
   if (rlang::is_missing(vars)) vars <- tidyselect::peek_data(fn = "vars_data")
   sel <- purrr::map_lgl(vars, ~is(.x, "DataDefinedVariable"))
@@ -166,7 +167,7 @@ vars_data <- function(vars) {
 }
 
 #' @export
-#' @rdname vars_prms
+#' @rdname model-variable-selection
 vars_eta <- function(vars) {
   if (rlang::is_missing(vars)) vars <- tidyselect::peek_data(fn = "vars_eta")
   sel_type <- purrr::map_lgl(vars, ~is(.x, "RandomEffectVariable"))
@@ -174,21 +175,21 @@ vars_eta <- function(vars) {
 }
 
 #' @export
-#' @rdname vars_prms
+#' @rdname model-variable-selection
 vars_nm_std <- function(vars) {
   if (rlang::is_missing(vars)) vars <- tidyselect::peek_data(fn = "vars_nm_std")
   tidyselect::all_of(c("DV", "PRED", "RES", "WRES", "IPREDI", "IWRESI"))
 }
 
 #' @export
-#' @rdname vars_prms
+#' @rdname model-variable-selection
 vars_starts_with <- function(match, vars) {
   if (rlang::is_missing(vars)) vars <- tidyselect::peek_data(fn = "vars_starts_with")
   tidyselect::starts_with(match)
 }
 
 #' @export
-#' @rdname vars_prms
+#' @rdname model-variable-selection
 vars_matches <- function(match, vars) {
   if (rlang::is_missing(vars)) vars <- tidyselect::peek_data(fn = "vars_matches")
   tidyselect::matches(match)

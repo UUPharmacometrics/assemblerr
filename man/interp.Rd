@@ -21,3 +21,4 @@ Perform string interpolation with pluralization
 x <- 1:10
 assemblerr:::interp("x has elements {x}")
 }
+\keyword{internal}
