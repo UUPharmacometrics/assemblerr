@@ -6,9 +6,10 @@ Description: assemblerr is an R package to construct pharmacometric models by
     to generate models in an automatic way. 
 Version: 0.0.0.9007
 Authors@R: 
-    c(person(given = "Sebastian",
+    c(
+    person(given = "Sebastian",
            family = "Ueckert",
-           role = c("aut", "cre"),
+           role = c("aut", "cre","cph"),
            email = "sebastian.ueckert@gmail.com",
            comment = c(ORCID = "0000-0002-3712-0255")),
     person(given = "Mats O.",
@@ -19,7 +20,9 @@ Authors@R:
            role = c("sad")),
     person(given = "Rikard",
            family = "Nordgren",
-           role = c("sad"))
+           role = c("sad")),
+    person("F. Hoffmann-La Roche Ltd.", 
+            role = "fnd")
     )
 License: MIT + file LICENSE
 Encoding: UTF-8

@@ -12,13 +12,14 @@ assemblerr is an R package to construct pharmacometric models by
     to generate models in an automatic way.
 }
 \author{
-\strong{Maintainer}: Sebastian Ueckert \email{sebastian.ueckert@gmail.com} (\href{https://orcid.org/0000-0002-3712-0255}{ORCID})
+\strong{Maintainer}: Sebastian Ueckert \email{sebastian.ueckert@gmail.com} (\href{https://orcid.org/0000-0002-3712-0255}{ORCID}) [copyright holder]
 
 Other contributors:
 \itemize{
   \item Mats O. Karlsson [scientific advisor]
   \item Andrew C. Hooker [scientific advisor]
   \item Rikard Nordgren [scientific advisor]
+  \item F. Hoffmann-La Roche Ltd. [funder]
 }
 
 }
