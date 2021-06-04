@@ -17,7 +17,7 @@ m <- model() +
 
 ## Parameter values
 
-The paramter values that a parameter model expects varies by type. For example, `prm_normal()` requires the mean and the variance, whereas for `prm_log_normal()` 
+The parameter values that a parameter model expects vary by type. For example, `prm_normal()` requires the mean and the variance, whereas for `prm_log_normal()` 
 median and variance on the log scale need to be provided. The argument name should indicate what parameter value is expected.
 
 ## MU-referencing

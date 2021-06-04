@@ -36,7 +36,7 @@ a log-normal distribution in the following snippet:\preformatted{m <- model() +
 
 \subsection{Parameter values}{
 
-The paramter values that a parameter model expects varies by type. For
+The parameter values that a parameter model expects vary by type. For
 example, \code{prm_normal()} requires the mean and the variance, whereas for
 \code{prm_log_normal()} median and variance on the log scale need to be
 provided. The argument name should indicate what parameter value is
