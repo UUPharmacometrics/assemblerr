@@ -19,6 +19,9 @@ Other contributors:
   \item Mats O. Karlsson [scientific advisor]
   \item Andrew C. Hooker [scientific advisor]
   \item Rikard Nordgren [scientific advisor]
+  \item Simon Carter [reviewer]
+  \item Simon Buatois [reviewer]
+  \item João A. Abrantes [reviewer]
   \item F. Hoffmann-La Roche Ltd. [funder]
 }
 

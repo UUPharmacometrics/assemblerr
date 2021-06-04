@@ -21,8 +21,17 @@ Authors@R:
     person(given = "Rikard",
            family = "Nordgren",
            role = c("sad")),
+    person(given = "Simon", 
+            family = "Carter",
+            role = c("rev")),
+    person(given = "Simon", 
+            family = "Buatois",
+            role = c("rev")),
+    person(given = "João A.", 
+            family = "Abrantes",
+            role = c("rev")),
     person("F. Hoffmann-La Roche Ltd.", 
-            role = "fnd")
+            role = c("fnd"))
     )
 License: MIT + file LICENSE
 Encoding: UTF-8
