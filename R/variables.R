@@ -118,7 +118,7 @@ create_variable_list <- function(variable_names, variable_types) {
 #' ## Overview of selection features
 #'
 #' The selection of variables builds on the tidyselect package
-#' which implements a powerful variable selection language.
+#' which implements a powerful variable selection language (see [tidyselect::language]).
 #' The following features are most relevant for the
 #' selection of model variables:
 #'

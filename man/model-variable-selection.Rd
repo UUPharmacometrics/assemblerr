@@ -32,7 +32,7 @@ name or using one of the helper functions described below.
 \subsection{Overview of selection features}{
 
 The selection of variables builds on the tidyselect package
-which implements a powerful variable selection language.
+which implements a powerful variable selection language (see \link[tidyselect:language]{tidyselect::language}).
 The following features are most relevant for the
 selection of model variables:
 \itemize{
