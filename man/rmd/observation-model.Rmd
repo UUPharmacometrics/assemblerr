@@ -1,0 +1,27 @@
+Observation models specify the observed variable, how an observation is expected to diverge from the model (i.e, the residual unexplained variability model),
+and parameter values. The observation model type is selected through the function name. The observed variable as well as the parameters are specified as function 
+arguments. 
+
+## Specifying predictions
+
+The actual prediction from the model is the first argument of the function. It can be specified in a number of different ways:
+
+  - A name of a variable in the model: `obs_additive("effect")`
+  - A compartment concentration: `obs_additive(~C["central"])`
+  - An equation: `obs_additive(~base+slp*time)`
+  
+If the definition contains a variable name on the left-hand side (as in `conc~C["central"]`), the variable will appear in the generated model code.
+This can be useful to make the model code more readable if the prediction is defined as a long equation.
+
+## Observation names
+
+The observation name can be specified via the `name=` argument and is automatically derived if the argument is left empty. Adding an observation model 
+with an already existing name will replace the previous definition.  
+
+
+## Error variance
+
+The variance of the error components are specified via the `var_add=` and `var_prop` arguments of the function.
+
+
+

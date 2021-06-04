@@ -105,31 +105,19 @@ setMethod("initialize",
             callNextMethod(.Object, prediction = prediction, ...)
           })
 
-#' Observation model
+#' Observation with combined error
 #'
-#' These building blocks specify an observational model describing the observed variable as well as how an observation is expected to diverge from
-#' the model (i.e, the residual unexplained variability model).
+#' This building block declares an observation model with a combined residual error model (\eqn{y = f + f \epsilon_1 + \epsilon_2}).
 #'
-#' The RUV model is choosen by selecting one of the predefined functions.
-#' \itemize{
-#'   \item \code{obs_additive}: Observation following an additive error model \eqn{y = f + \epsilon_1}
-#'   \item \code{obs_proportional}: Observation following a proportional error model \eqn{y = f + f \epsilon_1}
-#'   \item \code{obs_combined}: Observation following a combined error model \eqn{y = f + f \epsilon_1 + \epsilon_2}
-#' }
-#' The first argument of these functions requires the definition of the actual prediction from the model. It can be specified in a number of different ways
-#' \itemize{
-#'   \item the name of a variable in the model: \code{obs_additive("effect")}
-#'   \item a compartment concentration: \code{obs_additive(~C["central"])}
-#'   \item an equation: \code{obs_additive(~base+slp*time)}
-#' }
-#' If the definition contains a variable name on the left-hand side (as in \code{conc~C["central"]}), the variable will appear in the generated model code.
-#' The latter is useful to make the model code more readable if the prediction is defined as a long equation.
+#' @includeRmd man/rmd/observation-model.Rmd
 #'
-#' The second function argument "name" will be used to support multiple observations but is currently not useful.
-#'
-#' @param prediction A declaration defining the observed variable
+#' @param prediction A definition of the model prediction
 #' @param name A name for the observation (automatically derived if missing)
+#' @param var_prop Variance of the proportional error component
+#' @param var_add Variance of the additive error component
 #'
+#' @export
+#' @family observation models
 #' @examples
 #' # additve RUV model for observing the variable WT
 #' m <- model() +
@@ -142,12 +130,6 @@ setMethod("initialize",
 #'   prm_no_var("emax") +
 #'   prm_no_var("ed50") +
 #'   obs_proportional(effect~emax*dose/(ed50+dose))
-#' @name observation-model
-NULL
-
-#' @export
-#' @rdname observation-model
-#' @order 3
 obs_combined <- function(prediction, name, var_prop = 0.1, var_add = 1) {
   validate_and_create_observation(
     constructor = ObsNormalCombined,
@@ -180,9 +162,19 @@ setMethod(
   }
 )
 
+#' Observation with additive error
+#'
+#' This building block declares an observation model with an additive residual error model (\eqn{y = f + \epsilon_1}).
+#'
+#' @includeRmd man/rmd/observation-model.Rmd
+#'
+#' @param prediction A definition of the model prediction
+#' @param name A name for the observation (automatically derived if missing)
+#' @param var_add Variance of the additive error
+#'
 #' @export
-#' @rdname observation-model
-#' @order 1
+#' @family observation models
+#' @inherit obs_combined examples
 obs_additive <- function(prediction, name, var_add = 1) {
   validate_and_create_observation(
     constructor = AdditiveObservation,
@@ -211,9 +203,19 @@ setMethod(
 )
 
 
+#' Observation with proportional error
+#'
+#' This building block declares an observation model with a proportional residual error model (\eqn{y = f + f \epsilon_1}).
+#'
+#' @includeRmd man/rmd/observation-model.Rmd
+#'
+#' @param prediction A definition of the model prediction
+#' @param name A name for the observation (automatically derived if missing)
+#' @param var_prop Variance of the proportional error
+#'
 #' @export
-#' @rdname observation-model
-#' @order 2
+#' @family observation models
+#' @inherit obs_combined examples
 obs_proportional <- function(prediction, name, var_prop = 0.1) {
   validate_and_create_observation(
     constructor = ProportionalObservation,
