@@ -1,0 +1,38 @@
+Parameter models specify type, name, and values for a parameter. The paramter model type is selected through the function name. The parameter 
+name and values are provided as function arguments.
+
+## Parameter names
+
+Every parameter must have a valid name. A parameter name can contain letters, numbers as well as the underscore character. 
+The name needs to start with a letter.  
+
+Adding a parameter with an already existing name will replace the definition of the parameter. For example, the parameter "base"
+will have a log-normal distribution in the following snippet:
+
+```
+m <- model() +
+ prm_normal("base") +
+ prm_log_normal("base")
+```
+
+## Parameter values
+
+The paramter values that a parameter model expects varies by type. For example, `prm_normal()` requires the mean and the variance, whereas for `prm_log_normal()` 
+median and variance on the log scale need to be provided. The argument name should indicate what parameter value is expected.
+
+## MU-referencing
+
+`assemblerr` can include mu-referencing statements for parameter distributions that support it. The functionality can be
+activated by setting the option `prm.use_mu_referencing` to `TRUE` as shown in the following snippet:
+
+```
+m <- model() +
+  prm_normal("base") +
+  prm_log_normal("slp") +
+  obs_additive(response~base+slp*time)
+
+render(
+  model = m,
+  options = assemblerr_options(prm.use_mu_referencing = TRUE)
+)
+```
