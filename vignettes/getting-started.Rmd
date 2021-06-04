@@ -1,0 +1,222 @@
+---
+title: "Getting started"
+author: "Sebastian Ueckert"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting Started}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE}
+library(assemblerr)
+```
+
+assemblerr is an R package helping you build pharmacometric models quickly and without hassle. The package allows to assemble a model from a set of predefined building blocks and then convert it to NONMEM code. This document will show you the most important steps when working with assemblerr and is an excellent place to start if you are new to the package. We will use a few examples to discuss how to :
+
+- [Assemble a simple model]
+- [Check and modify] the  model
+- Turn the assembled model into NONMEM code using [rendering]
+- Specify what [tasks] the model code should implement
+- Write more complex models using [differential equations]
+- Create [pharmacokinetic models] even faster
+- And get [more help]  
+
+
+
+## Assemble a simple model
+
+Let's start simple and assume you want to build a dose-response model using the Emax function. The following code would accomplish that:
+
+```{r}
+m <- model() +
+  prm_log_normal("emax", median = 10, var_log = 0.09) +
+  prm_log_normal("ed50", median = 50, var_log = 0.09) +
+  algebraic(effect~emax*dose/(ed50 + dose)) +
+  obs_proportional(~effect, var_prop = 1)
+
+```
+
+The first line is the so-called constructor, something like the foundation of what you are trying to build. In this example, we are building a general pharmacometric model. Later, we will discuss when and why you would choose something else. All other lines specify building blocks and combine them using the `+` operator.  What each of the building blocks defines is hopefully clear from its name, but let's go through them anyway to be sure:  
+
+  - Line 2 and 3 define the parameters "emax" and "ed50" as being log-normally distributed with a specific median and variance on the log-scale. 
+  - Line 4 defines the an algebraic relationship for the variable effect using a classical `R` formula. In these formulae, the `~` should be understood like a `=`. You can use formulae in assemblerr whenever you want to define a mathematical relationship.   
+  - Line 5 defines the observational model, i.e., what to observed (the variable "effect" in this case) as well as the model for residual error (additive) and the variance of the error term.
+  
+Let's assume you want to create a model with a proportional error model instead, you simply would need to exchange the last line to something like `obs_proportional(~effect, var_prop = 0.05)`. Similar, if you would want to switch one of the parameter models. The use of these exchangable building blocks is the core principle in assemblerr. 
+
+
+## Check and modify
+
+When you are done defining your model you can check whether it contains any issues using the `check()` function, e.g.,  
+
+```{r}
+check(m)
+```
+
+In this case, the model definition used the variable 'dose' without it being declared. You can tell assemblerr that dose is part of the dataset by modifying the model as follows: 
+
+```{r}
+m <- m + 
+  input_variable("dose")
+```
+
+Now, the check function does not find any issues:
+
+```{r}
+check(m)
+```
+
+You can also replace an already existing building block by adding a new one with the same name. For example, the following code updates the parameter model for the EMAX parameter to one without variability:
+
+```{r}
+m <- m +
+  prm_no_var("emax", value = 10)
+```
+
+The warning message indicates that an existing building block has been replace. Now, there won't be any random effect associated with EMAX when you render the modified model:
+
+```{r}
+render(m)
+```
+
+
+## Rendering
+
+After having defined your model, you probably want to turn it into something useful, in assemblerr this process is called rendering. Since we stored our assembled model above in the variable `m` we can simply pass this variable to the `render` function, which will write the resulting NONMEM code to the console, like so 
+
+```{r}
+render(m)
+```
+
+While this is great to quickly check the resulting code, we generally want a model file. We can create it using the `filename=` argument of the `render()` function, i.e., 
+
+```{r, eval=FALSE}
+render(m, filename = "run1.mod")
+```
+
+The `render` function also has an options argument that allows you to modify some aspects of the rendering process. For example, the following code automatically adds mu-referencing code for all parameters.
+
+```{r}
+render(
+  m, 
+  options = assemblerr_options(
+    prm.use_mu_referencing = TRUE
+  )
+)
+```
+
+## Tasks
+
+"All models are wrong" AND useless if we can not do anything with them. So far, you only saw the description of a model. The `tasks=` argument of the `render()` function allows to specify what the model should "do".  
+
+By default assemblerr adds an estimation task using the FOCE algorithm but you can change that, for example using:
+
+```{r}
+render(m, 
+       tasks = tsk_estimation(algorithm = "imp", se = TRUE))
+```
+
+This example also requested the standard errors for the estimated parameters, which resulted in the addition of the covariance step in the NONMEM code. 
+
+You can combine multiple tasks using the `+` operator. For example, you might want to estimate parameters and output the parameter values for all parameters in the model. The following code accomplishes this:    
+
+```{r}
+render(m, 
+       tasks = tsk_estimation() + tsk_output(filename = "sdtab", variables = vars_prms()))
+```
+
+In the previous example, you saw the variable selection helper `vars_prms()` in action. Variable selection helpers allow you to specify what variables should be used in a table. You can read more about them in the documentation for the `tsk_output()` function.
+
+## Differential equations
+
+Many pharmacometric models are defined using differential equations. In assemblerr you can specify differential equations via compartments and flows (while this does not cover all types of differential equations, it will hopefully get you pretty far). To show compartment and flows in action, we will extend the dose-response model from the beginning to a concentration-response model. The following code chunk shows the necessary changes:  
+
+```{r}
+m2 <- model() +
+  prm_log_normal("v", median = 100, var_log = 0.09) +
+  prm_log_normal("cl", median = 10, var_log = 0.09) +
+  prm_log_normal("emax", median = 10, var_log = 0.09) +
+  prm_log_normal("ec50", median = 1, var_log = 0.09) +
+  compartment("central", volume = "v") +
+  flow(from = "central", definition = ~cl*C) +
+  obs_additive(effect~emax*C["central"]/(ec50 + C["central"]), var_add = 1)
+```
+
+In this model definition, we used two additional parameters and, more importantly, a compartment as well as a flow from that compartment. You should note, how you can use the variable `C` in the flow definition to refer to the concentration in the "from" compartment. Similarily, you can also use `C["central"]` to refer to the concentration in the central compartment when defining the observational model. The `A` variable provides a reference to the unscaled amount in the compartment. 
+
+Pay attention to how assemblerr replaces the `C` variables with the corresponding compartment reference when we render the model like before: 
+
+```{r}
+render(m2)
+```
+
+Did you also notice what happened to the differential equation? It disappeared! assemblerr recognized that this simple one-compartment model could be written as a much quicker analytical solution using ADVAN1 and did the necessary replacements.
+
+## Pharmacokinetic models
+
+For PK models, assemblerr supports building blocks with a higher level of abstraction. The following snippet assembles a one-compartment model with linear elimination: 
+
+```{r}
+pkm <- pk_model() +
+  pk_absorption_fo() +
+  pk_distribution_1cmp() +
+  pk_elimination_linear() +
+  obs_additive(conc~C["central"]) 
+```
+
+You can see how `pk_model()` instead of `model()` was used as a constructor. The resulting model objects accepts building blocks such as:
+
+  - A first-order absorption model (line 2)
+  - A compartment distribution model (line 3)
+  - A linear elimination model (line 4)
+  
+as well as the additive observation model (line 5) that you saw before.
+
+Despite its slighly different nature, you can turn the model into NONMEM code using the `render()` function. Also, tasks and rendering options work like in the previous examples. So you could do the following to create NONMEM code with mu-referencing, importance sampling estimation, and a table containing all model parameters: 
+
+```{r}
+render(
+  model = pkm, 
+  tasks = tsk_estimation("imp") + tsk_output("sdtab", variables = vars_prms()),
+  options = assemblerr_options(prm.use_mu_referencing = TRUE)
+)
+```
+
+
+PK model building blocks come with a default parameter model for their parameters. You can change the default by providing the parameter model as an argument to the building blocks. For example, if you want to have no variability on the volume of distribution, you could use the following code (note also how VC was renamed to V1):    
+
+```{r}
+pkm <- pk_model() +
+  pk_absorption_fo() +
+  pk_distribution_1cmp(prm_vc = prm_no_var("v1", value = 100)) +
+  pk_elimination_linear() +
+  obs_additive(conc~C["central"]) 
+
+render(pkm)
+```
+
+Alternativly, you can overwrite the default parameter model by adding a another one with the same name, i.e., :
+
+```{r}
+pkm <- pk_model() +
+  pk_absorption_fo() +
+  pk_distribution_1cmp() +
+  pk_elimination_linear() +
+  prm_no_var("vc", value = 100) +
+  obs_additive(conc~C["central"]) 
+  
+render(pkm)
+```
+
+## More help
+
+There is more to learn about assemblerr and you have multiple sources available to do so:  
+
+  - Help for a specific function can be found in the reference documentation in R that can be accessed using `?`. For example, `?prm_log_normal` will open the documentation for the log-normal parameter building block.
+  - An overview of the available documentation is available via `help(package="assemblerr")`.
+  - The vignette building blocks provides an overview of all the building blocks available in assemblerr.
+  
+
+
