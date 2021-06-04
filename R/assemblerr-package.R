@@ -1,4 +1,3 @@
-#' @keywords internal
 #' @importFrom methods is getFunction
 #' @importFrom rlang .data %||%
 "_PACKAGE"
