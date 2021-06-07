@@ -51,7 +51,7 @@ previous definition.
 \subsection{Error variance}{
 
 The variance of the error components are specified via the \verb{var_add=}
-and \code{var_prop} arguments of the function.
+and \verb{var_prop=} arguments of the function.
 }
 }
 \examples{

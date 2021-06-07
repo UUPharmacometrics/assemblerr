@@ -18,10 +18,9 @@ This can be useful to make the model code more readable if the prediction is def
 The observation name can be specified via the `name=` argument and is automatically derived if the argument is left empty. Adding an observation model 
 with an already existing name will replace the previous definition.  
 
-
 ## Error variance
 
-The variance of the error components are specified via the `var_add=` and `var_prop` arguments of the function.
+The variance of the error components are specified via the `var_add=` and `var_prop=` arguments of the function.
 
 
 
