@@ -7,14 +7,11 @@
 flow(definition, from = NA_character_, to = NA_character_)
 }
 \arguments{
-\item{definition}{Equation describing the flow Declaration of the flow using the variable A (amount in 'from' compartment) and C (concentration in 'from' compartment)}
+\item{definition}{Equation describing the flow}
 
 \item{from}{Name of the source compartment (NA for an inflow without source)}
 
 \item{to}{Name of the sink compartment (NA for an ouflow without sink)}
-}
-\value{
-A flow building block
 }
 \description{
 This building block describes a flow between compartments.
@@ -25,11 +22,49 @@ Flows define the connections between compartments and the equations according to
 
 The first function argument is the flow equation. It is defined using R formulas that can start with the tilde \code{~} operator and do not
 need to have a left-hand side (i.e., \code{~k0} is a valid flow definition).
+
+Flow equations can contains the special variables \code{A} and \code{C} which can be used to refer to the amount and concentration in the compartment specified via
+the \verb{from=} argument. For example, the following code creates a flow building block describing the first-order transfer from the depot to the central
+compartment\preformatted{flow(~ka*A, "depot", "central")
+}
+
+When the model is rendered, \code{A} and \code{C} will get replaced with the corresponding compartment reference. assemblerr will raise an error if \code{A} or \code{C} are used
+without specifying the \verb{from=} compartment (such as in an inflow).
+}
+
+\subsection{Compartment connections}{
+
+The connection between compartments can be specified using the \verb{from=} and \verb{to=} arguments of the function. Setting either \verb{from=} or \verb{to=} to \code{NA} allows
+the definition of in and outflows without a source or sink. Setting both arguments to \code{NA} results in error.
+}
+
+\subsection{Conversion to differential equations}{
+
+When flows are rendered they are converted to ordinary differential equations (ODEs). The connection between compartments together with the flow equations allow
+assemblerr to determine whether an analytic solution can be generated. This automatic optimization of differential equations can be disabled via the rendering
+options.
 }
 }
 \examples{
-f <- model() +
-     compartment("depot") +
-     compartment("central", volume = ~V) +
-     flow(declaration(~ka*A), from = "depot", to = "central")
+# one-compartment model with first-order elimination
+m <- model() +
+     prm_log_normal("v") +
+     prm_log_normal("cl") +
+     compartment("central", volume = ~v) +
+     flow(declaration(~cl*C), from = "central") +
+     obs_additive(~C["central"])
+# an analytic solution is generated
+render(m)
+
+# one-compartment model with Michaelis-Menten elimination
+m2 <- model() +
+     prm_log_normal("v") +
+     prm_log_normal("vmax") +
+     prm_no_var("km") +
+     compartment("central", volume = ~v) +
+     flow(declaration(~vmax*C/(km+C)), from = "central") +
+     obs_additive(~C["central"])
+
+# an ODE is generated
+render(m2)
 }
