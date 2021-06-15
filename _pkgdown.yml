@@ -1,0 +1,41 @@
+templates:
+  params:
+    bootswatch: Flatly
+
+development:
+  mode: auto
+
+reference:
+- title: "Model constructors"
+  desc: >
+    Functions to create the foundation of a model.
+- contents:
+  - model
+  - pk_model
+
+- title: "Parameter models"
+  desc: "Building blocks defining parameters"
+- contents:
+  - starts_with("prm_")
+
+- title: "Observation models"
+  desc: "Building blocks defining observations"
+- contents:
+  - starts_with("obs_")
+
+- title: "Compartments"
+  desc: "Building blocks to define compartments and flows"
+- contents:
+  - compartment
+  - cmp
+  - flow
+
+- title: "Rendering"
+  desc: "Converting a model description into code"
+- contents: render
+
+- title: "Model tasks"
+  desc: "Specifying model tasks"
+- contents:
+    - starts_with("tsk_")
+    - model-variable-selection

@@ -7,3 +7,6 @@
 ^\.travis\.yml$
 ^codecov\.yml$
 ^scratch$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$

@@ -11,3 +11,4 @@ vignettes/*.html
 vignettes/*.R
 inst/doc
 scratch
+docs
