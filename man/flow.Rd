@@ -2,26 +2,34 @@
 % Please edit documentation in R/compartment.R
 \name{flow}
 \alias{flow}
-\title{Flows between compartments}
+\title{Flow between compartments}
 \usage{
 flow(definition, from = NA_character_, to = NA_character_)
 }
 \arguments{
-\item{definition}{Declaration of the flow using the variable A (amount in 'from' compartment) and C (concentration in 'from' compartment)}
+\item{definition}{Equation describing the flow Declaration of the flow using the variable A (amount in 'from' compartment) and C (concentration in 'from' compartment)}
 
-\item{from}{Name of the source compartment or NA for an inflow without source}
+\item{from}{Name of the source compartment (NA for an inflow without source)}
 
-\item{to}{Name of the sink compartment or NA for an ouflow without sink}
+\item{to}{Name of the sink compartment (NA for an ouflow without sink)}
 }
 \value{
 A flow building block
 }
 \description{
-Creates a building block describing a flow between compartments.
+This building block describes a flow between compartments.
+}
+\details{
+Flows define the connections between compartments and the equations according to which exchanges occur.
+\subsection{Flow equations}{
+
+The first function argument is the flow equation. It is defined using R formulas that can start with the tilde \code{~} operator and do not
+need to have a left-hand side (i.e., \code{~k0} is a valid flow definition).
+}
 }
 \examples{
 f <- model() +
      compartment("depot") +
-     compartment("central", volume = ~V)
+     compartment("central", volume = ~V) +
      flow(declaration(~ka*A), from = "depot", to = "central")
 }

@@ -72,3 +72,20 @@ sq <- function(x) {
   return(paste0("'",x,"'"))
 }
 
+#' Create documentation links functions
+#'
+#' Creates a string with the Markdown code linking to the doc for all function that match the specifed pattern.
+#'
+#' @param pattern Regular expression to select the package functions
+#'
+#' @return Character vector of length 1
+#' @export
+#' @keywords internal
+#'
+#' @examples
+#' md_doc_links_for_package_functions("^prm_")
+md_doc_links_for_package_functions <- function(pattern) {
+  lsf.str("package:assemblerr", pattern = pattern) %>%
+    paste0("[", . , "]") %>%
+    paste(collapse = ", ")
+}

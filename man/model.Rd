@@ -13,16 +13,15 @@ A general pharmacometric model
 This building block creates the basis for a general pharmacometric model, a flexible but verbose model type.
 }
 \details{
-The object created is just an empty structure to which different building blocks need to be added. In a general model, each building block
-can modify one or more of the following facets
+The function creates the fundament for a general pharmacometric model to which different building blocks can be added. The following building
+blocks are relevant for this model type:
 \itemize{
-\item \link[=parameter-model]{Parameters}
-\item \link[=observation-model]{Observations}
-\item \link[=algebraic]{Algebraic relationships}
-\item \link[=compartment]{Compartments}
-\item \link[=flow]{Flows}
-\item \link[=input_variables]{Input variables}
-\item Meta data
+\item Parameters: \link{prm_log_normal}, \link{prm_logit_normal}, \link{prm_no_var}, \link{prm_normal}
+\item Observations: \link{obs_additive}, \link{obs_combined}, \link{obs_proportional}
+\item Algebraic relationships: \link{algebraic}
+\item Compartments: \link{compartment}
+\item Flows: \link{flow}
+\item Input variables: \link{input_variable}
 }
 
 The more specialized \code{\link[=pk_model]{pk_model()}} is converted to a general model during the rendering process.

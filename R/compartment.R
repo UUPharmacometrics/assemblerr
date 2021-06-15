@@ -219,20 +219,28 @@ compartment <- function(name, volume = 1){
 #' @describeIn compartment Is a simple alias for compartment.
 cmp <- compartment
 
-#' Flows between compartments
+#' Flow between compartments
 #'
-#' Creates a building block describing a flow between compartments.
+#' This building block describes a flow between compartments.
 #'
-#' @param from Name of the source compartment or NA for an inflow without source
-#' @param to Name of the sink compartment or NA for an ouflow without sink
-#' @param definition Declaration of the flow using the variable A (amount in 'from' compartment) and C (concentration in 'from' compartment)
+#' Flows define the connections between compartments and the equations according to which exchanges occur.
+#'
+#' ## Flow equations
+#'
+#' The first function argument is the flow equation. It is defined using R formulas that can start with the tilde `~` operator and do not
+#' need to have a left-hand side (i.e., `~k0` is a valid flow definition).
+#'
+#' @param definition Equation describing the flow Declaration of the flow using the variable A (amount in 'from' compartment) and C (concentration in 'from' compartment)
+#' @param from Name of the source compartment (NA for an inflow without source)
+#' @param to Name of the sink compartment (NA for an ouflow without sink)
 #'
 #' @return A flow building block
 #' @export
+#' @md
 #' @examples
 #' f <- model() +
 #'      compartment("depot") +
-#'      compartment("central", volume = ~V)
+#'      compartment("central", volume = ~V) +
 #'      flow(declaration(~ka*A), from = "depot", to = "central")
 flow <- function(definition, from = NA_character_, to = NA_character_){
   if (!is.character(from) && !is.character(to)) stop("'from' or/and 'to' need to be compartment names")

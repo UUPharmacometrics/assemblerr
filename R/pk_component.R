@@ -115,6 +115,16 @@ setMethod(
 )
 
 
+#' PK distribution 1 compartment
+#'
+#' This building block declares a one compartment distribution component for a pharmacokinetic model.
+#'
+#' @includeRmd man/rmd/pk-component.Rmd
+#'
+#' @param prm_vc Parameter model for the central volume of distribution
+#' @family distribution components
+#' @seealso [pk_model()] for the creation of PK models
+#' @md
 #' @export
 pk_distribution_1cmp <- function(prm_vc = prm_log_normal("vc", median = 100, var_log = 0.1)) {
   PkDistribution1Cmp(parameters = list(vc = prm_vc)) +
@@ -175,6 +185,18 @@ setMethod(
   }
 )
 
+#' PK distribution 2 compartment
+#'
+#' This building block declares a two compartment distribution component for a pharmacokinetic model.
+#'
+#' @includeRmd man/rmd/pk-component.Rmd
+#'
+#' @param prm_vc Parameter model for the central volume of distribution
+#' @param prm_vp Parameter model for the peripheral volume of distribution
+#' @param prm_q Parameter model for the inter-compartmental clearance
+#' @family distribution components
+#' @seealso [pk_model()] for the creation of PK models
+#' @md
 #' @export
 pk_distribution_2cmp <- function(
   prm_vc = prm_log_normal("vc", median = 100, var_log = 0.1),
@@ -652,6 +674,12 @@ setMethod(
   }
 )
 
+#' Zero-order absorption model
+#'
+#' @param prm_mat Parameter building block
+#'
+#' @return An absorption building block
+#' @family PK absorption models
 #' @export
 pk_absorption_zo <- function(prm_mat = prm_log_normal("mat", median = 0.5, var_log = 0.1)) {
   PkAbsorptionZO(
@@ -700,6 +728,12 @@ setMethod(
   }
 )
 
+#' Zero-order absorption with lag-time model
+#'
+#' @param prm_mat Parameter building block
+#'
+#' @return  An absorption building block
+#' @family PK absorption models
 #' @export
 pk_absorption_zo_lag <- function(prm_mat = prm_log_normal("mat", median = 0.5, var_log = 0.1),
                                  prm_mdt = prm_log_normal("mdt", median = 0.5, var_log = 0.1)) {

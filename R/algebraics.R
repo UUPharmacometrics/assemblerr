@@ -104,11 +104,30 @@ setMethod(
   }
 )
 
-#' Create an algebraic relationship
+#' Algebraic relationship
 #'
-#' @param definition The definition
+#' This building block defines a model variable as a function of other variables.
 #'
-#' @return An algebraic fragment
+#' Algebraic relationships are equations where one variable is defined as a function of multiple other variables. assemblerr
+#' uses R formulas to implement these equations. For example, the Emax dose response model
+#' \deqn{effect=emax*dose/(ed50 + dose)}
+#' could be declared as
+#'
+#' ```
+#'     algebraic(effect~emax*dose/(ed50+dose))
+#' ```
+#'
+#' where the tilde `~` replaced the equal sign `=` in the definition.
+#'
+#' @param definition A definition of the model variable
+#' @examples
+#' m <- model() +
+#'   input_variable("dose") +
+#'   prm_log_normal("emax", 10, 0.3) +
+#'   prm_no_var("ed50", 5) +
+#'   algebraic(effect~emax*dose/(ed50+dose)) +
+#'   obs_additive(~effect)
+#' @md
 #' @export
 algebraic <- function(definition){
   definition <- as_declaration(definition)

@@ -44,21 +44,19 @@ setMethod(
 #'
 #' This building block creates the basis for a general pharmacometric model, a flexible but verbose model type.
 #'
-#' The object created is just an empty structure to which different building blocks need to be added. In a general model, each building block
-#' can modify one or more of the following facets
-#'   * [Parameters][parameter-model]
-#'   * [Observations][observation-model]
-#'   * [Algebraic relationships][algebraic()]
-#'   * [Compartments][compartment()]
-#'   * [Flows][flow()]
-#'   * [Input variables][input_variables()]
-#'   * Meta data
+#' The function creates the fundament for a general pharmacometric model to which different building blocks can be added. The following building
+#' blocks are relevant for this model type:
+#'   * Parameters: `r md_doc_links_for_package_functions("^prm_")`
+#'   * Observations: `r md_doc_links_for_package_functions("^obs_")`
+#'   * Algebraic relationships: [algebraic]
+#'   * Compartments: [compartment]
+#'   * Flows: [flow]
+#'   * Input variables: [input_variable]
 #'
 #' The more specialized [pk_model()] is converted to a general model during the rendering process.
 #'
 #' @return A general pharmacometric model
 #' @export
-#' @importFrom magrittr %>%
 #' @examples
 #' m <- model() +
 #'     input_variable("dose") +
