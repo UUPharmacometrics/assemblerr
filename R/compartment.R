@@ -185,22 +185,47 @@ check_for_undefined_flow_variables <- function(flow_facet, model) {
 
 #' Compartment
 #'
-#' Defines name and volume of a compartment
+#' Defines name and volume of a compartment.
 #'
-#' @seealso \code{\link{model}}
+#' In most applications, compartments contain kinetically homogeneous amount of drug (applications where the compartment
+#' content represents other quantities are also possible). In assemblerr, a compartment is defined by providing a
+#' a name and the compartment volume.
+#'
+#' ## Compartment names
+#'
+#' Every compartment must have a valid name. A compartment name can contain letters, numbers as well as the underscore character, and
+#' needs to start with a letter.  Adding a compartment with an already existing name will replace the definition of the compartment.
+#'
+#' ## Compartment volumes
+#'
+#' The compartment volume can be provided as a number, R formula, or a parameter name. It will be used by assemblerr to replace
+#' references to the compartment concentration (e.g., `~C["central"]`) with the corresponding amount devided by volume (e.g., `~A["central]/vc`).
+#'
+#' @seealso [flow] for how to describe compartment kinetics
 #' @param name Name of the compartment
-#' @param volume Defintion of the compartment volume as a number, formula or declaration
+#' @param volume Volume as a number, formula or parameter name
 #'
-#' @return A compartment building block
 #' @export
+#' @md
 #' @examples
-#' # add a compartment with name "central" and volume Vc
+#' # model with depot and central compartment
 #' m <- model() +
-#'  compartment("central", volume = ~vc) +
+#'  compartment("depot", volume = 1) +
+#'  compartment("central", volume = "vc") +
+#'  flow(~ka*A, from = "depot", to = "central") +
 #'  flow(~cl*C, from = "central") +
+#'  prm_log_normal("ka") +
 #'  prm_log_normal("cl") +
 #'  prm_log_normal("vc") +
 #'  obs_additive(conc~C["central"])
+#'
+#' render(
+#'   model = m,
+#'   options = assemblerr_options(
+#'     ode.use_special_advans = FALSE,
+#'     ode.use_general_linear_advans = FALSE
+#'    )
+#' )
 compartment <- function(name, volume = 1){
   if (!is.character(name) || !is_valid_variable_name(name)) {
     rlang::abort(
@@ -216,7 +241,7 @@ compartment <- function(name, volume = 1){
 }
 
 #' @export
-#' @describeIn compartment Is a simple alias for compartment.
+#' @rdname compartment
 cmp <- compartment
 
 #' Flow between compartments
