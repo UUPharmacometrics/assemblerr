@@ -84,6 +84,7 @@ sq <- function(x) {
 #'
 #' @examples
 #' md_doc_links_for_package_functions("^prm_")
+#' @importFrom utils lsf.str
 md_doc_links_for_package_functions <- function(pattern) {
   lsf.str("package:assemblerr", pattern = pattern) %>%
     paste0("[", . , "]") %>%
