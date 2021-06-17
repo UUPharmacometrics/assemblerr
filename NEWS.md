@@ -1,5 +1,9 @@
 # assemblerr (development version)
 
+# assemblerr 0.0.0.9008
+* extended help for the building blocks: parameter, observation, compartment, flow 
+* added pkgdown reference
+* added new "Getting started" vignette
 
 # assemblerr 0.0.0.9007 
 * added `task` option to `render` function allowing to customize estimation and covariance records, e.g., `render(m, tasks = tsk_estimation(method = "foce"))`
