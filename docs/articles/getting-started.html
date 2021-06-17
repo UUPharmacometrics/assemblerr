@@ -90,7 +90,7 @@
 
     
     
-<p>assemblerr is an R package helping you build pharmacometric models quickly and without hassle. The package allows to assemble a model from a set of predefined building blocks and then convert it to NONMEM code. This document will show you the most important steps when working with assemblerr and is an excellent place to start if you are new to the package. We will use a few examples to discuss how to :</p>
+<p>assemblerr is an R package helping you build pharmacometric models quickly and without hassle. The package allows you to assemble a model from a set of predefined building blocks and then convert it to NONMEM code. This document will show you the most important steps when working with assemblerr and is an excellent place to start if you are new to the package. We will use a few examples to discuss how to :</p>
 <ul>
 <li><a href="#assemble-a-simple-model">Assemble a simple model</a></li>
 <li>
@@ -98,8 +98,7 @@
 <li>Turn the assembled model into NONMEM code using <a href="#rendering">rendering</a>
 </li>
 <li>Specify what <a href="#tasks">tasks</a> the model code should implement</li>
-<li>Write more complex models using <a href="#differential-equations">differential equations</a>
-</li>
+<li>Write more complex models using [differential equations]</li>
 <li>Create <a href="#pharmacokinetic-models">pharmacokinetic models</a> even faster</li>
 <li>And get <a href="#more-help">more help</a>
 </li>
@@ -107,21 +106,21 @@
 <div id="assemble-a-simple-model" class="section level2">
 <h2 class="hasAnchor">
 <a href="#assemble-a-simple-model" class="anchor"></a>Assemble a simple model</h2>
-<p>Let’s start simple and assume you want to build a dose-response model using the Emax function. The following code would accomplish that:</p>
+<p>Let’s start simple and assume you want to build a dose-response model using an Emax function. The following code would accomplish that:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/model.html">model</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="../reference/prm_log_normal.html">prm_log_normal</a></span><span class="op">(</span><span class="st">"emax"</span>, median <span class="op">=</span> <span class="fl">10</span>, var_log <span class="op">=</span> <span class="fl">0.09</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="../reference/prm_log_normal.html">prm_log_normal</a></span><span class="op">(</span><span class="st">"ed50"</span>, median <span class="op">=</span> <span class="fl">50</span>, var_log <span class="op">=</span> <span class="fl">0.09</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="../reference/algebraic.html">algebraic</a></span><span class="op">(</span><span class="va">effect</span><span class="op">~</span><span class="va">emax</span><span class="op">*</span><span class="va">dose</span><span class="op">/</span><span class="op">(</span><span class="va">ed50</span> <span class="op">+</span> <span class="va">dose</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="../reference/obs_proportional.html">obs_proportional</a></span><span class="op">(</span><span class="op">~</span><span class="va">effect</span>, var_prop <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
+  <span class="fu"><a href="../reference/obs_additive.html">obs_additive</a></span><span class="op">(</span><span class="op">~</span><span class="va">effect</span>, var_add <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
 <p>The first line is the so-called constructor, something like the foundation of what you are trying to build. In this example, we are building a general pharmacometric model. Later, we will discuss when and why you would choose something else. All other lines specify building blocks and combine them using the <code><a href="https://rdrr.io/r/base/Arithmetic.html">+</a></code> operator. What each of the building blocks defines is hopefully clear from its name, but let’s go through them anyway to be sure:</p>
 <ul>
 <li>Line 2 and 3 define the parameters “emax” and “ed50” as being log-normally distributed with a specific median and variance on the log-scale.</li>
-<li>Line 4 defines the an algebraic relationship for the variable effect using a classical <code>R</code> formula. In these formulae, the <code><a href="https://rdrr.io/r/base/tilde.html">~</a></code> should be understood like a <code><a href="https://rdrr.io/r/base/assignOps.html">=</a></code>. You can use formulae in assemblerr whenever you want to define a mathematical relationship.<br>
+<li>Line 4 defines the algebraic relationship for the variable effect using a classical <code>R</code> formula. In these formulae, the <code><a href="https://rdrr.io/r/base/tilde.html">~</a></code> should be understood like a <code><a href="https://rdrr.io/r/base/assignOps.html">=</a></code>. You can use formulae in assemblerr whenever you want to define a mathematical relationship.<br>
 </li>
-<li>Line 5 defines the observational model, i.e., what to observed (the variable “effect” in this case) as well as the model for residual error (additive) and the variance of the error term.</li>
+<li>Line 5 defines the observational model, i.e., what is the observation in the model (the variable “effect” in this case) as well as the model for residual error (additive) and the variance of the error term.</li>
 </ul>
-<p>Let’s assume you want to create a model with a proportional error model instead, you simply would need to exchange the last line to something like <code><a href="../reference/obs_proportional.html">obs_proportional(~effect, var_prop = 0.05)</a></code>. Similar, if you would want to switch one of the parameter models. The use of these exchangable building blocks is the core principle in assemblerr.</p>
+<p>Let’s assume you want to create a model with a proportional error model instead and change the initial estimate for it, you would simply need to exchange the last line to something like <code><a href="../reference/obs_proportional.html">obs_proportional(~effect, var_prop = 0.05)</a></code>. Similarly, if you would want to switch one of the parameters shown above, you could also change it. The use of these exchangeable building blocks is the core principle in assemblerr.</p>
 </div>
 <div id="check-and-modify" class="section level2">
 <h2 class="hasAnchor">
@@ -139,13 +138,13 @@
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/PkgUtils.html">check</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></code></pre></div>
 <pre><code>## ✓ No issues</code></pre>
-<p>You can also replace an already existing building block by adding a new one with the same name. For example, the following code updates the parameter model for the EMAX parameter to one without variability:</p>
+<p>You can also replace an already existing building block by adding a new one with the same name. For example, the following code updates the parameter model for the Emax parameter to one without variability:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">m</span> <span class="op">&lt;-</span> <span class="va">m</span> <span class="op">+</span>
   <span class="fu"><a href="../reference/prm_no_var.html">prm_no_var</a></span><span class="op">(</span><span class="st">"emax"</span>, value <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></code></pre></div>
 <pre><code>## Warning: Building block replaced
 ## x The building block [emax: log-normal] has been replaced with [emax: no variability]</code></pre>
-<p>The warning message indicates that an existing building block has been replace. Now, there won’t be any random effect associated with EMAX when you render the modified model:</p>
+<p>The warning message indicates that an existing building block has been replace. Now, there won’t be any random effect associated with Emax when you render the modified model:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/render.html">render</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></code></pre></div>
 <pre><code>## $PROBLEM
@@ -155,12 +154,12 @@
 ## EMAX = THETA(1)
 ## ED50 = THETA(2) * EXP(ETA(1))
 ## EFFECT = EMAX * DOSE/(ED50 + DOSE)
-## Y = EFFECT + EFFECT * EPS(1)
-## $ESTIMATION METHOD=COND INTERACTION MAXEVAL=999999
+## Y = EFFECT + EPS(1)
+## $ESTIMATION METHOD=COND MAXEVAL=999999
 ## $THETA (0, 10, Inf) ; POP_EMAX
 ## $THETA (0, 50, Inf) ; POP_ED50
 ## $OMEGA 0.09 ; IIV_ED50
-## $SIGMA 1; RUV_PROP</code></pre>
+## $SIGMA 1; RUV_ADD</code></pre>
 </div>
 <div id="rendering" class="section level2">
 <h2 class="hasAnchor">
@@ -175,16 +174,16 @@
 ## EMAX = THETA(1)
 ## ED50 = THETA(2) * EXP(ETA(1))
 ## EFFECT = EMAX * DOSE/(ED50 + DOSE)
-## Y = EFFECT + EFFECT * EPS(1)
-## $ESTIMATION METHOD=COND INTERACTION MAXEVAL=999999
+## Y = EFFECT + EPS(1)
+## $ESTIMATION METHOD=COND MAXEVAL=999999
 ## $THETA (0, 10, Inf) ; POP_EMAX
 ## $THETA (0, 50, Inf) ; POP_ED50
 ## $OMEGA 0.09 ; IIV_ED50
-## $SIGMA 1; RUV_PROP</code></pre>
+## $SIGMA 1; RUV_ADD</code></pre>
 <p>While this is great to quickly check the resulting code, we generally want a model file. We can create it using the <code>filename=</code> argument of the <code><a href="../reference/render.html">render()</a></code> function, i.e.,</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/render.html">render</a></span><span class="op">(</span><span class="va">m</span>, filename <span class="op">=</span> <span class="st">"run1.mod"</span><span class="op">)</span></code></pre></div>
-<p>The <code>render</code> function also has an options argument that allows you to modify some aspects of the rendering process. For example, the following code automatically adds mu-referencing code for all parameters.</p>
+<p>The <code>render</code> function also has an options argument that allows you to modify some aspects of the rendering process. For example, the following code automatically adds the mu-referenced code for all parameters.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/render.html">render</a></span><span class="op">(</span>
   <span class="va">m</span>, 
@@ -200,17 +199,17 @@
 ## MU_1 = LOG(THETA(2))
 ## ED50 = EXP(MU_1 + ETA(1))
 ## EFFECT = EMAX * DOSE/(ED50 + DOSE)
-## Y = EFFECT + EFFECT * EPS(1)
-## $ESTIMATION METHOD=COND INTERACTION MAXEVAL=999999
+## Y = EFFECT + EPS(1)
+## $ESTIMATION METHOD=COND MAXEVAL=999999
 ## $THETA (0, 10, Inf) ; POP_EMAX
 ## $THETA (0, 50, Inf) ; POP_ED50
 ## $OMEGA 0.09 ; IIV_ED50
-## $SIGMA 1; RUV_PROP</code></pre>
+## $SIGMA 1; RUV_ADD</code></pre>
 </div>
 <div id="tasks" class="section level2">
 <h2 class="hasAnchor">
 <a href="#tasks" class="anchor"></a>Tasks</h2>
-<p>“All models are wrong” AND useless if we can not do anything with them. So far, you only saw the description of a model. The <code>tasks=</code> argument of the <code><a href="../reference/render.html">render()</a></code> function allows to specify what the model should “do”.</p>
+<p>“All models are wrong” AND useless if we cannot do anything with them. So far, you only saw the description of a model. The <code>tasks=</code> argument of the <code><a href="../reference/render.html">render()</a></code> function allows you to specify what the model should “do”.</p>
 <p>By default assemblerr adds an estimation task using the FOCE algorithm but you can change that, for example using:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/render.html">render</a></span><span class="op">(</span><span class="va">m</span>, 
@@ -222,13 +221,13 @@
 ## EMAX = THETA(1)
 ## ED50 = THETA(2) * EXP(ETA(1))
 ## EFFECT = EMAX * DOSE/(ED50 + DOSE)
-## Y = EFFECT + EFFECT * EPS(1)
+## Y = EFFECT + EPS(1)
 ## $ESTIMATION METHOD=IMP AUTO=1
 ## $COVARIANCE PRINT=E
 ## $THETA (0, 10, Inf) ; POP_EMAX
 ## $THETA (0, 50, Inf) ; POP_ED50
 ## $OMEGA 0.09 ; IIV_ED50
-## $SIGMA 1; RUV_PROP</code></pre>
+## $SIGMA 1; RUV_ADD</code></pre>
 <p>This example also requested the standard errors for the estimated parameters, which resulted in the addition of the covariance step in the NONMEM code.</p>
 <p>You can combine multiple tasks using the <code><a href="https://rdrr.io/r/base/Arithmetic.html">+</a></code> operator. For example, you might want to estimate parameters and output the parameter values for all parameters in the model. The following code accomplishes this:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
@@ -241,19 +240,19 @@
 ## EMAX = THETA(1)
 ## ED50 = THETA(2) * EXP(ETA(1))
 ## EFFECT = EMAX * DOSE/(ED50 + DOSE)
-## Y = EFFECT + EFFECT * EPS(1)
-## $ESTIMATION METHOD=COND INTERACTION MAXEVAL=999999
+## Y = EFFECT + EPS(1)
+## $ESTIMATION METHOD=COND MAXEVAL=999999
 ## $TABLE EMAX ED50 FILE=sdtab NOAPPEND NOPRINT
 ## $THETA (0, 10, Inf) ; POP_EMAX
 ## $THETA (0, 50, Inf) ; POP_ED50
 ## $OMEGA 0.09 ; IIV_ED50
-## $SIGMA 1; RUV_PROP</code></pre>
+## $SIGMA 1; RUV_ADD</code></pre>
 <p>In the previous example, you saw the variable selection helper <code><a href="../reference/model-variable-selection.html">vars_prms()</a></code> in action. Variable selection helpers allow you to specify what variables should be used in a table. You can read more about them in the documentation for the <code><a href="../reference/tsk_estimation.html">tsk_output()</a></code> function.</p>
 </div>
-<div id="differential-equations" class="section level2">
+<div id="ordinary-differential-equations" class="section level2">
 <h2 class="hasAnchor">
-<a href="#differential-equations" class="anchor"></a>Differential equations</h2>
-<p>Many pharmacometric models are defined using differential equations. In assemblerr you can specify differential equations via compartments and flows (while this does not cover all types of differential equations, it will hopefully get you pretty far). To show compartment and flows in action, we will extend the dose-response model from the beginning to a concentration-response model. The following code chunk shows the necessary changes:</p>
+<a href="#ordinary-differential-equations" class="anchor"></a>Ordinary differential equations</h2>
+<p>Many pharmacometric models are defined using ordinary differential equations. In assemblerr you can specify ordinary differential equations via compartments and flows (while this does not cover all types of ordinary differential equations, it will hopefully get you pretty far). To show compartment and flows in action, we will extend the dose-response model from the beginning to a concentration-response model. The following code chunk shows the necessary changes:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/model.html">model</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="../reference/prm_log_normal.html">prm_log_normal</a></span><span class="op">(</span><span class="st">"v"</span>, median <span class="op">=</span> <span class="fl">100</span>, var_log <span class="op">=</span> <span class="fl">0.09</span><span class="op">)</span> <span class="op">+</span>
@@ -263,7 +262,7 @@
   <span class="fu"><a href="../reference/compartment.html">compartment</a></span><span class="op">(</span><span class="st">"central"</span>, volume <span class="op">=</span> <span class="st">"v"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="../reference/flow.html">flow</a></span><span class="op">(</span>from <span class="op">=</span> <span class="st">"central"</span>, definition <span class="op">=</span> <span class="op">~</span><span class="va">cl</span><span class="op">*</span><span class="va">C</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="../reference/obs_additive.html">obs_additive</a></span><span class="op">(</span><span class="va">effect</span><span class="op">~</span><span class="va">emax</span><span class="op">*</span><span class="va">C</span><span class="op">[</span><span class="st">"central"</span><span class="op">]</span><span class="op">/</span><span class="op">(</span><span class="va">ec50</span> <span class="op">+</span> <span class="va">C</span><span class="op">[</span><span class="st">"central"</span><span class="op">]</span><span class="op">)</span>, var_add <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
-<p>In this model definition, we used two additional parameters and, more importantly, a compartment as well as a flow from that compartment. You should note, how you can use the variable <code>C</code> in the flow definition to refer to the concentration in the “from” compartment. Similarily, you can also use <code>C["central"]</code> to refer to the concentration in the central compartment when defining the observational model. The <code>A</code> variable provides a reference to the unscaled amount in the compartment.</p>
+<p>In this model definition, we used two additional parameters and, more importantly, a compartment as well as a flow from that compartment. You should note, how you can use the variable <code>C</code> in the flow definition to refer to the concentration in the “from” compartment. Similarly, you can also use <code>C["central"]</code> to refer to the concentration in the central compartment when defining the observational model. The <code>A</code> variable provides a reference to the unscaled amount in the compartment.</p>
 <p>Pay attention to how assemblerr replaces the <code>C</code> variables with the corresponding compartment reference when we render the model like before:</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/render.html">render</a></span><span class="op">(</span><span class="va">m2</span><span class="op">)</span></code></pre></div>
@@ -308,7 +307,7 @@
 <li>A linear elimination model (line 4)</li>
 </ul>
 <p>as well as the additive observation model (line 5) that you saw before.</p>
-<p>Despite its slighly different nature, you can turn the model into NONMEM code using the <code><a href="../reference/render.html">render()</a></code> function. Also, tasks and rendering options work like in the previous examples. So you could do the following to create NONMEM code with mu-referencing, importance sampling estimation, and a table containing all model parameters:</p>
+<p>Despite its slightly different nature, you can turn the model into NONMEM code using the <code><a href="../reference/render.html">render()</a></code> function. Also, tasks and rendering options work like in the previous examples. You could therefore do the following to create NONMEM code with mu-referencing, importance sampling estimation, and a table containing all model parameters:</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/render.html">render</a></span><span class="op">(</span>
   model <span class="op">=</span> <span class="va">pkm</span>, 
@@ -369,7 +368,7 @@
 ## $OMEGA 0.1 ; IIV_MAT
 ## $OMEGA 0.1 ; IIV_CL
 ## $SIGMA 1; RUV_ADD</code></pre>
-<p>Alternativly, you can overwrite the default parameter model by adding a another one with the same name, i.e., :</p>
+<p>Alternatively, you can overwrite the default parameter model by adding a another one with the same name, i.e., :</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pkm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pk_model.html">pk_model</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">pk_absorption_fo</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
