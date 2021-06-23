@@ -20,12 +20,12 @@ test_that("flow", {
   expect_error(flow(~ka*C, to = "depot"))
   expect_silent(flow(~ka*C, from = "depot"))
   expect_silent(flow(~ka, to = "central"))
+  expect_warning(flow(~ka*c, from = "depot"))
 })
 
 
 
 # parameter ---------------------------------------------------------------
-
 test_that("parameter",{
   prm_funs <- lsf.str("package:assemblerr", pattern = "^prm_")
 

@@ -322,6 +322,12 @@ flow <- function(definition, from = NA_character_, to = NA_character_){
   if (is.na(from) && is.na(to)) rlang::abort(c("Invalid flow definition", x = "The 'from' or 'to' compartment need to be specified"))
   definition <- as_declaration(definition)
   vec_assert(definition, ptype = declaration(), size = 1)
+  if (any(c("c", "a") %in% dcl_vars_chr(definition, include_indicies = TRUE, include_lhs = FALSE))) {
+    rlang::warn(
+      c("Variable names are case-sensitive",
+        i = "Use capital A or C to refer to the amount or concentration in the 'from' compartment")
+    )
+  }
   if (is.na(from) && any(c("C", "A") %in% dcl_vars_chr(definition, include_indicies = TRUE, include_lhs = FALSE))) {
     rlang::abort(
       c("Invalid flow definition",
