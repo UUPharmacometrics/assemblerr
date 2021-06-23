@@ -388,8 +388,9 @@ exprs_match_ignore_index <- function(expr1, expr2) {
   return(FALSE)
 }
 
-dcl_discard_identities <- function(dcl) {
-  identical <- purrr::map2_lgl(dcl_id(dcl), dcl_def(dcl), ~.x==.y)
+dcl_discard_identities <- function(dcl, ignore_case = TRUE) {
+  if (ignore_case) identical <- purrr::map2_lgl(dcl_id(dcl), dcl_def(dcl), ~length(.y)==1 && tolower(.x)==tolower(.y))
+  else identical <- purrr::map2_lgl(dcl_id(dcl), dcl_def(dcl), ~.x==.y)
   dcl[!identical]
 }
 
