@@ -69,6 +69,18 @@ setMethod(
 )
 
 setMethod(
+  f = "rename_variables",
+  signature = "ObservationFacet",
+  definition = function(x, variable_mapping) {
+    for (i in seq_along(x@entries)) {
+      x@entries[[i]] <- rename_variables(x@entries[[i]], variable_mapping)
+    }
+    return(x)
+  }
+)
+
+
+setMethod(
   f = "compact_description",
   signature = "ObservationFacet",
   definition = function(x) {
@@ -82,6 +94,15 @@ ObsNormalCombined = setClass("ObsNormalCombined",
          slots = c(prediction = "assemblerr_declaration", additive_term = "logical", proportional_term = "logical"),
          prototype = prototype(additive_term = TRUE, proportional_term = TRUE),
          contains = "Observation")
+
+setMethod(
+  f = "rename_variables",
+  signature = "ObsNormalCombined",
+  definition = function(x, variable_mapping) {
+    x@prediction <- dcl_substitute(x@prediction, rlang::syms(variable_mapping))
+    return(x)
+  }
+)
 
 setMethod(
   f = "description",

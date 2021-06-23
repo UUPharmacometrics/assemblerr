@@ -104,6 +104,21 @@ setMethod(
   }
 )
 
+setMethod(
+  f = "rename_variables",
+  signature = "AlgebraicFacet",
+  definition = function(x, variable_mapping) {
+    for (i in seq_along(x@entries)) {
+      x@entries[[i]]@definition <- dcl_substitute(x@entries[[i]]@definition, rlang::syms(variable_mapping))
+      x@entries[[i]]@name <- dcl_id_label(x@entries[[i]]@definition)
+    }
+    names(x@entries) <- names(x)
+    return(x)
+  }
+)
+
+
+
 #' Algebraic relationship
 #'
 #' This building block defines a model variable as a function of other variables.

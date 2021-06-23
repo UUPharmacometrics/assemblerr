@@ -3,7 +3,7 @@
     Code
       check(model())
     Message <cliMessage>
-      WARNING! 2 issues
+      ! 2 critical issues
         1. No parameters specified
         2. No observation specified
 

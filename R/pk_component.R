@@ -14,6 +14,8 @@ setMethod(
   definition = function(x) VariableList()
 )
 
+
+
 setMethod(
   f = "initialize",
   signature = "PkComponent",
@@ -24,6 +26,20 @@ setMethod(
                    ...)
   }
 )
+
+setMethod(
+  f = "rename_variables",
+  signature = "PkComponent",
+  definition = function(x, variable_mapping) {
+    for (i in seq_along(x@prm_names)) {
+      if (x@prm_names[i] %in% names(variable_mapping)) {
+        x@prm_names[i] <- variable_mapping[x@prm_names[i]]
+      }
+    }
+    return(x)
+  }
+)
+
 
 PkComponentFacet <- setClass(
   "PkComponentFacet",
@@ -40,6 +56,18 @@ setMethod(
       .f = ~combine(defined_variables(.y), .x),
       .init = VariableList()
       )
+  }
+)
+
+setMethod(
+  f = "rename_variables",
+  signature = "PkComponentFacet",
+  definition = function(x, variable_mapping) {
+    for (i in seq_along(x@entries)) {
+      x@entries[[i]] <- rename_variables(x@entries[[i]], variable_mapping)
+    }
+    names(x@entries) <- names(x)
+    return(x)
   }
 )
 

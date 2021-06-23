@@ -24,6 +24,20 @@ setMethod(
   }
 )
 
+setMethod(
+  f = "rename_variables",
+  signature = "InputVariableFacet",
+  definition = function(x, variable_mapping) {
+    for (i in seq_along(x@entries)) {
+      if (x@entries[[i]]@name %in% names(variable_mapping)) {
+        x@entries[[i]]@name <- variable_mapping[x@entries[[i]]@name]
+      }
+    }
+    names(x@entries) <- names(x)
+    return(x)
+  }
+)
+
 #' @export
 input_variable <- function(name){
   if (!is.character(name)) stop("'name' needs to be a character vector")

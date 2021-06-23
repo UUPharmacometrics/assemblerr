@@ -90,3 +90,21 @@ md_doc_links_for_package_functions <- function(pattern) {
     paste0("[", . , "]") %>%
     paste(collapse = ", ")
 }
+
+generate_unique_name_mapping <- function(variables) {
+  mapping <- character()
+  indicies <- seq_along(variables)
+  for (i in indicies) {
+    suffix <- ""
+    while (any(toupper(variables[indicies < i]) == toupper(paste0(variables[i], suffix)))) {
+      if (suffix == "") suffix <- 0L
+      suffix <- suffix + 1L
+    }
+    if (is.integer(suffix)) {
+      mapping[variables[i]] <- paste0(variables[i], suffix)
+      variables[i] <- paste0(variables[i], suffix)
+    }
+  }
+  return(mapping)
+}
+

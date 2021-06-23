@@ -63,6 +63,20 @@ setMethod(
   }
 )
 
+setMethod(
+  f = "rename_variables",
+  signature = "ParameterFacet",
+  definition = function(x, variable_mapping) {
+    for (i in seq_along(x@entries)) {
+      if (x@entries[[i]]@name %in% names(variable_mapping)) {
+        x@entries[[i]]@name <- variable_mapping[x@entries[[i]]@name]
+      }
+    }
+    names(x@entries) <- names(x)
+    return(x)
+  }
+)
+
 # log-normal --------------------------------------------------------------
 
 

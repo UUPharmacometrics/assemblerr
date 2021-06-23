@@ -3,7 +3,7 @@
     Code
       print(issues)
     Message <cliMessage>
-      WARNING! 2 issues
-        1. test
-        2. test2
+      ! 2 issues (1 critical & 1 non-critical)
+        1. test2
+        2. test
 

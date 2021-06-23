@@ -34,8 +34,24 @@ render <- function(model,
         )
       }
       if (options$issues.missing_variables %in% c("fix", "fix-warn", "warn", "ignore")) {
-        issues <- purrr::discard(issues, ~is(.x, "MissingVariableIssue"))
+        issues <- discard_issues(issues, "MissingVariableIssue")
       }
+    }
+    if ("ChangedVariableCapitalizationIssue" %in% issue_types(issues)) {
+      variable_mapping <- issues %>%
+        purrr::keep(~is(.x, "ChangedVariableCapitalizationIssue")) %>%
+        purrr::map(purrr::attr_getter("variables")) %>%
+        purrr::flatten_chr() %>%
+        generate_unique_name_mapping()
+      model <- rename_variables(model, variable_mapping)
+      variable_mapping_ui <- paste(names(variable_mapping), variable_mapping, sep = "->")
+      rlang::warn(
+        c(
+          "Variables renamed",
+          x = interp("Variables with differing capitalization are not supported by NONMEM and were renamed ({variable_mapping_ui}).")
+        )
+      )
+      issues <- discard_issues(issues, "ChangedVariableCapitalizationIssue")
     }
     if (length(issues) > 0) {
       rlang::abort(

@@ -1,4 +1,5 @@
 # assemblerr (development version)
+* automatically rename variables with conflicting capitalization (e.g., emax and EMAX)
 
 # assemblerr 0.0.0.9008
 * extended help for the building blocks: parameter, observation, compartment, flow 

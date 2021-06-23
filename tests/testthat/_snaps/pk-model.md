@@ -3,7 +3,7 @@
     Code
       check(pk_model())
     Message <cliMessage>
-      WARNING! 4 issues
+      ! 4 critical issues
         1. No parameters specified
         2. A distribution component is missing
         3. An elimination component is missing

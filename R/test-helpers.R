@@ -20,6 +20,22 @@ simple_model <- function(prm = prm_log_normal("k"), obs = obs_additive(~conc), v
     vars
 }
 
+simple_ode_model <- function(prms = prm_log_normal("cl") + prm_log_normal("v"), obs = obs_additive(~C["central"])) {
+  model() +
+    prms +
+    obs +
+    compartment("central", volume = "v") +
+    flow(~cl*C, from = "central")
+}
+
+simple_pk_model <- function() {
+  pk_model() +
+    pk_absorption_fo() +
+    pk_distribution_1cmp() +
+    pk_elimination_linear() +
+    obs_additive(~C["central"])
+}
+
 
 #' @keywords internal
 #' @importFrom utils write.csv

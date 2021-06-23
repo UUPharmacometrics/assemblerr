@@ -119,6 +119,7 @@ FlowFacet <- setClass("FlowFacet",
 
 
 
+
 setMethod(
   f = "compact_description",
   signature = "FlowFacet",
@@ -139,6 +140,17 @@ setMethod(
       check_for_undefined_flow_variables(x, model)
     )
     return(issues)
+  }
+)
+
+setMethod(
+  f = "rename_variables",
+  signature = "FlowFacet",
+  definition = function(x, variable_mapping) {
+    for (i in seq_along(x@entries)) {
+      x@entries[[i]]@definition <- dcl_substitute(x@entries[[i]]@definition, rlang::syms(variable_mapping))
+    }
+    return(x)
   }
 )
 

@@ -146,6 +146,7 @@ setGeneric(
   def = function(x) standardGeneric("defined_variables")
 )
 
+
 setMethod(
   f = "defined_variables",
   signature = signature(x = "Facet"),
@@ -153,6 +154,20 @@ setMethod(
     return(VariableList())
   }
 )
+
+setGeneric(
+  name = "rename_variables",
+  def = function(x, variable_mapping) standardGeneric("rename_variables")
+)
+
+setMethod(
+  f = "rename_variables",
+  signature = signature(x = "Facet"),
+  definition = function(x, variable_mapping) {
+    return(x)
+  }
+)
+
 
 setGeneric(name = "add_entry",
            def = function(x, y) standardGeneric("add_entry"))
@@ -182,7 +197,7 @@ setMethod(
   f = "index_of",
   signature = signature(facet = "NamedFacet", x = "character"),
   definition = function(facet, x) {
-    which(names(facet@entries) == x)
+    which(names(facet) == x)
   }
 )
 
@@ -193,7 +208,8 @@ setMethod(
   f = "names",
   signature = c(x = "NamedFacet"),
   definition = function(x){
-    names(x@entries)
+    purrr::map_chr(x@entries, "name") %>%
+      unname()
   }
 )
 
@@ -265,8 +281,31 @@ setMethod(
   f = "check",
   signature = signature(x = "GenericModel"),
   definition = function(x) {
-    issues <- purrr::map(x@facets, check, model = x)
-    purrr::reduce(issues, c, .init = IssueList())
+    issues <- purrr::map(x@facets, check, model = x) %>%
+      purrr::reduce( c, .init = IssueList())
+
+    vars <- defined_variables(x)
+    var_names <- unique(names(vars))
+    changed_case_vars <- var_names[duplicated(toupper(var_names))]
+    changed_case_vars <- unique(toupper(changed_case_vars))
+    if (!rlang::is_empty(changed_case_vars)) {
+      cvc_issues <- purrr::map(changed_case_vars, ~var_names[toupper(var_names) == toupper(.x)]) %>%
+        purrr::map(~ChangedVariableCapitalizationIssue(vars = .x))
+      issues <- c(issues, cvc_issues)
+    }
+    issues
+  }
+)
+
+
+setMethod(
+  f = "rename_variables",
+  signature = "GenericModel",
+  definition = function(x, variable_mapping) {
+    for (i in seq_along(x@facets)) {
+      x@facets[[i]] <- rename_variables(x@facets[[i]], variable_mapping)
+    }
+    return(x)
   }
 )
 

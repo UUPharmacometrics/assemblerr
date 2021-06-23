@@ -107,11 +107,12 @@ print_shortened_tree_description <- function(tree_description,
 }
 
 print_issues_warning <- function(issues) {
-  if (length(issues) > 0) {
+  n_critical <- length(purrr::keep(issues, ~is(.x, "CriticalIssue")))
+  if (n_critical > 0) {
     cat(
       cli::style_italic(
         cli::col_red(
-          cli::pluralize("! {length(issues)} critical issue{?s}")
+          cli::pluralize("! {n_critical} critical issue{?s}")
         )
       ),
       "\n")

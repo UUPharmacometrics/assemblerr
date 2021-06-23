@@ -8,6 +8,16 @@ MissingVariableIssue <- setClass("MissingVariableIssue",
                                  slots = c(variables = "character"),
                           contains = "CriticalIssue")
 
+ChangedVariableCapitalizationIssue <- setClass("ChangedVariableCapitalizationIssue",
+                                       slots = c(variables = "character"),
+                                       contains = "Issue")
+
+setMethod(f = "initialize",
+          signature = "ChangedVariableCapitalizationIssue",
+          definition = function(.Object, vars, ...){
+            msg <- interp("Same variables with different capitalization ({vars})")
+            callNextMethod(.Object, msg, variables = vars)
+          })
 
 IssueList <- setClass("IssueList", contains = "list")
 
@@ -48,17 +58,39 @@ setMethod(
     if (vec_is_empty(object@.Data)) {
       cli::cli_alert_success("No issues")
     } else{
-      cli::cli_alert_warning("{length(object)} issue{?s}")
+      n_issues <- length(object)
+      n_critical <- length(purrr::keep(object, ~is(.x, "CriticalIssue")))
+      n_non_critical <- n_issues - n_critical
       div_id <- cli::cli_div(theme = list(
-        "ol" = list("margin-left" = 2),
+        "li" = list("margin-left" = 2),
         ".critical" = list(color = "red"),
         ".non-critical" = list(color = "black")
         )
       )
-      cli::cli_ol(purrr::map_chr(object, as.character), class = "critical")
+      if (n_issues == n_critical) {
+        cli::cli_text(cli::symbol$warning, " {n_issues} {.critical critical} issue{?s}")
+      } else if (n_critical == 0) {
+        cli::cli_text(cli::symbol$warning, " {n_issues} {.non-critical non-critical} issue{?s}")
+      } else {
+        cli::cli_text(cli::symbol$warning, " {n_issues} issue{?s} ({.critical {n_critical} critical} & {.non-critical {n_non_critical} non-critical})")
+      }
+      ol_id <- cli::cli_ol()
+      purrr::walk(sort(object), ~cli::cli_li(.x, class = ifelse(is(.x, "CriticalIssue"), "critical", "non-critical")))
+      cli::cli_end(ol_id)
       cli::cli_end(div_id)
     }
     invisible(NULL)
+  }
+)
+
+
+
+setMethod(
+  f = "xtfrm",
+  signature = "IssueList",
+  definition = function(x) {
+    purrr::map_lgl(x, ~!is(.x, "CriticalIssue")) %>%
+      as.integer()
   }
 )
 
@@ -71,4 +103,17 @@ setMethod(
   f = "issue_types",
   signature = "IssueList",
   definition = function(x) purrr::map_chr(x, class)
+)
+
+
+setGeneric(
+  name = "discard_issues",
+  def = function(x, class) standardGeneric("discard_issues")
+)
+
+setMethod(
+  f = "discard_issues",
+  signature = "IssueList",
+  definition = function(x, class) purrr::discard(x, ~is(.x, class)) %>%
+    as("IssueList")
 )
