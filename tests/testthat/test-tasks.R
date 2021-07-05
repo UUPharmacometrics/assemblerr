@@ -24,3 +24,34 @@ test_that("estimation task with additional options", {
   render(m, tasks = tsk_estimation(algorithm = "saem", target_options = list(AUTO = FALSE))) %>%
     expect_match("\\$ESTIMATION METHOD=SAEM AUTO=0")
 })
+
+test_that("output task parameters", {
+  m <- simple_model()
+  render(m, tasks = tsk_output("sdtab", variables = vars_prms())) %>%
+    expect_match("\\$TABLE.*K.*FILE=sdtab")
+})
+
+test_that("output task standard variables", {
+  m <- simple_model()
+  render(m, tasks = tsk_output("sdtab", variables = vars_nm_std())) %>%
+    expect_match("\\$TABLE.*DV") %>%
+    expect_match("\\$TABLE.*PRED") %>%
+    expect_match("\\$TABLE.*RES") %>%
+    expect_match("\\$TABLE.*WRES") %>%
+    expect_match("\\$TABLE.*IPREDI") %>%
+    expect_match("\\$TABLE.*IWRESI")
+})
+
+test_that("output task eta variables", {
+  m <- simple_model()
+  render(m, tasks = tsk_output("sdtab", variables = vars_eta())) %>%
+    expect_match("\\$TABLE.*ETA\\(1\\)")
+})
+
+test_that("output task data variables", {
+  m <- simple_model()
+  render(m, tasks = tsk_output("sdtab", variables = vars_data())) %>%
+    expect_match("\\$TABLE.*TIME") %>%
+    expect_match("\\$TABLE.*C0")
+})
+
