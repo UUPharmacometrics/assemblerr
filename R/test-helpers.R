@@ -12,7 +12,7 @@ local_create_nonmem_test_directory <- function(path = tempdir(), debug = FALSE, 
 }
 
 
-simple_model <- function(prm = prm_log_normal("k"), obs = obs_additive(~conc), vars = input_variable("time") + input_variable("c0")) {
+simple_model <- function(prm = prm_log_normal("k"), obs = obs_additive(~conc), vars = input_variable("time") + input_variable("c0") + input_variable("id")) {
   model() +
     prm +
     algebraic(conc~c0*exp(-k*time)) +

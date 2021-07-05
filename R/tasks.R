@@ -194,7 +194,7 @@ tsk_estimation <- function(algorithm = "foce",
 #' It is a shortcut for the following two output tasks:
 #'
 #' ```
-#'  xpose4_output <- tsk_output("sdtab", variables = vars_nm_std()) +
+#'  xpose4_output <- tsk_output("sdtab", variables = any_of(c("id","time")) | vars_nm_std()) +
 #'   tsk_output("patab", variables = vars_prms() | vars_eta())
 #' ```
 #'
@@ -219,6 +219,6 @@ tsk_output <- function(filename = "sdtab", variables) {
 #' render(m, tasks = tsk_output_xpose4())
 tsk_output_xpose4 <- function() {
   ModelingTasks() +
-    OutputTask(filename = "sdtab", selector = rlang::quo(vars_nm_std())) +
+    OutputTask(filename = "sdtab", selector = rlang::quo(any_of(c("id","time")) | vars_nm_std())) +
     OutputTask(filename = "patab", selector = rlang::quo(vars_prms() | vars_eta()))
 }
