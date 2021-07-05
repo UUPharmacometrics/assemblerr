@@ -73,22 +73,71 @@ OutputTask <- setClass(
   )
 )
 
-#' Model tasks
-#'
-#' These functions define model tasks that can be combined using `+` and then be included during rendering.
-#'  * `tsk_estimation()` adds a parameter estimation task allowing to specify
-#'  the estimation algorithm to be used and whether a $COV step should be run.
-#'  * `tsk_ouput()` adds an output task allowing to display model variables
-#'  in a table.
-#'  * `tsk_ouput_xpose()` adds several tables as output following the xpose4 output
-#'  standard.
+#' Task estimation
 #'
 #'
-#' @param algorithm The estimation algorithm to use for the task
+#' This function defines an estimation task allowing to specify the estimation algorithm, estimation options, and whether standard errors should be obtained.
+#'
+#' @includeRmd man/rmd/tasks.Rmd
+#'
+#' @details
+#' ## Estimation tasks
+#'
+#' Estimation tasks provide details on the parameter estimation process, in terms of estimation algorithm, estimation options and whether standard errors should be obtained.
+#'
+#' ### Algorithm
+#'
+#' The algorithm argument allows to select the estimation algorithm among the following options:
+#'
+#' |               |                                                                    |
+#' | ---------     | ------------------------------------------------------------------ |
+#' | foce          | First-order conditional estimation with interaction detection      |
+#' | foce-inter    | First-order conditional estimation with interaction                |
+#' | foce-no-inter | First-order conditional estimation without interaction             |
+#' | fo            | First-order estimation                                             |
+#' | imp           | Importance sampling                                                |
+#' | saem          | Stochastic approximation expectation maximization                  |
+#'
+#' The default algorithm `"foce"` detects whether the observation model includes an epsilon-eta interaction and includes the `INTERACTION` option accordingly.
+#' The `foce-inter` option forces the use of the `INTERACTION` argument independent of the residual error model, `foce-no-inter` enforces no interaction.
+#'
+#' Each algorithm includes a set of default options that the package authors consider sensible defaults (for example `MAXEVAL=999999` for FOCE). These defaults can be
+#' overwritten using the `target_options=` argument which is described below.
+#'
+#' ### Standard errors
+#'
+#' The `se=` argument allows to request the calculation of parameter standard errors. When standard errors are requested (`se=TRUE`) it will results
+#' in the inclusion of the `$COVARIANCE` record in the generated control stream.
+#'
+#' ### Target options
+#'
+#' The `target_options=` argument provides a mechanism to specify additional estimation options for the selected algorithm. The options should be provided
+#' as a list, e.g.,
+#'
+#' ```
+#' tsk_estimation(algorithm = "foce", target_options = list(mceta=100))
+#' ```
+#'
+#' The provided options are passed verbatim to the target tool and not checked by assemblerr for correctness.
+#'
+#' The `target_options=` argument
+#'
+#' ## Multiple estimation tasks
+#'
+#' A sequence of estimation tasks can be specified in assemblerr by combining multiple estimations, for example
+#'
+#' ```r
+#' render(m, tasks = tsk_estimation("foce") + tsk_estimation("imp"))
+#' ```
+#'
+#' will create model code that contains
+#'
+#' @param algorithm The estimation algorithm to use for the task ("foce", "foce-inter", "foce-no-inter", "fo", "imp", "saem")
 #' @param se Whether to calculate parameter uncertainties
 #' @param target_options List of additional options that should be passed to
 #' NONMEM
 #'
+#' @family tasks
 #' @examples
 #'
 #' m <- model() +
@@ -111,32 +160,63 @@ OutputTask <- setClass(
 #'
 #' @export
 #' @md
-tsk_estimation <- function(algorithm = c("foce", "foce-inter", "foce-no-inter", "fo", "imp", "saem"),
+tsk_estimation <- function(algorithm = "foce",
                            se = FALSE,
                            target_options = list()) {
-  algorithm <- rlang::arg_match(algorithm)
+  algorithms <- c("foce", "foce-inter", "foce-no-inter", "fo", "imp", "saem")
+  algorithm <- rlang::arg_match(algorithm, algorithm)
   ModelingTasks() +
     EstimationTask(algorithm = algorithm,
                    standard_errors = se,
                    target_options = target_options)
 }
 
+#' Task output
+#'
+#'
+#' These functions define output tasks that include the selected variables in the output of the generated model.
+#'
+#' @includeRmd man/rmd/tasks.Rmd
+#'
+#' @details
+#' ## Output tasks
+#'
+#' For NONMEM, an output task defines the `$TABLE` records by specifying the `filename=` as well as the `variables=` to include.
+#'
+#' The variables can be specified by providing a character vector of variable names (e.g., `variables =  c('cl','v')`) or by
+#' using a set of variable selection helpers (e.g., `variables = vars_prms()`). The latter is shorter if many variables are to
+#' be selected and allows the specification of tasks independent from the model. The details of the variable selection language
+#' can be found on the help pages for [model-variable-selection].
+#'
+#' ## xpose4 output task
+#'
+#' The `tsk_output_xpose4()` function includes `$TABLE` records that follow the output conventions of the model diagnostic package xpose4.
+#' It is a shortcut for the following two output tasks:
+#'
+#' ```
+#'  xpose4_output <- tsk_output("sdtab", variables = vars_nm_std()) +
+#'   tsk_output("patab", variables = vars_prms() | vars_eta())
+#' ```
+#'
 #' @param filename The filename for the output file
-#' @param variables The model variables that should be output
+#' @param variables The model variables that be included in the output
 #'
 #' @examples
 #' # output model parameters to file 'prms'
 #' render(m, tasks = tsk_output("prms", variables = vars_prms()))
-#' @rdname tsk_estimation
 #' @export
+#' @md
 tsk_output <- function(filename = "sdtab", variables) {
   expr <- rlang::enquo(variables)
   ModelingTasks() +
     OutputTask(filename = filename, selector = expr)
 }
 
-#' @rdname tsk_estimation
+#' @rdname tsk_output
 #' @export
+#' @examples
+#' # output variables required by xpose4
+#' render(m, tasks = tsk_output_xpose4())
 tsk_output_xpose4 <- function() {
   ModelingTasks() +
     OutputTask(filename = "sdtab", selector = rlang::quo(vars_nm_std())) +

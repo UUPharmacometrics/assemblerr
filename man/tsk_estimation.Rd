@@ -2,41 +2,80 @@
 % Please edit documentation in R/tasks.R
 \name{tsk_estimation}
 \alias{tsk_estimation}
-\alias{tsk_output}
-\alias{tsk_output_xpose4}
-\title{Model tasks}
+\title{Task estimation}
 \usage{
-tsk_estimation(
-  algorithm = c("foce", "foce-inter", "foce-no-inter", "fo", "imp", "saem"),
-  se = FALSE,
-  target_options = list()
-)
-
-tsk_output(filename = "sdtab", variables)
-
-tsk_output_xpose4()
+tsk_estimation(algorithm = "foce", se = FALSE, target_options = list())
 }
 \arguments{
-\item{algorithm}{The estimation algorithm to use for the task}
+\item{algorithm}{The estimation algorithm to use for the task ("foce", "foce-inter", "foce-no-inter", "fo", "imp", "saem")}
 
 \item{se}{Whether to calculate parameter uncertainties}
 
 \item{target_options}{List of additional options that should be passed to
 NONMEM}
-
-\item{filename}{The filename for the output file}
-
-\item{variables}{The model variables that should be output}
 }
 \description{
-These functions define model tasks that can be combined using \code{+} and then be included during rendering.
-\itemize{
-\item \code{tsk_estimation()} adds a parameter estimation task allowing to specify
-the estimation algorithm to be used and whether a $COV step should be run.
-\item \code{tsk_ouput()} adds an output task allowing to display model variables
-in a table.
-\item \code{tsk_ouput_xpose()} adds several tables as output following the xpose4 output
-standard.
+This function defines an estimation task allowing to specify the estimation algorithm, estimation options, and whether standard errors should be obtained.
+}
+\details{
+\subsection{Tasks}{
+
+Tasks are building blocks that allow to specify what a model should
+“do”. Like other model building blocks, they can be combined using
+the \code{+} operator. However, they should not be added to a model but
+rather provided via the \verb{tasks=} argument to the render function, e.g.,\if{html}{\out{<div class="r">}}\preformatted{render(m, tasks = tsk_estimation() +
+   tsk_output_xpose4())
+}\if{html}{\out{</div>}}
+}
+
+\subsection{Estimation tasks}{
+
+Estimation tasks provide details on the parameter estimation process, in terms of estimation algorithm, estimation options and whether standard errors should be obtained.
+\subsection{Algorithm}{
+
+The algorithm argument allows to select the estimation algorithm among the following options:\tabular{ll}{
+    \tab  \cr
+   foce \tab First-order conditional estimation with interaction detection \cr
+   foce-inter \tab First-order conditional estimation with interaction \cr
+   foce-no-inter \tab First-order conditional estimation without interaction \cr
+   fo \tab First-order estimation \cr
+   imp \tab Importance sampling \cr
+   saem \tab Stochastic approximation expectation maximization \cr
+}
+
+
+The default algorithm \code{"foce"} detects whether the observation model includes an epsilon-eta interaction and includes the \code{INTERACTION} option accordingly.
+The \code{foce-inter} option forces the use of the \code{INTERACTION} argument independent of the residual error model, \code{foce-no-inter} enforces no interaction.
+
+Each algorithm includes a set of default options that the package authors consider sensible defaults (for example \code{MAXEVAL=999999} for FOCE). These defaults can be
+overwritten using the \verb{target_options=} argument which is described below.
+}
+
+\subsection{Standard errors}{
+
+The \verb{se=} argument allows to request the calculation of parameter standard errors. When standard errors are requested (\code{se=TRUE}) it will results
+in the inclusion of the \verb{$COVARIANCE} record in the generated control stream.
+}
+
+\subsection{Target options}{
+
+The \verb{target_options=} argument provides a mechanism to specify additional estimation options for the selected algorithm. The options should be provided
+as a list, e.g.,\preformatted{tsk_estimation(algorithm = "foce", target_options = list(mceta=100))
+}
+
+The provided options are passed verbatim to the target tool and not checked by assemblerr for correctness.
+
+The \verb{target_options=} argument
+}
+
+}
+
+\subsection{Multiple estimation tasks}{
+
+A sequence of estimation tasks can be specified in assemblerr by combining multiple estimations, for example\if{html}{\out{<div class="r">}}\preformatted{render(m, tasks = tsk_estimation("foce") + tsk_estimation("imp"))
+}\if{html}{\out{</div>}}
+
+will create model code that contains
 }
 }
 \examples{
@@ -59,6 +98,5 @@ render(
   )
 )
 
-# output model parameters to file 'prms'
-render(m, tasks = tsk_output("prms", variables = vars_prms()))
 }
+\concept{tasks}
