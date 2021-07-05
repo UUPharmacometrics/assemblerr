@@ -505,6 +505,7 @@ setMethod(
         maxeval = x@maxeval
     )
     if (!is.na(x@interaction) && x@interaction) options$method <- paste(options$method, "INTERACTION")
+    names(x@target_options) <- tolower(names(x@target_options))
     options <- purrr::update_list(options, !!!x@target_options)
     glue::glue("$ESTIMATION {render_component(options)}")
   }

@@ -21,4 +21,6 @@ test_that("estimation task with additional options", {
   render(m, tasks = tsk_estimation(algorithm = "saem", target_options = list(auto = FALSE))) %>%
     expect_match("\\$ESTIMATION METHOD=SAEM AUTO=0")
 
+  render(m, tasks = tsk_estimation(algorithm = "saem", target_options = list(AUTO = FALSE))) %>%
+    expect_match("\\$ESTIMATION METHOD=SAEM AUTO=0")
 })
