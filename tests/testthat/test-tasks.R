@@ -55,3 +55,16 @@ test_that("output task data variables", {
     expect_match("\\$TABLE.*C0")
 })
 
+test_that("xpose4 output task ", {
+  m <- simple_model()
+  render(m, tasks = tsk_output_xpose4()) %>%
+    expect_match("\\$TABLE.*DV.*FILE=sdtab") %>%
+    expect_match("\\$TABLE.*PRED.*FILE=sdtab") %>%
+    expect_match("\\$TABLE.*RES.*FILE=sdtab") %>%
+    expect_match("\\$TABLE.*WRES.*FILE=sdtab") %>%
+    expect_match("\\$TABLE.*IPREDI.*FILE=sdtab") %>%
+    expect_match("\\$TABLE.*IWRESI.*FILE=sdtab")
+  render(m, tasks = tsk_output_xpose4()) %>%
+    expect_match("\\$TABLE.*K.*FILE=patab") %>%
+    expect_match("\\$TABLE.*ETA\\(1\\).*FILE=patab")
+})
