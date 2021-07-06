@@ -181,6 +181,7 @@ vars_nm_std <- function(vars) {
   tidyselect::all_of(c("DV", "PRED", "RES", "WRES", "IPREDI", "IWRESI"))
 }
 
+#' @param match A character vector to match against
 #' @export
 #' @rdname model-variable-selection
 vars_starts_with <- function(match, vars) {

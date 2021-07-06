@@ -24,6 +24,8 @@ vars_matches(match, vars)
 }
 \arguments{
 \item{vars}{A character vector of variable names (taken from the selection context)}
+
+\item{match}{A character vector to match against}
 }
 \description{
 The output task allows to select model variables using
