@@ -32,8 +32,6 @@ assemblerr_options <- function(prm.use_mu_referencing = FALSE,
       ode.general_nonlinear_advan = ode.general_nonlinear_advan,
       ode.general_linear_advan = ode.general_linear_advan,
       ode.preferred_trans_routines = ode.preferred_trans_routines,
-      default_record.covariance_step = default_record.covariance_step,
-      default_record.estimation_step = default_record.estimation_step,
       issues.missing_variables = match.arg(issues.missing_variables)
     )
   )
