@@ -47,6 +47,12 @@ It is a shortcut for the following two output tasks:\preformatted{ xpose4_output
 }
 }
 \examples{
+m <- model() +
+  input_variable("dose") +
+  prm_log_normal("emax", median = 10, var_log = 0.09) +
+  prm_log_normal("ed50", median = 50, var_log = 0.09) +
+  algebraic(effect~emax*dose/(ed50 + dose)) +
+  obs_proportional(~effect, var_prop = 1)
 # output model parameters to file 'prms'
 render(m, tasks = tsk_output("prms", variables = vars_prms()))
 # output variables required by xpose4

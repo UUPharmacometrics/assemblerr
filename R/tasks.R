@@ -203,6 +203,12 @@ tsk_estimation <- function(algorithm = "foce",
 #'
 #' @family tasks
 #' @examples
+#' m <- model() +
+#'   input_variable("dose") +
+#'   prm_log_normal("emax", median = 10, var_log = 0.09) +
+#'   prm_log_normal("ed50", median = 50, var_log = 0.09) +
+#'   algebraic(effect~emax*dose/(ed50 + dose)) +
+#'   obs_proportional(~effect, var_prop = 1)
 #' # output model parameters to file 'prms'
 #' render(m, tasks = tsk_output("prms", variables = vars_prms()))
 #' @export
@@ -220,6 +226,6 @@ tsk_output <- function(filename = "sdtab", variables) {
 #' render(m, tasks = tsk_output_xpose4())
 tsk_output_xpose4 <- function() {
   ModelingTasks() +
-    OutputTask(filename = "sdtab", selector = rlang::quo(any_of(c("id","time")) | vars_nm_std())) +
+    OutputTask(filename = "sdtab", selector = rlang::quo(tidyselect::any_of(c("id","time")) | vars_nm_std())) +
     OutputTask(filename = "patab", selector = rlang::quo(vars_prms() | vars_eta()))
 }
