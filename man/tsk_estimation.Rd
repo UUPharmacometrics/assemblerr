@@ -99,4 +99,8 @@ render(
 )
 
 }
+\seealso{
+Other tasks: 
+\code{\link{tsk_output}()}
+}
 \concept{tasks}

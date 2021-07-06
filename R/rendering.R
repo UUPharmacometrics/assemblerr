@@ -8,15 +8,61 @@ setGeneric(name = "render_component",
 
 #' Generate model code
 #'
-#' This function generates NONMEM code for a model object. The generated code will be written to the file specified by 'filename' or printed to the
-#' console if the argument is set to NULL.
+#' This function generates the code for a model object, prints it to the console or writes it to a file.
+#'
+#'
+#' The generated code will be written to the file specified by `filename=` or printed to the console if the filename is
+#' set to `NULL`. Only `'nonmem'` is currently supported as a `target_tool=` option. The `tasks=` argument allows the
+#' specification of model tasks and the `options=` argument customizes the generated code.
+#'
+#' ## Task specification
+#'
+#' Tasks are building blocks that allow to specify what a model should "do". Like other model building blocks, they can be combined using the `+` operator.
+#' For example, the following adds an estimation task and an xpose4 output task to the generated code:
+#'
+#' ```
+#'    render(m, tasks = tsk_estimation() +
+#'         tsk_output_xpose4())
+#'  ```
+#'
+#' The default argument (`tasks=tsk_estimation()`) adds an FOCE estimation task to the code.
+#'
+#' ## Rendering options
+#'
+#' The `options=` argument allows to modify the rendering process and, hence,  the generated code. Options are provided
+#' as a list and the `assemblerr_options()` function helps to generate list with the proper formatting.
+#'
+#' The following code block renders the model `m` with automatic mu-referencing for the model parameters
+#'
+#' ```
+#'    render(m, options = assemblerr_options(prm.use_mu_referencing = TRUE))
+#' ```
 #'
 #' @param model A model object
 #' @param filename Name of the model file to create or NULL
 #' @param target_tool Name of the target tool (currently only 'nonmem')
+#' @param tasks A task specification
 #' @param options List of options for model generation
 #'
+#' @examples
+#' m <- model() +
+#'     input_variable("dose") +
+#'     prm_log_normal("emax") +
+#'     prm_log_normal("ed50") +
+#'     obs_additive(eff~emax*dose/(ed50+dose))
+#' # render to console
+#' render(m)
+#'
+#' # render to file
+#' \dontrun{
+#' render(m, "run1.mod")
+#' }
+#'
+#' # render to console with estimation & output task
+#' render(m, tasks = tsk_estimation() + tsk_output_xpose4())
+#'
 #' @export
+#' @md
 render <- function(model,
                    filename = NULL,
                    target_tool = "nonmem",

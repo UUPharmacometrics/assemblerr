@@ -201,6 +201,7 @@ tsk_estimation <- function(algorithm = "foce",
 #' @param filename The filename for the output file
 #' @param variables The model variables that be included in the output
 #'
+#' @family tasks
 #' @examples
 #' # output model parameters to file 'prms'
 #' render(m, tasks = tsk_output("prms", variables = vars_prms()))

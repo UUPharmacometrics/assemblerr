@@ -19,9 +19,51 @@ render(
 
 \item{target_tool}{Name of the target tool (currently only 'nonmem')}
 
+\item{tasks}{A task specification}
+
 \item{options}{List of options for model generation}
 }
 \description{
-This function generates NONMEM code for a model object. The generated code will be written to the file specified by 'filename' or printed to the
-console if the argument is set to NULL.
+This function generates the code for a model object, prints it to the console or writes it to a file.
+}
+\details{
+The generated code will be written to the file specified by \verb{filename=} or printed to the console if the filename is
+set to \code{NULL}. Only \code{'nonmem'} is currently supported as a \verb{target_tool=} option. The \verb{tasks=} argument allows the
+specification of model tasks and the \verb{options=} argument customizes the generated code.
+\subsection{Task specification}{
+
+Tasks are building blocks that allow to specify what a model should "do". Like other model building blocks, they can be combined using the \code{+} operator.
+For example, the following adds an estimation task and an xpose4 output task to the generated code:\preformatted{   render(m, tasks = tsk_estimation() +
+        tsk_output_xpose4())
+}
+
+The default argument (\code{tasks=tsk_estimation()}) adds an FOCE estimation task to the code.
+}
+
+\subsection{Rendering options}{
+
+The \verb{options=} argument allows to modify the rendering process and, hence,  the generated code. Options are provided
+as a list and the \code{assemblerr_options()} function helps to generate list with the proper formatting.
+
+The following code block renders the model \code{m} with automatic mu-referencing for the model parameters\preformatted{   render(m, options = assemblerr_options(prm.use_mu_referencing = TRUE))
+}
+}
+}
+\examples{
+m <- model() +
+    input_variable("dose") +
+    prm_log_normal("emax") +
+    prm_log_normal("ed50") +
+    obs_additive(eff~emax*dose/(ed50+dose))
+# render to console
+render(m)
+
+# render to file
+\dontrun{
+render(m, "run1.mod")
+}
+
+# render to console with estimation & output task
+render(m, tasks = tsk_estimation() + tsk_output_xpose4())
+
 }

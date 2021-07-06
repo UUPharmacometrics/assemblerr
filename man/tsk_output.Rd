@@ -41,7 +41,7 @@ can be found on the help pages for \link{model-variable-selection}.
 \subsection{xpose4 output task}{
 
 The \code{tsk_output_xpose4()} function includes \verb{$TABLE} records that follow the output conventions of the model diagnostic package xpose4.
-It is a shortcut for the following two output tasks:\preformatted{ xpose4_output <- tsk_output("sdtab", variables = vars_nm_std()) +
+It is a shortcut for the following two output tasks:\preformatted{ xpose4_output <- tsk_output("sdtab", variables = any_of(c("id","time")) | vars_nm_std()) +
   tsk_output("patab", variables = vars_prms() | vars_eta())
 }
 }
@@ -52,3 +52,8 @@ render(m, tasks = tsk_output("prms", variables = vars_prms()))
 # output variables required by xpose4
 render(m, tasks = tsk_output_xpose4())
 }
+\seealso{
+Other tasks: 
+\code{\link{tsk_estimation}()}
+}
+\concept{tasks}
