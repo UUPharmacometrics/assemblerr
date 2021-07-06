@@ -178,7 +178,7 @@ setMethod(
     purrr::imap(x, function(v,k){
       if (is.logical(v)) v <- as.integer(v)
       if (is.na(v)) return(character())
-      if (is.na(k) || k == "") {
+      if (is.na(k) || k == "" || k == ".") {
         toupper(v)
       } else {
         glue::glue("{toupper(k)}={toupper(v)}")
@@ -506,6 +506,8 @@ setMethod(
     )
     if (!is.na(x@interaction) && x@interaction) options$method <- paste(options$method, "INTERACTION")
     names(x@target_options) <- tolower(names(x@target_options))
+    x@target_options[["."]] <- paste(x@target_options[is.na(names(x@target_options))], collapse = " ")
+    x@target_options[is.na(names(x@target_options))] <- NULL
     options <- purrr::update_list(options, !!!x@target_options)
     glue::glue("$ESTIMATION {render_component(options)}")
   }
