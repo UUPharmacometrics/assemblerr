@@ -75,7 +75,7 @@ The \verb{target_options=} argument
 A sequence of estimation tasks can be specified in assemblerr by combining multiple estimations, for example\if{html}{\out{<div class="r">}}\preformatted{render(m, tasks = tsk_estimation("foce") + tsk_estimation("imp"))
 }\if{html}{\out{</div>}}
 
-will create model code that contains
+will create model code that contains an FOCE as well as an importance sampling estimation step.
 }
 }
 \examples{

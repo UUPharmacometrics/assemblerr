@@ -130,7 +130,7 @@ OutputTask <- setClass(
 #' render(m, tasks = tsk_estimation("foce") + tsk_estimation("imp"))
 #' ```
 #'
-#' will create model code that contains
+#' will create model code that contains an FOCE as well as an importance sampling estimation step.
 #'
 #' @param algorithm The estimation algorithm to use for the task ("foce", "foce-inter", "foce-no-inter", "fo", "imp", "saem")
 #' @param se Whether to calculate parameter uncertainties
