@@ -491,7 +491,7 @@ setMethod(
 )
 
 #' @export
-pk_elimination_linear_nl <- function(prm_cllin = prm_log_normal("clin", median = 50, var_log = 0.1),
+pk_elimination_linear_nl <- function(prm_cllin = prm_log_normal("cllin", median = 50, var_log = 0.1),
                               prm_vmax = prm_log_normal("vmax", median = 10, var_log = 0.1),
                               prm_km = prm_log_normal("km", median = 0.5, var_log = 0.1)) {
   PkEliminationLinearNL(
