@@ -323,7 +323,7 @@
 ---
 
     Code
-      pk_model() + pk_distribution_1cmp() + pk_elimination_linear_mm() +
+      pk_model() + pk_distribution_1cmp() + pk_elimination_linear_nl() +
         pk_absorption_fo() + obs_additive(~C["central"])
     Output
       # an assemblerr pk_model 
@@ -336,7 +336,7 @@
 ---
 
     Code
-      pk_model() + pk_distribution_2cmp() + pk_elimination_linear_mm() +
+      pk_model() + pk_distribution_2cmp() + pk_elimination_linear_nl() +
         pk_absorption_fo() + obs_additive(~C["central"])
     Output
       # an assemblerr pk_model 
@@ -349,7 +349,7 @@
 ---
 
     Code
-      pk_model() + pk_distribution_3cmp() + pk_elimination_linear_mm() +
+      pk_model() + pk_distribution_3cmp() + pk_elimination_linear_nl() +
         pk_absorption_fo() + obs_additive(~C["central"])
     Output
       # an assemblerr pk_model 
@@ -491,7 +491,7 @@
 ---
 
     Code
-      pk_model() + pk_distribution_1cmp() + pk_elimination_linear_mm() +
+      pk_model() + pk_distribution_1cmp() + pk_elimination_linear_nl() +
         pk_absorption_fo_lag() + obs_additive(~C["central"])
     Output
       # an assemblerr pk_model 
@@ -504,7 +504,7 @@
 ---
 
     Code
-      pk_model() + pk_distribution_2cmp() + pk_elimination_linear_mm() +
+      pk_model() + pk_distribution_2cmp() + pk_elimination_linear_nl() +
         pk_absorption_fo_lag() + obs_additive(~C["central"])
     Output
       # an assemblerr pk_model 
@@ -517,7 +517,7 @@
 ---
 
     Code
-      pk_model() + pk_distribution_3cmp() + pk_elimination_linear_mm() +
+      pk_model() + pk_distribution_3cmp() + pk_elimination_linear_nl() +
         pk_absorption_fo_lag() + obs_additive(~C["central"])
     Output
       # an assemblerr pk_model 
@@ -659,7 +659,7 @@
 ---
 
     Code
-      pk_model() + pk_distribution_1cmp() + pk_elimination_linear_mm() +
+      pk_model() + pk_distribution_1cmp() + pk_elimination_linear_nl() +
         pk_absorption_fo_transit() + obs_additive(~C["central"])
     Output
       # an assemblerr pk_model 
@@ -672,7 +672,7 @@
 ---
 
     Code
-      pk_model() + pk_distribution_2cmp() + pk_elimination_linear_mm() +
+      pk_model() + pk_distribution_2cmp() + pk_elimination_linear_nl() +
         pk_absorption_fo_transit() + obs_additive(~C["central"])
     Output
       # an assemblerr pk_model 
@@ -685,7 +685,7 @@
 ---
 
     Code
-      pk_model() + pk_distribution_3cmp() + pk_elimination_linear_mm() +
+      pk_model() + pk_distribution_3cmp() + pk_elimination_linear_nl() +
         pk_absorption_fo_transit() + obs_additive(~C["central"])
     Output
       # an assemblerr pk_model 
@@ -827,7 +827,7 @@
 ---
 
     Code
-      pk_model() + pk_distribution_1cmp() + pk_elimination_linear_mm() +
+      pk_model() + pk_distribution_1cmp() + pk_elimination_linear_nl() +
         pk_absorption_fo_zo() + obs_additive(~C["central"])
     Output
       # an assemblerr pk_model 
@@ -840,7 +840,7 @@
 ---
 
     Code
-      pk_model() + pk_distribution_2cmp() + pk_elimination_linear_mm() +
+      pk_model() + pk_distribution_2cmp() + pk_elimination_linear_nl() +
         pk_absorption_fo_zo() + obs_additive(~C["central"])
     Output
       # an assemblerr pk_model 
@@ -853,7 +853,7 @@
 ---
 
     Code
-      pk_model() + pk_distribution_3cmp() + pk_elimination_linear_mm() +
+      pk_model() + pk_distribution_3cmp() + pk_elimination_linear_nl() +
         pk_absorption_fo_zo() + obs_additive(~C["central"])
     Output
       # an assemblerr pk_model 
@@ -995,7 +995,7 @@
 ---
 
     Code
-      pk_model() + pk_distribution_1cmp() + pk_elimination_linear_mm() +
+      pk_model() + pk_distribution_1cmp() + pk_elimination_linear_nl() +
         pk_absorption_zo() + obs_additive(~C["central"])
     Output
       # an assemblerr pk_model 
@@ -1008,7 +1008,7 @@
 ---
 
     Code
-      pk_model() + pk_distribution_2cmp() + pk_elimination_linear_mm() +
+      pk_model() + pk_distribution_2cmp() + pk_elimination_linear_nl() +
         pk_absorption_zo() + obs_additive(~C["central"])
     Output
       # an assemblerr pk_model 
@@ -1021,7 +1021,7 @@
 ---
 
     Code
-      pk_model() + pk_distribution_3cmp() + pk_elimination_linear_mm() +
+      pk_model() + pk_distribution_3cmp() + pk_elimination_linear_nl() +
         pk_absorption_zo() + obs_additive(~C["central"])
     Output
       # an assemblerr pk_model 
@@ -1163,7 +1163,7 @@
 ---
 
     Code
-      pk_model() + pk_distribution_1cmp() + pk_elimination_linear_mm() +
+      pk_model() + pk_distribution_1cmp() + pk_elimination_linear_nl() +
         pk_absorption_zo_lag() + obs_additive(~C["central"])
     Output
       # an assemblerr pk_model 
@@ -1176,7 +1176,7 @@
 ---
 
     Code
-      pk_model() + pk_distribution_2cmp() + pk_elimination_linear_mm() +
+      pk_model() + pk_distribution_2cmp() + pk_elimination_linear_nl() +
         pk_absorption_zo_lag() + obs_additive(~C["central"])
     Output
       # an assemblerr pk_model 
@@ -1189,7 +1189,7 @@
 ---
 
     Code
-      pk_model() + pk_distribution_3cmp() + pk_elimination_linear_mm() +
+      pk_model() + pk_distribution_3cmp() + pk_elimination_linear_nl() +
         pk_absorption_zo_lag() + obs_additive(~C["central"])
     Output
       # an assemblerr pk_model 
