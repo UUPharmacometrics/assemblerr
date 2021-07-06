@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">assemblerr</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9007</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9008</span>
       </span>
     </div>
 
@@ -165,7 +165,7 @@ blocks are relevant for this model type:</p><ul>
 #&gt; ED50 = THETA(2) * EXP(ETA(2))
 #&gt; EFF = EMAX * DOSE/(ED50 + DOSE)
 #&gt; Y = EFF + EPS(1)
-#&gt; $ESTIMATION METHOD=COND MAXEVAL=999999
+#&gt; $ESTIMATION METHOD=COND MAXEVAL=999999 
 #&gt; $THETA (0, 1, Inf) ; POP_EMAX
 #&gt; $THETA (0, 1, Inf) ; POP_ED50
 #&gt; $OMEGA 0.1 ; IIV_EMAX

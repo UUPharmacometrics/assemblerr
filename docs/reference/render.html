@@ -40,8 +40,7 @@
 
 
 <meta property="og:title" content="Generate model code — render" />
-<meta property="og:description" content="This function generates NONMEM code for a model object. The generated code will be written to the file specified by 'filename' or printed to the
-console if the argument is set to NULL." />
+<meta property="og:description" content="This function generates the code for a model object, prints it to the console or writes it to a file." />
 
 
 
@@ -73,7 +72,7 @@ console if the argument is set to NULL." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">assemblerr</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9007</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9008</span>
       </span>
     </div>
 
@@ -128,8 +127,7 @@ console if the argument is set to NULL." />
     </div>
 
     <div class="ref-description">
-    <p>This function generates NONMEM code for a model object. The generated code will be written to the file specified by 'filename' or printed to the
-console if the argument is set to NULL.</p>
+    <p>This function generates the code for a model object, prints it to the console or writes it to a file.</p>
     </div>
 
     <pre class="usage"><span class='fu'>render</span><span class='op'>(</span>
@@ -137,7 +135,7 @@ console if the argument is set to NULL.</p>
   filename <span class='op'>=</span> <span class='cn'>NULL</span>,
   target_tool <span class='op'>=</span> <span class='st'>"nonmem"</span>,
   tasks <span class='op'>=</span> <span class='fu'><a href='tsk_estimation.html'>tsk_estimation</a></span><span class='op'>(</span><span class='op'>)</span>,
-  options <span class='op'>=</span> <span class='fu'>assemblerr_options</span><span class='op'>(</span><span class='op'>)</span>
+  options <span class='op'>=</span> <span class='fu'><a href='assemblerr_options.html'>assemblerr_options</a></span><span class='op'>(</span><span class='op'>)</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -156,12 +154,85 @@ console if the argument is set to NULL.</p>
       <td><p>Name of the target tool (currently only 'nonmem')</p></td>
     </tr>
     <tr>
+      <th>tasks</th>
+      <td><p>A task specification</p></td>
+    </tr>
+    <tr>
       <th>options</th>
       <td><p>List of options for model generation</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
+    <p>The generated code will be written to the file specified by <code>filename=</code> or printed to the console if the filename is
+set to <code>NULL</code>. Only <code>'nonmem'</code> is currently supported as a <code>target_tool=</code> option. The <code>tasks=</code> argument allows the
+specification of model tasks and the <code>options=</code> argument customizes the generated code.</p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Task specification</h3>
+
+
+<p>Tasks are building blocks that allow to specify what a model should "do". Like other model building blocks, they can be combined using the <code><a href='https://rdrr.io/r/base/Arithmetic.html'>+</a></code> operator.
+For example, the following adds an estimation task and an xpose4 output task to the generated code:</p><pre>   <span class='fu'>render</span><span class='op'>(</span><span class='va'>m</span>, tasks <span class='op'>=</span> <span class='fu'><a href='tsk_estimation.html'>tsk_estimation</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+        <span class='fu'><a href='tsk_output.html'>tsk_output_xpose4</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+</pre>
+
+<p>The default argument (<code>tasks=tsk_estimation()</code>) adds an FOCE estimation task to the code.</p>
+
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Rendering options</h3>
+
+
+<p>The <code>options=</code> argument allows to modify the rendering process and, hence,  the generated code. Options are provided
+as a list and the <code><a href='assemblerr_options.html'>assemblerr_options()</a></code> function helps to generate list with the proper formatting.</p>
+<p>The following code block renders the model <code>m</code> with automatic mu-referencing for the model parameters</p><pre>   <span class='fu'>render</span><span class='op'>(</span><span class='va'>m</span>, options <span class='op'>=</span> <span class='fu'><a href='assemblerr_options.html'>assemblerr_options</a></span><span class='op'>(</span>prm.use_mu_referencing <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>
+</pre>
+
+
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='model.html'>model</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+    <span class='fu'>input_variable</span><span class='op'>(</span><span class='st'>"dose"</span><span class='op'>)</span> <span class='op'>+</span>
+    <span class='fu'><a href='prm_log_normal.html'>prm_log_normal</a></span><span class='op'>(</span><span class='st'>"emax"</span><span class='op'>)</span> <span class='op'>+</span>
+    <span class='fu'><a href='prm_log_normal.html'>prm_log_normal</a></span><span class='op'>(</span><span class='st'>"ed50"</span><span class='op'>)</span> <span class='op'>+</span>
+    <span class='fu'><a href='obs_additive.html'>obs_additive</a></span><span class='op'>(</span><span class='va'>eff</span><span class='op'>~</span><span class='va'>emax</span><span class='op'>*</span><span class='va'>dose</span><span class='op'>/</span><span class='op'>(</span><span class='va'>ed50</span><span class='op'>+</span><span class='va'>dose</span><span class='op'>)</span><span class='op'>)</span>
+<span class='co'># render to console</span>
+<span class='fu'>render</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $PROBLEM
+#&gt; $INPUT DOSE ID DV
+#&gt; $DATA data.csv IGNORE=@
+#&gt; $PRED
+#&gt; EMAX = THETA(1) * EXP(ETA(1))
+#&gt; ED50 = THETA(2) * EXP(ETA(2))
+#&gt; EFF = EMAX * DOSE/(ED50 + DOSE)
+#&gt; Y = EFF + EPS(1)
+#&gt; $ESTIMATION METHOD=COND MAXEVAL=999999 
+#&gt; $THETA (0, 1, Inf) ; POP_EMAX
+#&gt; $THETA (0, 1, Inf) ; POP_ED50
+#&gt; $OMEGA 0.1 ; IIV_EMAX
+#&gt; $OMEGA 0.1 ; IIV_ED50
+#&gt; $SIGMA 1; RUV_ADD</div><div class='input'>
+<span class='co'># render to file</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='fu'>render</span><span class='op'>(</span><span class='va'>m</span>, <span class='st'>"run1.mod"</span><span class='op'>)</span>
+<span class='op'>}</span>
+
+<span class='co'># render to console with estimation &amp; output task</span>
+<span class='fu'>render</span><span class='op'>(</span><span class='va'>m</span>, tasks <span class='op'>=</span> <span class='fu'><a href='tsk_estimation.html'>tsk_estimation</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'><a href='tsk_output.html'>tsk_output_xpose4</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $PROBLEM
+#&gt; $INPUT DOSE ID DV
+#&gt; $DATA data.csv IGNORE=@
+#&gt; $PRED
+#&gt; EMAX = THETA(1) * EXP(ETA(1))
+#&gt; ED50 = THETA(2) * EXP(ETA(2))
+#&gt; EFF = EMAX * DOSE/(ED50 + DOSE)
+#&gt; Y = EFF + EPS(1)
+#&gt; $ESTIMATION METHOD=COND MAXEVAL=999999 
+#&gt; $TABLE DV PRED RES WRES IPREDI IWRESI FILE=sdtab NOAPPEND NOPRINT
+#&gt; $TABLE EMAX ED50 ETA(1) ETA(2) FILE=patab NOAPPEND NOPRINT
+#&gt; $THETA (0, 1, Inf) ; POP_EMAX
+#&gt; $THETA (0, 1, Inf) ; POP_ED50
+#&gt; $OMEGA 0.1 ; IIV_EMAX
+#&gt; $OMEGA 0.1 ; IIV_ED50
+#&gt; $SIGMA 1; RUV_ADD</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

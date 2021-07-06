@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Selecting model variables — model-variable-selection • assemblerr</title>
+<title>Task output — tsk_output • assemblerr</title>
 
 
 <!-- jquery -->
@@ -39,31 +39,8 @@
 
 
 
-<meta property="og:title" content="Selecting model variables — model-variable-selection" />
-<meta property="og:description" content="The output task allows to select model variables using
-a concise mini language. You can select variables by
-name or using one of the helper functions described below.Overview of selection features
-
-
-The selection of variables builds on the tidyselect package
-which implements a powerful variable selection language (see tidyselect::language).
-The following features are most relevant for the
-selection of model variables:
-| for selecting the union of several variables
-c()  for combining selections
-! for taking the complement of a set of variables
-
-
-In addition, you can select variables using a combination of the following helper functions:
-vars_prms() selects all model parameters
-vars_data() selects all data defined variables
-vars_eta() selects all eta variables
-vars_nm_std() selects the standard NONMEM variables DV, PRED, RES, WRES, IPREDI, IWRESI
-vars_starts_with() selects variables that start with a prefix
-vars_matches() selects variables that match a regular expression
-
-
-" />
+<meta property="og:title" content="Task output — tsk_output" />
+<meta property="og:description" content="These functions define output tasks that include the selected variables in the output of the generated model." />
 
 
 
@@ -144,75 +121,77 @@ vars_matches() selects variables that match a regular expression
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Selecting model variables</h1>
+    <h1>Task output</h1>
     
-    <div class="hidden name"><code>model-variable-selection.Rd</code></div>
+    <div class="hidden name"><code>tsk_output.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>The output task allows to select model variables using
-a concise mini language. You can select variables by
-name or using one of the helper functions described below.</p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Overview of selection features</h3>
-
-
-<p>The selection of variables builds on the tidyselect package
-which implements a powerful variable selection language (see <a href='https://tidyselect.r-lib.org/reference/language.html'>tidyselect::language</a>).
-The following features are most relevant for the
-selection of model variables:</p><ul>
-<li><p><code><a href='https://rdrr.io/r/base/Logic.html'>|</a></code> for selecting the union of several variables</p></li>
-<li><p><code><a href='https://rdrr.io/r/base/c.html'>c()</a></code>  for combining selections</p></li>
-<li><p><code><a href='https://rdrr.io/r/base/Logic.html'>!</a></code> for taking the complement of a set of variables</p></li>
-</ul>
-
-<p>In addition, you can select variables using a combination of the following helper functions:</p><ul>
-<li><p><code>vars_prms()</code> selects all model parameters</p></li>
-<li><p><code>vars_data()</code> selects all data defined variables</p></li>
-<li><p><code>vars_eta()</code> selects all eta variables</p></li>
-<li><p><code>vars_nm_std()</code> selects the standard NONMEM variables DV, PRED, RES, WRES, IPREDI, IWRESI</p></li>
-<li><p><code>vars_starts_with()</code> selects variables that start with a prefix</p></li>
-<li><p><code>vars_matches()</code> selects variables that match a regular expression</p></li>
-</ul>
-
-
+    <p>These functions define output tasks that include the selected variables in the output of the generated model.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>vars_prms</span><span class='op'>(</span><span class='va'>vars</span><span class='op'>)</span>
+    <pre class="usage"><span class='fu'>tsk_output</span><span class='op'>(</span>filename <span class='op'>=</span> <span class='st'>"sdtab"</span>, <span class='va'>variables</span><span class='op'>)</span>
 
-<span class='fu'>vars_data</span><span class='op'>(</span><span class='va'>vars</span><span class='op'>)</span>
-
-<span class='fu'>vars_eta</span><span class='op'>(</span><span class='va'>vars</span><span class='op'>)</span>
-
-<span class='fu'>vars_nm_std</span><span class='op'>(</span><span class='va'>vars</span><span class='op'>)</span>
-
-<span class='fu'>vars_starts_with</span><span class='op'>(</span><span class='va'>match</span>, <span class='va'>vars</span><span class='op'>)</span>
-
-<span class='fu'>vars_matches</span><span class='op'>(</span><span class='va'>match</span>, <span class='va'>vars</span><span class='op'>)</span></pre>
+<span class='fu'>tsk_output_xpose4</span><span class='op'>(</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>vars</th>
-      <td><p>A character vector of variable names (taken from the selection context)</p></td>
+      <th>filename</th>
+      <td><p>The filename for the output file</p></td>
     </tr>
     <tr>
-      <th>match</th>
-      <td><p>A character vector to match against</p></td>
+      <th>variables</th>
+      <td><p>The model variables that be included in the output</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Tasks</h3>
+
+
+<p>Tasks are building blocks that allow to specify what a model should
+“do”. Like other model building blocks, they can be combined using
+the <code><a href='https://rdrr.io/r/base/Arithmetic.html'>+</a></code> operator. However, they should not be added to a model but
+rather provided via the <code>tasks=</code> argument to the render function, e.g.,<div class="r"></p><pre><span class='fu'><a href='render.html'>render</a></span><span class='op'>(</span><span class='va'>m</span>, tasks <span class='op'>=</span> <span class='fu'><a href='tsk_estimation.html'>tsk_estimation</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+   <span class='fu'>tsk_output_xpose4</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+</pre><p></div></p>
+
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Output tasks</h3>
+
+
+<p>For NONMEM, an output task defines the <code>$TABLE</code> records by specifying the <code>filename=</code> as well as the <code>variables=</code> to include.</p>
+<p>The variables can be specified by providing a character vector of variable names (e.g., <code>variables =  c('cl','v')</code>) or by
+using a set of variable selection helpers (e.g., <code>variables = vars_prms()</code>). The latter is shorter if many variables are to
+be selected and allows the specification of tasks independent from the model. The details of the variable selection language
+can be found on the help pages for <a href='model-variable-selection.html'>model-variable-selection</a>.</p>
+
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>xpose4 output task</h3>
+
+
+<p>The <code>tsk_output_xpose4()</code> function includes <code>$TABLE</code> records that follow the output conventions of the model diagnostic package xpose4.
+It is a shortcut for the following two output tasks:</p><pre> <span class='va'>xpose4_output</span> <span class='op'>&lt;-</span> <span class='fu'>tsk_output</span><span class='op'>(</span><span class='st'>"sdtab"</span>, variables <span class='op'>=</span> <span class='fu'>any_of</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"id"</span>,<span class='st'>"time"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>|</span> <span class='fu'><a href='model-variable-selection.html'>vars_nm_std</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>tsk_output</span><span class='op'>(</span><span class='st'>"patab"</span>, variables <span class='op'>=</span> <span class='fu'><a href='model-variable-selection.html'>vars_prms</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>|</span> <span class='fu'><a href='model-variable-selection.html'>vars_eta</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+</pre>
+
+
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>Other tasks: 
+<code><a href='tsk_estimation.html'>tsk_estimation</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='model.html'>model</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+    <pre class="examples"><div class='input'><span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='model.html'>model</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
   <span class='fu'>input_variable</span><span class='op'>(</span><span class='st'>"dose"</span><span class='op'>)</span> <span class='op'>+</span>
   <span class='fu'><a href='prm_log_normal.html'>prm_log_normal</a></span><span class='op'>(</span><span class='st'>"emax"</span>, median <span class='op'>=</span> <span class='fl'>10</span>, var_log <span class='op'>=</span> <span class='fl'>0.09</span><span class='op'>)</span> <span class='op'>+</span>
   <span class='fu'><a href='prm_log_normal.html'>prm_log_normal</a></span><span class='op'>(</span><span class='st'>"ed50"</span>, median <span class='op'>=</span> <span class='fl'>50</span>, var_log <span class='op'>=</span> <span class='fl'>0.09</span><span class='op'>)</span> <span class='op'>+</span>
   <span class='fu'><a href='algebraic.html'>algebraic</a></span><span class='op'>(</span><span class='va'>effect</span><span class='op'>~</span><span class='va'>emax</span><span class='op'>*</span><span class='va'>dose</span><span class='op'>/</span><span class='op'>(</span><span class='va'>ed50</span> <span class='op'>+</span> <span class='va'>dose</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
   <span class='fu'><a href='obs_proportional.html'>obs_proportional</a></span><span class='op'>(</span><span class='op'>~</span><span class='va'>effect</span>, var_prop <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
-
-<span class='co'># output all model parameter and eta variables</span>
-<span class='fu'><a href='render.html'>render</a></span><span class='op'>(</span><span class='va'>m</span>, tasks <span class='op'>=</span> <span class='fu'><a href='tsk_output.html'>tsk_output</a></span><span class='op'>(</span><span class='st'>"prms"</span>, variables <span class='op'>=</span> <span class='fu'>vars_prms</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>|</span> <span class='fu'>vars_eta</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+<span class='co'># output model parameters to file 'prms'</span>
+<span class='fu'><a href='render.html'>render</a></span><span class='op'>(</span><span class='va'>m</span>, tasks <span class='op'>=</span> <span class='fu'>tsk_output</span><span class='op'>(</span><span class='st'>"prms"</span>, variables <span class='op'>=</span> <span class='fu'><a href='model-variable-selection.html'>vars_prms</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $PROBLEM
 #&gt; $INPUT DOSE ID DV
 #&gt; $DATA data.csv IGNORE=@
@@ -221,7 +200,23 @@ selection of model variables:</p><ul>
 #&gt; ED50 = THETA(2) * EXP(ETA(2))
 #&gt; EFFECT = EMAX * DOSE/(ED50 + DOSE)
 #&gt; Y = EFFECT + EFFECT * EPS(1)
-#&gt; $TABLE EMAX ED50 ETA(1) ETA(2) FILE=prms NOAPPEND NOPRINT
+#&gt; $TABLE EMAX ED50 FILE=prms NOAPPEND NOPRINT
+#&gt; $THETA (0, 10, Inf) ; POP_EMAX
+#&gt; $THETA (0, 50, Inf) ; POP_ED50
+#&gt; $OMEGA 0.09 ; IIV_EMAX
+#&gt; $OMEGA 0.09 ; IIV_ED50
+#&gt; $SIGMA 1; RUV_PROP</div><div class='input'><span class='co'># output variables required by xpose4</span>
+<span class='fu'><a href='render.html'>render</a></span><span class='op'>(</span><span class='va'>m</span>, tasks <span class='op'>=</span> <span class='fu'>tsk_output_xpose4</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $PROBLEM
+#&gt; $INPUT DOSE ID DV
+#&gt; $DATA data.csv IGNORE=@
+#&gt; $PRED
+#&gt; EMAX = THETA(1) * EXP(ETA(1))
+#&gt; ED50 = THETA(2) * EXP(ETA(2))
+#&gt; EFFECT = EMAX * DOSE/(ED50 + DOSE)
+#&gt; Y = EFFECT + EFFECT * EPS(1)
+#&gt; $TABLE DV PRED RES WRES IPREDI IWRESI FILE=sdtab NOAPPEND NOPRINT
+#&gt; $TABLE EMAX ED50 ETA(1) ETA(2) FILE=patab NOAPPEND NOPRINT
 #&gt; $THETA (0, 10, Inf) ; POP_EMAX
 #&gt; $THETA (0, 50, Inf) ; POP_ED50
 #&gt; $OMEGA 0.09 ; IIV_EMAX

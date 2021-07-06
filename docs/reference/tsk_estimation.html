@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Model tasks — tsk_estimation • assemblerr</title>
+<title>Task estimation — tsk_estimation • assemblerr</title>
 
 
 <!-- jquery -->
@@ -39,16 +39,8 @@
 
 
 
-<meta property="og:title" content="Model tasks — tsk_estimation" />
-<meta property="og:description" content="These functions define model tasks that can be combined using + and then be included during rendering.
-tsk_estimation() adds a parameter estimation task allowing to specify
-the estimation algorithm to be used and whether a $COV step should be run.
-tsk_ouput() adds an output task allowing to display model variables
-in a table.
-tsk_ouput_xpose() adds several tables as output following the xpose4 output
-standard.
-
-" />
+<meta property="og:title" content="Task estimation — tsk_estimation" />
+<meta property="og:description" content="This function defines an estimation task allowing to specify the estimation algorithm, estimation options, and whether standard errors should be obtained." />
 
 
 
@@ -80,7 +72,7 @@ standard.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">assemblerr</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9007</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9008</span>
       </span>
     </div>
 
@@ -129,39 +121,23 @@ standard.
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Model tasks</h1>
+    <h1>Task estimation</h1>
     
     <div class="hidden name"><code>tsk_estimation.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>These functions define model tasks that can be combined using <code><a href='https://rdrr.io/r/base/Arithmetic.html'>+</a></code> and then be included during rendering.</p><ul>
-<li><p><code>tsk_estimation()</code> adds a parameter estimation task allowing to specify
-the estimation algorithm to be used and whether a $COV step should be run.</p></li>
-<li><p><code>tsk_ouput()</code> adds an output task allowing to display model variables
-in a table.</p></li>
-<li><p><code>tsk_ouput_xpose()</code> adds several tables as output following the xpose4 output
-standard.</p></li>
-</ul>
-
+    <p>This function defines an estimation task allowing to specify the estimation algorithm, estimation options, and whether standard errors should be obtained.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>tsk_estimation</span><span class='op'>(</span>
-  algorithm <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"foce"</span>, <span class='st'>"foce-inter"</span>, <span class='st'>"foce-no-inter"</span>, <span class='st'>"fo"</span>, <span class='st'>"imp"</span>, <span class='st'>"saem"</span><span class='op'>)</span>,
-  se <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  target_options <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>
-<span class='op'>)</span>
-
-<span class='fu'>tsk_output</span><span class='op'>(</span>filename <span class='op'>=</span> <span class='st'>"sdtab"</span>, <span class='va'>variables</span><span class='op'>)</span>
-
-<span class='fu'>tsk_output_xpose4</span><span class='op'>(</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>tsk_estimation</span><span class='op'>(</span>algorithm <span class='op'>=</span> <span class='st'>"foce"</span>, se <span class='op'>=</span> <span class='cn'>FALSE</span>, target_options <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>algorithm</th>
-      <td><p>The estimation algorithm to use for the task</p></td>
+      <td><p>The estimation algorithm to use for the task ("foce", "foce-inter", "foce-no-inter", "fo", "imp", "saem")</p></td>
     </tr>
     <tr>
       <th>se</th>
@@ -172,16 +148,73 @@ standard.</p></li>
       <td><p>List of additional options that should be passed to
 NONMEM</p></td>
     </tr>
-    <tr>
-      <th>filename</th>
-      <td><p>The filename for the output file</p></td>
-    </tr>
-    <tr>
-      <th>variables</th>
-      <td><p>The model variables that should be output</p></td>
-    </tr>
     </table>
 
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Tasks</h3>
+
+
+<p>Tasks are building blocks that allow to specify what a model should
+“do”. Like other model building blocks, they can be combined using
+the <code><a href='https://rdrr.io/r/base/Arithmetic.html'>+</a></code> operator. However, they should not be added to a model but
+rather provided via the <code>tasks=</code> argument to the render function, e.g.,<div class="r"></p><pre><span class='fu'><a href='render.html'>render</a></span><span class='op'>(</span><span class='va'>m</span>, tasks <span class='op'>=</span> <span class='fu'>tsk_estimation</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+   <span class='fu'><a href='tsk_output.html'>tsk_output_xpose4</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+</pre><p></div></p>
+
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Estimation tasks</h3>
+
+
+<p>Estimation tasks provide details on the parameter estimation process, in terms of estimation algorithm, estimation options and whether standard errors should be obtained.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Algorithm</h4>
+
+
+<p>The algorithm argument allows to select the estimation algorithm among the following options:</p><table class='table'>
+<tr><td></td><td></td></tr>
+<tr><td>foce</td><td>First-order conditional estimation with interaction detection</td></tr>
+<tr><td>foce-inter</td><td>First-order conditional estimation with interaction</td></tr>
+<tr><td>foce-no-inter</td><td>First-order conditional estimation without interaction</td></tr>
+<tr><td>fo</td><td>First-order estimation</td></tr>
+<tr><td>imp</td><td>Importance sampling</td></tr>
+<tr><td>saem</td><td>Stochastic approximation expectation maximization</td></tr>
+</table>
+
+
+
+<p>The default algorithm <code>"foce"</code> detects whether the observation model includes an epsilon-eta interaction and includes the <code>INTERACTION</code> option accordingly.
+The <code>foce-inter</code> option forces the use of the <code>INTERACTION</code> argument independent of the residual error model, <code>foce-no-inter</code> enforces no interaction.</p>
+<p>Each algorithm includes a set of default options that the package authors consider sensible defaults (for example <code>MAXEVAL=999999</code> for FOCE). These defaults can be
+overwritten using the <code>target_options=</code> argument which is described below.</p>
+
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Standard errors</h4>
+
+
+<p>The <code>se=</code> argument allows to request the calculation of parameter standard errors. When standard errors are requested (<code>se=TRUE</code>) it will results
+in the inclusion of the <code>$COVARIANCE</code> record in the generated control stream.</p>
+
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Target options</h4>
+
+
+<p>The <code>target_options=</code> argument provides a mechanism to specify additional estimation options for the selected algorithm. The options should be provided
+as a list, e.g.,</p><pre><span class='fu'>tsk_estimation</span><span class='op'>(</span>algorithm <span class='op'>=</span> <span class='st'>"foce"</span>, target_options <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>mceta<span class='op'>=</span><span class='fl'>100</span><span class='op'>)</span><span class='op'>)</span>
+</pre>
+
+<p>The provided options are passed verbatim to the target tool and not checked by assemblerr for correctness.</p>
+<p>The <code>target_options=</code> argument</p>
+
+
+
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Multiple estimation tasks</h3>
+
+
+<p>A sequence of estimation tasks can be specified in assemblerr by combining multiple estimations, for example<div class="r"></p><pre><span class='fu'><a href='render.html'>render</a></span><span class='op'>(</span><span class='va'>m</span>, tasks <span class='op'>=</span> <span class='fu'>tsk_estimation</span><span class='op'>(</span><span class='st'>"foce"</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'>tsk_estimation</span><span class='op'>(</span><span class='st'>"imp"</span><span class='op'>)</span><span class='op'>)</span>
+</pre><p></div></p>
+<p>will create model code that contains an FOCE as well as an importance sampling estimation step.</p>
+
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>Other tasks: 
+<code><a href='tsk_output.html'>tsk_output</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
@@ -210,29 +243,14 @@ NONMEM</p></td>
 #&gt; ED50 = THETA(2) * EXP(ETA(2))
 #&gt; EFFECT = EMAX * DOSE/(ED50 + DOSE)
 #&gt; Y = EFFECT + EFFECT * EPS(1)
-#&gt; $ESTIMATION METHOD=IMP AUTO=1 ISAMPLE=1000
+#&gt; $ESTIMATION METHOD=IMP AUTO=1 ISAMPLE=1000 
 #&gt; $COVARIANCE PRINT=E
 #&gt; $THETA (0, 10, Inf) ; POP_EMAX
 #&gt; $THETA (0, 50, Inf) ; POP_ED50
 #&gt; $OMEGA 0.09 ; IIV_EMAX
 #&gt; $OMEGA 0.09 ; IIV_ED50
 #&gt; $SIGMA 1; RUV_PROP</div><div class='input'>
-<span class='co'># output model parameters to file 'prms'</span>
-<span class='fu'><a href='render.html'>render</a></span><span class='op'>(</span><span class='va'>m</span>, tasks <span class='op'>=</span> <span class='fu'>tsk_output</span><span class='op'>(</span><span class='st'>"prms"</span>, variables <span class='op'>=</span> <span class='fu'><a href='model-variable-selection.html'>vars_prms</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $PROBLEM
-#&gt; $INPUT DOSE ID DV
-#&gt; $DATA data.csv IGNORE=@
-#&gt; $PRED
-#&gt; EMAX = THETA(1) * EXP(ETA(1))
-#&gt; ED50 = THETA(2) * EXP(ETA(2))
-#&gt; EFFECT = EMAX * DOSE/(ED50 + DOSE)
-#&gt; Y = EFFECT + EFFECT * EPS(1)
-#&gt; $TABLE EMAX ED50 FILE=prms NOAPPEND NOPRINT
-#&gt; $THETA (0, 10, Inf) ; POP_EMAX
-#&gt; $THETA (0, 50, Inf) ; POP_ED50
-#&gt; $OMEGA 0.09 ; IIV_EMAX
-#&gt; $OMEGA 0.09 ; IIV_ED50
-#&gt; $SIGMA 1; RUV_PROP</div></pre>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

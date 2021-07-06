@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">assemblerr</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9007</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9008</span>
       </span>
     </div>
 
@@ -81,7 +81,7 @@
       <h1 data-toc-skip>Getting started</h1>
                         <h4 class="author">Sebastian Ueckert</h4>
             
-            <h4 class="date">2021-06-17</h4>
+            <h4 class="date">2021-07-06</h4>
       
       
       <div class="hidden name"><code>getting-started.Rmd</code></div>
@@ -128,7 +128,7 @@
 <p>When you are done defining your model you can check whether it contains any issues using the <code><a href="https://rdrr.io/r/utils/PkgUtils.html">check()</a></code> function, e.g.,</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/PkgUtils.html">check</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></code></pre></div>
-<pre><code>## ! 1 issue</code></pre>
+<pre><code>## ! 1 critical issue</code></pre>
 <pre><code>##   1. Undefined variable 'dose' in algebraics</code></pre>
 <p>In this case, the model definition used the variable ‘dose’ without it being declared. You can tell assemblerr that dose is part of the dataset by modifying the model as follows:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -155,7 +155,7 @@
 ## ED50 = THETA(2) * EXP(ETA(1))
 ## EFFECT = EMAX * DOSE/(ED50 + DOSE)
 ## Y = EFFECT + EPS(1)
-## $ESTIMATION METHOD=COND MAXEVAL=999999
+## $ESTIMATION METHOD=COND MAXEVAL=999999 
 ## $THETA (0, 10, Inf) ; POP_EMAX
 ## $THETA (0, 50, Inf) ; POP_ED50
 ## $OMEGA 0.09 ; IIV_ED50
@@ -175,7 +175,7 @@
 ## ED50 = THETA(2) * EXP(ETA(1))
 ## EFFECT = EMAX * DOSE/(ED50 + DOSE)
 ## Y = EFFECT + EPS(1)
-## $ESTIMATION METHOD=COND MAXEVAL=999999
+## $ESTIMATION METHOD=COND MAXEVAL=999999 
 ## $THETA (0, 10, Inf) ; POP_EMAX
 ## $THETA (0, 50, Inf) ; POP_ED50
 ## $OMEGA 0.09 ; IIV_ED50
@@ -187,7 +187,7 @@
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/render.html">render</a></span><span class="op">(</span>
   <span class="va">m</span>, 
-  options <span class="op">=</span> <span class="fu">assemblerr_options</span><span class="op">(</span>
+  options <span class="op">=</span> <span class="fu"><a href="../reference/assemblerr_options.html">assemblerr_options</a></span><span class="op">(</span>
     prm.use_mu_referencing <span class="op">=</span> <span class="cn">TRUE</span>
   <span class="op">)</span>
 <span class="op">)</span></code></pre></div>
@@ -200,7 +200,7 @@
 ## ED50 = EXP(MU_1 + ETA(1))
 ## EFFECT = EMAX * DOSE/(ED50 + DOSE)
 ## Y = EFFECT + EPS(1)
-## $ESTIMATION METHOD=COND MAXEVAL=999999
+## $ESTIMATION METHOD=COND MAXEVAL=999999 
 ## $THETA (0, 10, Inf) ; POP_EMAX
 ## $THETA (0, 50, Inf) ; POP_ED50
 ## $OMEGA 0.09 ; IIV_ED50
@@ -222,7 +222,7 @@
 ## ED50 = THETA(2) * EXP(ETA(1))
 ## EFFECT = EMAX * DOSE/(ED50 + DOSE)
 ## Y = EFFECT + EPS(1)
-## $ESTIMATION METHOD=IMP AUTO=1
+## $ESTIMATION METHOD=IMP AUTO=1 
 ## $COVARIANCE PRINT=E
 ## $THETA (0, 10, Inf) ; POP_EMAX
 ## $THETA (0, 50, Inf) ; POP_ED50
@@ -232,7 +232,7 @@
 <p>You can combine multiple tasks using the <code><a href="https://rdrr.io/r/base/Arithmetic.html">+</a></code> operator. For example, you might want to estimate parameters and output the parameter values for all parameters in the model. The following code accomplishes this:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/render.html">render</a></span><span class="op">(</span><span class="va">m</span>, 
-       tasks <span class="op">=</span> <span class="fu"><a href="../reference/tsk_estimation.html">tsk_estimation</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/tsk_estimation.html">tsk_output</a></span><span class="op">(</span>filename <span class="op">=</span> <span class="st">"sdtab"</span>, variables <span class="op">=</span> <span class="fu"><a href="../reference/model-variable-selection.html">vars_prms</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+       tasks <span class="op">=</span> <span class="fu"><a href="../reference/tsk_estimation.html">tsk_estimation</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/tsk_output.html">tsk_output</a></span><span class="op">(</span>filename <span class="op">=</span> <span class="st">"sdtab"</span>, variables <span class="op">=</span> <span class="fu"><a href="../reference/model-variable-selection.html">vars_prms</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## $PROBLEM
 ## $INPUT DOSE ID DV
 ## $DATA data.csv IGNORE=@
@@ -241,13 +241,13 @@
 ## ED50 = THETA(2) * EXP(ETA(1))
 ## EFFECT = EMAX * DOSE/(ED50 + DOSE)
 ## Y = EFFECT + EPS(1)
-## $ESTIMATION METHOD=COND MAXEVAL=999999
+## $ESTIMATION METHOD=COND MAXEVAL=999999 
 ## $TABLE EMAX ED50 FILE=sdtab NOAPPEND NOPRINT
 ## $THETA (0, 10, Inf) ; POP_EMAX
 ## $THETA (0, 50, Inf) ; POP_ED50
 ## $OMEGA 0.09 ; IIV_ED50
 ## $SIGMA 1; RUV_ADD</code></pre>
-<p>In the previous example, you saw the variable selection helper <code><a href="../reference/model-variable-selection.html">vars_prms()</a></code> in action. Variable selection helpers allow you to specify what variables should be used in a table. You can read more about them in the documentation for the <code><a href="../reference/tsk_estimation.html">tsk_output()</a></code> function.</p>
+<p>In the previous example, you saw the variable selection helper <code><a href="../reference/model-variable-selection.html">vars_prms()</a></code> in action. Variable selection helpers allow you to specify what variables should be used in a table. You can read more about them in the documentation for the <code><a href="../reference/tsk_output.html">tsk_output()</a></code> function.</p>
 </div>
 <div id="ordinary-differential-equations" class="section level2">
 <h2 class="hasAnchor">
@@ -278,7 +278,7 @@
 ## $ERROR
 ## EFFECT = EMAX * (A(1)/V)/(EC50 + A(1)/V)
 ## Y = EFFECT + EPS(1)
-## $ESTIMATION METHOD=COND MAXEVAL=999999
+## $ESTIMATION METHOD=COND MAXEVAL=999999 
 ## $THETA (0, 100, Inf) ; POP_V
 ## $THETA (0, 10, Inf) ; POP_CL
 ## $THETA (0, 10, Inf) ; POP_EMAX
@@ -311,8 +311,8 @@
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/render.html">render</a></span><span class="op">(</span>
   model <span class="op">=</span> <span class="va">pkm</span>, 
-  tasks <span class="op">=</span> <span class="fu"><a href="../reference/tsk_estimation.html">tsk_estimation</a></span><span class="op">(</span><span class="st">"imp"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/tsk_estimation.html">tsk_output</a></span><span class="op">(</span><span class="st">"sdtab"</span>, variables <span class="op">=</span> <span class="fu"><a href="../reference/model-variable-selection.html">vars_prms</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,
-  options <span class="op">=</span> <span class="fu">assemblerr_options</span><span class="op">(</span>prm.use_mu_referencing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+  tasks <span class="op">=</span> <span class="fu"><a href="../reference/tsk_estimation.html">tsk_estimation</a></span><span class="op">(</span><span class="st">"imp"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/tsk_output.html">tsk_output</a></span><span class="op">(</span><span class="st">"sdtab"</span>, variables <span class="op">=</span> <span class="fu"><a href="../reference/model-variable-selection.html">vars_prms</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,
+  options <span class="op">=</span> <span class="fu"><a href="../reference/assemblerr_options.html">assemblerr_options</a></span><span class="op">(</span>prm.use_mu_referencing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="op">)</span></code></pre></div>
 <pre><code>## $PROBLEM
 ## $INPUT ID TIME DV AMT
@@ -330,7 +330,7 @@
 ## $ERROR
 ## CONC = A(2)/VC
 ## Y = CONC + EPS(1)
-## $ESTIMATION METHOD=IMP AUTO=1
+## $ESTIMATION METHOD=IMP AUTO=1 
 ## $TABLE MAT VC CL FILE=sdtab NOAPPEND NOPRINT
 ## $THETA (0, 0.5, Inf) ; POP_MAT
 ## $THETA (0, 100, Inf) ; POP_VC
@@ -361,7 +361,7 @@
 ## $ERROR
 ## CONC = A(2)/V1
 ## Y = CONC + EPS(1)
-## $ESTIMATION METHOD=COND MAXEVAL=999999
+## $ESTIMATION METHOD=COND MAXEVAL=999999 
 ## $THETA (0, 0.5, Inf) ; POP_MAT
 ## $THETA (0, 100, Inf) ; POP_V1
 ## $THETA (0, 50, Inf) ; POP_CL
@@ -393,7 +393,7 @@
 ## $ERROR
 ## CONC = A(2)/VC
 ## Y = CONC + EPS(1)
-## $ESTIMATION METHOD=COND MAXEVAL=999999
+## $ESTIMATION METHOD=COND MAXEVAL=999999 
 ## $THETA (0, 0.5, Inf) ; POP_MAT
 ## $THETA (0, 100, Inf) ; POP_VC
 ## $THETA (0, 50, Inf) ; POP_CL

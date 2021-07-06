@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Test if an expression is a valid LHS for a declaration — is_valid_lhs • assemblerr</title>
+<title>Options — assemblerr_options • assemblerr</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Test if an expression is a valid LHS for a declaration — is_valid_lhs" />
-<meta property="og:description" content="Test if an expression is a valid LHS for a declaration" />
+<meta property="og:title" content="Options — assemblerr_options" />
+<meta property="og:description" content="This function creates a list of options for the use with the render function." />
 
 
 
@@ -121,29 +121,62 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Test if an expression is a valid LHS for a declaration</h1>
+    <h1>Options</h1>
     
-    <div class="hidden name"><code>is_valid_lhs.Rd</code></div>
+    <div class="hidden name"><code>assemblerr_options.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Test if an expression is a valid LHS for a declaration</p>
+    <p>This function creates a list of options for the use with the render function.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>is_valid_lhs</span><span class='op'>(</span><span class='va'>expr</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>assemblerr_options</span><span class='op'>(</span>
+  prm.use_mu_referencing <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  ode.use_special_advans <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  ode.use_general_linear_advans <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  ode.general_nonlinear_advan <span class='op'>=</span> <span class='st'>"advan13"</span>,
+  ode.general_linear_advan <span class='op'>=</span> <span class='st'>"advan5"</span>,
+  ode.preferred_trans_routines <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"trans2"</span>, <span class='st'>"trans4"</span><span class='op'>)</span>,
+  issues.missing_variables <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"fix-warn"</span>, <span class='st'>"fix"</span>, <span class='st'>"ignore"</span>, <span class='st'>"fail"</span><span class='op'>)</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>expr</th>
-      <td><p>an expression</p></td>
+      <th>prm.use_mu_referencing</th>
+      <td><p>Use mu-referencing?</p></td>
+    </tr>
+    <tr>
+      <th>ode.use_special_advans</th>
+      <td><p>Use analytic solution ADVANs?</p></td>
+    </tr>
+    <tr>
+      <th>ode.use_general_linear_advans</th>
+      <td><p>Use ADVANs for linear ODEs?</p></td>
+    </tr>
+    <tr>
+      <th>ode.general_nonlinear_advan</th>
+      <td><p>ADVAN to be used for non-linear ODEs</p></td>
+    </tr>
+    <tr>
+      <th>ode.general_linear_advan</th>
+      <td><p>ADVAN to be used for linear ODEs</p></td>
+    </tr>
+    <tr>
+      <th>ode.preferred_trans_routines</th>
+      <td><p>Order of TRANS routines to be tried</p></td>
+    </tr>
+    <tr>
+      <th>issues.missing_variables</th>
+      <td><p>How to handle missing variables</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>TRUE/FALSE</p>
+    <p>The function helps to create properly formatted list that can serve as input to the <code>options=</code> argument
+of the <code><a href='render.html'>render()</a></code> function.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

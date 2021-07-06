@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">assemblerr</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9007</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9008</span>
       </span>
     </div>
 
@@ -81,7 +81,7 @@
       <h1 data-toc-skip>Introduction</h1>
                         <h4 class="author">Sebastian Ueckert</h4>
             
-            <h4 class="date">2021-06-17</h4>
+            <h4 class="date">2021-07-06</h4>
       
       
       <div class="hidden name"><code>introduction.rmd</code></div>
@@ -149,7 +149,7 @@
 ## $ERROR
 ## CONC = A(2)/VC
 ## Y = CONC + EPS(1)
-## $ESTIMATION METHOD=COND MAXEVAL=999999
+## $ESTIMATION METHOD=COND MAXEVAL=999999 
 ## $THETA (0, 1, Inf) ; POP_MAT
 ## $THETA (0, 1, Inf) ; POP_VC
 ## $THETA (0, 1, Inf) ; POP_CL
@@ -179,7 +179,7 @@
 ## $ERROR
 ## CONC = A(2)/VC
 ## Y = CONC + EPS(1)
-## $ESTIMATION METHOD=COND MAXEVAL=999999
+## $ESTIMATION METHOD=COND MAXEVAL=999999 
 ## $THETA (0, 0.5, Inf) ; POP_MAT
 ## $THETA (0, 100, Inf) ; POP_VC
 ## $THETA (0, 50, Inf) ; POP_CL
@@ -244,7 +244,7 @@
 <dt>PK components</dt>
 <dd>Defines pharmacokinetic model components for absorption, distribution and elimination
 </dd>
-<dd>Functions: pk_absorption_fo, pk_absorption_fo_lag, pk_absorption_fo_transit, pk_absorption_fo_zo, pk_absorption_zo, pk_absorption_zo_lag, pk_distribution_1cmp, pk_distribution_2cmp, pk_distribution_3cmp, pk_elimination_linear, pk_elimination_linear_mm, pk_elimination_mm, pk_elimination_nl, pk_model
+<dd>Functions: pk_absorption_fo, pk_absorption_fo_lag, pk_absorption_fo_transit, pk_absorption_fo_zo, pk_absorption_zo, pk_absorption_zo_lag, pk_distribution_1cmp, pk_distribution_2cmp, pk_distribution_3cmp, pk_elimination_linear, pk_elimination_linear_nl, pk_elimination_mm, pk_elimination_nl, pk_model
 </dd>
 <dd>Example: <code>pk_elimination_linear()</code>
 </dd>
@@ -272,10 +272,10 @@
 <div id="options" class="section level3">
 <h3 class="hasAnchor">
 <a href="#options" class="anchor"></a>Options</h3>
-<p>Some aspectes to the rendering process can be controlled using the <code>options</code> argument. It is best used in conjunction with the <code>assemblerr_options()</code> function. For example, the following snippet produces a mu-referenced version of the model m.</p>
+<p>Some aspectes to the rendering process can be controlled using the <code>options</code> argument. It is best used in conjunction with the <code><a href="../reference/assemblerr_options.html">assemblerr_options()</a></code> function. For example, the following snippet produces a mu-referenced version of the model m.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/render.html">render</a></span><span class="op">(</span><span class="va">m</span>, 
-       options <span class="op">=</span> <span class="fu">assemblerr_options</span><span class="op">(</span>prm.use_mu_referencing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+       options <span class="op">=</span> <span class="fu"><a href="../reference/assemblerr_options.html">assemblerr_options</a></span><span class="op">(</span>prm.use_mu_referencing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>writes the NMTRAN code for the provided model to the console</p>
 <p>The translation of the specified model to NMTRAN is controlled via arguments to the render function. By default the function will output the NMTRAN code to the console, unless the <code>filename</code> argument is specified, in which case the model will be written to the requested file.</p>
 </div>
