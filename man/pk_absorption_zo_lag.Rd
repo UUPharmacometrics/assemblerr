@@ -11,6 +11,8 @@ pk_absorption_zo_lag(
 }
 \arguments{
 \item{prm_mat}{Parameter building block}
+
+\item{prm_mdt}{Parameter building block}
 }
 \value{
 An absorption building block

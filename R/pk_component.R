@@ -785,6 +785,7 @@ setMethod(
 #' Zero-order absorption with lag-time model
 #'
 #' @param prm_mat Parameter building block
+#' @param prm_mdt Parameter building block
 #'
 #' @return  An absorption building block
 #' @family PK absorption models
