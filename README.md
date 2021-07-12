@@ -5,10 +5,6 @@
 
 <!-- badges: start -->
 
-[![Travis build
-status](https://travis-ci.org/UUPharmacometrics/assemblerr.svg?branch=master)](https://travis-ci.org/UUPharmacometrics/assemblerr)
-[![Codecov test
-coverage](https://codecov.io/gh/UUPharmacometrics/assemblerr/branch/master/graph/badge.svg)](https://codecov.io/gh/UUPharmacometrics/assemblerr?branch=master)
 <!-- badges: end -->
 
 assemblerr is an R package to construct pharmacometric models by
@@ -48,20 +44,22 @@ m <- model() +
 
 ``` r
 render(m) 
+#> Warning: Undefined variables added
+#> x The variables 'time' and 'amt' were not defined and have been added as input variables.
 #> $PROBLEM
-#> $INPUT ID TIME DV AMT
+#> $INPUT TIME AMT ID DV
 #> $DATA data.csv IGNORE=@
 #> $PRED
 #> V = THETA(1) * EXP(ETA(1))
 #> CL = THETA(2) * EXP(ETA(2))
 #> CONC = AMT/V * EXP(-CL/V * TIME)
 #> Y = CONC + EPS(1)
-#> $ESTIMATION METHOD=COND INTERACTION
+#> $ESTIMATION METHOD=COND MAXEVAL=999999 
 #> $THETA (0, 1, Inf) ; POP_V
 #> $THETA (0, 1, Inf) ; POP_CL
-#> $OMEGA 0.1; IIV_V
-#> $OMEGA 0.1; IIV_CL
-#> $SIGMA 0.1; RUV_ADD
+#> $OMEGA 0.1 ; IIV_V
+#> $OMEGA 0.1 ; IIV_CL
+#> $SIGMA 1; RUV_ADD
 ```
 
 ## Learning more

@@ -16,8 +16,7 @@ knitr::opts_chunk$set(
 # assemblerr
 
 <!-- badges: start -->
-[![Travis build status](https://travis-ci.org/UUPharmacometrics/assemblerr.svg?branch=master)](https://travis-ci.org/UUPharmacometrics/assemblerr)
-[![Codecov test coverage](https://codecov.io/gh/UUPharmacometrics/assemblerr/branch/master/graph/badge.svg)](https://codecov.io/gh/UUPharmacometrics/assemblerr?branch=master)
+
 <!-- badges: end -->
 
 
