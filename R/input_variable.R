@@ -38,15 +38,36 @@ setMethod(
   }
 )
 
+#' Input variables
+#'
+#' These building block declare input variables, i.e., variables that are defined in the dataset.
+#'
+#' An input variable is defined in the dataset and is declared so that it can be used in the rest of the model definition. The function
+#' `input_variable()` declares a single variable whereas the `dataset()` function reads the header of the file provided and
+#' declares all variables found.
+#'
+#' @param name Variable name
+#'
 #' @export
+#' @examples
+#' m <- model() +
+#'     input_variable("dose") +
+#'     prm_log_normal("emax") +
+#'     prm_log_normal("ed50") +
+#'     obs_additive(eff~emax*dose/(ed50+dose))
+#' render(m)
+#' @md
+#' @rdname input_variables
 input_variable <- function(name){
   if (!is.character(name)) stop("'name' needs to be a character vector")
   InputVariable(name = name)
 }
 
+#' @param path Dataset path
 #' @importFrom utils read.csv
 #' @importFrom utils read.table
 #' @export
+#' @rdname input_variables
 dataset <- function(path){
   if (grepl(".csv$",path)) {
     tab <- read.csv(path, header = TRUE, nrows = 1, check.names = FALSE)

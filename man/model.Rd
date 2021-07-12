@@ -21,7 +21,7 @@ blocks are relevant for this model type:
 \item Algebraic relationships: \link{algebraic}
 \item Compartments: \link{compartment}
 \item Flows: \link{flow}
-\item Input variables: \link{input_variable}
+\item Input variables: \link{input_variable}, \link{dataset}
 }
 
 The more specialized \code{\link[=pk_model]{pk_model()}} is converted to a general model during the rendering process.

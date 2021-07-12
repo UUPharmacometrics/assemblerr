@@ -54,7 +54,7 @@ setMethod(
 #'   * Algebraic relationships: [algebraic]
 #'   * Compartments: [compartment]
 #'   * Flows: [flow]
-#'   * Input variables: [input_variable]
+#'   * Input variables: [input_variable], [dataset]
 #'
 #' The more specialized [pk_model()] is converted to a general model during the rendering process.
 #'
