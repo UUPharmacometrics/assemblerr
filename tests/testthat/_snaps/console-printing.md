@@ -362,57 +362,6 @@
 ---
 
     Code
-      pk_model() + pk_distribution_1cmp() + pk_elimination_mm() + pk_absorption_fo() +
-        obs_additive(~C["central"])
-    Warning <warning>
-      Function deprecated
-      x `pk_elimination_mm` has been deprecated
-      i Please use `pk_elimination_nl` instead
-    Output
-      # an assemblerr pk_model 
-        parameters: vc, clmm, km, and mat
-        algebraics: none
-        pk components: 1 cmp, nonlinear elim., and FO abs.
-        observations: `. ~ C["central"]` (additive)
-      # ...2 more facets 
-
----
-
-    Code
-      pk_model() + pk_distribution_2cmp() + pk_elimination_mm() + pk_absorption_fo() +
-        obs_additive(~C["central"])
-    Warning <warning>
-      Function deprecated
-      x `pk_elimination_mm` has been deprecated
-      i Please use `pk_elimination_nl` instead
-    Output
-      # an assemblerr pk_model 
-        parameters: vc, vp, q, clmm, km, and mat
-        algebraics: none
-        pk components: 2 cmp, nonlinear elim., and FO abs.
-        observations: `. ~ C["central"]` (additive)
-      # ...2 more facets 
-
----
-
-    Code
-      pk_model() + pk_distribution_3cmp() + pk_elimination_mm() + pk_absorption_fo() +
-        obs_additive(~C["central"])
-    Warning <warning>
-      Function deprecated
-      x `pk_elimination_mm` has been deprecated
-      i Please use `pk_elimination_nl` instead
-    Output
-      # an assemblerr pk_model 
-        parameters: vc, vp1, vp2, q1, q2, clmm, km, and mat
-        algebraics: none
-        pk components: 3 cmp, nonlinear elim., and FO abs.
-        observations: `. ~ C["central"]` (additive)
-      # ...2 more facets 
-
----
-
-    Code
       pk_model() + pk_distribution_1cmp() + pk_elimination_nl() + pk_absorption_fo() +
         obs_additive(~C["central"])
     Output
@@ -524,57 +473,6 @@
         parameters: vc, vp1, vp2, q1, q2, cllin, vmax, km, mdt, and mat
         algebraics: none
         pk components: 3 cmp, lin. + nonlin. elim., and FO abs. lag-time
-        observations: `. ~ C["central"]` (additive)
-      # ...2 more facets 
-
----
-
-    Code
-      pk_model() + pk_distribution_1cmp() + pk_elimination_mm() +
-        pk_absorption_fo_lag() + obs_additive(~C["central"])
-    Warning <warning>
-      Function deprecated
-      x `pk_elimination_mm` has been deprecated
-      i Please use `pk_elimination_nl` instead
-    Output
-      # an assemblerr pk_model 
-        parameters: vc, clmm, km, mdt, and mat
-        algebraics: none
-        pk components: 1 cmp, nonlinear elim., and FO abs. lag-time
-        observations: `. ~ C["central"]` (additive)
-      # ...2 more facets 
-
----
-
-    Code
-      pk_model() + pk_distribution_2cmp() + pk_elimination_mm() +
-        pk_absorption_fo_lag() + obs_additive(~C["central"])
-    Warning <warning>
-      Function deprecated
-      x `pk_elimination_mm` has been deprecated
-      i Please use `pk_elimination_nl` instead
-    Output
-      # an assemblerr pk_model 
-        parameters: vc, vp, q, clmm, km, mdt, and mat
-        algebraics: none
-        pk components: 2 cmp, nonlinear elim., and FO abs. lag-time
-        observations: `. ~ C["central"]` (additive)
-      # ...2 more facets 
-
----
-
-    Code
-      pk_model() + pk_distribution_3cmp() + pk_elimination_mm() +
-        pk_absorption_fo_lag() + obs_additive(~C["central"])
-    Warning <warning>
-      Function deprecated
-      x `pk_elimination_mm` has been deprecated
-      i Please use `pk_elimination_nl` instead
-    Output
-      # an assemblerr pk_model 
-        parameters: vc, vp1, vp2, q1, q2, clmm, km, mdt, and mat
-        algebraics: none
-        pk components: 3 cmp, nonlinear elim., and FO abs. lag-time
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
@@ -698,57 +596,6 @@
 ---
 
     Code
-      pk_model() + pk_distribution_1cmp() + pk_elimination_mm() +
-        pk_absorption_fo_transit() + obs_additive(~C["central"])
-    Warning <warning>
-      Function deprecated
-      x `pk_elimination_mm` has been deprecated
-      i Please use `pk_elimination_nl` instead
-    Output
-      # an assemblerr pk_model 
-        parameters: vc, clmm, km, mdt, and mat
-        algebraics: none
-        pk components: 1 cmp, nonlinear elim., and FO abs. transit-cmps(1)
-        observations: `. ~ C["central"]` (additive)
-      # ...2 more facets 
-
----
-
-    Code
-      pk_model() + pk_distribution_2cmp() + pk_elimination_mm() +
-        pk_absorption_fo_transit() + obs_additive(~C["central"])
-    Warning <warning>
-      Function deprecated
-      x `pk_elimination_mm` has been deprecated
-      i Please use `pk_elimination_nl` instead
-    Output
-      # an assemblerr pk_model 
-        parameters: vc, vp, q, clmm, km, mdt, and mat
-        algebraics: none
-        pk components: 2 cmp, nonlinear elim., and FO abs. transit-cmps(1)
-        observations: `. ~ C["central"]` (additive)
-      # ...2 more facets 
-
----
-
-    Code
-      pk_model() + pk_distribution_3cmp() + pk_elimination_mm() +
-        pk_absorption_fo_transit() + obs_additive(~C["central"])
-    Warning <warning>
-      Function deprecated
-      x `pk_elimination_mm` has been deprecated
-      i Please use `pk_elimination_nl` instead
-    Output
-      # an assemblerr pk_model 
-        parameters: vc, vp1, vp2, q1, q2, clmm, km, mdt, and mat
-        algebraics: none
-        pk components: 3 cmp, nonlinear elim., and FO abs. transit-cmps(1)
-        observations: `. ~ C["central"]` (additive)
-      # ...2 more facets 
-
----
-
-    Code
       pk_model() + pk_distribution_1cmp() + pk_elimination_nl() +
         pk_absorption_fo_transit() + obs_additive(~C["central"])
     Output
@@ -860,57 +707,6 @@
         parameters: vc, vp1, vp2, q1, q2, cllin, vmax, km, mat, and mdt
         algebraics: none
         pk components: 3 cmp, lin. + nonlin. elim., and FO abs. ZO delay
-        observations: `. ~ C["central"]` (additive)
-      # ...2 more facets 
-
----
-
-    Code
-      pk_model() + pk_distribution_1cmp() + pk_elimination_mm() + pk_absorption_fo_zo() +
-        obs_additive(~C["central"])
-    Warning <warning>
-      Function deprecated
-      x `pk_elimination_mm` has been deprecated
-      i Please use `pk_elimination_nl` instead
-    Output
-      # an assemblerr pk_model 
-        parameters: vc, clmm, km, mat, and mdt
-        algebraics: none
-        pk components: 1 cmp, nonlinear elim., and FO abs. ZO delay
-        observations: `. ~ C["central"]` (additive)
-      # ...2 more facets 
-
----
-
-    Code
-      pk_model() + pk_distribution_2cmp() + pk_elimination_mm() + pk_absorption_fo_zo() +
-        obs_additive(~C["central"])
-    Warning <warning>
-      Function deprecated
-      x `pk_elimination_mm` has been deprecated
-      i Please use `pk_elimination_nl` instead
-    Output
-      # an assemblerr pk_model 
-        parameters: vc, vp, q, clmm, km, mat, and mdt
-        algebraics: none
-        pk components: 2 cmp, nonlinear elim., and FO abs. ZO delay
-        observations: `. ~ C["central"]` (additive)
-      # ...2 more facets 
-
----
-
-    Code
-      pk_model() + pk_distribution_3cmp() + pk_elimination_mm() + pk_absorption_fo_zo() +
-        obs_additive(~C["central"])
-    Warning <warning>
-      Function deprecated
-      x `pk_elimination_mm` has been deprecated
-      i Please use `pk_elimination_nl` instead
-    Output
-      # an assemblerr pk_model 
-        parameters: vc, vp1, vp2, q1, q2, clmm, km, mat, and mdt
-        algebraics: none
-        pk components: 3 cmp, nonlinear elim., and FO abs. ZO delay
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
@@ -1034,57 +830,6 @@
 ---
 
     Code
-      pk_model() + pk_distribution_1cmp() + pk_elimination_mm() + pk_absorption_zo() +
-        obs_additive(~C["central"])
-    Warning <warning>
-      Function deprecated
-      x `pk_elimination_mm` has been deprecated
-      i Please use `pk_elimination_nl` instead
-    Output
-      # an assemblerr pk_model 
-        parameters: vc, clmm, km, and mat
-        algebraics: none
-        pk components: 1 cmp, nonlinear elim., and ZO abs.
-        observations: `. ~ C["central"]` (additive)
-      # ...2 more facets 
-
----
-
-    Code
-      pk_model() + pk_distribution_2cmp() + pk_elimination_mm() + pk_absorption_zo() +
-        obs_additive(~C["central"])
-    Warning <warning>
-      Function deprecated
-      x `pk_elimination_mm` has been deprecated
-      i Please use `pk_elimination_nl` instead
-    Output
-      # an assemblerr pk_model 
-        parameters: vc, vp, q, clmm, km, and mat
-        algebraics: none
-        pk components: 2 cmp, nonlinear elim., and ZO abs.
-        observations: `. ~ C["central"]` (additive)
-      # ...2 more facets 
-
----
-
-    Code
-      pk_model() + pk_distribution_3cmp() + pk_elimination_mm() + pk_absorption_zo() +
-        obs_additive(~C["central"])
-    Warning <warning>
-      Function deprecated
-      x `pk_elimination_mm` has been deprecated
-      i Please use `pk_elimination_nl` instead
-    Output
-      # an assemblerr pk_model 
-        parameters: vc, vp1, vp2, q1, q2, clmm, km, and mat
-        algebraics: none
-        pk components: 3 cmp, nonlinear elim., and ZO abs.
-        observations: `. ~ C["central"]` (additive)
-      # ...2 more facets 
-
----
-
-    Code
       pk_model() + pk_distribution_1cmp() + pk_elimination_nl() + pk_absorption_zo() +
         obs_additive(~C["central"])
     Output
@@ -1196,57 +941,6 @@
         parameters: vc, vp1, vp2, q1, q2, cllin, vmax, km, mat, and mdt
         algebraics: none
         pk components: 3 cmp, lin. + nonlin. elim., and ZO abs. lag-time
-        observations: `. ~ C["central"]` (additive)
-      # ...2 more facets 
-
----
-
-    Code
-      pk_model() + pk_distribution_1cmp() + pk_elimination_mm() +
-        pk_absorption_zo_lag() + obs_additive(~C["central"])
-    Warning <warning>
-      Function deprecated
-      x `pk_elimination_mm` has been deprecated
-      i Please use `pk_elimination_nl` instead
-    Output
-      # an assemblerr pk_model 
-        parameters: vc, clmm, km, mat, and mdt
-        algebraics: none
-        pk components: 1 cmp, nonlinear elim., and ZO abs. lag-time
-        observations: `. ~ C["central"]` (additive)
-      # ...2 more facets 
-
----
-
-    Code
-      pk_model() + pk_distribution_2cmp() + pk_elimination_mm() +
-        pk_absorption_zo_lag() + obs_additive(~C["central"])
-    Warning <warning>
-      Function deprecated
-      x `pk_elimination_mm` has been deprecated
-      i Please use `pk_elimination_nl` instead
-    Output
-      # an assemblerr pk_model 
-        parameters: vc, vp, q, clmm, km, mat, and mdt
-        algebraics: none
-        pk components: 2 cmp, nonlinear elim., and ZO abs. lag-time
-        observations: `. ~ C["central"]` (additive)
-      # ...2 more facets 
-
----
-
-    Code
-      pk_model() + pk_distribution_3cmp() + pk_elimination_mm() +
-        pk_absorption_zo_lag() + obs_additive(~C["central"])
-    Warning <warning>
-      Function deprecated
-      x `pk_elimination_mm` has been deprecated
-      i Please use `pk_elimination_nl` instead
-    Output
-      # an assemblerr pk_model 
-        parameters: vc, vp1, vp2, q1, q2, clmm, km, mat, and mdt
-        algebraics: none
-        pk components: 3 cmp, nonlinear elim., and ZO abs. lag-time
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 

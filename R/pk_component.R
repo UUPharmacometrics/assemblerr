@@ -391,28 +391,6 @@ pk_elimination_linear <- function(prm_cl = prm_log_normal("cl", median = 50, var
 }
 
 
-# elimination Michaelis Menten ------------------------------------------------------
-
-
-#' @export
-pk_elimination_mm <- function(prm_clmm = prm_log_normal("clmm", median = 50, var_log = 0.1),
-                              prm_km = prm_log_normal("km", median = 0.5, var_log = 0.1)) {
-  rlang::warn(
-    c("Function deprecated",
-      x = "`pk_elimination_mm` has been deprecated",
-      i = "Please use `pk_elimination_nl` instead")
-  )
-  PkEliminationNL(
-    parameters = list(
-      clmm = prm_clmm,
-      km = prm_km
-    )
-  ) +
-    prm_clmm +
-    prm_km
-}
-
-
 # elimination non-linear --------------------------------------------------
 
 

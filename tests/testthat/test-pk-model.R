@@ -129,7 +129,7 @@ test_that("1cmp nonlinear", {
     expect_contains("CONC = A(1)/VC") %>%
     expect_contains("Y = CONC + EPS(1)")
 
-  expect_warning(pk_elimination_mm())
+
   expect_warning(pk_elimination_nl(prm_clmm = prm_log_normal("clmm"), prm_vmax = prm_log_normal("vmax")))
 })
 

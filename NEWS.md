@@ -1,6 +1,7 @@
 # assemblerr (development version)
 * automatically rename variables with conflicting capitalization (e.g., emax and EMAX)
 * rename `pk_elimination_linear_mm()` to `pk_elimination_linear_nl()`
+* remove `pk_elimination_mm()`
 
 # assemblerr 0.0.0.9008
 * extended help for the building blocks: parameter, observation, compartment, flow 
