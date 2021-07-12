@@ -16,15 +16,49 @@ This building block declares a one compartment distribution component for a phar
 }
 \details{
 \subsection{PK components}{
-\subsection{Parameter models}{
+
+PK components can be added to a \link{pk_model} and exist in
+three different types: absorption, distribution, and elimination. The
+absorption component is optional, distribution and elimination are not
+and need to be added for the PK model to be valid.
+
+A PK model can only have one component of each type and adding a
+component with an already existing type will replace the previous
+definition. For example, the distribution component will be a two
+compartment model in the following snippet:\preformatted{pkm <- pk_model() +
+  pk_absorption_fo() +
+  pk_distribution_1cmp() +
+  pk_distribution_2cmp() +
+  pk_elimination_linear() +
+  obs_additive(conc~C["central"]) 
+pkm
+}
 }
 
+\subsection{Parameter models}{
+
+All PK component functions allow the specification of the parameter
+model via their arguments. Arguments that refer to a parameter start
+with the prefix \code{prm_}. The default parameter model can be deduced from
+the default arguments in the usage section of the help entry. The
+parameter name, specified via the \verb{name=} argument of the parameter
+model building block allows the renaming of the model parameters.
+
+For example, the parameter \verb{prm_vc=} refers to the central volumen of
+distribution parameter in the one compartment distribution PK component
+and the default parameter model is a log-normal distribution. The
+follwing code block specifies a normal distribution parameter model and
+names the parameter \code{v}:\preformatted{pk_distribution_1cmp(
+    prm_vc = prm_normal("v", mean = 50, var = 25)
+)
+}
 }
 }
 \seealso{
 \code{\link[=pk_model]{pk_model()}} for the creation of PK models
 
 Other distribution components: 
-\code{\link{pk_distribution_2cmp}()}
+\code{\link{pk_distribution_2cmp}()},
+\code{\link{pk_distribution_3cmp}()}
 }
 \concept{distribution components}

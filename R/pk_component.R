@@ -213,7 +213,7 @@ setMethod(
   }
 )
 
-#' PK distribution 2 compartment
+#' PK distribution 2 compartments
 #'
 #' This building block declares a two compartment distribution component for a pharmacokinetic model.
 #'
@@ -295,6 +295,20 @@ setMethod(
   }
 )
 
+#' PK distribution 3 compartments
+#'
+#' This building block declares a three compartment distribution component for a pharmacokinetic model.
+#'
+#' @includeRmd man/rmd/pk-component.Rmd
+#'
+#' @param prm_vc Parameter model for the central volume of distribution
+#' @param prm_vp1 Parameter model for the volume of the first peripheral compartment
+#' @param prm_vp2 Parameter model for the volume of the second peripheral compartment
+#' @param prm_q1 Parameter model for the inter-compartmental clearance between central and first peripheral compartment
+#' @param prm_q2 Parameter model for the inter-compartmental clearance between central and second peripheral compartment
+#' @family distribution components
+#' @seealso [pk_model()] for the creation of PK models
+#' @md
 #' @export
 pk_distribution_3cmp <- function(
   prm_vc = prm_log_normal("vc", median = 100, var_log = 0.1),
