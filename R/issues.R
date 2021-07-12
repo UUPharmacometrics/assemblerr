@@ -85,6 +85,11 @@ setMethod(
 
 
 
+#' Auxiliary Function for Sorting and Ranking
+#'
+#' @param x an R Object
+#'
+#' @keywords internal
 setMethod(
   f = "xtfrm",
   signature = "IssueList",
@@ -117,3 +122,36 @@ setMethod(
   definition = function(x, class) purrr::discard(x, ~is(.x, class)) %>%
     as("IssueList")
 )
+
+#' Checking for issues
+#'
+#' This function checks a model for existing issues.
+#'
+#' The function accepts a model object and returns a list of issues that can help to identify problems in a model.
+#' If no issues are found, a message and an empty list are produced. Issues can either be critical or non-critical,
+#' depending on whether a valid model could still be rendered.
+#'
+#' The function currently detects the following issues:
+#'   - Undefined variables
+#'   - Lack of parameters
+#'   - Lack of observations
+#'   - Lack of distribution/elimination components (pk_model)
+#'   - Inconsistent capitalization of variable names
+#'
+#' @param model Model to check
+#'
+#' @md
+#' @examples
+#' m <- model() +
+#'     prm_log_normal("emax") +
+#'     prm_log_normal("ed50") +
+#'     obs_additive(eff~emax*dose/(ed50+dose))
+#' check(m)
+#'
+#' # fix issue
+#' m <- m + input_variable("dose")
+#' check(m)
+#' @export
+check <- function(model) {
+  check_component(model)
+}

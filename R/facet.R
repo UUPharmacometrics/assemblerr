@@ -127,14 +127,14 @@ setMethod(
   }
 )
 
-#'@export
+
 setGeneric(
-  name = "check",
-  def = function(x, ...) standardGeneric("check")
+  name = "check_component",
+  def = function(x, ...) standardGeneric("check_component")
 )
 
 setMethod(
-  f = "check",
+  f = "check_component",
   signature = signature(x = "Facet"),
   definition = function(x, ...) {
     return(IssueList())
@@ -278,10 +278,10 @@ setClass("GenericModel",
          contains = "Fragment")
 
 setMethod(
-  f = "check",
+  f = "check_component",
   signature = signature(x = "GenericModel"),
   definition = function(x) {
-    issues <- purrr::map(x@facets, check, model = x) %>%
+    issues <- purrr::map(x@facets, check_component, model = x) %>%
       purrr::reduce( c, .init = IssueList())
 
     vars <- defined_variables(x)
@@ -442,7 +442,7 @@ setMethod(
   definition = function(object) {
     compact_description(object) %>%
       print_tdesc_as_list()
-    issues <- check(object)
+    issues <- check_component(object)
     if (length(issues) > 0) {
       cli::cli_text("{length(issues)} issue{?s}")
     }

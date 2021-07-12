@@ -70,7 +70,7 @@ render <- function(model,
                    options = assemblerr_options()) {
   model_arg_label <- rlang::as_label(rlang::enexpr(model))
   if (target_tool == "nonmem") {
-    issues <- check(model)
+    issues <- check_component(model)
     if ("MissingVariableIssue" %in% issue_types(issues)) {
       if (options$issues.missing_variables %in% c("fix", "fix-warn")) {
         model <- add_missing_variables(
@@ -103,7 +103,7 @@ render <- function(model,
       rlang::abort(
         c("Critical issues found",
           x = interp("The model contains {length(issues)} issue{?s} that need to be fixed before rendering it."),
-          i = interp("Get a list of issue by running: `check({model_arg_label})`")
+          i = interp("Get a list of issue by running: `check_component({model_arg_label})`")
         )
       )
     }

@@ -15,7 +15,7 @@ ObservationFacet <- setClass("ObservationFacet",
                           ))
 
 setMethod(
-  f = "check",
+  f = "check_component",
   signature = signature(x = "ObservationFacet"),
   definition = function(x, model) {
     issues <- c(

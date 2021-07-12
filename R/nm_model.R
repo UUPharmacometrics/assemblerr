@@ -211,7 +211,7 @@ setMethod(
   }
 )
 
-#' @export
+
 nm_input <- function(name, type = NA_character_){
   if (!is.character(name)) stop("'name' needs to be a character vector")
   NmInputEntry(name = name, type = type)
@@ -529,7 +529,7 @@ setMethod(
 )
 
 
-#' @export
+
 nm_estimation <- function(method = "cond", interaction = TRUE, maxeval = 999999L, auto = NA, target_options = list()){
   NmEstimationRecord(
     method = method,
@@ -555,7 +555,7 @@ NmCovarianceStepFacet <- setClass(
   prototype = prototype(entry_class = "NmCovarianceStepOption", name = "covariance")
 )
 
-#' @export
+
 nm_covariance <- function(print = 'E', matrix = NULL){
   NmCovarianceStepFacet(options = list(print = print, matrix = matrix))
 }

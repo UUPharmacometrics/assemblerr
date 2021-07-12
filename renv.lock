@@ -65,6 +65,13 @@
       "Repository": "CRAN",
       "Hash": "6d80a9fc3c0c8473153b54fa54719dfd"
     },
+    "cpp11": {
+      "Package": "cpp11",
+      "Version": "0.2.7",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "730eebcc741a5c36761f7d4d0f5e37b8"
+    },
     "crayon": {
       "Package": "crayon",
       "Version": "1.3.4",
@@ -100,6 +107,13 @@
       "Repository": "CRAN",
       "Hash": "496dd262e1ec64e452151479a74c972f"
     },
+    "downlit": {
+      "Package": "downlit",
+      "Version": "0.2.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "f24f1e44320a978c03050b8403a83793"
+    },
     "ellipsis": {
       "Package": "ellipsis",
       "Version": "0.3.1",
@@ -120,6 +134,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "b31d9e5d051553d1177083aeba04b5b9"
+    },
+    "fs": {
+      "Package": "fs",
+      "Version": "1.5.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "44594a07a42e5f91fac9f93fda6d0109"
     },
     "glue": {
       "Package": "glue",
@@ -191,6 +212,13 @@
       "Repository": "CRAN",
       "Hash": "6e05029d16b0df430ab2d31d151a3ac2"
     },
+    "memoise": {
+      "Package": "memoise",
+      "Version": "1.1.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "58baa74e4603fcfb9a94401c58c8f9b1"
+    },
     "mime": {
       "Package": "mime",
       "Version": "0.6",
@@ -225,6 +253,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "01f28d4278f15c76cddbea05899c5d6f"
+    },
+    "pkgdown": {
+      "Package": "pkgdown",
+      "Version": "1.6.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "8896076540d9e9b556a2ec658c81f916"
     },
     "pkgload": {
       "Package": "pkgload",
@@ -267,6 +302,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "97def703420c8ab10d8f0e6c72101e02"
+    },
+    "ragg": {
+      "Package": "ragg",
+      "Version": "1.1.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "663065eff8c6c08eaa9955c6f478ee7a"
     },
     "rematch2": {
       "Package": "rematch2",
@@ -342,12 +384,26 @@
       "Repository": "CRAN",
       "Hash": "22319ae218b22b9a14d5e7ecbf841703"
     },
-    "testthat": {
-      "Package": "testthat",
-      "Version": "3.0.2",
+    "systemfonts": {
+      "Package": "systemfonts",
+      "Version": "1.0.2",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "495e0434d9305716b6a87031570ce109"
+      "Hash": "f2e17ba09737e2e7e2ec40fc1f9b6e08"
+    },
+    "testthat": {
+      "Package": "testthat",
+      "Version": "3.0.4",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "575216c9946ca70016c3ffb9c31709ba"
+    },
+    "textshaping": {
+      "Package": "textshaping",
+      "Version": "0.3.5",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "6bb7e974b464fe72f192e51b4dab67f2"
     },
     "tibble": {
       "Package": "tibble",
@@ -355,6 +411,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "71dffd8544691c520dd8e41ed2d7e070"
+    },
+    "tidyselect": {
+      "Package": "tidyselect",
+      "Version": "1.1.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "7243004a708d06d4716717fa1ff5b2fe"
     },
     "tinytex": {
       "Package": "tinytex",
@@ -384,6 +447,13 @@
       "Repository": "CRAN",
       "Hash": "29df52c781e572c967f90de9713423c4"
     },
+    "whisker": {
+      "Package": "whisker",
+      "Version": "0.4",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "ca970b96d894e90397ed20637a0c1bbe"
+    },
     "withr": {
       "Package": "withr",
       "Version": "2.3.0",
@@ -397,6 +467,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "282591aae26bebda7ed5bc256bb7d896"
+    },
+    "xml2": {
+      "Package": "xml2",
+      "Version": "1.3.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "d4d71a75dd3ea9eb5fa28cc21f9585e2"
     },
     "yaml": {
       "Package": "yaml",

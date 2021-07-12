@@ -16,7 +16,7 @@ ParameterFacet <- setClass("ParameterFacet",
 
 
 setMethod(
-  f = "check",
+  f = "check_component",
   signature = signature(x = "ParameterFacet"),
   definition = function(x, ...) {
     if (vec_is_empty(x@entries)) {

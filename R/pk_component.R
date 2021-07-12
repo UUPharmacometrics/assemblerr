@@ -73,7 +73,7 @@ setMethod(
 
 
 setMethod(
-  f = "check",
+  f = "check_component",
   signature = signature(x = "PkComponentFacet"),
   definition = function(x, ...) {
     issues <- IssueList()

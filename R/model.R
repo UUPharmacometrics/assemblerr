@@ -28,7 +28,7 @@ setMethod(
       child_type = "facet{?s}",
       show = c("ParameterFacet", "AlgebraicFacet", "CompartmentFacet", "FlowFacet", "ObservationFacet")
     )
-    print_issues_warning(check(object))
+    print_issues_warning(check_component(object))
   }
 )
 
@@ -75,7 +75,7 @@ model <- function(){
 setOldClass("model")
 
 setMethod(
-  f = "check",
+  f = "check_component",
   signature = signature(x = "Model"),
   definition = function(x, ...) {
     issues <- c(IssueList(),

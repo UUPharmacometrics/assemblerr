@@ -23,7 +23,7 @@ CompartmentFacet <- setClass(
 )
 
 setMethod(
-  f = "check",
+  f = "check_component",
   signature = "CompartmentFacet",
   definition = function(x, model, ...) {
     issues <- c(
@@ -129,7 +129,7 @@ setMethod(
 )
 
 setMethod(
-  f = "check",
+  f = "check_component",
   signature = "FlowFacet",
   definition = function(x, model, ...) {
     issues <- c(

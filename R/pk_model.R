@@ -28,7 +28,7 @@ setMethod(
       child_type = "facet{?s}",
       show = c("PkComponentFacet","ParameterFacet", "AlgebraicFacet", "ObservationFacet")
     )
-    print_issues_warning(check(object))
+    print_issues_warning(check_component(object))
   }
 )
 

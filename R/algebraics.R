@@ -35,7 +35,7 @@ setMethod(
 )
 
 setMethod(
-  f = "check",
+  f = "check_component",
   signature = signature(x = "AlgebraicFacet"),
   definition = function(x, model) {
     issues <- c(IssueList(),
