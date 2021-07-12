@@ -370,6 +370,16 @@ setMethod(
   }
 )
 
+#' PK elimination linear
+#'
+#' This building block declares a linear elimination component for a pharmacokinetic model.
+#'
+#' @includeRmd man/rmd/pk-component.Rmd
+#'
+#' @param prm_cl Parameter model for the clearance
+#' @family elimination components
+#' @seealso [pk_model()] for the creation of PK models
+#' @md
 #' @export
 pk_elimination_linear <- function(prm_cl = prm_log_normal("cl", median = 50, var_log = 0.1)) {
   PkEliminationLinear(
@@ -442,6 +452,18 @@ setMethod(
   }
 )
 
+#' PK elimination nonlinear
+#'
+#' This building block declares a nonlinear elimination component for a pharmacokinetic model.
+#'
+#' @includeRmd man/rmd/pk-component.Rmd
+#'
+#' @param prm_clmm Parameter model for the clearance
+#' @param prm_km Parameter model for KM (the half-maximal concentration)
+#' @param prm_vmax Parameter model for Vmax (the maximal elimination rate)
+#' @family elimination components
+#' @seealso [pk_model()] for the creation of PK models
+#' @md
 #' @export
 pk_elimination_nl <- function(prm_clmm = prm_log_normal("clmm", median = 25, var_log = 0.1),
                               prm_km = prm_log_normal("km", median = 0.5, var_log = 0.1),
@@ -504,6 +526,18 @@ setMethod(
   }
 )
 
+#' PK elimination linear & nonlinear
+#'
+#' This building block declares a mixed linear and nonlinear elimination component for a pharmacokinetic model.
+#'
+#' @includeRmd man/rmd/pk-component.Rmd
+#'
+#' @param prm_cllin Parameter model for the linear clearance
+#' @param prm_vmax Parameter model for Vmax (the maximal elimination rate)
+#' @param prm_km Parameter model for KM (the half-maximal concentration)
+#' @family elimination components
+#' @seealso [pk_model()] for the creation of PK models
+#' @md
 #' @export
 pk_elimination_linear_nl <- function(prm_cllin = prm_log_normal("cllin", median = 50, var_log = 0.1),
                               prm_vmax = prm_log_normal("vmax", median = 10, var_log = 0.1),
