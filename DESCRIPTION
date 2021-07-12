@@ -48,7 +48,6 @@ Imports:
     rlang,
     magrittr,
     methods,
-    stats,
     glue,
     vctrs (>= 0.3.4),
     cli (>= 2.1.0),
