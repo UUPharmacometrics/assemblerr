@@ -5,6 +5,7 @@
 
 <!-- badges: start -->
 
+[![R-CMD-check](https://github.com/UUPharmacometrics/assemblerr/workflows/R-CMD-check/badge.svg)](https://github.com/UUPharmacometrics/assemblerr/actions)
 <!-- badges: end -->
 
 assemblerr is an R package to construct pharmacometric models by
