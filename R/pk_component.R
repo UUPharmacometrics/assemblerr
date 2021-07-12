@@ -567,6 +567,16 @@ setMethod(
   }
 )
 
+#' PK absorption first-order
+#'
+#' This building block declares a first-order absorption component for a pharmacokinetic model.
+#'
+#' @includeRmd man/rmd/pk-component.Rmd
+#'
+#' @param prm_mat Parameter model for the mean absorption time (MAT)
+#' @family absorption components
+#' @seealso [pk_model()] for the creation of PK models
+#' @md
 #' @export
 pk_absorption_fo <- function(prm_mat = prm_log_normal("mat", median = 0.5, var_log = 0.1)){
   PkAbsorptionFO(
@@ -618,6 +628,17 @@ setMethod(
   }
 )
 
+#' PK absorption first-order, lag-time
+#'
+#' This building block declares a first-order absorption with lag-time component for a pharmacokinetic model.
+#'
+#' @includeRmd man/rmd/pk-component.Rmd
+#'
+#' @param prm_mat Parameter model for the mean absorption time (MAT)
+#' @param prm_mdt Parameter model for the mean delay time (MDT)
+#' @family absorption components
+#' @seealso [pk_model()] for the creation of PK models
+#' @md
 #' @export
 pk_absorption_fo_lag <- function(prm_mat = prm_log_normal("mat", median = 0.5, var_log = 0.1),
                                  prm_mdt = prm_log_normal("mdt", median = 0.5, var_log = 0.1)) {
@@ -681,6 +702,19 @@ setMethod(
   }
 )
 
+#' PK absorption first-order, transit compartment
+#'
+#' This building block declares a first-order absorption with transit compartments component for
+#' a pharmacokinetic model.
+#'
+#' @includeRmd man/rmd/pk-component.Rmd
+#'
+#' @param prm_mat Parameter model for the mean absorption time (MAT)
+#' @param transit_compartments Number of transit compartments
+#' @param prm_mdt Parameter model for the mean delay time (MDT)
+#' @family absorption components
+#' @seealso [pk_model()] for the creation of PK models
+#' @md
 #' @export
 pk_absorption_fo_transit <- function(prm_mat = prm_log_normal("mat", median = 0.5, var_log = 0.1),
                                      transit_compartments = 1L,
@@ -728,12 +762,17 @@ setMethod(
   }
 )
 
-#' Zero-order absorption model
+#' PK absorption zero-order
 #'
-#' @param prm_mat Parameter building block
+#' This building block declares a zero-order absorption component for
+#' a pharmacokinetic model.
 #'
-#' @return An absorption building block
-#' @family PK absorption models
+#' @includeRmd man/rmd/pk-component.Rmd
+#'
+#' @param prm_mat Parameter model for the mean absorption time (MAT)
+#' @family absorption components
+#' @seealso [pk_model()] for the creation of PK models
+#' @md
 #' @export
 pk_absorption_zo <- function(prm_mat = prm_log_normal("mat", median = 0.5, var_log = 0.1)) {
   PkAbsorptionZO(
@@ -782,13 +821,17 @@ setMethod(
   }
 )
 
-#' Zero-order absorption with lag-time model
+#' PK absorption zero-order, lag-time
 #'
-#' @param prm_mat Parameter building block
-#' @param prm_mdt Parameter building block
+#' This building block declares a zero-order absorption with lag-time component for a pharmacokinetic model.
 #'
-#' @return  An absorption building block
-#' @family PK absorption models
+#' @includeRmd man/rmd/pk-component.Rmd
+#'
+#' @param prm_mat Parameter model for the mean absorption time (MAT)
+#' @param prm_mdt Parameter model for the mean delay time (MDT)
+#' @family absorption components
+#' @seealso [pk_model()] for the creation of PK models
+#' @md
 #' @export
 pk_absorption_zo_lag <- function(prm_mat = prm_log_normal("mat", median = 0.5, var_log = 0.1),
                                  prm_mdt = prm_log_normal("mdt", median = 0.5, var_log = 0.1)) {
@@ -838,6 +881,18 @@ setMethod(
   }
 )
 
+#' PK absorption first-order, zero-order delay
+#'
+#' This building block declares a first-order absorption with zero-order delay component
+#' for a pharmacokinetic model.
+#'
+#' @includeRmd man/rmd/pk-component.Rmd
+#'
+#' @param prm_mat Parameter model for the mean absorption time (MAT)
+#' @param prm_mdt Parameter model for the mean delay time (MDT)
+#' @family absorption components
+#' @seealso [pk_model()] for the creation of PK models
+#' @md
 #' @export
 pk_absorption_fo_zo <- function(prm_mat = prm_log_normal("mat", median = 0.5, var_log = 0.1),
                                 prm_mdt = prm_log_normal("mdt", median = 0.5, var_log = 0.1)) {

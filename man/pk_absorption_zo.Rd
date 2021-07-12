@@ -2,21 +2,65 @@
 % Please edit documentation in R/pk_component.R
 \name{pk_absorption_zo}
 \alias{pk_absorption_zo}
-\title{Zero-order absorption model}
+\title{PK absorption zero-order}
 \usage{
 pk_absorption_zo(prm_mat = prm_log_normal("mat", median = 0.5, var_log = 0.1))
 }
 \arguments{
-\item{prm_mat}{Parameter building block}
-}
-\value{
-An absorption building block
+\item{prm_mat}{Parameter model for the mean absorption time (MAT)}
 }
 \description{
-Zero-order absorption model
+This building block declares a zero-order absorption component for
+a pharmacokinetic model.
+}
+\details{
+\subsection{PK components}{
+
+PK components can be added to a \link{pk_model} and exist in
+three different types: absorption, distribution, and elimination. The
+absorption component is optional, distribution and elimination are not
+and need to be added for the PK model to be valid.
+
+A PK model can only have one component of each type and adding a
+component with an already existing type will replace the previous
+definition. For example, the distribution component will be a two
+compartment model in the following snippet:\preformatted{pkm <- pk_model() +
+  pk_absorption_fo() +
+  pk_distribution_1cmp() +
+  pk_distribution_2cmp() +
+  pk_elimination_linear() +
+  obs_additive(conc~C["central"]) 
+pkm
+}
+}
+
+\subsection{Parameter models}{
+
+All PK component functions allow the specification of the parameter
+model via their arguments. Arguments that refer to a parameter start
+with the prefix \code{prm_}. The default parameter model can be deduced from
+the default arguments in the usage section of the help entry. The
+parameter name, specified via the \verb{name=} argument of the parameter
+model building block allows the renaming of the model parameters.
+
+For example, the parameter \verb{prm_vc=} refers to the central volumen of
+distribution parameter in the one compartment distribution PK component
+and the default parameter model is a log-normal distribution. The
+follwing code block specifies a normal distribution parameter model and
+names the parameter \code{v}:\preformatted{pk_distribution_1cmp(
+    prm_vc = prm_normal("v", mean = 50, var = 25)
+)
+}
+}
 }
 \seealso{
-Other PK absorption models: 
+\code{\link[=pk_model]{pk_model()}} for the creation of PK models
+
+Other absorption components: 
+\code{\link{pk_absorption_fo_lag}()},
+\code{\link{pk_absorption_fo_transit}()},
+\code{\link{pk_absorption_fo_zo}()},
+\code{\link{pk_absorption_fo}()},
 \code{\link{pk_absorption_zo_lag}()}
 }
-\concept{PK absorption models}
+\concept{absorption components}
