@@ -65,7 +65,14 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/UUPharmacometrics/assemblerr/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -81,9 +88,9 @@
       <h1 data-toc-skip>Getting started</h1>
                         <h4 class="author">Sebastian Ueckert</h4>
             
-            <h4 class="date">2021-07-06</h4>
+            <h4 class="date">2021-07-19</h4>
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/UUPharmacometrics/assemblerr/blob/master/vignettes/getting-started.Rmd"><code>vignettes/getting-started.Rmd</code></a></small>
       <div class="hidden name"><code>getting-started.Rmd</code></div>
 
     </div>
@@ -125,18 +132,18 @@
 <div id="check-and-modify" class="section level2">
 <h2 class="hasAnchor">
 <a href="#check-and-modify" class="anchor"></a>Check and modify</h2>
-<p>When you are done defining your model you can check whether it contains any issues using the <code><a href="https://rdrr.io/r/utils/PkgUtils.html">check()</a></code> function, e.g.,</p>
+<p>When you are done defining your model you can check whether it contains any issues using the <code><a href="../reference/check.html">check()</a></code> function, e.g.,</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/PkgUtils.html">check</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/check.html">check</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></code></pre></div>
 <pre><code>## ! 1 critical issue</code></pre>
 <pre><code>##   1. Undefined variable 'dose' in algebraics</code></pre>
 <p>In this case, the model definition used the variable ‘dose’ without it being declared. You can tell assemblerr that dose is part of the dataset by modifying the model as follows:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">m</span> <span class="op">&lt;-</span> <span class="va">m</span> <span class="op">+</span> 
-  <span class="fu">input_variable</span><span class="op">(</span><span class="st">"dose"</span><span class="op">)</span></code></pre></div>
+  <span class="fu"><a href="../reference/input_variable.html">input_variable</a></span><span class="op">(</span><span class="st">"dose"</span><span class="op">)</span></code></pre></div>
 <p>Now, the check function does not find any issues:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/PkgUtils.html">check</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/check.html">check</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></code></pre></div>
 <pre><code>## ✓ No issues</code></pre>
 <p>You can also replace an already existing building block by adding a new one with the same name. For example, the following code updates the parameter model for the Emax parameter to one without variability:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -296,9 +303,9 @@
 <p>For PK models, assemblerr supports building blocks with a higher level of abstraction. The following snippet assembles a one-compartment model with linear elimination:</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pkm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pk_model.html">pk_model</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">pk_absorption_fo</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/pk_absorption_fo.html">pk_absorption_fo</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="../reference/pk_distribution_1cmp.html">pk_distribution_1cmp</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">pk_elimination_linear</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/pk_elimination_linear.html">pk_elimination_linear</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="../reference/obs_additive.html">obs_additive</a></span><span class="op">(</span><span class="va">conc</span><span class="op">~</span><span class="va">C</span><span class="op">[</span><span class="st">"central"</span><span class="op">]</span><span class="op">)</span> </code></pre></div>
 <p>You can see how <code><a href="../reference/pk_model.html">pk_model()</a></code> instead of <code><a href="../reference/model.html">model()</a></code> was used as a constructor. The resulting model objects accepts building blocks such as:</p>
 <ul>
@@ -342,9 +349,9 @@
 <p>PK model building blocks come with a default parameter model for their parameters. You can change the default by providing the parameter model as an argument to the building blocks. For example, if you want to have no variability on the volume of distribution, you could use the following code (note also how VC was renamed to V1):</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pkm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pk_model.html">pk_model</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">pk_absorption_fo</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/pk_absorption_fo.html">pk_absorption_fo</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="../reference/pk_distribution_1cmp.html">pk_distribution_1cmp</a></span><span class="op">(</span>prm_vc <span class="op">=</span> <span class="fu"><a href="../reference/prm_no_var.html">prm_no_var</a></span><span class="op">(</span><span class="st">"v1"</span>, value <span class="op">=</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">pk_elimination_linear</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/pk_elimination_linear.html">pk_elimination_linear</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="../reference/obs_additive.html">obs_additive</a></span><span class="op">(</span><span class="va">conc</span><span class="op">~</span><span class="va">C</span><span class="op">[</span><span class="st">"central"</span><span class="op">]</span><span class="op">)</span> 
 
 <span class="fu"><a href="../reference/render.html">render</a></span><span class="op">(</span><span class="va">pkm</span><span class="op">)</span></code></pre></div>
@@ -371,9 +378,9 @@
 <p>Alternatively, you can overwrite the default parameter model by adding a another one with the same name, i.e., :</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pkm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pk_model.html">pk_model</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">pk_absorption_fo</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/pk_absorption_fo.html">pk_absorption_fo</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="../reference/pk_distribution_1cmp.html">pk_distribution_1cmp</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">pk_elimination_linear</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/pk_elimination_linear.html">pk_elimination_linear</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="../reference/prm_no_var.html">prm_no_var</a></span><span class="op">(</span><span class="st">"vc"</span>, value <span class="op">=</span> <span class="fl">100</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="../reference/obs_additive.html">obs_additive</a></span><span class="op">(</span><span class="va">conc</span><span class="op">~</span><span class="va">C</span><span class="op">[</span><span class="st">"central"</span><span class="op">]</span><span class="op">)</span> </code></pre></div>
 <pre><code>## Warning: Building block replaced

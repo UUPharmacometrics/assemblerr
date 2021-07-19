@@ -107,7 +107,12 @@
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/UUPharmacometrics/assemblerr/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -122,7 +127,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>General model</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/UUPharmacometrics/assemblerr/blob/master/R/model.R'><code>R/model.R</code></a></small>
     <div class="hidden name"><code>model.Rd</code></div>
     </div>
 
@@ -145,14 +150,14 @@ blocks are relevant for this model type:</p><ul>
 <li><p>Algebraic relationships: <a href='algebraic.html'>algebraic</a></p></li>
 <li><p>Compartments: <a href='compartment.html'>compartment</a></p></li>
 <li><p>Flows: <a href='flow.html'>flow</a></p></li>
-<li><p>Input variables: input_variable</p></li>
+<li><p>Input variables: <a href='input_variable.html'>input_variable</a>, <a href='input_variable.html'>dataset</a></p></li>
 </ul>
 
 <p>The more specialized <code><a href='pk_model.html'>pk_model()</a></code> is converted to a general model during the rendering process.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'>model</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
-    <span class='fu'>input_variable</span><span class='op'>(</span><span class='st'>"dose"</span><span class='op'>)</span> <span class='op'>+</span>
+    <span class='fu'><a href='input_variable.html'>input_variable</a></span><span class='op'>(</span><span class='st'>"dose"</span><span class='op'>)</span> <span class='op'>+</span>
     <span class='fu'><a href='prm_log_normal.html'>prm_log_normal</a></span><span class='op'>(</span><span class='st'>"emax"</span><span class='op'>)</span> <span class='op'>+</span>
     <span class='fu'><a href='prm_log_normal.html'>prm_log_normal</a></span><span class='op'>(</span><span class='st'>"ed50"</span><span class='op'>)</span> <span class='op'>+</span>
     <span class='fu'><a href='obs_additive.html'>obs_additive</a></span><span class='op'>(</span><span class='va'>eff</span><span class='op'>~</span><span class='va'>emax</span><span class='op'>*</span><span class='va'>dose</span><span class='op'>/</span><span class='op'>(</span><span class='va'>ed50</span><span class='op'>+</span><span class='va'>dose</span><span class='op'>)</span><span class='op'>)</span>

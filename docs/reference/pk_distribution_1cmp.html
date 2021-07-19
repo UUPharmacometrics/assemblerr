@@ -107,7 +107,12 @@
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/UUPharmacometrics/assemblerr/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -122,7 +127,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>PK distribution 1 compartment</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/UUPharmacometrics/assemblerr/blob/master/R/pk_component.R'><code>R/pk_component.R</code></a></small>
     <div class="hidden name"><code>pk_distribution_1cmp.Rd</code></div>
     </div>
 
@@ -148,17 +153,49 @@
     
 <h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>PK components</h3>
 
-<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Parameter models</h4>
+
+<p>PK components can be added to a <a href='pk_model.html'>pk_model</a> and exist in
+three different types: absorption, distribution, and elimination. The
+absorption component is optional, distribution and elimination are not
+and need to be added for the PK model to be valid.</p>
+<p>A PK model can only have one component of each type and adding a
+component with an already existing type will replace the previous
+definition. For example, the distribution component will be a two
+compartment model in the following snippet:</p><pre><span class='va'>pkm</span> <span class='op'>&lt;-</span> <span class='fu'><a href='pk_model.html'>pk_model</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='pk_absorption_fo.html'>pk_absorption_fo</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>pk_distribution_1cmp</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='pk_distribution_2cmp.html'>pk_distribution_2cmp</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='pk_elimination_linear.html'>pk_elimination_linear</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='obs_additive.html'>obs_additive</a></span><span class='op'>(</span><span class='va'>conc</span><span class='op'>~</span><span class='va'>C</span><span class='op'>[</span><span class='st'>"central"</span><span class='op'>]</span><span class='op'>)</span> 
+<span class='va'>pkm</span>
+</pre>
 
 
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Parameter models</h3>
 
+
+<p>All PK component functions allow the specification of the parameter
+model via their arguments. Arguments that refer to a parameter start
+with the prefix <code>prm_</code>. The default parameter model can be deduced from
+the default arguments in the usage section of the help entry. The
+parameter name, specified via the <code>name=</code> argument of the parameter
+model building block allows the renaming of the model parameters.</p>
+<p>For example, the parameter <code>prm_vc=</code> refers to the central volumen of
+distribution parameter in the one compartment distribution PK component
+and the default parameter model is a log-normal distribution. The
+follwing code block specifies a normal distribution parameter model and
+names the parameter <code>v</code>:</p><pre><span class='fu'>pk_distribution_1cmp</span><span class='op'>(</span>
+    prm_vc <span class='op'>=</span> <span class='fu'><a href='prm_normal.html'>prm_normal</a></span><span class='op'>(</span><span class='st'>"v"</span>, mean <span class='op'>=</span> <span class='fl'>50</span>, var <span class='op'>=</span> <span class='fl'>25</span><span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
 
 
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='pk_model.html'>pk_model()</a></code> for the creation of PK models</p>
 <p>Other distribution components: 
-<code><a href='pk_distribution_2cmp.html'>pk_distribution_2cmp</a>()</code></p></div>
+<code><a href='pk_distribution_2cmp.html'>pk_distribution_2cmp</a>()</code>,
+<code><a href='pk_distribution_3cmp.html'>pk_distribution_3cmp</a>()</code></p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Observation with additive error — obs_additive • assemblerr</title>
+<title>PK absorption first-order, transit compartment — pk_absorption_fo_transit • assemblerr</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,9 @@
 
 
 
-<meta property="og:title" content="Observation with additive error — obs_additive" />
-<meta property="og:description" content="This building block declares an observation model with an additive residual error model (\(y = f + \epsilon_1\))." />
+<meta property="og:title" content="PK absorption first-order, transit compartment — pk_absorption_fo_transit" />
+<meta property="og:description" content="This building block declares a first-order absorption with transit compartments component for
+a pharmacokinetic model." />
 
 
 
@@ -126,88 +127,91 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Observation with additive error</h1>
-    <small class="dont-index">Source: <a href='https://github.com/UUPharmacometrics/assemblerr/blob/master/R/observation.R'><code>R/observation.R</code></a></small>
-    <div class="hidden name"><code>obs_additive.Rd</code></div>
+    <h1>PK absorption first-order, transit compartment</h1>
+    <small class="dont-index">Source: <a href='https://github.com/UUPharmacometrics/assemblerr/blob/master/R/pk_component.R'><code>R/pk_component.R</code></a></small>
+    <div class="hidden name"><code>pk_absorption_fo_transit.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This building block declares an observation model with an additive residual error model (\(y = f + \epsilon_1\)).</p>
+    <p>This building block declares a first-order absorption with transit compartments component for
+a pharmacokinetic model.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>obs_additive</span><span class='op'>(</span><span class='va'>prediction</span>, <span class='va'>name</span>, var_add <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>pk_absorption_fo_transit</span><span class='op'>(</span>
+  prm_mat <span class='op'>=</span> <span class='fu'><a href='prm_log_normal.html'>prm_log_normal</a></span><span class='op'>(</span><span class='st'>"mat"</span>, median <span class='op'>=</span> <span class='fl'>0.5</span>, var_log <span class='op'>=</span> <span class='fl'>0.1</span><span class='op'>)</span>,
+  transit_compartments <span class='op'>=</span> <span class='fl'>1L</span>,
+  prm_mdt <span class='op'>=</span> <span class='fu'><a href='prm_log_normal.html'>prm_log_normal</a></span><span class='op'>(</span><span class='st'>"mdt"</span>, median <span class='op'>=</span> <span class='fl'>0.5</span>, var_log <span class='op'>=</span> <span class='fl'>0.1</span><span class='op'>)</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>prediction</th>
-      <td><p>A definition of the model prediction</p></td>
+      <th>prm_mat</th>
+      <td><p>Parameter model for the mean absorption time (MAT)</p></td>
     </tr>
     <tr>
-      <th>name</th>
-      <td><p>A name for the observation (automatically derived if missing)</p></td>
+      <th>transit_compartments</th>
+      <td><p>Number of transit compartments</p></td>
     </tr>
     <tr>
-      <th>var_add</th>
-      <td><p>Variance of the additive error</p></td>
+      <th>prm_mdt</th>
+      <td><p>Parameter model for the mean delay time (MDT)</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Observation models specify the observed variable, how an observation is
-expected to diverge from the model (i.e, the residual unexplained
-variability model), and parameter values. The observation model type is
-selected through the function name. The observed variable as well as the
-parameters are specified as function arguments.</p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Specifying predictions</h3>
+    
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>PK components</h3>
 
 
-<p>The actual prediction from the model is the first argument of the
-function. It can be specified in a number of different ways:</p><ul>
-<li><p>A name of a variable in the model: <code>obs_additive("effect")</code></p></li>
-<li><p>A compartment concentration: <code>obs_additive(~C["central"])</code></p></li>
-<li><p>An equation: <code>obs_additive(~base+slp*time)</code></p></li>
-</ul>
-
-<p>If the definition contains a variable name on the left-hand side (as in
-<code>conc~C["central"]</code>), the variable will appear in the generated model
-code. This can be useful to make the model code more readable if the
-prediction is defined as a long equation.</p>
-
-<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Observation names</h3>
-
-
-<p>The observation name can be specified via the <code>name=</code> argument and is
-automatically derived if the argument is left empty. Adding an
-observation model with an already existing name will replace the
-previous definition.</p>
-
-<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Error variance</h3>
+<p>PK components can be added to a <a href='pk_model.html'>pk_model</a> and exist in
+three different types: absorption, distribution, and elimination. The
+absorption component is optional, distribution and elimination are not
+and need to be added for the PK model to be valid.</p>
+<p>A PK model can only have one component of each type and adding a
+component with an already existing type will replace the previous
+definition. For example, the distribution component will be a two
+compartment model in the following snippet:</p><pre><span class='va'>pkm</span> <span class='op'>&lt;-</span> <span class='fu'><a href='pk_model.html'>pk_model</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='pk_absorption_fo.html'>pk_absorption_fo</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='pk_distribution_1cmp.html'>pk_distribution_1cmp</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='pk_distribution_2cmp.html'>pk_distribution_2cmp</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='pk_elimination_linear.html'>pk_elimination_linear</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='obs_additive.html'>obs_additive</a></span><span class='op'>(</span><span class='va'>conc</span><span class='op'>~</span><span class='va'>C</span><span class='op'>[</span><span class='st'>"central"</span><span class='op'>]</span><span class='op'>)</span> 
+<span class='va'>pkm</span>
+</pre>
 
 
-<p>The variance of the error components are specified via the <code>var_add=</code>
-and <code>var_prop=</code> arguments of the function.</p>
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Parameter models</h3>
+
+
+<p>All PK component functions allow the specification of the parameter
+model via their arguments. Arguments that refer to a parameter start
+with the prefix <code>prm_</code>. The default parameter model can be deduced from
+the default arguments in the usage section of the help entry. The
+parameter name, specified via the <code>name=</code> argument of the parameter
+model building block allows the renaming of the model parameters.</p>
+<p>For example, the parameter <code>prm_vc=</code> refers to the central volumen of
+distribution parameter in the one compartment distribution PK component
+and the default parameter model is a log-normal distribution. The
+follwing code block specifies a normal distribution parameter model and
+names the parameter <code>v</code>:</p><pre><span class='fu'><a href='pk_distribution_1cmp.html'>pk_distribution_1cmp</a></span><span class='op'>(</span>
+    prm_vc <span class='op'>=</span> <span class='fu'><a href='prm_normal.html'>prm_normal</a></span><span class='op'>(</span><span class='st'>"v"</span>, mean <span class='op'>=</span> <span class='fl'>50</span>, var <span class='op'>=</span> <span class='fl'>25</span><span class='op'>)</span>
+<span class='op'>)</span>
+</pre>
+
 
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other observation models: 
-<code><a href='obs_combined.html'>obs_combined</a>()</code>,
-<code><a href='obs_proportional.html'>obs_proportional</a>()</code></p></div>
+    <div class='dont-index'><p><code><a href='pk_model.html'>pk_model()</a></code> for the creation of PK models</p>
+<p>Other absorption components: 
+<code><a href='pk_absorption_fo_lag.html'>pk_absorption_fo_lag</a>()</code>,
+<code><a href='pk_absorption_fo_zo.html'>pk_absorption_fo_zo</a>()</code>,
+<code><a href='pk_absorption_fo.html'>pk_absorption_fo</a>()</code>,
+<code><a href='pk_absorption_zo_lag.html'>pk_absorption_zo_lag</a>()</code>,
+<code><a href='pk_absorption_zo.html'>pk_absorption_zo</a>()</code></p></div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># additve RUV model for observing the variable WT</span>
-<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='model.html'>model</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'><a href='prm_log_normal.html'>prm_log_normal</a></span><span class='op'>(</span><span class='st'>"wt"</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'>obs_additive</span><span class='op'>(</span><span class='op'>~</span><span class='va'>wt</span><span class='op'>)</span>
-
-<span class='co'># EMAX dose-response model with proportional RUV</span>
-<span class='va'>m2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='model.html'>model</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'><a href='input_variable.html'>input_variable</a></span><span class='op'>(</span><span class='st'>"dose"</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'><a href='prm_no_var.html'>prm_no_var</a></span><span class='op'>(</span><span class='st'>"emax"</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'><a href='prm_no_var.html'>prm_no_var</a></span><span class='op'>(</span><span class='st'>"ed50"</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'><a href='obs_proportional.html'>obs_proportional</a></span><span class='op'>(</span><span class='va'>effect</span><span class='op'>~</span><span class='va'>emax</span><span class='op'>*</span><span class='va'>dose</span><span class='op'>/</span><span class='op'>(</span><span class='va'>ed50</span><span class='op'>+</span><span class='va'>dose</span><span class='op'>)</span><span class='op'>)</span>
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

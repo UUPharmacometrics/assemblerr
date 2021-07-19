@@ -130,7 +130,12 @@ vars_matches() selects variables that match a regular expression
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/UUPharmacometrics/assemblerr/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -145,7 +150,7 @@ vars_matches() selects variables that match a regular expression
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Selecting model variables</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/UUPharmacometrics/assemblerr/blob/master/R/variables.R'><code>R/variables.R</code></a></small>
     <div class="hidden name"><code>model-variable-selection.Rd</code></div>
     </div>
 
@@ -205,7 +210,7 @@ selection of model variables:</p><ul>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='model.html'>model</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'>input_variable</span><span class='op'>(</span><span class='st'>"dose"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='input_variable.html'>input_variable</a></span><span class='op'>(</span><span class='st'>"dose"</span><span class='op'>)</span> <span class='op'>+</span>
   <span class='fu'><a href='prm_log_normal.html'>prm_log_normal</a></span><span class='op'>(</span><span class='st'>"emax"</span>, median <span class='op'>=</span> <span class='fl'>10</span>, var_log <span class='op'>=</span> <span class='fl'>0.09</span><span class='op'>)</span> <span class='op'>+</span>
   <span class='fu'><a href='prm_log_normal.html'>prm_log_normal</a></span><span class='op'>(</span><span class='st'>"ed50"</span>, median <span class='op'>=</span> <span class='fl'>50</span>, var_log <span class='op'>=</span> <span class='fl'>0.09</span><span class='op'>)</span> <span class='op'>+</span>
   <span class='fu'><a href='algebraic.html'>algebraic</a></span><span class='op'>(</span><span class='va'>effect</span><span class='op'>~</span><span class='va'>emax</span><span class='op'>*</span><span class='va'>dose</span><span class='op'>/</span><span class='op'>(</span><span class='va'>ed50</span> <span class='op'>+</span> <span class='va'>dose</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>

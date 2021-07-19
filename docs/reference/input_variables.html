@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create documentation links functions — md_doc_links_for_package_functions • assemblerr</title>
+<title>Input variables — input_variable • assemblerr</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Create documentation links functions — md_doc_links_for_package_functions" />
-<meta property="og:description" content="Creates a string with the Markdown code linking to the doc for all function that match the specifed pattern." />
+<meta property="og:title" content="Input variables — input_variable" />
+<meta property="og:description" content="These building block declare input variables, i.e., variables that are defined in the dataset." />
 
 
 
@@ -126,33 +126,59 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create documentation links functions</h1>
-    <small class="dont-index">Source: <a href='https://github.com/UUPharmacometrics/assemblerr/blob/master/R/util.R'><code>R/util.R</code></a></small>
-    <div class="hidden name"><code>md_doc_links_for_package_functions.Rd</code></div>
+    <h1>Input variables</h1>
+    <small class="dont-index">Source: <a href='https://github.com/UUPharmacometrics/assemblerr/blob/master/R/input_variable.R'><code>R/input_variable.R</code></a></small>
+    <div class="hidden name"><code>input_variables.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Creates a string with the Markdown code linking to the doc for all function that match the specifed pattern.</p>
+    <p>These building block declare input variables, i.e., variables that are defined in the dataset.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>md_doc_links_for_package_functions</span><span class='op'>(</span><span class='va'>pattern</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>input_variable</span><span class='op'>(</span><span class='va'>name</span><span class='op'>)</span>
+
+<span class='fu'>dataset</span><span class='op'>(</span><span class='va'>path</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>pattern</th>
-      <td><p>Regular expression to select the package functions</p></td>
+      <th>name</th>
+      <td><p>Variable name</p></td>
+    </tr>
+    <tr>
+      <th>path</th>
+      <td><p>Dataset path</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Character vector of length 1</p>
+    <p>An input variable is defined in the dataset and is declared so that it can be used in the rest of the model definition. The function
+<code>input_variable()</code> declares a single variable whereas the <code>dataset()</code> function reads the header of the file provided and
+declares all variables found.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>md_doc_links_for_package_functions</span><span class='op'>(</span><span class='st'>"^prm_"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "[prm_log_normal], [prm_logit_normal], [prm_no_var], [prm_normal]"</div></pre>
+    <pre class="examples"><div class='input'><span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='model.html'>model</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+    <span class='fu'>input_variable</span><span class='op'>(</span><span class='st'>"dose"</span><span class='op'>)</span> <span class='op'>+</span>
+    <span class='fu'><a href='prm_log_normal.html'>prm_log_normal</a></span><span class='op'>(</span><span class='st'>"emax"</span><span class='op'>)</span> <span class='op'>+</span>
+    <span class='fu'><a href='prm_log_normal.html'>prm_log_normal</a></span><span class='op'>(</span><span class='st'>"ed50"</span><span class='op'>)</span> <span class='op'>+</span>
+    <span class='fu'><a href='obs_additive.html'>obs_additive</a></span><span class='op'>(</span><span class='va'>eff</span><span class='op'>~</span><span class='va'>emax</span><span class='op'>*</span><span class='va'>dose</span><span class='op'>/</span><span class='op'>(</span><span class='va'>ed50</span><span class='op'>+</span><span class='va'>dose</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='render.html'>render</a></span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $PROBLEM
+#&gt; $INPUT DOSE ID DV
+#&gt; $DATA data.csv IGNORE=@
+#&gt; $PRED
+#&gt; EMAX = THETA(1) * EXP(ETA(1))
+#&gt; ED50 = THETA(2) * EXP(ETA(2))
+#&gt; EFF = EMAX * DOSE/(ED50 + DOSE)
+#&gt; Y = EFF + EPS(1)
+#&gt; $ESTIMATION METHOD=COND MAXEVAL=999999 
+#&gt; $THETA (0, 1, Inf) ; POP_EMAX
+#&gt; $THETA (0, 1, Inf) ; POP_ED50
+#&gt; $OMEGA 0.1 ; IIV_EMAX
+#&gt; $OMEGA 0.1 ; IIV_ED50
+#&gt; $SIGMA 1; RUV_ADD</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

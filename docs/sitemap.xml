@@ -19,6 +19,9 @@
     <loc>https://uupharmacometrics.github.io/assemblerr//reference/c-IssueList-method.html</loc>
   </url>
   <url>
+    <loc>https://uupharmacometrics.github.io/assemblerr//reference/check.html</loc>
+  </url>
+  <url>
     <loc>https://uupharmacometrics.github.io/assemblerr//reference/compartment.html</loc>
   </url>
   <url>
@@ -38,6 +41,9 @@
   </url>
   <url>
     <loc>https://uupharmacometrics.github.io/assemblerr//reference/flow.html</loc>
+  </url>
+  <url>
+    <loc>https://uupharmacometrics.github.io/assemblerr//reference/input_variables.html</loc>
   </url>
   <url>
     <loc>https://uupharmacometrics.github.io/assemblerr//reference/interp.html</loc>
@@ -82,6 +88,18 @@
     <loc>https://uupharmacometrics.github.io/assemblerr//reference/pipe.html</loc>
   </url>
   <url>
+    <loc>https://uupharmacometrics.github.io/assemblerr//reference/pk_absorption_fo.html</loc>
+  </url>
+  <url>
+    <loc>https://uupharmacometrics.github.io/assemblerr//reference/pk_absorption_fo_lag.html</loc>
+  </url>
+  <url>
+    <loc>https://uupharmacometrics.github.io/assemblerr//reference/pk_absorption_fo_transit.html</loc>
+  </url>
+  <url>
+    <loc>https://uupharmacometrics.github.io/assemblerr//reference/pk_absorption_fo_zo.html</loc>
+  </url>
+  <url>
     <loc>https://uupharmacometrics.github.io/assemblerr//reference/pk_absorption_zo.html</loc>
   </url>
   <url>
@@ -92,6 +110,18 @@
   </url>
   <url>
     <loc>https://uupharmacometrics.github.io/assemblerr//reference/pk_distribution_2cmp.html</loc>
+  </url>
+  <url>
+    <loc>https://uupharmacometrics.github.io/assemblerr//reference/pk_distribution_3cmp.html</loc>
+  </url>
+  <url>
+    <loc>https://uupharmacometrics.github.io/assemblerr//reference/pk_elimination_linear.html</loc>
+  </url>
+  <url>
+    <loc>https://uupharmacometrics.github.io/assemblerr//reference/pk_elimination_linear_nl.html</loc>
+  </url>
+  <url>
+    <loc>https://uupharmacometrics.github.io/assemblerr//reference/pk_elimination_nl.html</loc>
   </url>
   <url>
     <loc>https://uupharmacometrics.github.io/assemblerr//reference/pk_model.html</loc>
@@ -128,6 +158,9 @@
   </url>
   <url>
     <loc>https://uupharmacometrics.github.io/assemblerr//reference/tsk_output.html</loc>
+  </url>
+  <url>
+    <loc>https://uupharmacometrics.github.io/assemblerr//reference/xtfrm-IssueList-method.html</loc>
   </url>
   <url>
     <loc>https://uupharmacometrics.github.io/assemblerr//articles/getting-started.html</loc>

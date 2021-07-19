@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PK absorption zero-order — pk_absorption_zo • assemblerr</title>
+<title>PK distribution 3 compartments — pk_distribution_3cmp • assemblerr</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,8 @@
 
 
 
-<meta property="og:title" content="PK absorption zero-order — pk_absorption_zo" />
-<meta property="og:description" content="This building block declares a zero-order absorption component for
-a pharmacokinetic model." />
+<meta property="og:title" content="PK distribution 3 compartments — pk_distribution_3cmp" />
+<meta property="og:description" content="This building block declares a three compartment distribution component for a pharmacokinetic model." />
 
 
 
@@ -127,24 +126,45 @@ a pharmacokinetic model." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>PK absorption zero-order</h1>
+    <h1>PK distribution 3 compartments</h1>
     <small class="dont-index">Source: <a href='https://github.com/UUPharmacometrics/assemblerr/blob/master/R/pk_component.R'><code>R/pk_component.R</code></a></small>
-    <div class="hidden name"><code>pk_absorption_zo.Rd</code></div>
+    <div class="hidden name"><code>pk_distribution_3cmp.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This building block declares a zero-order absorption component for
-a pharmacokinetic model.</p>
+    <p>This building block declares a three compartment distribution component for a pharmacokinetic model.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>pk_absorption_zo</span><span class='op'>(</span>prm_mat <span class='op'>=</span> <span class='fu'><a href='prm_log_normal.html'>prm_log_normal</a></span><span class='op'>(</span><span class='st'>"mat"</span>, median <span class='op'>=</span> <span class='fl'>0.5</span>, var_log <span class='op'>=</span> <span class='fl'>0.1</span><span class='op'>)</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>pk_distribution_3cmp</span><span class='op'>(</span>
+  prm_vc <span class='op'>=</span> <span class='fu'><a href='prm_log_normal.html'>prm_log_normal</a></span><span class='op'>(</span><span class='st'>"vc"</span>, median <span class='op'>=</span> <span class='fl'>100</span>, var_log <span class='op'>=</span> <span class='fl'>0.1</span><span class='op'>)</span>,
+  prm_vp1 <span class='op'>=</span> <span class='fu'><a href='prm_log_normal.html'>prm_log_normal</a></span><span class='op'>(</span><span class='st'>"vp1"</span>, median <span class='op'>=</span> <span class='fl'>5</span>, var_log <span class='op'>=</span> <span class='fl'>0.1</span><span class='op'>)</span>,
+  prm_vp2 <span class='op'>=</span> <span class='fu'><a href='prm_log_normal.html'>prm_log_normal</a></span><span class='op'>(</span><span class='st'>"vp2"</span>, median <span class='op'>=</span> <span class='fl'>5</span>, var_log <span class='op'>=</span> <span class='fl'>0.1</span><span class='op'>)</span>,
+  prm_q1 <span class='op'>=</span> <span class='fu'><a href='prm_log_normal.html'>prm_log_normal</a></span><span class='op'>(</span><span class='st'>"q1"</span>, median <span class='op'>=</span> <span class='fl'>25</span>, var_log <span class='op'>=</span> <span class='fl'>0.1</span><span class='op'>)</span>,
+  prm_q2 <span class='op'>=</span> <span class='fu'><a href='prm_log_normal.html'>prm_log_normal</a></span><span class='op'>(</span><span class='st'>"q2"</span>, median <span class='op'>=</span> <span class='fl'>25</span>, var_log <span class='op'>=</span> <span class='fl'>0.1</span><span class='op'>)</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>prm_mat</th>
-      <td><p>Parameter model for the mean absorption time (MAT)</p></td>
+      <th>prm_vc</th>
+      <td><p>Parameter model for the central volume of distribution</p></td>
+    </tr>
+    <tr>
+      <th>prm_vp1</th>
+      <td><p>Parameter model for the volume of the first peripheral compartment</p></td>
+    </tr>
+    <tr>
+      <th>prm_vp2</th>
+      <td><p>Parameter model for the volume of the second peripheral compartment</p></td>
+    </tr>
+    <tr>
+      <th>prm_q1</th>
+      <td><p>Parameter model for the inter-compartmental clearance between central and first peripheral compartment</p></td>
+    </tr>
+    <tr>
+      <th>prm_q2</th>
+      <td><p>Parameter model for the inter-compartmental clearance between central and second peripheral compartment</p></td>
     </tr>
     </table>
 
@@ -193,12 +213,9 @@ names the parameter <code>v</code>:</p><pre><span class='fu'><a href='pk_distrib
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='pk_model.html'>pk_model()</a></code> for the creation of PK models</p>
-<p>Other absorption components: 
-<code><a href='pk_absorption_fo_lag.html'>pk_absorption_fo_lag</a>()</code>,
-<code><a href='pk_absorption_fo_transit.html'>pk_absorption_fo_transit</a>()</code>,
-<code><a href='pk_absorption_fo_zo.html'>pk_absorption_fo_zo</a>()</code>,
-<code><a href='pk_absorption_fo.html'>pk_absorption_fo</a>()</code>,
-<code><a href='pk_absorption_zo_lag.html'>pk_absorption_zo_lag</a>()</code></p></div>
+<p>Other distribution components: 
+<code><a href='pk_distribution_1cmp.html'>pk_distribution_1cmp</a>()</code>,
+<code><a href='pk_distribution_2cmp.html'>pk_distribution_2cmp</a>()</code></p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

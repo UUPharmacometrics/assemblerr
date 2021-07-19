@@ -106,7 +106,12 @@
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/UUPharmacometrics/assemblerr/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -121,7 +126,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
       <h1 data-toc-skip>Changelog <small></small></h1>
-      
+      <small>Source: <a href='https://github.com/UUPharmacometrics/assemblerr/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
     <div id="assemblerr-development-version" class="section level1">
@@ -129,8 +134,11 @@
 <a href="#assemblerr-development-version" class="anchor"></a>assemblerr (development version)</h1>
 <ul>
 <li>automatically rename variables with conflicting capitalization (e.g., emax and EMAX)</li>
-<li>rename <code>pk_elimination_linear_mm()</code> to <code>pk_elimination_linear_nl()</code>
+<li>rename <code>pk_elimination_linear_mm()</code> to <code><a href="../reference/pk_elimination_linear_nl.html">pk_elimination_linear_nl()</a></code>
 </li>
+<li>remove <code>pk_elimination_mm()</code>
+</li>
+<li>extended help for PK component building blocks</li>
 </ul>
 </div>
     <div id="assemblerr-0009008" class="section level1">
@@ -177,13 +185,13 @@
 <h1 class="page-header" data-toc-text="0.0.0.9004">
 <a href="#assemblerr-0009004" class="anchor"></a>assemblerr 0.0.0.9004</h1>
 <ul>
-<li>added <code><a href="https://rdrr.io/r/utils/PkgUtils.html">check()</a></code> function to check and list model issues<br>
+<li>added <code><a href="../reference/check.html">check()</a></code> function to check and list model issues<br>
 </li>
 <li>improved error checking and reporting when creating building blocks, e.g., <code><a href="../reference/prm_normal.html">prm_normal()</a></code>
 </li>
 <li>prediction declarations for observations do not longer need a left-hand side, e.g., <code><a href="../reference/obs_additive.html">obs_additive(~C["central"])</a></code> is now valid.</li>
 <li>
-<code>pk_elimination_mm</code> has been replaced with <code>pk_elimination_nl</code> to clarify that the default parameterization is not the classical MM model. Additionally, <code>pk_elimination_nl</code> allows selecting the classical parameterization using <code>pk_elimination_nl(prm_vmax = prm_log_normal("vmax"), prm_clmm = NULL)</code>
+<code>pk_elimination_mm</code> has been replaced with <code>pk_elimination_nl</code> to clarify that the default parameterization is not the classical MM model. Additionally, <code>pk_elimination_nl</code> allows selecting the classical parameterization using <code><a href="../reference/pk_elimination_nl.html">pk_elimination_nl(prm_vmax = prm_log_normal("vmax"), prm_clmm = NULL)</a></code>
 </li>
 <li>unsupported building blocks are now ignored with a warning when added to a model (e.g., <code>pk_model()+compartment('central')</code>)</li>
 <li>option to include estimation &amp; covariance step records in generated NONMEM model through <code><a href="../reference/render.html">render(m, options = assemblerr_options(default_record.covariance_step = nm_covariance()))</a></code>
