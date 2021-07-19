@@ -6,10 +6,9 @@
 \alias{assemblerr-package}
 \title{assemblerr: Assembly of Pharmacometric Models}
 \description{
-assemblerr is an R package to construct pharmacometric models by
-    combining pre-defined model components. It’s intended to simplify the
-    specification of complex pharmacometric models and provide a mechanism
-    to generate models in an automatic way.
+assemblerr is an R package to construct pharmacometric models by combining 
+    pre-defined model components. It’s intended to simplify the specification of complex 
+    pharmacometric models and provide a mechanism to generate models automatically.
 }
 \seealso{
 Useful links:
