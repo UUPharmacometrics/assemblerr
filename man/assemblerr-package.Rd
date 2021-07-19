@@ -11,6 +11,14 @@ assemblerr is an R package to construct pharmacometric models by
     specification of complex pharmacometric models and provide a mechanism
     to generate models in an automatic way.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/UUPharmacometrics/assemblerr}
+  \item Report bugs at \url{https://github.com/UUPharmacometrics/assemblerr/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Sebastian Ueckert \email{sebastian.ueckert@gmail.com} (\href{https://orcid.org/0000-0002-3712-0255}{ORCID}) [copyright holder]
 

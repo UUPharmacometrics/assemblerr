@@ -46,9 +46,11 @@ library(assemblerr)
 
 ```{r}
 m <- model() +
-  prm_log_normal("v") +
-  prm_log_normal("cl") +
-  obs_additive(conc~amt/v*exp(-cl/v*time)) 
+  input_variable("dose") +
+  prm_log_normal("emax", median = 10, var_log = 0.09) +
+  prm_log_normal("ed50", median = 50, var_log = 0.09) +
+  algebraic(effect~emax*dose/(ed50 + dose)) +
+  obs_additive(~effect, var_add = 1)
 
 ```
 
@@ -62,12 +64,8 @@ render(m)
 
 ## Learning more
 
-The best place to learn how to use assemblerr is the vignette "Introduction". It provides an overview of the concepts underpinning assemblerr and helps you assembling your own models. A simple way to find it is using the `vignette()` function in R: 
+The best place to learn how to use assemblerr is the vignette "Getting Started". It provides an overview of the functionality in assemblerr and helps you building your own models. A simple way to find it is using the `vignette()` function in R: 
 
 ``` r
-vignette("introduction", package = "assemblerr")
+vignette("getting-started", package = "assemblerr")
 ```
-
-## Status
-
-assemblerr has reached a status where it can significantly simplify the creation of pharmacometric model. Nonetheless, it is still considered in its early stages of development. Please use the [GitHub issue](https://github.com/UUPharmacometrics/assemblerr/issues) system if you run into errors or have improvement suggestions.         

@@ -38,48 +38,40 @@ library(assemblerr)
 
 ``` r
 m <- model() +
-  prm_log_normal("v") +
-  prm_log_normal("cl") +
-  obs_additive(conc~amt/v*exp(-cl/v*time)) 
+  input_variable("dose") +
+  prm_log_normal("emax", median = 10, var_log = 0.09) +
+  prm_log_normal("ed50", median = 50, var_log = 0.09) +
+  algebraic(effect~emax*dose/(ed50 + dose)) +
+  obs_additive(~effect, var_add = 1)
 ```
 
 **Generate NONMEM code**
 
 ``` r
 render(m) 
-#> Warning: Undefined variables added
-#> x The variables 'time' and 'amt' were not defined and have been added as input variables.
 #> $PROBLEM
-#> $INPUT TIME AMT ID DV
+#> $INPUT DOSE ID DV
 #> $DATA data.csv IGNORE=@
 #> $PRED
-#> V = THETA(1) * EXP(ETA(1))
-#> CL = THETA(2) * EXP(ETA(2))
-#> CONC = AMT/V * EXP(-CL/V * TIME)
-#> Y = CONC + EPS(1)
+#> EMAX = THETA(1) * EXP(ETA(1))
+#> ED50 = THETA(2) * EXP(ETA(2))
+#> EFFECT = EMAX * DOSE/(ED50 + DOSE)
+#> Y = EFFECT + EPS(1)
 #> $ESTIMATION METHOD=COND MAXEVAL=999999 
-#> $THETA (0, 1, Inf) ; POP_V
-#> $THETA (0, 1, Inf) ; POP_CL
-#> $OMEGA 0.1 ; IIV_V
-#> $OMEGA 0.1 ; IIV_CL
+#> $THETA (0, 10, Inf) ; POP_EMAX
+#> $THETA (0, 50, Inf) ; POP_ED50
+#> $OMEGA 0.09 ; IIV_EMAX
+#> $OMEGA 0.09 ; IIV_ED50
 #> $SIGMA 1; RUV_ADD
 ```
 
 ## Learning more
 
-The best place to learn how to use assemblerr is the vignette
-“Introduction”. It provides an overview of the concepts underpinning
-assemblerr and helps you assembling your own models. A simple way to
-find it is using the `vignette()` function in R:
+The best place to learn how to use assemblerr is the vignette “Getting
+Started”. It provides an overview of the functionality in assemblerr and
+helps you building your own models. A simple way to find it is using the
+`vignette()` function in R:
 
 ``` r
-vignette("introduction", package = "assemblerr")
+vignette("getting-started", package = "assemblerr")
 ```
-
-## Status
-
-assemblerr has reached a status where it can significantly simplify the
-creation of pharmacometric model. Nonetheless, it is still considered in
-its early stages of development. Please use the [GitHub
-issue](https://github.com/UUPharmacometrics/assemblerr/issues) system if
-you run into errors or have improvement suggestions.
