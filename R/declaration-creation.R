@@ -40,6 +40,8 @@ setOldClass("assemblerr_declaration")
 #' @return A declaration vector
 #' @export
 #'
+#' @keywords internal
+#'
 #' @examples
 #' d <- declaration(cl~theta[1]+eta[1])
 #' d2 <- declaration(v=theta[2]*exp(eta[2]))

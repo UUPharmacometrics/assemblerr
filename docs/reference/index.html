@@ -79,7 +79,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -96,9 +96,6 @@
     <li>
       <a href="../articles/getting-started.html">Getting started</a>
     </li>
-    <li>
-      <a href="../articles/introduction.html">Introduction</a>
-    </li>
   </ul>
 </li>
 <li>
@@ -108,7 +105,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/UUPharmacometrics/assemblerr/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -257,8 +254,8 @@
     </tbody><tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-rendering" class="hasAnchor"><a href="#section-rendering" class="anchor"></a>Rendering</h2>
-          <p class="section-desc"><p>Converting a model description into code</p></p>
+          <h2 id="section-pk-components" class="hasAnchor"><a href="#section-pk-components" class="anchor"></a>PK components</h2>
+          <p class="section-desc"><p>Building blocks to define pharmacokinetic components</p></p>
         </th>
       </tr>
       
@@ -269,9 +266,137 @@
       <tr>
         
         <td>
+          <p><code><a href="pk_absorption_fo.html">pk_absorption_fo()</a></code> </p>
+        </td>
+        <td><p>PK absorption first-order</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="pk_absorption_fo_lag.html">pk_absorption_fo_lag()</a></code> </p>
+        </td>
+        <td><p>PK absorption first-order, lag-time</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="pk_absorption_fo_transit.html">pk_absorption_fo_transit()</a></code> </p>
+        </td>
+        <td><p>PK absorption first-order, transit compartment</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="pk_absorption_fo_zo.html">pk_absorption_fo_zo()</a></code> </p>
+        </td>
+        <td><p>PK absorption first-order, zero-order delay</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="pk_absorption_zo.html">pk_absorption_zo()</a></code> </p>
+        </td>
+        <td><p>PK absorption zero-order</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="pk_absorption_zo_lag.html">pk_absorption_zo_lag()</a></code> </p>
+        </td>
+        <td><p>PK absorption zero-order, lag-time</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="pk_distribution_1cmp.html">pk_distribution_1cmp()</a></code> </p>
+        </td>
+        <td><p>PK distribution 1 compartment</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="pk_distribution_2cmp.html">pk_distribution_2cmp()</a></code> </p>
+        </td>
+        <td><p>PK distribution 2 compartments</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="pk_distribution_3cmp.html">pk_distribution_3cmp()</a></code> </p>
+        </td>
+        <td><p>PK distribution 3 compartments</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="pk_elimination_linear.html">pk_elimination_linear()</a></code> </p>
+        </td>
+        <td><p>PK elimination linear</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="pk_elimination_linear_nl.html">pk_elimination_linear_nl()</a></code> </p>
+        </td>
+        <td><p>PK elimination linear &amp; nonlinear</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="pk_elimination_nl.html">pk_elimination_nl()</a></code> </p>
+        </td>
+        <td><p>PK elimination nonlinear</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="pk_model.html">pk_model()</a></code> </p>
+        </td>
+        <td><p>Create a PK model</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-algebraics-variables" class="hasAnchor"><a href="#section-algebraics-variables" class="anchor"></a>Algebraics &amp; variables</h2>
+          <p class="section-desc"><p>Building blocks to specify algebraic relationships and input variables</p></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="algebraic.html">algebraic()</a></code> </p>
+        </td>
+        <td><p>Algebraic relationship</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="input_variables.html">input_variable()</a></code> <code><a href="input_variables.html">dataset()</a></code> </p>
+        </td>
+        <td><p>Input variables</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-checking-rendering" class="hasAnchor"><a href="#section-checking-rendering" class="anchor"></a>Checking &amp; Rendering</h2>
+          <p class="section-desc"><p>Check a model and converting it into code</p></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="check.html">check()</a></code> </p>
+        </td>
+        <td><p>Checking for issues</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="render.html">render()</a></code> </p>
         </td>
         <td><p>Generate model code</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="assemblerr_options.html">assemblerr_options()</a></code> </p>
+        </td>
+        <td><p>Options</p></td>
       </tr>
     </tbody><tbody>
       <tr>

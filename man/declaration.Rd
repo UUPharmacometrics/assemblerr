@@ -21,3 +21,4 @@ in `assemblerr`. A declaration consists of the variable names being declared (th
 d <- declaration(cl~theta[1]+eta[1])
 d2 <- declaration(v=theta[2]*exp(eta[2]))
 }
+\keyword{internal}
