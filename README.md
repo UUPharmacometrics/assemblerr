@@ -6,6 +6,8 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/UUPharmacometrics/assemblerr/workflows/R-CMD-check/badge.svg)](https://github.com/UUPharmacometrics/assemblerr/actions)
+[![Codecov test
+coverage](https://codecov.io/gh/UUPharmacometrics/assemblerr/branch/master/graph/badge.svg)](https://codecov.io/gh/UUPharmacometrics/assemblerr?branch=master)
 <!-- badges: end -->
 
 assemblerr is an R package to construct pharmacometric models by
