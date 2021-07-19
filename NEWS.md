@@ -1,4 +1,4 @@
-# assemblerr (development version)
+# assemblerr 0.0.0.9009
 * automatically rename variables with conflicting capitalization (e.g., emax and EMAX)
 * rename `pk_elimination_linear_mm()` to `pk_elimination_linear_nl()`
 * remove `pk_elimination_mm()`
