@@ -29,7 +29,7 @@ transform_ast <- function(node, transformer, ...){
 
 
 substitution_transformer <- function(node, substitutions){
-  if (exists(deparse(node), substitutions)) {
+  if (exists(deparse(node, width.cutoff = 500L), substitutions)) {
     node <-  substitutions[[deparse(node)]]
   }
   node
