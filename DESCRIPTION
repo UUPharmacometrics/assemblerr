@@ -92,3 +92,5 @@ Collate:
     'test-helpers.R'
     'util.R'
     'variables.R'
+URL: https://github.com/UUPharmacometrics/assemblerr
+BugReports: https://github.com/UUPharmacometrics/assemblerr/issues
