@@ -2,7 +2,7 @@ Package: assemblerr
 Title: Assembly of Pharmacometric Models
 Description: Construct pharmacometric models by combining predefined model components
     and automatically generate model code. 
-Version: 0.0.0.9009
+Version: 0.1.0
 Authors@R: 
     c(
     person(given = "Sebastian",
