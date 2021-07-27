@@ -10,7 +10,7 @@ model()
 A general pharmacometric model
 }
 \description{
-This building block creates the basis for a general pharmacometric model, a flexible but verbose model type.
+This function creates the basis for a general pharmacometric model, a flexible but verbose model type.
 }
 \details{
 The function creates the fundament for a general pharmacometric model to which different building blocks can be added. The following building

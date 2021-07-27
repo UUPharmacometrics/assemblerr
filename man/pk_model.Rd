@@ -10,5 +10,16 @@ pk_model()
 A pk_model
 }
 \description{
-Create a PK model
+This function creates the basis for a pharmacokinetic model.
+}
+\details{
+The function creates the fundament for a pharmacokinetic model to which different building blocks can be added.
+The following building blocks are relevant for this model type:
+\itemize{
+\item Parameters: \link{prm_log_normal}, \link{prm_logit_normal}, \link{prm_no_var}, \link{prm_normal}
+\item Observations: \link{obs_additive}, \link{obs_combined}, \link{obs_proportional}
+\item Algebraic relationships: \link{algebraic}
+\item PK components: \link{pk_absorption_fo}, \link{pk_absorption_fo_lag}, \link{pk_absorption_fo_transit}, \link{pk_absorption_fo_zo}, \link{pk_absorption_zo}, \link{pk_absorption_zo_lag}, \link{pk_distribution_1cmp}, \link{pk_distribution_2cmp}, \link{pk_distribution_3cmp}, \link{pk_elimination_linear}, \link{pk_elimination_linear_nl}, \link{pk_elimination_nl}, \link{pk_model}
+\item Input variables: \link{input_variable}, \link{dataset}
+}
 }

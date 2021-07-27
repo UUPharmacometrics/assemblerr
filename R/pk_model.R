@@ -35,7 +35,19 @@ setMethod(
 
 #' Create a PK model
 #'
+#' This function creates the basis for a pharmacokinetic model.
+#'
+#' The function creates the fundament for a pharmacokinetic model to which different building blocks can be added.
+#' The following building blocks are relevant for this model type:
+#'
+#'   * Parameters: `r md_doc_links_for_package_functions("^prm_")`
+#'   * Observations: `r md_doc_links_for_package_functions("^obs_")`
+#'   * Algebraic relationships: [algebraic]
+#'   * PK components: `r md_doc_links_for_package_functions("^pk_")`
+#'   * Input variables: [input_variable], [dataset]
+#'
 #' @return A pk_model
+#' @md
 #' @export
 pk_model <- function(){
   PkModel()
