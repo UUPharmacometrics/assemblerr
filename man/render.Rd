@@ -63,6 +63,7 @@ render(m)
 
 # render to file
 \dontrun{
+setwd(tempdir())
 render(m, "run1.mod")
 }
 

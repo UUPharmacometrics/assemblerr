@@ -58,7 +58,8 @@ setGeneric(name = "render_component",
 #'
 #' # render to file
 #' \dontrun{
-#' render(m, tempfile("run1.mod"))
+#' setwd(tempdir())
+#' render(m, "run1.mod")
 #' }
 #'
 #' # render to console with estimation & output task
