@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">assemblerr</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9008</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -85,7 +85,7 @@
       <h1 data-toc-skip>Getting started</h1>
                         <h4 class="author">Sebastian Ueckert</h4>
             
-            <h4 class="date">2021-07-19</h4>
+            <h4 class="date">2021-07-27</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/UUPharmacometrics/assemblerr/blob/master/vignettes/getting-started.Rmd"><code>vignettes/getting-started.Rmd</code></a></small>
       <div class="hidden name"><code>getting-started.Rmd</code></div>
@@ -186,7 +186,8 @@
 ## $SIGMA 1; RUV_ADD</code></pre>
 <p>While this is great to quickly check the resulting code, we generally want a model file. We can create it using the <code>filename=</code> argument of the <code><a href="../reference/render.html">render()</a></code> function, i.e.,</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/render.html">render</a></span><span class="op">(</span><span class="va">m</span>, filename <span class="op">=</span> <span class="st">"run1.mod"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/getwd.html">setwd</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="../reference/render.html">render</a></span><span class="op">(</span><span class="va">m</span>, filename <span class="op">=</span> <span class="st">"run1.mod"</span><span class="op">)</span></code></pre></div>
 <p>The <code>render</code> function also has an options argument that allows you to modify some aspects of the rendering process. For example, the following code automatically adds the mu-referenced code for all parameters.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/render.html">render</a></span><span class="op">(</span>
@@ -412,7 +413,6 @@
 <ul>
 <li>Help for a specific function can be found in the reference documentation in R. It can be accessed using <code><a href="https://rdrr.io/r/utils/Question.html">?</a></code>. For example, <code><a href="../reference/prm_log_normal.html">?prm_log_normal</a></code> will open the documentation for the log-normal parameter building block. You can find links to similar building blocks at the bottom of each help page.</li>
 <li>An overview of the available documentation is available via <code><a href="https://rdrr.io/pkg/assemblerr/man">help(package="assemblerr")</a></code>.</li>
-<li>The vignette building blocks provides an overview of all the building blocks available in assemblerr.</li>
 </ul>
 </div>
   </div>

@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="Create a PK model — pk_model" />
-<meta property="og:description" content="Create a PK model" />
+<meta property="og:description" content="This function creates the basis for a pharmacokinetic model." />
 
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">assemblerr</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9008</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -129,7 +129,7 @@
     </div>
 
     <div class="ref-description">
-    <p>Create a PK model</p>
+    <p>This function creates the basis for a pharmacokinetic model.</p>
     </div>
 
     <pre class="usage"><span class='fu'>pk_model</span><span class='op'>(</span><span class='op'>)</span></pre>
@@ -138,6 +138,17 @@
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A pk_model</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The function creates the fundament for a pharmacokinetic model to which different building blocks can be added.
+The following building blocks are relevant for this model type:</p><ul>
+<li><p>Parameters: <a href='prm_log_normal.html'>prm_log_normal</a>, <a href='prm_logit_normal.html'>prm_logit_normal</a>, <a href='prm_no_var.html'>prm_no_var</a>, <a href='prm_normal.html'>prm_normal</a></p></li>
+<li><p>Observations: <a href='obs_additive.html'>obs_additive</a>, <a href='obs_combined.html'>obs_combined</a>, <a href='obs_proportional.html'>obs_proportional</a></p></li>
+<li><p>Algebraic relationships: <a href='algebraic.html'>algebraic</a></p></li>
+<li><p>PK components: <a href='pk_absorption_fo.html'>pk_absorption_fo</a>, <a href='pk_absorption_fo_lag.html'>pk_absorption_fo_lag</a>, <a href='pk_absorption_fo_transit.html'>pk_absorption_fo_transit</a>, <a href='pk_absorption_fo_zo.html'>pk_absorption_fo_zo</a>, <a href='pk_absorption_zo.html'>pk_absorption_zo</a>, <a href='pk_absorption_zo_lag.html'>pk_absorption_zo_lag</a>, <a href='pk_distribution_1cmp.html'>pk_distribution_1cmp</a>, <a href='pk_distribution_2cmp.html'>pk_distribution_2cmp</a>, <a href='pk_distribution_3cmp.html'>pk_distribution_3cmp</a>, <a href='pk_elimination_linear.html'>pk_elimination_linear</a>, <a href='pk_elimination_linear_nl.html'>pk_elimination_linear_nl</a>, <a href='pk_elimination_nl.html'>pk_elimination_nl</a>, pk_model</p></li>
+<li><p>Input variables: <a href='input_variable.html'>input_variable</a>, <a href='input_variable.html'>dataset</a></p></li>
+</ul>
+
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
