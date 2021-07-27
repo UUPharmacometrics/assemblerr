@@ -31,7 +31,7 @@ is_valid_variable_name <- function(name){
 #' @param names Character vector of facet class names
 #'
 #' @return Character vector with class names translated to labels
-#'
+#' @export
 #' @examples
 #' assemblerr:::facet_names_to_labels(c("ParameterFacet", "InputVariableFacet"))
 #' @keywords internal
@@ -51,7 +51,7 @@ split_camelcase <- function(x) gsub("\\B([A-Z])", " \\1", x = x)
 #' @param .envir Environment for lookup
 #'
 #' @return A character vector
-#'
+#' @export
 #' @examples
 #' x <- 1:10
 #' assemblerr:::interp("x has elements {x}")

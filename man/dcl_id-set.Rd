@@ -17,8 +17,4 @@ The modified declaration
 \description{
 Set declaration fields
 }
-\examples{
-d <- declaration(cl~theta*exp(eta))
-assemblerr:::dcl_id(d) <- quote(v)
-}
 \keyword{internal}

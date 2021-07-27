@@ -32,9 +32,6 @@ dcl_is_anonymous <- function(dcl) {
 #' @return The modified declaration
 #'
 #' @keywords internal
-#' @examples
-#' d <- declaration(cl~theta*exp(eta))
-#' assemblerr:::dcl_id(d) <- quote(v)
 `dcl_id<-` <- function(dcl, value){
   vec_assert(dcl, ptype = declaration())
   if (rlang::is_expression(value)) value <- list(value)
@@ -122,7 +119,6 @@ dcl_substitute <- function(dcl,
 #' @param dcl1 A declaration
 #' @param dcl2 A declaration
 #' @param lhs List of expressions for the left-hand side of the resulting declaration
-#'
 #' @return A declaration
 #' @keywords internal
 #' @describeIn dcl_add Addition of the declarations
@@ -136,10 +132,6 @@ dcl_add <- function(dcl1, dcl2, lhs = dcl_id(dcl1)){
 }
 
 #' @describeIn dcl_add Substraction of the declarations
-#' @examples
-#' d1 <- declaration(dadt~k12*C)
-#' d2 <- declaration(data~k21*C)
-#' assemblerr:::dcl_substract(d1, d2)
 dcl_substract <- function(dcl1, dcl2, lhs = dcl_id(dcl1)) {
   substract <- function(e1, e2){
     if (e1 == quote(0) && e2 == quote(0)) return(quote(0))

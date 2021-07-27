@@ -39,9 +39,4 @@ These functions allow to combine two declarations using addition, substraction, 
 \item \code{dcl_devide}: Devision of the declarations
 }}
 
-\examples{
-d1 <- declaration(dadt~k12*C)
-d2 <- declaration(data~k21*C)
-assemblerr:::dcl_substract(d1, d2)
-}
 \keyword{internal}
