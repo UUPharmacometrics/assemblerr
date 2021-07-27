@@ -93,7 +93,7 @@ render(m)
 While this is great to quickly check the resulting code, we generally want a model file. We can create it using the `filename=` argument of the `render()` function, i.e., 
 
 ```{r, eval=FALSE}
-render(m, filename = "run1.mod")
+render(m, filename = tempfile("run1.mod"))
 ```
 
 The `render` function also has an options argument that allows you to modify some aspects of the rendering process. For example, the following code automatically adds the mu-referenced code for all parameters.
