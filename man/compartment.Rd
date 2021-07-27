@@ -14,6 +14,9 @@ cmp(name, volume = 1)
 
 \item{volume}{Volume as a number, formula or parameter name}
 }
+\value{
+A building block of type 'compartment'
+}
 \description{
 Defines name and volume of a compartment.
 }

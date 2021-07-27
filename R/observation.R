@@ -137,6 +137,8 @@ setMethod("initialize",
 #' @param var_prop Variance of the proportional error component
 #' @param var_add Variance of the additive error component
 #'
+#' @return A building block of type 'observation'
+#'
 #' @export
 #' @family observation models
 #' @examples
@@ -193,6 +195,8 @@ setMethod(
 #' @param name A name for the observation (automatically derived if missing)
 #' @param var_add Variance of the additive error
 #'
+#' @return A building block of type 'observation'
+#'
 #' @export
 #' @family observation models
 #' @inherit obs_combined examples
@@ -233,6 +237,8 @@ setMethod(
 #' @param prediction A definition of the model prediction
 #' @param name A name for the observation (automatically derived if missing)
 #' @param var_prop Variance of the proportional error
+#'
+#' @return A building block of type 'observation'
 #'
 #' @export
 #' @family observation models

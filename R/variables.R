@@ -137,6 +137,8 @@ create_variable_list <- function(variable_names, variable_types) {
 #'
 #' @param vars A character vector of variable names (taken from the selection context)
 #'
+#' @return A selection context
+#'
 #'
 #' @examples
 #'

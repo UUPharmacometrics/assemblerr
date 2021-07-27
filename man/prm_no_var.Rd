@@ -11,6 +11,9 @@ prm_no_var(name, value = 1)
 
 \item{value}{Parameter value}
 }
+\value{
+A building block of type 'parameter'
+}
 \description{
 This building block declares a parameter model for a parameter that does not vary between subjects.
 }

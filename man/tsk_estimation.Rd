@@ -14,6 +14,9 @@ tsk_estimation(algorithm = "foce", se = FALSE, target_options = list())
 \item{target_options}{List of additional options that should be passed to
 NONMEM}
 }
+\value{
+A building block of type 'estimation_task'
+}
 \description{
 This function defines an estimation task allowing to specify the estimation algorithm, estimation options, and whether standard errors should be obtained.
 }

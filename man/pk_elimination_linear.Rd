@@ -11,6 +11,9 @@ pk_elimination_linear(
 \arguments{
 \item{prm_cl}{Parameter model for the clearance}
 }
+\value{
+A building block of type 'pk_component'
+}
 \description{
 This building block declares a linear elimination component for a pharmacokinetic model.
 }

@@ -29,6 +29,9 @@ assemblerr_options(
 
 \item{issues.missing_variables}{How to handle missing variables}
 }
+\value{
+A list of options
+}
 \description{
 This function creates a list of options for the use with the render function.
 }

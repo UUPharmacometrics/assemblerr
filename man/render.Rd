@@ -23,6 +23,9 @@ render(
 
 \item{options}{List of options for model generation}
 }
+\value{
+The model code as a character vector
+}
 \description{
 This function generates the code for a model object, prints it to the console or writes it to a file.
 }

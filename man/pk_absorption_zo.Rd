@@ -9,6 +9,9 @@ pk_absorption_zo(prm_mat = prm_log_normal("mat", median = 0.5, var_log = 0.1))
 \arguments{
 \item{prm_mat}{Parameter model for the mean absorption time (MAT)}
 }
+\value{
+A building block of type 'pk_component'
+}
 \description{
 This building block declares a zero-order absorption component for
 a pharmacokinetic model.

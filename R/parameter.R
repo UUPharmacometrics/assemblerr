@@ -104,6 +104,9 @@ setMethod(
 #' @param name Parameter name
 #' @param median Median (on the normal scale)
 #' @param var_log Variance on the log scale
+#'
+#' @return A building block of type 'parameter'
+#'
 #' @family parameter models
 #' @export
 #' @examples
@@ -147,6 +150,9 @@ setMethod(
 #' @param name Parameter name
 #' @param mean Mean
 #' @param var Variance
+#'
+#' @return A building block of type 'parameter'
+#'
 #' @family parameter models
 #' @export
 #' @inherit prm_log_normal examples
@@ -178,6 +184,9 @@ setMethod(
 #' @param name Parameter name
 #' @param mean_logit Mean on the logit scale
 #' @param var_logit Variance on the logit scale
+#'
+#' @return A building block of type 'parameter'
+#'
 #' @family parameter models
 #' @export
 #' @inherit prm_log_normal examples
@@ -209,6 +218,9 @@ setMethod(
 #'
 #' @param name Parameter name
 #' @param value Parameter value
+#'
+#' @return A building block of type 'parameter'
+#'
 #' @family parameter models
 #' @export
 #' @inherit prm_log_normal examples

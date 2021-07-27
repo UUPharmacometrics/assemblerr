@@ -14,6 +14,9 @@ pk_absorption_fo_lag(
 
 \item{prm_mdt}{Parameter model for the mean delay time (MDT)}
 }
+\value{
+A building block of type 'pk_component'
+}
 \description{
 This building block declares a first-order absorption with lag-time component for a pharmacokinetic model.
 }

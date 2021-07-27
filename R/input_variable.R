@@ -48,6 +48,8 @@ setMethod(
 #'
 #' @param name Variable name
 #'
+#' @return A building block of type 'input_variable'
+#'
 #' @export
 #' @examples
 #' m <- model() +

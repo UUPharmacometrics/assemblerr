@@ -23,6 +23,9 @@ pk_distribution_3cmp(
 
 \item{prm_q2}{Parameter model for the inter-compartmental clearance between central and second peripheral compartment}
 }
+\value{
+A building block of type 'pk_component'
+}
 \description{
 This building block declares a three compartment distribution component for a pharmacokinetic model.
 }

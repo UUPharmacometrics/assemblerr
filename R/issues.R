@@ -139,7 +139,7 @@ setMethod(
 #'   - Inconsistent capitalization of variable names
 #'
 #' @param model Model to check
-#'
+#' @return An issue list (printed to the console by default)
 #' @md
 #' @examples
 #' m <- model() +

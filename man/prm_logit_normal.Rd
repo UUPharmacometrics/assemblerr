@@ -13,6 +13,9 @@ prm_logit_normal(name, mean_logit = 0, var_logit = 1)
 
 \item{var_logit}{Variance on the logit scale}
 }
+\value{
+A building block of type 'parameter'
+}
 \description{
 This building block declares a parameter model for a parameter that follows the normal distribution on the logit-scale.
 }

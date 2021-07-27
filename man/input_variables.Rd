@@ -14,6 +14,9 @@ dataset(path)
 
 \item{path}{Dataset path}
 }
+\value{
+A building block of type 'input_variable'
+}
 \description{
 These building block declare input variables, i.e., variables that are defined in the dataset.
 }

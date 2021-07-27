@@ -9,6 +9,9 @@ check(model)
 \arguments{
 \item{model}{Model to check}
 }
+\value{
+An issue list (printed to the console by default)
+}
 \description{
 This function checks a model for existing issues.
 }

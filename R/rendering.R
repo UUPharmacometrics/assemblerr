@@ -44,6 +44,9 @@ setGeneric(name = "render_component",
 #' @param tasks A task specification
 #' @param options List of options for model generation
 #'
+#' @return The model code as a character vector
+#'
+#'
 #' @examples
 #' m <- model() +
 #'     input_variable("dose") +
@@ -55,7 +58,7 @@ setGeneric(name = "render_component",
 #'
 #' # render to file
 #' \dontrun{
-#' render(m, "run1.mod")
+#' render(m, tempfile("run1.mod"))
 #' }
 #'
 #' # render to console with estimation & output task

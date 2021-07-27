@@ -17,6 +17,9 @@ pk_elimination_nl(
 
 \item{prm_vmax}{Parameter model for Vmax (the maximal elimination rate)}
 }
+\value{
+A building block of type 'pk_component'
+}
 \description{
 This building block declares a nonlinear elimination component for a pharmacokinetic model.
 }

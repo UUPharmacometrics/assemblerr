@@ -9,6 +9,9 @@ algebraic(definition)
 \arguments{
 \item{definition}{A definition of the model variable}
 }
+\value{
+A building block of type 'algebraic'
+}
 \description{
 This building block defines a model variable as a function of other variables.
 }

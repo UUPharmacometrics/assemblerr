@@ -14,6 +14,9 @@ tsk_output_xpose4()
 
 \item{variables}{The model variables that be included in the output}
 }
+\value{
+A building block of type 'output_task'
+}
 \description{
 These functions define output tasks that include the selected variables in the output of the generated model.
 }

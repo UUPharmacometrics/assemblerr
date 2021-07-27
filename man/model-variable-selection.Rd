@@ -27,6 +27,9 @@ vars_matches(match, vars)
 
 \item{match}{A character vector to match against}
 }
+\value{
+A selection context
+}
 \description{
 The output task allows to select model variables using
 a concise mini language. You can select variables by

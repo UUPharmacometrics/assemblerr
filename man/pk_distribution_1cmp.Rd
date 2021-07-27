@@ -11,6 +11,9 @@ pk_distribution_1cmp(
 \arguments{
 \item{prm_vc}{Parameter model for the central volume of distribution}
 }
+\value{
+A building block of type 'pk_component'
+}
 \description{
 This building block declares a one compartment distribution component for a pharmacokinetic model.
 }

@@ -135,6 +135,7 @@ setMethod(
 #' where the tilde `~` replaced the equal sign `=` in the definition.
 #'
 #' @param definition A definition of the model variable
+#' @return A building block of type 'algebraic'
 #' @examples
 #' m <- model() +
 #'   input_variable("dose") +

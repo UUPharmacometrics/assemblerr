@@ -17,6 +17,9 @@ pk_distribution_2cmp(
 
 \item{prm_q}{Parameter model for the inter-compartmental clearance}
 }
+\value{
+A building block of type 'pk_component'
+}
 \description{
 This building block declares a two compartment distribution component for a pharmacokinetic model.
 }

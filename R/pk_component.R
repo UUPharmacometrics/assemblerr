@@ -150,6 +150,9 @@ setMethod(
 #' @includeRmd man/rmd/pk-component.Rmd
 #'
 #' @param prm_vc Parameter model for the central volume of distribution
+#'
+#' @return A building block of type 'pk_component'
+#'
 #' @family distribution components
 #' @seealso [pk_model()] for the creation of PK models
 #' @md
@@ -222,6 +225,9 @@ setMethod(
 #' @param prm_vc Parameter model for the central volume of distribution
 #' @param prm_vp Parameter model for the peripheral volume of distribution
 #' @param prm_q Parameter model for the inter-compartmental clearance
+#'
+#' @return A building block of type 'pk_component'
+#'
 #' @family distribution components
 #' @seealso [pk_model()] for the creation of PK models
 #' @md
@@ -306,6 +312,9 @@ setMethod(
 #' @param prm_vp2 Parameter model for the volume of the second peripheral compartment
 #' @param prm_q1 Parameter model for the inter-compartmental clearance between central and first peripheral compartment
 #' @param prm_q2 Parameter model for the inter-compartmental clearance between central and second peripheral compartment
+#'
+#' @return A building block of type 'pk_component'
+#'
 #' @family distribution components
 #' @seealso [pk_model()] for the creation of PK models
 #' @md
@@ -377,6 +386,9 @@ setMethod(
 #' @includeRmd man/rmd/pk-component.Rmd
 #'
 #' @param prm_cl Parameter model for the clearance
+#'
+#' @return A building block of type 'pk_component'
+#'
 #' @family elimination components
 #' @seealso [pk_model()] for the creation of PK models
 #' @md
@@ -439,6 +451,9 @@ setMethod(
 #' @param prm_clmm Parameter model for the clearance
 #' @param prm_km Parameter model for KM (the half-maximal concentration)
 #' @param prm_vmax Parameter model for Vmax (the maximal elimination rate)
+#'
+#' @return A building block of type 'pk_component'
+#'
 #' @family elimination components
 #' @seealso [pk_model()] for the creation of PK models
 #' @md
@@ -513,6 +528,9 @@ setMethod(
 #' @param prm_cllin Parameter model for the linear clearance
 #' @param prm_vmax Parameter model for Vmax (the maximal elimination rate)
 #' @param prm_km Parameter model for KM (the half-maximal concentration)
+#'
+#' @return A building block of type 'pk_component'
+#'
 #' @family elimination components
 #' @seealso [pk_model()] for the creation of PK models
 #' @md
@@ -574,6 +592,9 @@ setMethod(
 #' @includeRmd man/rmd/pk-component.Rmd
 #'
 #' @param prm_mat Parameter model for the mean absorption time (MAT)
+#'
+#' @return A building block of type 'pk_component'
+#'
 #' @family absorption components
 #' @seealso [pk_model()] for the creation of PK models
 #' @md
@@ -636,6 +657,9 @@ setMethod(
 #'
 #' @param prm_mat Parameter model for the mean absorption time (MAT)
 #' @param prm_mdt Parameter model for the mean delay time (MDT)
+#'
+#' @return A building block of type 'pk_component'
+#'
 #' @family absorption components
 #' @seealso [pk_model()] for the creation of PK models
 #' @md
@@ -712,6 +736,9 @@ setMethod(
 #' @param prm_mat Parameter model for the mean absorption time (MAT)
 #' @param transit_compartments Number of transit compartments
 #' @param prm_mdt Parameter model for the mean delay time (MDT)
+#'
+#' @return A building block of type 'pk_component'
+#'
 #' @family absorption components
 #' @seealso [pk_model()] for the creation of PK models
 #' @md
@@ -770,6 +797,9 @@ setMethod(
 #' @includeRmd man/rmd/pk-component.Rmd
 #'
 #' @param prm_mat Parameter model for the mean absorption time (MAT)
+#'
+#' @return A building block of type 'pk_component'
+#'
 #' @family absorption components
 #' @seealso [pk_model()] for the creation of PK models
 #' @md
@@ -829,6 +859,9 @@ setMethod(
 #'
 #' @param prm_mat Parameter model for the mean absorption time (MAT)
 #' @param prm_mdt Parameter model for the mean delay time (MDT)
+#'
+#' @return A building block of type 'pk_component'
+#'
 #' @family absorption components
 #' @seealso [pk_model()] for the creation of PK models
 #' @md
@@ -890,6 +923,9 @@ setMethod(
 #'
 #' @param prm_mat Parameter model for the mean absorption time (MAT)
 #' @param prm_mdt Parameter model for the mean delay time (MDT)
+#'
+#' @return A building block of type 'pk_component'
+#'
 #' @family absorption components
 #' @seealso [pk_model()] for the creation of PK models
 #' @md

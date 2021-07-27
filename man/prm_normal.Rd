@@ -13,6 +13,9 @@ prm_normal(name, mean = 1, var = 0.1)
 
 \item{var}{Variance}
 }
+\value{
+A building block of type 'parameter'
+}
 \description{
 This building block declares a parameter model for a parameter that follows the normal distribution.
 }

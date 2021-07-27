@@ -13,6 +13,9 @@ obs_additive(prediction, name, var_add = 1)
 
 \item{var_add}{Variance of the additive error}
 }
+\value{
+A building block of type 'observation'
+}
 \description{
 This building block declares an observation model with an additive residual error model (\eqn{y = f + \epsilon_1}).
 }

@@ -217,6 +217,8 @@ check_for_undefined_flow_variables <- function(flow_facet, model) {
 #' @param name Name of the compartment
 #' @param volume Volume as a number, formula or parameter name
 #'
+#' @return A building block of type 'compartment'
+#'
 #' @export
 #' @md
 #' @examples
@@ -292,6 +294,8 @@ cmp <- compartment
 #' @param definition Equation describing the flow
 #' @param from Name of the source compartment (NA for an inflow without source)
 #' @param to Name of the sink compartment (NA for an ouflow without sink)
+#'
+#' @return A building block of type 'flow'
 #'
 #' @export
 #' @md

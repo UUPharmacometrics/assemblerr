@@ -17,6 +17,9 @@ pk_absorption_fo_transit(
 
 \item{prm_mdt}{Parameter model for the mean delay time (MDT)}
 }
+\value{
+A building block of type 'pk_component'
+}
 \description{
 This building block declares a first-order absorption with transit compartments component for
 a pharmacokinetic model.

@@ -137,6 +137,9 @@ OutputTask <- setClass(
 #' @param target_options List of additional options that should be passed to
 #' NONMEM
 #'
+#'
+#' @return A building block of type 'estimation_task'
+#'
 #' @family tasks
 #' @examples
 #'
@@ -200,6 +203,9 @@ tsk_estimation <- function(algorithm = "foce",
 #'
 #' @param filename The filename for the output file
 #' @param variables The model variables that be included in the output
+#'
+#'
+#' @return A building block of type 'output_task'
 #'
 #' @family tasks
 #' @examples

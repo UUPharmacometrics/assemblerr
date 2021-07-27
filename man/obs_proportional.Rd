@@ -13,6 +13,9 @@ obs_proportional(prediction, name, var_prop = 0.1)
 
 \item{var_prop}{Variance of the proportional error}
 }
+\value{
+A building block of type 'observation'
+}
 \description{
 This building block declares an observation model with a proportional residual error model (\eqn{y = f + f \epsilon_1}).
 }

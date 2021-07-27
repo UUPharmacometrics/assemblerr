@@ -13,6 +13,9 @@ prm_log_normal(name, median = 1, var_log = 0.1)
 
 \item{var_log}{Variance on the log scale}
 }
+\value{
+A building block of type 'parameter'
+}
 \description{
 This building block declares a parameter model for a parameter that follows the normal distribution on the log scale.
 }

@@ -14,6 +14,8 @@
 #' @param ode.preferred_trans_routines Order of TRANS routines to be tried
 #' @param issues.missing_variables How to handle missing variables
 #'
+#' @return A list of options
+#'
 #' @md
 #' @export
 assemblerr_options <- function(prm.use_mu_referencing = FALSE,

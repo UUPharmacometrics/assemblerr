@@ -17,6 +17,9 @@ pk_elimination_linear_nl(
 
 \item{prm_km}{Parameter model for KM (the half-maximal concentration)}
 }
+\value{
+A building block of type 'pk_component'
+}
 \description{
 This building block declares a mixed linear and nonlinear elimination component for a pharmacokinetic model.
 }

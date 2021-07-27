@@ -15,6 +15,9 @@ obs_combined(prediction, name, var_prop = 0.1, var_add = 1)
 
 \item{var_add}{Variance of the additive error component}
 }
+\value{
+A building block of type 'observation'
+}
 \description{
 This building block declares an observation model with a combined residual error model (\eqn{y = f + f \epsilon_1 + \epsilon_2}).
 }

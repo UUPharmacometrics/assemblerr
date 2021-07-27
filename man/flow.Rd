@@ -13,6 +13,9 @@ flow(definition, from = NA_character_, to = NA_character_)
 
 \item{to}{Name of the sink compartment (NA for an ouflow without sink)}
 }
+\value{
+A building block of type 'flow'
+}
 \description{
 This building block describes a flow between compartments.
 }
