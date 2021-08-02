@@ -8,6 +8,8 @@
 [![R-CMD-check](https://github.com/UUPharmacometrics/assemblerr/workflows/R-CMD-check/badge.svg)](https://github.com/UUPharmacometrics/assemblerr/actions)
 [![Codecov test
 coverage](https://codecov.io/gh/UUPharmacometrics/assemblerr/branch/master/graph/badge.svg)](https://codecov.io/gh/UUPharmacometrics/assemblerr?branch=master)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/assemblerr)](https://CRAN.R-project.org/package=assemblerr)
 <!-- badges: end -->
 
 assemblerr is an R package to construct pharmacometric models by
@@ -18,12 +20,10 @@ specified using R code and then converted to a NONMEM control stream.
 
 ## Installation
 
-You can install the development version from
-[GitHub](https://github.com/) with:
+You can install the latest CRAN version `assemblerr` using:
 
 ``` r
-# install.packages("remotes")
-remotes::install_github("UUPharmacometrics/assemblerr", build_vignettes = TRUE)
+install.packages("assemblerr")
 ```
 
 ## Quick start
