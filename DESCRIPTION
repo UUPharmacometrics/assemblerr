@@ -8,7 +8,7 @@ Description: Construct pharmacometric nonlinear mixed effect models by combining
     The generated code is optimized for performance by recognizing, for example,
     linear differential equations or differential equations with an analytic 
     solution.
-Version: 0.1.0
+Version: 0.1.0.9000
 Authors@R: 
     c(
     person(given = "Sebastian",
