@@ -88,15 +88,18 @@ as_declaration.character <- function(x) {
 as_declaration.name <- function(x) new_declaration(list(NULL), list(x))
 
 # user-facing version with informative error message
-ui_as_declaration <- function(x) {
-  rlang::with_handlers(
+ui_as_declaration <- function(x, error_call) {
+  withCallingHandlers(
     as_declaration(x),
-    error = ~ rlang::abort(
+    error = function(cnd) rlang::abort(
       c(
         "Invalid declaration",
         x = paste0("'", rlang::as_label(rlang::enexpr(x)), "' can not be interpreted as a declaration."),
         i = "A declaration can be specified as a formula, number or the name of a variable."
-      )
+      ),
+      call = error_call,
+      parent = cnd,
+      use_cli_format = TRUE
     )
   )
 }
