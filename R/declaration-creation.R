@@ -90,7 +90,7 @@ as_declaration.name <- function(x) new_declaration(list(NULL), list(x))
 # user-facing version with informative error message
 ui_as_declaration <- function(x) {
   rlang::with_handlers(
-    rlang::with_abort(as_declaration(x)),
+    as_declaration(x),
     error = ~ rlang::abort(
       c(
         "Invalid declaration",
