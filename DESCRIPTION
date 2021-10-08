@@ -75,6 +75,7 @@ Collate:
     'assemblerr-package.R'
     'ast.R'
     'compartment.R'
+    'component.R'
     'conversion-compartment-nm.R'
     'input_variable.R'
     'conversion-input_variable-nm.R'
