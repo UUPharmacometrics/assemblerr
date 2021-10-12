@@ -47,7 +47,7 @@ Suggests:
     withr,
     markdown
 Imports: 
-    purrr,
+    purrr (>= 0.3.0),
     rlang,
     magrittr,
     methods,
