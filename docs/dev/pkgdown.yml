@@ -3,7 +3,7 @@ pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
   getting-started: getting-started.html
-last_built: 2021-08-02T08:25Z
+last_built: 2021-10-08T05:19Z
 urls:
   reference: https://uupharmacometrics.github.io/assemblerr//reference
   article: https://uupharmacometrics.github.io/assemblerr//articles
