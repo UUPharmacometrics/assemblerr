@@ -70,7 +70,7 @@ input_variable <- function(name){
 #' @importFrom utils read.table
 #' @export
 #' @rdname input_variables
-dataset <- function(path){
+dataset <- function(path, use_only_filename = FALSE){
   if (grepl(".csv$",path)) {
     tab <- read.csv(path, header = TRUE, nrows = 1, check.names = FALSE)
   }else{
@@ -87,6 +87,7 @@ dataset <- function(path){
     )
     col_names <- make.unique(col_names, "_")
   }
+  if (!use_only_filename) path <- basename(path)
   purrr::map(tolower(col_names), input_variable) %>%
     purrr::reduce(`+`) +
     metadata("dataset", path)
