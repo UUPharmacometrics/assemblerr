@@ -162,8 +162,12 @@ obs_combined <- function(prediction, name, var_prop = 0.1, var_add = 1) {
   )
 }
 
-validate_and_create_observation <- function(constructor, prediction, name, values) {
-  prediction <- ui_as_declaration(prediction)
+validate_and_create_observation <- function(constructor,
+                                            prediction,
+                                            name,
+                                            values,
+                                            error_call = parent.frame()) {
+  prediction <- ui_as_declaration(prediction, error_call = error_call)
   if (rlang::is_missing(name)) name <- dcl_make_obs_names(prediction)
   assert_valid_observation_name(name)
   constructor(prediction = prediction, name = name, values = values)

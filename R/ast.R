@@ -17,7 +17,7 @@ transform_ast <- function(node, transformer, ...){
     return(node)
   }else if(rlang::is_pairlist(node)){
     lapply(node, transform_ast, ...) %>%
-      rlang::as_pairlist() %>%
+      as.pairlist() %>%
       return()
   }else if(is.null(node)){
     return(node)
