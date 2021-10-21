@@ -23,19 +23,8 @@ NamedComponent <- setClass(
   slots = c(name = "character")
 )
 
-ComponentList <- setClass(
-  "ComponentList",
-  contains = "Component",
-  slots = c(
-    elements = "list"
-  )
-)
 
-NamedComponentList <- setClass(
-  "NamedComponentList",
-  contains = "ComponentList",
-  prototype = prototype(component_class = "NamedComponent")
-)
+
 
 #' Check whether component x and y are compatible
 #'
@@ -46,6 +35,16 @@ setGeneric(
     standardGeneric("is_compatible")
   }
 )
+
+
+setMethod(
+  "is_compatible",
+  signature = signature(x = "Component", y = "ANY"),
+  definition = function(x, y) {
+    return(FALSE)
+  }
+)
+
 
 setMethod(
   "is_compatible",
@@ -172,20 +171,6 @@ ComponentList <- setClass(
 #' Component class
 #'
 #' @noRd
-setGeneric(
-  "component_class",
-  def = function(x) {
-    standardGeneric("component_class")
-  }
-)
-
-setMethod(
-  "component_class",
-  signature = signature(x = "ComponentList"),
-  definition = function(x) {
-    return("Component")
-  }
-)
 
 setMethod(
   f = "add_component",
