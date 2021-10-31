@@ -36,7 +36,6 @@ setGeneric(
   }
 )
 
-
 setMethod(
   "is_compatible",
   signature = signature(x = "Component", y = "ANY"),
@@ -54,14 +53,6 @@ setMethod(
   }
 )
 
-
-setMethod(
-  "is_compatible",
-  signature = signature(x = "Component", y = "ComponentList"),
-  definition = function(x, y) {
-    return(is(y, component_class(x)))
-  }
-)
 
 
 #' Check whether component y can be added to slot s in x

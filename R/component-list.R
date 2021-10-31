@@ -1,4 +1,6 @@
-#' S4 class to represent a list of components
+#' @include component.R
+#'
+#'  S4 class to represent a list of components
 #'
 #' This is the base class for a list of components. The list accepts only elements that are of the right class
 #' as specified by the component_class slot.
@@ -57,6 +59,8 @@ setMethod(
     return(is(y, component_class(x)))
   }
 )
+
+
 
 setMethod(
   "length",
