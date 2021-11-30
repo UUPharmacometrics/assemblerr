@@ -180,7 +180,7 @@ vars_eta <- function(vars) {
 #' @rdname model-variable-selection
 vars_nm_std <- function(vars) {
   if (rlang::is_missing(vars)) vars <- tidyselect::peek_data(fn = "vars_nm_std")
-  tidyselect::all_of(c("DV", "PRED", "RES", "WRES", "IPREDI", "IWRESI"))
+  tidyselect::all_of(c("DV", "PRED", "RES", "WRES", "IPREDI", "IWRESI", "CWRES"))
 }
 
 #' @param match A character vector to match against

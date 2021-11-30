@@ -7,7 +7,7 @@
 \usage{
 input_variable(name)
 
-dataset(path)
+dataset(path, use_only_filename = FALSE)
 }
 \arguments{
 \item{name}{Variable name}

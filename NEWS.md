@@ -1,4 +1,5 @@
 # assemblerr (development version)
+* add CWRES to `vars_nm_std`
 
 # assemblerr 0.1.0
 * First release
