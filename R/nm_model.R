@@ -117,8 +117,8 @@ setMethod(
 
 NmRecord <- setClass("NmRecord",
                      slots = c(name = "character", invisible = "logical"),
-                      contains = "NamedFacet",
-                      prototype = prototype(entry_class = "NmRecordOption"))
+                     contains = "NamedFacet",
+                     prototype = prototype(entry_class = "NmRecordOption"))
 
 setMethod(
   f = "initialize",
@@ -200,8 +200,8 @@ NmInputEntry <- setClass(
 )
 
 NmInputEntryFacet <- setClass("NmInputEntryFacet",
-                         contains = "NamedFacet",
-                         prototype = prototype(entry_class = "NmInputEntry"))
+                              contains = "NamedFacet",
+                              prototype = prototype(entry_class = "NmInputEntry"))
 
 setMethod(
   f = "render_component",

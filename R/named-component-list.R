@@ -42,14 +42,14 @@ setMethod(
 
 
 setReplaceMethod("[[", "NamedComponentList",
-     function(x, i, j, ..., value) {
-       if (!missing(j) || length(list(...)) > 0) rlang::abort("Incorrect number of subscripts.")
-       if (is.null(value)) {
-         x@elements[i] <- NULL
-       } else {
-         assert_compatible_list_elements(value, x)
-         x@elements[[name(value)]] <- value
-       }
-       return(x)
-     }
+                 function(x, i, j, ..., value) {
+                   if (!missing(j) || length(list(...)) > 0) rlang::abort("Incorrect number of subscripts.")
+                   if (is.null(value)) {
+                     x@elements[i] <- NULL
+                   } else {
+                     assert_compatible_list_elements(value, x)
+                     x@elements[[name(value)]] <- value
+                   }
+                   return(x)
+                 }
 )
