@@ -31,6 +31,7 @@ render_in_environment <- function(template, envir) {
   # transformer to:
   #   - protect from length 0
   #   - allow {?'TOL='tol} syntax
+  #   - collapse multiline strings
   transformer <- function(text, envir) {
     prefix <- ""
     if (grepl("^\\?", text)) {
@@ -40,6 +41,8 @@ render_in_environment <- function(template, envir) {
     res <- glue::identity_transformer(text, envir)
     if (rlang::is_empty(res)) {
       res <- ""
+    } else if (length(res) > 1) {
+      res <- paste(res, collapse = "\n")
     }
     else {
       res <- paste0(prefix, res)
@@ -57,6 +60,10 @@ render_in_environment <- function(template, envir) {
 wrap <- function(str, width = 80, exdent = 4) {
   strwrap(str, width = 80, exdent = 4) %>%
     paste(collapse = "\n")
+}
+
+indent <- function(str, n_levels = 1, chars = "\t") {
+  paste0(strrep(chars, n_levels), str)
 }
 
 ie <- function(test, yes = "", no = "") ifelse(test, yes, no)

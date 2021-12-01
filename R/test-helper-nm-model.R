@@ -7,7 +7,10 @@ create_nm_test_model <- function() {
     add_component(NmSubroutine(name = "ADVAN1")) %>%
     add_component(NmCompartment2(name = "CENTRAL")) %>%
     add_component(NmCompartment2(name = "DEPOT", initial_off = TRUE)) %>%
-    add_component(NmPkCode(statements = statement("cl <- theta")))
+    add_component(NmPkCode(statements = statement("cl <- theta[1]*exp(eta[1])"))) %>%
+    add_component(NmPkCode(statements = statement("v <- theta[2]*exp(eta[2])"))) %>%
+    add_component(NmPkCode(statements = statement("k <- cl/v", "conc <- d/v*exp(-k*time)"))) %>%
+    add_component(NmDesCode(statements = statement("dadt[1] <- k*A[1]")))
 
 
 

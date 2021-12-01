@@ -6,7 +6,8 @@
 {render_component2(data) %>% wrap()}
 {render_component2(subroutines) %>% wrap()}
 {render_component2(model) %>% wrap()}
-{render_component2(pk)}"
+{render_component2(pk)}
+{render_component2(des)}"
 
 .templates[["NmProblemRecord"]] <- "$PROBLEM {text}"
 
@@ -29,4 +30,12 @@
 
 .templates[["NmCompartment2"]] <- "COMPARTMENT=({name}{ie(initial_off,' INITIALOFF')}{ie(no_off,' INITIALOFF')}{ie(no_dose,' NODOSE')}{ie(equilibrium,' EQUILIBRIUM')}{ie(default_observation,' DEFOBSERVATION')}{ie(default_dose,' DEFDOSE')})"
 
-.templates[["NmPkRecord"]] <- "$PK"
+.templates[["NmPkRecord"]] <- "$PK
+{render_collection(elements, collapse = NULL)}"
+
+.templates[["NmDesRecord"]] <- "$DES
+{render_collection(elements, collapse = NULL)}"
+
+
+.templates[["NmAbbrivatedCodeBlock"]] <- "{indent(render_component(statements, collapse = NULL))}"
+

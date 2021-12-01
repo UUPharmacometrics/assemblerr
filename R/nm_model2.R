@@ -98,7 +98,8 @@ NmAbbrivatedCodeBlock <- setClass(
 
 NmAbbrivatedCodeRecord <- setClass(
   "NmAbbrivatedCodeRecord",
-  contains = "ComponentList"
+  contains = "ComponentList",
+  prototype = prototype(component_class = "NmAbbrivatedCodeBlock")
 )
 
 
@@ -111,8 +112,23 @@ NmPkCode <- setClass(
 
 NmPkRecord <- setClass(
   "NmPkRecord",
-  contains = "NmAbbrivatedCodeRecord"
+  contains = "NmAbbrivatedCodeRecord",
+  prototype = prototype(component_class = "NmPkCode")
 )
+
+# $DES ---------------------------------------------------------------------
+
+NmDesCode <- setClass(
+  "NmDesCode",
+  contains = "NmAbbrivatedCodeBlock"
+)
+
+NmDesRecord <- setClass(
+  "NmDesRecord",
+  contains = "NmAbbrivatedCodeRecord",
+  prototype = prototype(component_class = "NmDesCode")
+)
+
 
 
 # Model ------------------------------------------------------------------
@@ -125,7 +141,8 @@ NmModel2 <- setClass(
     data = "NmDataRecord",
     subroutines = "NmSubroutinesRecord",
     model = "NmModelRecord",
-    pk = "NmPkRecord"
+    pk = "NmPkRecord",
+    des = "NmDesRecord"
   )
 )
 

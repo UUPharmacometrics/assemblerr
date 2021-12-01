@@ -53,12 +53,12 @@ vec_ptype_full.assemblerr_statement <- function(x, ...) "statement"
 setMethod(
   f = "render_component",
   signature = c(x = "assemblerr_statement"),
-  definition = function(x) {
+  definition = function(x, collapse = "\n") {
     vec_data(x) %>%
       purrr::map(transform_ast, transformer = vec2fcall_transformer) %>%
       purrr::map(transform_ast, transformer = assignment_transformer) %>%
       purrr::map_chr(deparse, control = c(), width.cutoff = 200) %>%
-      glue::glue_collapse(sep = "\n") %>%
+      paste(collapse = collapse) %>%
       toupper()
   }
 )
