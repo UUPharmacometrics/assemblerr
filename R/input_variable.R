@@ -66,6 +66,7 @@ input_variable <- function(name){
 }
 
 #' @param path Dataset path
+#' @param use_only_filename Whether to include the path of the file
 #' @importFrom utils read.csv
 #' @importFrom utils read.table
 #' @export
