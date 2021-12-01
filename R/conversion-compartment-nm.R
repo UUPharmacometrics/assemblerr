@@ -87,7 +87,7 @@ collect_flows <- function(flow_facet, source_model) {
       volume <- dcl_def(cmp_from@volume)[[1]]
       dcl <- dcl_substitute(dcl, list(C = bquote(A/.(volume))))
     }
-    dcl <- dcl_substitute(dcl, list(A = bquote(A[.(cmp_from@name)])))
+    if (!is.null(cmp_from)) dcl <- dcl_substitute(dcl, list(A = bquote(A[.(cmp_from@name)])))
     data_frame(definition = dcl, from = flow@from, to = flow@to)
   })
   vec_c(!!!tmp)
