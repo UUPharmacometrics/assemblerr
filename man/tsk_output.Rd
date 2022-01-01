@@ -26,7 +26,7 @@ These functions define output tasks that include the selected variables in the o
 Tasks are building blocks that allow to specify what a model should
 “do”. Like other model building blocks, they can be combined using
 the \code{+} operator. However, they should not be added to a model but
-rather provided via the \verb{tasks=} argument to the render function, e.g.,\if{html}{\out{<div class="r">}}\preformatted{render(m, tasks = tsk_estimation() +
+rather provided via the \verb{tasks=} argument to the render function, e.g.,\if{html}{\out{<div class="sourceCode r">}}\preformatted{render(m, tasks = tsk_estimation() +
    tsk_output_xpose4())
 }\if{html}{\out{</div>}}
 }

@@ -26,7 +26,7 @@ This function defines an estimation task allowing to specify the estimation algo
 Tasks are building blocks that allow to specify what a model should
 “do”. Like other model building blocks, they can be combined using
 the \code{+} operator. However, they should not be added to a model but
-rather provided via the \verb{tasks=} argument to the render function, e.g.,\if{html}{\out{<div class="r">}}\preformatted{render(m, tasks = tsk_estimation() +
+rather provided via the \verb{tasks=} argument to the render function, e.g.,\if{html}{\out{<div class="sourceCode r">}}\preformatted{render(m, tasks = tsk_estimation() +
    tsk_output_xpose4())
 }\if{html}{\out{</div>}}
 }
@@ -75,7 +75,7 @@ The \verb{target_options=} argument
 
 \subsection{Multiple estimation tasks}{
 
-A sequence of estimation tasks can be specified in assemblerr by combining multiple estimations, for example\if{html}{\out{<div class="r">}}\preformatted{render(m, tasks = tsk_estimation("foce") + tsk_estimation("imp"))
+A sequence of estimation tasks can be specified in assemblerr by combining multiple estimations, for example\if{html}{\out{<div class="sourceCode r">}}\preformatted{render(m, tasks = tsk_estimation("foce") + tsk_estimation("imp"))
 }\if{html}{\out{</div>}}
 
 will create model code that contains an FOCE as well as an importance sampling estimation step.

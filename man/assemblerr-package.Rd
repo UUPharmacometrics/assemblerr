@@ -6,14 +6,7 @@
 \alias{assemblerr-package}
 \title{assemblerr: Assembly of Pharmacometric Models}
 \description{
-Construct pharmacometric nonlinear mixed effect models by combining 
-    predefined model components and automatically generate model code for NONMEM. 
-    Models are created by combining parameter and observation models, algebraic 
-    relationships, compartments, and flows. Pharmacokinetic models can be assembled
-    from the higher-order components: absorption, distribution, and elimination. 
-    The generated code is optimized for performance by recognizing, for example,
-    linear differential equations or differential equations with an analytic 
-    solution.
+Construct pharmacometric nonlinear mixed effect models by combining predefined model components and automatically generate model code for NONMEM. Models are created by combining parameter and observation models, algebraic relationships, compartments, and flows. Pharmacokinetic models can be assembled from the higher-order components: absorption, distribution, and elimination. The generated code is optimized for performance by recognizing, for example, linear differential equations or differential equations with an analytic solution.
 }
 \seealso{
 Useful links:
