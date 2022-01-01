@@ -1,4 +1,4 @@
-# parameters
+# prm_log_normal
 
     Code
       prm_log_normal("test")
@@ -6,7 +6,7 @@
       # an assemblerr building block 
       test: log-normal
 
----
+# prm_logit_normal
 
     Code
       prm_logit_normal("test")
@@ -14,7 +14,7 @@
       # an assemblerr building block 
       test: logit-normal
 
----
+# prm_no_var
 
     Code
       prm_no_var("test")
@@ -22,7 +22,7 @@
       # an assemblerr building block 
       test: no variability
 
----
+# prm_normal
 
     Code
       prm_normal("test")
@@ -30,7 +30,7 @@
       # an assemblerr building block 
       test: normal
 
-# observations
+# obs_additive
 
     Code
       obs_additive(~test)
@@ -38,7 +38,7 @@
       # an assemblerr building block 
       test: `. ~ test`
 
----
+# obs_combined
 
     Code
       obs_combined(~test)
@@ -46,7 +46,7 @@
       # an assemblerr building block 
       test: `. ~ test`
 
----
+# obs_proportional
 
     Code
       obs_proportional(~test)
@@ -100,7 +100,7 @@
       # ...2 more facets 
       ! 2 critical issues 
 
-# permuation of prm and obs
+# prm_log_normal + obs_additive
 
     Code
       model() + prm_log_normal("k") + compartment("central") + flow(~k * C, "central") +
@@ -114,7 +114,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# prm_logit_normal + obs_additive
 
     Code
       model() + prm_logit_normal("k") + compartment("central") + flow(~k * C,
@@ -128,7 +128,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# prm_no_var + obs_additive
 
     Code
       model() + prm_no_var("k") + compartment("central") + flow(~k * C, "central") +
@@ -142,7 +142,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# prm_normal + obs_additive
 
     Code
       model() + prm_normal("k") + compartment("central") + flow(~k * C, "central") +
@@ -156,7 +156,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# prm_log_normal + obs_combined
 
     Code
       model() + prm_log_normal("k") + compartment("central") + flow(~k * C, "central") +
@@ -170,7 +170,7 @@
         observations: `. ~ C["central"]` (combined)
       # ...2 more facets 
 
----
+# prm_logit_normal + obs_combined
 
     Code
       model() + prm_logit_normal("k") + compartment("central") + flow(~k * C,
@@ -184,7 +184,7 @@
         observations: `. ~ C["central"]` (combined)
       # ...2 more facets 
 
----
+# prm_no_var + obs_combined
 
     Code
       model() + prm_no_var("k") + compartment("central") + flow(~k * C, "central") +
@@ -198,7 +198,7 @@
         observations: `. ~ C["central"]` (combined)
       # ...2 more facets 
 
----
+# prm_normal + obs_combined
 
     Code
       model() + prm_normal("k") + compartment("central") + flow(~k * C, "central") +
@@ -212,7 +212,7 @@
         observations: `. ~ C["central"]` (combined)
       # ...2 more facets 
 
----
+# prm_log_normal + obs_proportional
 
     Code
       model() + prm_log_normal("k") + compartment("central") + flow(~k * C, "central") +
@@ -226,7 +226,7 @@
         observations: `. ~ C["central"]` (proportional)
       # ...2 more facets 
 
----
+# prm_logit_normal + obs_proportional
 
     Code
       model() + prm_logit_normal("k") + compartment("central") + flow(~k * C,
@@ -240,7 +240,7 @@
         observations: `. ~ C["central"]` (proportional)
       # ...2 more facets 
 
----
+# prm_no_var + obs_proportional
 
     Code
       model() + prm_no_var("k") + compartment("central") + flow(~k * C, "central") +
@@ -254,7 +254,7 @@
         observations: `. ~ C["central"]` (proportional)
       # ...2 more facets 
 
----
+# prm_normal + obs_proportional
 
     Code
       model() + prm_normal("k") + compartment("central") + flow(~k * C, "central") +
@@ -281,7 +281,7 @@
       # ...2 more facets 
       ! 4 critical issues 
 
-# permutation of PK models
+# pk_distribution_1cmp + pk_elimination_linear + pk_absorption_fo
 
     Code
       pk_model() + pk_distribution_1cmp() + pk_elimination_linear() +
@@ -294,7 +294,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_2cmp + pk_elimination_linear + pk_absorption_fo
 
     Code
       pk_model() + pk_distribution_2cmp() + pk_elimination_linear() +
@@ -307,7 +307,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_3cmp + pk_elimination_linear + pk_absorption_fo
 
     Code
       pk_model() + pk_distribution_3cmp() + pk_elimination_linear() +
@@ -320,7 +320,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_1cmp + pk_elimination_linear_nl + pk_absorption_fo
 
     Code
       pk_model() + pk_distribution_1cmp() + pk_elimination_linear_nl() +
@@ -333,7 +333,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_2cmp + pk_elimination_linear_nl + pk_absorption_fo
 
     Code
       pk_model() + pk_distribution_2cmp() + pk_elimination_linear_nl() +
@@ -346,7 +346,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_3cmp + pk_elimination_linear_nl + pk_absorption_fo
 
     Code
       pk_model() + pk_distribution_3cmp() + pk_elimination_linear_nl() +
@@ -359,7 +359,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_1cmp + pk_elimination_nl + pk_absorption_fo
 
     Code
       pk_model() + pk_distribution_1cmp() + pk_elimination_nl() + pk_absorption_fo() +
@@ -372,7 +372,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_2cmp + pk_elimination_nl + pk_absorption_fo
 
     Code
       pk_model() + pk_distribution_2cmp() + pk_elimination_nl() + pk_absorption_fo() +
@@ -385,7 +385,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_3cmp + pk_elimination_nl + pk_absorption_fo
 
     Code
       pk_model() + pk_distribution_3cmp() + pk_elimination_nl() + pk_absorption_fo() +
@@ -398,7 +398,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_1cmp + pk_elimination_linear + pk_absorption_fo_lag
 
     Code
       pk_model() + pk_distribution_1cmp() + pk_elimination_linear() +
@@ -411,7 +411,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_2cmp + pk_elimination_linear + pk_absorption_fo_lag
 
     Code
       pk_model() + pk_distribution_2cmp() + pk_elimination_linear() +
@@ -424,7 +424,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_3cmp + pk_elimination_linear + pk_absorption_fo_lag
 
     Code
       pk_model() + pk_distribution_3cmp() + pk_elimination_linear() +
@@ -437,7 +437,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_1cmp + pk_elimination_linear_nl + pk_absorption_fo_lag
 
     Code
       pk_model() + pk_distribution_1cmp() + pk_elimination_linear_nl() +
@@ -450,7 +450,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_2cmp + pk_elimination_linear_nl + pk_absorption_fo_lag
 
     Code
       pk_model() + pk_distribution_2cmp() + pk_elimination_linear_nl() +
@@ -463,7 +463,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_3cmp + pk_elimination_linear_nl + pk_absorption_fo_lag
 
     Code
       pk_model() + pk_distribution_3cmp() + pk_elimination_linear_nl() +
@@ -476,7 +476,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_1cmp + pk_elimination_nl + pk_absorption_fo_lag
 
     Code
       pk_model() + pk_distribution_1cmp() + pk_elimination_nl() +
@@ -489,7 +489,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_2cmp + pk_elimination_nl + pk_absorption_fo_lag
 
     Code
       pk_model() + pk_distribution_2cmp() + pk_elimination_nl() +
@@ -502,7 +502,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_3cmp + pk_elimination_nl + pk_absorption_fo_lag
 
     Code
       pk_model() + pk_distribution_3cmp() + pk_elimination_nl() +
@@ -515,7 +515,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_1cmp + pk_elimination_linear + pk_absorption_fo_transit
 
     Code
       pk_model() + pk_distribution_1cmp() + pk_elimination_linear() +
@@ -528,7 +528,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_2cmp + pk_elimination_linear + pk_absorption_fo_transit
 
     Code
       pk_model() + pk_distribution_2cmp() + pk_elimination_linear() +
@@ -541,7 +541,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_3cmp + pk_elimination_linear + pk_absorption_fo_transit
 
     Code
       pk_model() + pk_distribution_3cmp() + pk_elimination_linear() +
@@ -554,7 +554,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_1cmp + pk_elimination_linear_nl + pk_absorption_fo_transit
 
     Code
       pk_model() + pk_distribution_1cmp() + pk_elimination_linear_nl() +
@@ -567,7 +567,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_2cmp + pk_elimination_linear_nl + pk_absorption_fo_transit
 
     Code
       pk_model() + pk_distribution_2cmp() + pk_elimination_linear_nl() +
@@ -580,7 +580,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_3cmp + pk_elimination_linear_nl + pk_absorption_fo_transit
 
     Code
       pk_model() + pk_distribution_3cmp() + pk_elimination_linear_nl() +
@@ -593,7 +593,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_1cmp + pk_elimination_nl + pk_absorption_fo_transit
 
     Code
       pk_model() + pk_distribution_1cmp() + pk_elimination_nl() +
@@ -606,7 +606,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_2cmp + pk_elimination_nl + pk_absorption_fo_transit
 
     Code
       pk_model() + pk_distribution_2cmp() + pk_elimination_nl() +
@@ -619,7 +619,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_3cmp + pk_elimination_nl + pk_absorption_fo_transit
 
     Code
       pk_model() + pk_distribution_3cmp() + pk_elimination_nl() +
@@ -632,7 +632,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_1cmp + pk_elimination_linear + pk_absorption_fo_zo
 
     Code
       pk_model() + pk_distribution_1cmp() + pk_elimination_linear() +
@@ -645,7 +645,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_2cmp + pk_elimination_linear + pk_absorption_fo_zo
 
     Code
       pk_model() + pk_distribution_2cmp() + pk_elimination_linear() +
@@ -658,7 +658,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_3cmp + pk_elimination_linear + pk_absorption_fo_zo
 
     Code
       pk_model() + pk_distribution_3cmp() + pk_elimination_linear() +
@@ -671,7 +671,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_1cmp + pk_elimination_linear_nl + pk_absorption_fo_zo
 
     Code
       pk_model() + pk_distribution_1cmp() + pk_elimination_linear_nl() +
@@ -684,7 +684,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_2cmp + pk_elimination_linear_nl + pk_absorption_fo_zo
 
     Code
       pk_model() + pk_distribution_2cmp() + pk_elimination_linear_nl() +
@@ -697,7 +697,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_3cmp + pk_elimination_linear_nl + pk_absorption_fo_zo
 
     Code
       pk_model() + pk_distribution_3cmp() + pk_elimination_linear_nl() +
@@ -710,7 +710,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_1cmp + pk_elimination_nl + pk_absorption_fo_zo
 
     Code
       pk_model() + pk_distribution_1cmp() + pk_elimination_nl() + pk_absorption_fo_zo() +
@@ -723,7 +723,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_2cmp + pk_elimination_nl + pk_absorption_fo_zo
 
     Code
       pk_model() + pk_distribution_2cmp() + pk_elimination_nl() + pk_absorption_fo_zo() +
@@ -736,7 +736,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_3cmp + pk_elimination_nl + pk_absorption_fo_zo
 
     Code
       pk_model() + pk_distribution_3cmp() + pk_elimination_nl() + pk_absorption_fo_zo() +
@@ -749,7 +749,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_1cmp + pk_elimination_linear + pk_absorption_zo
 
     Code
       pk_model() + pk_distribution_1cmp() + pk_elimination_linear() +
@@ -762,7 +762,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_2cmp + pk_elimination_linear + pk_absorption_zo
 
     Code
       pk_model() + pk_distribution_2cmp() + pk_elimination_linear() +
@@ -775,7 +775,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_3cmp + pk_elimination_linear + pk_absorption_zo
 
     Code
       pk_model() + pk_distribution_3cmp() + pk_elimination_linear() +
@@ -788,7 +788,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_1cmp + pk_elimination_linear_nl + pk_absorption_zo
 
     Code
       pk_model() + pk_distribution_1cmp() + pk_elimination_linear_nl() +
@@ -801,7 +801,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_2cmp + pk_elimination_linear_nl + pk_absorption_zo
 
     Code
       pk_model() + pk_distribution_2cmp() + pk_elimination_linear_nl() +
@@ -814,7 +814,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_3cmp + pk_elimination_linear_nl + pk_absorption_zo
 
     Code
       pk_model() + pk_distribution_3cmp() + pk_elimination_linear_nl() +
@@ -827,7 +827,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_1cmp + pk_elimination_nl + pk_absorption_zo
 
     Code
       pk_model() + pk_distribution_1cmp() + pk_elimination_nl() + pk_absorption_zo() +
@@ -840,7 +840,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_2cmp + pk_elimination_nl + pk_absorption_zo
 
     Code
       pk_model() + pk_distribution_2cmp() + pk_elimination_nl() + pk_absorption_zo() +
@@ -853,7 +853,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_3cmp + pk_elimination_nl + pk_absorption_zo
 
     Code
       pk_model() + pk_distribution_3cmp() + pk_elimination_nl() + pk_absorption_zo() +
@@ -866,7 +866,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_1cmp + pk_elimination_linear + pk_absorption_zo_lag
 
     Code
       pk_model() + pk_distribution_1cmp() + pk_elimination_linear() +
@@ -879,7 +879,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_2cmp + pk_elimination_linear + pk_absorption_zo_lag
 
     Code
       pk_model() + pk_distribution_2cmp() + pk_elimination_linear() +
@@ -892,7 +892,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_3cmp + pk_elimination_linear + pk_absorption_zo_lag
 
     Code
       pk_model() + pk_distribution_3cmp() + pk_elimination_linear() +
@@ -905,7 +905,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_1cmp + pk_elimination_linear_nl + pk_absorption_zo_lag
 
     Code
       pk_model() + pk_distribution_1cmp() + pk_elimination_linear_nl() +
@@ -918,7 +918,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_2cmp + pk_elimination_linear_nl + pk_absorption_zo_lag
 
     Code
       pk_model() + pk_distribution_2cmp() + pk_elimination_linear_nl() +
@@ -931,7 +931,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_3cmp + pk_elimination_linear_nl + pk_absorption_zo_lag
 
     Code
       pk_model() + pk_distribution_3cmp() + pk_elimination_linear_nl() +
@@ -944,7 +944,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_1cmp + pk_elimination_nl + pk_absorption_zo_lag
 
     Code
       pk_model() + pk_distribution_1cmp() + pk_elimination_nl() +
@@ -957,7 +957,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_2cmp + pk_elimination_nl + pk_absorption_zo_lag
 
     Code
       pk_model() + pk_distribution_2cmp() + pk_elimination_nl() +
@@ -970,7 +970,7 @@
         observations: `. ~ C["central"]` (additive)
       # ...2 more facets 
 
----
+# pk_distribution_3cmp + pk_elimination_nl + pk_absorption_zo_lag
 
     Code
       pk_model() + pk_distribution_3cmp() + pk_elimination_nl() +
