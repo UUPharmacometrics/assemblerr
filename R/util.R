@@ -91,6 +91,16 @@ md_doc_links_for_package_functions <- function(pattern) {
     paste(collapse = ", ")
 }
 
+list_fns <- function(pattern) {
+  lsf.str("package:assemblerr", pattern = pattern)
+}
+
+list_combs <- function(...) {
+  rlang::list2(...) %>%
+    purrr::map(list_fns) %>%
+    purrr::cross_df()
+}
+
 generate_unique_name_mapping <- function(variables) {
   mapping <- character()
   indicies <- seq_along(variables)

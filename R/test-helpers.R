@@ -101,3 +101,29 @@ expect_no_matching_issue <- function(object, regexp) {
   )
   return(invisible(object))
 }
+
+create_snapshot_tests <- function(test_name, test_expr, ..., section_label = "Section 1") {
+  str_call <- rlang::expr_deparse(sys.call())
+  section_header <- paste("#", section_label, paste(rep("-", 80 - nchar(section_label)), collapse = ""))
+  # add tab to each line of test_expr
+  test_expr <- strsplit(test_expr, "\n") %>%
+    unlist() %>%
+    trimws() %>%
+    paste0("\t\t", .) %>%
+    paste(collapse = "\n")
+  test_args <- vctrs::vec_recycle_common(...)
+  cli::cat_line(section_header)
+  cli::cat_line("#")
+  cli::cat_line("# Automatically generated with:")
+  cli::cat_line("# \t", str_call)
+  for (args in purrr::transpose(test_args)) {
+    name <- rlang::exec(glue::glue, test_name, !!!args)
+    expr <- rlang::exec(glue::glue, test_expr, !!!args, .trim = FALSE)
+    cli::cat_line()
+    cli::cat_line("test_that(\"", name, "\", {")
+    cli::cat_line("\texpect_snapshot(")
+    cli::cat_line(expr)
+    cli::cat_line("\t)")
+    cli::cat_line("})")
+  }
+}
