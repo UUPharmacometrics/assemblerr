@@ -6,16 +6,19 @@
 \usage{
 pk_elimination_linear_nl(
   prm_cllin = prm_log_normal("cllin", median = 50, var_log = 0.1),
-  prm_vmax = prm_log_normal("vmax", median = 10, var_log = 0.1),
-  prm_km = prm_log_normal("km", median = 0.5, var_log = 0.1)
+  prm_clmm = prm_log_normal("clmm", median = 25, var_log = 0.1),
+  prm_km = prm_log_normal("km", median = 0.5, var_log = 0.1),
+  prm_vmax = NULL
 )
 }
 \arguments{
 \item{prm_cllin}{Parameter model for the linear clearance}
 
-\item{prm_vmax}{Parameter model for Vmax (the maximal elimination rate)}
+\item{prm_clmm}{Parameter model for the non-linear clearance}
 
 \item{prm_km}{Parameter model for KM (the half-maximal concentration)}
+
+\item{prm_vmax}{Parameter model for Vmax (the maximal elimination rate)}
 }
 \value{
 A building block of type 'pk_component'

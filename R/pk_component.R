@@ -507,9 +507,14 @@ setMethod(
   f = "convert",
   signature = c(target = "Model", source = "PkModel", component = "PkEliminationLinearNL"),
   definition = function(target, source, component, options) {
-    dcl_nl_elim <- declaration(~vmax*C/(km+C)) %>%
-        dcl_substitute(list(vmax = sym(component@prm_names['vmax']), km = sym(component@prm_names['km'])))
 
+    if ('vmax' %in% names(component@prm_names)) {
+      dcl_nl_elim <- declaration(~vmax*C/(km+C)) %>%
+        dcl_substitute(list(vmax = sym(component@prm_names['vmax']), km = sym(component@prm_names['km'])))
+    }else{
+      dcl_nl_elim <- declaration(~clmm*km/(km+C)) %>%
+        dcl_substitute(list(clmm = sym(component@prm_names['clmm']), km = sym(component@prm_names['km'])))
+    }
     dcl_lin_elim <- declaration(~cllin*C) %>%
       dcl_substitute(list(cllin = sym(component@prm_names['cllin'])))
 
@@ -526,8 +531,9 @@ setMethod(
 #' @includeRmd man/rmd/pk-component.Rmd
 #'
 #' @param prm_cllin Parameter model for the linear clearance
-#' @param prm_vmax Parameter model for Vmax (the maximal elimination rate)
+#' @param prm_clmm Parameter model for the non-linear clearance
 #' @param prm_km Parameter model for KM (the half-maximal concentration)
+#' @param prm_vmax Parameter model for Vmax (the maximal elimination rate)
 #'
 #' @return A building block of type 'pk_component'
 #'
@@ -536,16 +542,27 @@ setMethod(
 #' @md
 #' @export
 pk_elimination_linear_nl <- function(prm_cllin = prm_log_normal("cllin", median = 50, var_log = 0.1),
-                              prm_vmax = prm_log_normal("vmax", median = 10, var_log = 0.1),
-                              prm_km = prm_log_normal("km", median = 0.5, var_log = 0.1)) {
+                                     prm_clmm = prm_log_normal("clmm", median = 25, var_log = 0.1),
+                              prm_km = prm_log_normal("km", median = 0.5, var_log = 0.1),
+                              prm_vmax = NULL
+                              ) {
+  if (!is.null(prm_clmm) && !is.null(prm_vmax)) {
+    prm_clmm <- NULL
+    rlang::warn(
+      c("Ignoring 'clmm' parameter",
+        i = "Only one of 'prm_clmm' and 'prm_vmax' need to be supplied")
+    )
+  }
   PkEliminationLinearNL(
     parameters = list(
       cllin = prm_cllin,
+      clmm = prm_clmm,
       vmax = prm_vmax,
       km = prm_km
     )
   ) +
     prm_cllin +
+    prm_clmm +
     prm_vmax +
     prm_km
 }
