@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">assemblerr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
       </span>
     </div>
 
@@ -85,7 +85,7 @@
       <h1 data-toc-skip>Getting started</h1>
                         <h4 class="author">Sebastian Ueckert</h4>
             
-            <h4 class="date">2021-07-27</h4>
+            <h4 class="date">2022-01-02</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/UUPharmacometrics/assemblerr/blob/master/vignettes/getting-started.Rmd"><code>vignettes/getting-started.Rmd</code></a></small>
       <div class="hidden name"><code>getting-started.Rmd</code></div>
@@ -267,7 +267,7 @@
   <span class="fu"><a href="../reference/compartment.html">compartment</a></span><span class="op">(</span><span class="st">"central"</span>, volume <span class="op">=</span> <span class="st">"v"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="../reference/flow.html">flow</a></span><span class="op">(</span>from <span class="op">=</span> <span class="st">"central"</span>, definition <span class="op">=</span> <span class="op">~</span><span class="va">cl</span><span class="op">*</span><span class="va">C</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="../reference/obs_additive.html">obs_additive</a></span><span class="op">(</span><span class="va">effect</span><span class="op">~</span><span class="va">emax</span><span class="op">*</span><span class="va">C</span><span class="op">[</span><span class="st">"central"</span><span class="op">]</span><span class="op">/</span><span class="op">(</span><span class="va">ec50</span> <span class="op">+</span> <span class="va">C</span><span class="op">[</span><span class="st">"central"</span><span class="op">]</span><span class="op">)</span>, var_add <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
-<p>In this model definition, we used two additional parameters and, more importantly, a compartment as well as a flow from that compartment. You should note, how you can use the variable <code>C</code> in the flow definition to refer to the concentration in the “from” compartment. Similarly, you can also use <code>C["central"]</code> to refer to the concentration in the central compartment when defining the observational model. The <code>A</code> variable provides a reference to the unscaled amount in the compartment.</p>
+<p>In this model definition, we used two additional parameters and, more importantly, a compartment as well as a flow from that compartment. You should note, how you can use the variable <code>C</code> in the flow definition to refer to the concentration in the “from” compartment. Similarly, you can also use <code>C["central"]</code> to refer to the concentration in the central compartment when defining the observational model. The <code>A</code> variable provides a reference to the amount in the compartment.</p>
 <p>Pay attention to how assemblerr replaces the <code>C</code> variables with the corresponding compartment reference when we render the model like before:</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/render.html">render</a></span><span class="op">(</span><span class="va">m2</span><span class="op">)</span></code></pre></div>

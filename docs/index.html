@@ -12,13 +12,13 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Assembly of Pharmacometric Models">
-<meta property="og:description" content="Construct pharmacometric nonlinear mixed effect models by combining
-    predefined model components and automatically generate model code for NONMEM.
-    Models are created by combining parameter and observation models, algebraic
+<meta property="og:description" content="Construct pharmacometric nonlinear mixed effect models by combining 
+    predefined model components and automatically generate model code for NONMEM. 
+    Models are created by combining parameter and observation models, algebraic 
     relationships, compartments, and flows. Pharmacokinetic models can be assembled
-    from the higher-order components: absorption, distribution, and elimination.
+    from the higher-order components: absorption, distribution, and elimination. 
     The generated code is optimized for performance by recognizing, for example,
-    linear differential equations or differential equations with an analytic
+    linear differential equations or differential equations with an analytic 
     solution.">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">assemblerr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
       </span>
     </div>
 
@@ -47,7 +47,7 @@
 <li>
   <a href="index.html">
     <span class="fas fa-home fa-lg"></span>
-
+     
   </a>
 </li>
 <li>
@@ -56,7 +56,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     Articles
-
+     
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
@@ -73,7 +73,7 @@
 <li>
   <a href="https://github.com/UUPharmacometrics/assemblerr/">
     <span class="fab fa-github fa-lg"></span>
-
+     
   </a>
 </li>
       </ul>
@@ -84,7 +84,7 @@
 </div>
 <!--/.navbar -->
 
-
+      
 
       </header><div class="row">
   <div class="contents col-md-9">
@@ -117,7 +117,7 @@
   <span class="fu"><a href="reference/obs_additive.html">obs_additive</a></span><span class="op">(</span><span class="op">~</span><span class="va">effect</span>, var_add <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
 <p><strong>Generate NONMEM code</strong></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/render.html">render</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="reference/render.html">render</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span> 
 <span class="co">#&gt; $PROBLEM</span>
 <span class="co">#&gt; $INPUT DOSE ID DV</span>
 <span class="co">#&gt; $DATA data.csv IGNORE=@</span>
@@ -147,9 +147,11 @@
     <div class="links">
 <h2>Links</h2>
 <ul class="list-unstyled">
-<li>Browse source code at <br><a href="https://github.com/UUPharmacometrics/assemblerr/">https://github.com/UUPharmacometrics/assemblerr/</a>
+<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=assemblerr">https://​cloud.r-project.org/​package=assemblerr</a>
 </li>
-<li>Report a bug at <br><a href="https://github.com/UUPharmacometrics/assemblerr/issues">https://github.com/UUPharmacometrics/assemblerr/issues</a>
+<li>Browse source code at <br><a href="https://github.com/UUPharmacometrics/assemblerr/">https://​github.com/​UUPharmacometrics/​assemblerr/​</a>
+</li>
+<li>Report a bug at <br><a href="https://github.com/UUPharmacometrics/assemblerr/issues">https://​github.com/​UUPharmacometrics/​assemblerr/​issues</a>
 </li>
 </ul>
 </div>
@@ -174,6 +176,7 @@
 <ul class="list-unstyled">
 <li><a href="https://github.com/UUPharmacometrics/assemblerr/actions"><img src="https://github.com/UUPharmacometrics/assemblerr/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://codecov.io/gh/UUPharmacometrics/assemblerr?branch=master"><img src="https://codecov.io/gh/UUPharmacometrics/assemblerr/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="https://CRAN.R-project.org/package=assemblerr"><img src="https://www.r-pkg.org/badges/version/assemblerr" alt="CRAN status"></a></li>
 </ul>
 </div>
 </div>
@@ -191,7 +194,7 @@
       </footer>
 </div>
 
-
+  
 
 
   </body>
