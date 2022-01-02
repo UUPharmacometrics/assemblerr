@@ -77,7 +77,8 @@ dataset <- function(path, use_only_filename = FALSE){
   }else{
     tab <- read.table(path, header = TRUE, nrows = 1, check.names = FALSE)
   }
-  col_names <- colnames(tab)
+  col_names <- colnames(tab) %>%
+    gsub("[^[:alnum:] ]", "", .)
   if (any(duplicated(col_names))) {
     duplicated_names <- col_names[duplicated(col_names)] %>%
       unique()
