@@ -88,7 +88,7 @@ dataset <- function(path, use_only_filename = FALSE){
     )
     col_names <- make.unique(col_names, "_")
   }
-  if (!use_only_filename) path <- basename(path)
+  if (use_only_filename) path <- basename(path)
   purrr::map(tolower(col_names), input_variable) %>%
     purrr::reduce(`+`) +
     metadata("dataset", path)
