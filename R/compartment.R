@@ -211,7 +211,7 @@ check_for_undefined_flow_variables <- function(flow_facet, model) {
 #' ## Compartment volumes
 #'
 #' The compartment volume can be provided as a number, R formula, or a parameter name. It will be used by assemblerr to replace
-#' references to the compartment concentration (e.g., `~C["central"]`) with the corresponding amount devided by volume (e.g., `~A["central]/vc`).
+#' references to the compartment concentration (e.g., `~C["central"]`) with the corresponding amount divided by volume (e.g., `~A["central]/vc`).
 #'
 #' @seealso [flow] for how to describe compartment kinetics
 #' @param name Name of the compartment
@@ -293,7 +293,7 @@ cmp <- compartment
 #'
 #' @param definition Equation describing the flow
 #' @param from Name of the source compartment (NA for an inflow without source)
-#' @param to Name of the sink compartment (NA for an ouflow without sink)
+#' @param to Name of the sink compartment (NA for an outflow without sink)
 #'
 #' @return A building block of type 'flow'
 #'

@@ -13,7 +13,7 @@ A general pharmacometric model
 This function creates the basis for a general pharmacometric model, a flexible but verbose model type.
 }
 \details{
-The function creates the fundament for a general pharmacometric model to which different building blocks can be added. The following building
+The function creates the foundation for a general pharmacometric model to which different building blocks can be added. The following building
 blocks are relevant for this model type:
 \itemize{
 \item Parameters: \link{prm_log_normal}, \link{prm_logit_normal}, \link{prm_no_var}, \link{prm_normal}

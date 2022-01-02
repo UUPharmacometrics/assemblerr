@@ -26,7 +26,7 @@ dcl_devide(dcl1, dcl2, lhs = dcl_id(dcl1))
 A declaration
 }
 \description{
-These functions allow to combine two declarations using addition, substraction, multiplication, or devision.
+These functions allow to combine two declarations using addition, substraction, multiplication, or division.
 }
 \section{Functions}{
 \itemize{
@@ -36,7 +36,7 @@ These functions allow to combine two declarations using addition, substraction, 
 
 \item \code{dcl_multiply}: Multiplications of the declarations
 
-\item \code{dcl_devide}: Devision of the declarations
+\item \code{dcl_devide}: Division of the declarations
 }}
 
 \keyword{internal}

@@ -33,7 +33,7 @@ needs to start with a letter.  Adding a compartment with an already existing nam
 \subsection{Compartment volumes}{
 
 The compartment volume can be provided as a number, R formula, or a parameter name. It will be used by assemblerr to replace
-references to the compartment concentration (e.g., \code{~C["central"]}) with the corresponding amount devided by volume (e.g., \verb{~A["central]/vc}).
+references to the compartment concentration (e.g., \code{~C["central"]}) with the corresponding amount divided by volume (e.g., \verb{~A["central]/vc}).
 }
 }
 \examples{

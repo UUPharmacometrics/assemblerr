@@ -37,7 +37,7 @@ setMethod(
 #'
 #' This function creates the basis for a pharmacokinetic model.
 #'
-#' The function creates the fundament for a pharmacokinetic model to which different building blocks can be added.
+#' The function creates the foundation for a pharmacokinetic model to which different building blocks can be added.
 #' The following building blocks are relevant for this model type:
 #'
 #'   * Parameters: `r md_doc_links_for_package_functions("^prm_")`

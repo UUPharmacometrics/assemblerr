@@ -20,7 +20,7 @@ pkm
 All PK component functions allow the specification of the parameter model via their arguments. Arguments that refer to a 
 parameter start with the prefix `prm_`. The default parameter model can be deduced from the default arguments in the usage section of the help entry. The parameter name, specified via the `name=` argument of the parameter model building block allows the renaming of the model parameters. 
 
-For example, the parameter `prm_vc=` refers to the central volumen of distribution parameter in the one compartment distribution PK component and the default parameter model is a log-normal distribution. The follwing code block specifies a normal distribution parameter model and names the parameter `v`:
+For example, the parameter `prm_vc=` refers to the central volume of distribution parameter in the one compartment distribution PK component and the default parameter model is a log-normal distribution. The following code block specifies a normal distribution parameter model and names the parameter `v`:
 
 ```
 pk_distribution_1cmp(

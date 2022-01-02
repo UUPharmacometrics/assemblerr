@@ -114,7 +114,7 @@ dcl_substitute <- function(dcl,
 
 #' Arithmetically combine declarations
 #'
-#' These functions allow to combine two declarations using addition, substraction, multiplication, or devision.
+#' These functions allow to combine two declarations using addition, substraction, multiplication, or division.
 #'
 #' @param dcl1 A declaration
 #' @param dcl2 A declaration
@@ -153,7 +153,7 @@ dcl_multiply <- function(dcl1, dcl2, lhs = dcl_id(dcl1)) {
   combine_declarations(dcl1, dcl2, lhs, mult)
 }
 
-#' @describeIn dcl_add Devision of the declarations
+#' @describeIn dcl_add Division of the declarations
 dcl_devide <- function(dcl1, dcl2, lhs = dcl_id(dcl1)) {
   devide <-  function(e1, e2){
     if (e1 == quote(1) && e2 == quote(1)) return(quote(1))

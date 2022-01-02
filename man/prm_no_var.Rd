@@ -19,8 +19,8 @@ This building block declares a parameter model for a parameter that does not var
 }
 \details{
 Parameter models specify type, name, and values for a parameter. The
-paramter model type is selected through the function name. The parameter
-name and values are provided as function arguments.
+parameter model type is selected through the function name. The
+parameter name and values are provided as function arguments.
 \subsection{Parameter names}{
 
 Every parameter must have a valid name. A parameter name can contain

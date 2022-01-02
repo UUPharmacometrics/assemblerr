@@ -47,10 +47,10 @@ the default arguments in the usage section of the help entry. The
 parameter name, specified via the \verb{name=} argument of the parameter
 model building block allows the renaming of the model parameters.
 
-For example, the parameter \verb{prm_vc=} refers to the central volumen of
+For example, the parameter \verb{prm_vc=} refers to the central volume of
 distribution parameter in the one compartment distribution PK component
 and the default parameter model is a log-normal distribution. The
-follwing code block specifies a normal distribution parameter model and
+following code block specifies a normal distribution parameter model and
 names the parameter \code{v}:\preformatted{pk_distribution_1cmp(
     prm_vc = prm_normal("v", mean = 50, var = 25)
 )

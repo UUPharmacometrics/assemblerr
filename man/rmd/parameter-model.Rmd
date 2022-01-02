@@ -1,4 +1,4 @@
-Parameter models specify type, name, and values for a parameter. The paramter model type is selected through the function name. The parameter 
+Parameter models specify type, name, and values for a parameter. The parameter model type is selected through the function name. The parameter 
 name and values are provided as function arguments.
 
 ## Parameter names

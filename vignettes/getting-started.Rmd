@@ -145,7 +145,7 @@ m2 <- model() +
   obs_additive(effect~emax*C["central"]/(ec50 + C["central"]), var_add = 1)
 ```
 
-In this model definition, we used two additional parameters and, more importantly, a compartment as well as a flow from that compartment. You should note, how you can use the variable `C` in the flow definition to refer to the concentration in the "from" compartment. Similarly, you can also use `C["central"]` to refer to the concentration in the central compartment when defining the observational model. The `A` variable provides a reference to the unscaled amount in the compartment. 
+In this model definition, we used two additional parameters and, more importantly, a compartment as well as a flow from that compartment. You should note, how you can use the variable `C` in the flow definition to refer to the concentration in the "from" compartment. Similarly, you can also use `C["central"]` to refer to the concentration in the central compartment when defining the observational model. The `A` variable provides a reference to the amount in the compartment. 
 
 Pay attention to how assemblerr replaces the `C` variables with the corresponding compartment reference when we render the model like before: 
 

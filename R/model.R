@@ -47,7 +47,7 @@ setMethod(
 #'
 #' This function creates the basis for a general pharmacometric model, a flexible but verbose model type.
 #'
-#' The function creates the fundament for a general pharmacometric model to which different building blocks can be added. The following building
+#' The function creates the foundation for a general pharmacometric model to which different building blocks can be added. The following building
 #' blocks are relevant for this model type:
 #'   * Parameters: `r md_doc_links_for_package_functions("^prm_")`
 #'   * Observations: `r md_doc_links_for_package_functions("^obs_")`

@@ -11,7 +11,7 @@ flow(definition, from = NA_character_, to = NA_character_)
 
 \item{from}{Name of the source compartment (NA for an inflow without source)}
 
-\item{to}{Name of the sink compartment (NA for an ouflow without sink)}
+\item{to}{Name of the sink compartment (NA for an outflow without sink)}
 }
 \value{
 A building block of type 'flow'

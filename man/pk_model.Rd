@@ -13,7 +13,7 @@ A pk_model
 This function creates the basis for a pharmacokinetic model.
 }
 \details{
-The function creates the fundament for a pharmacokinetic model to which different building blocks can be added.
+The function creates the foundation for a pharmacokinetic model to which different building blocks can be added.
 The following building blocks are relevant for this model type:
 \itemize{
 \item Parameters: \link{prm_log_normal}, \link{prm_logit_normal}, \link{prm_no_var}, \link{prm_normal}
