@@ -7,7 +7,7 @@
 
 [![R-CMD-check](https://github.com/UUPharmacometrics/assemblerr/workflows/R-CMD-check/badge.svg)](https://github.com/UUPharmacometrics/assemblerr/actions)
 [![Codecov test
-coverage](https://codecov.io/gh/UUPharmacometrics/assemblerr/branch/master/graph/badge.svg)](https://codecov.io/gh/UUPharmacometrics/assemblerr?branch=master)
+coverage](https://codecov.io/gh/UUPharmacometrics/assemblerr/branch/master/graph/badge.svg)](https://app.codecov.io/gh/UUPharmacometrics/assemblerr?branch=master)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/assemblerr)](https://CRAN.R-project.org/package=assemblerr)
 <!-- badges: end -->
