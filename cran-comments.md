@@ -1,3 +1,9 @@
+## Resubmission
+
+This is a resubmission. In this version I have:
+
+* fixed the code coverage URL
+
 ## Patch release
 
 * fix broken tests after changes in dependencies
