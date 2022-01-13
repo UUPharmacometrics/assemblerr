@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">assemblerr</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.1.0.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.1.1.9000</span>
       </span>
     </div>
 
@@ -161,7 +161,7 @@
 <p>Tasks are building blocks that allow to specify what a model should
 “do”. Like other model building blocks, they can be combined using
 the <code><a href='https://rdrr.io/r/base/Arithmetic.html'>+</a></code> operator. However, they should not be added to a model but
-rather provided via the <code>tasks=</code> argument to the render function, e.g.,<div class="r"></p><pre><span class='fu'><a href='render.html'>render</a></span><span class='op'>(</span><span class='va'>m</span>, tasks <span class='op'>=</span> <span class='fu'><a href='tsk_estimation.html'>tsk_estimation</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+rather provided via the <code>tasks=</code> argument to the render function, e.g.,<div class="sourceCode r"></p><pre><span class='fu'><a href='render.html'>render</a></span><span class='op'>(</span><span class='va'>m</span>, tasks <span class='op'>=</span> <span class='fu'><a href='tsk_estimation.html'>tsk_estimation</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
    <span class='fu'>tsk_output_xpose4</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
 </pre><p></div></p>
 
@@ -220,7 +220,7 @@ It is a shortcut for the following two output tasks:</p><pre> <span class='va'>x
 #&gt; ED50 = THETA(2) * EXP(ETA(2))
 #&gt; EFFECT = EMAX * DOSE/(ED50 + DOSE)
 #&gt; Y = EFFECT + EFFECT * EPS(1)
-#&gt; $TABLE DV PRED RES WRES IPREDI IWRESI FILE=sdtab NOAPPEND NOPRINT
+#&gt; $TABLE DV PRED RES WRES IPREDI IWRESI CWRES FILE=sdtab NOAPPEND NOPRINT
 #&gt; $TABLE EMAX ED50 ETA(1) ETA(2) FILE=patab NOAPPEND NOPRINT
 #&gt; $THETA (0, 10, Inf) ; POP_EMAX
 #&gt; $THETA (0, 50, Inf) ; POP_ED50

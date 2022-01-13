@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">assemblerr</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.1.0.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.1.1.9000</span>
       </span>
     </div>
 
@@ -178,10 +178,10 @@ with the prefix <code>prm_</code>. The default parameter model can be deduced fr
 the default arguments in the usage section of the help entry. The
 parameter name, specified via the <code>name=</code> argument of the parameter
 model building block allows the renaming of the model parameters.</p>
-<p>For example, the parameter <code>prm_vc=</code> refers to the central volumen of
+<p>For example, the parameter <code>prm_vc=</code> refers to the central volume of
 distribution parameter in the one compartment distribution PK component
 and the default parameter model is a log-normal distribution. The
-follwing code block specifies a normal distribution parameter model and
+following code block specifies a normal distribution parameter model and
 names the parameter <code>v</code>:</p><pre><span class='fu'><a href='pk_distribution_1cmp.html'>pk_distribution_1cmp</a></span><span class='op'>(</span>
     prm_vc <span class='op'>=</span> <span class='fu'><a href='prm_normal.html'>prm_normal</a></span><span class='op'>(</span><span class='st'>"v"</span>, mean <span class='op'>=</span> <span class='fl'>50</span>, var <span class='op'>=</span> <span class='fl'>25</span><span class='op'>)</span>
 <span class='op'>)</span>

@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">assemblerr</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.1.0.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.1.1.9000</span>
       </span>
     </div>
 
@@ -231,7 +231,7 @@ as a list and the <code><a href='assemblerr_options.html'>assemblerr_options()</
 #&gt; EFF = EMAX * DOSE/(ED50 + DOSE)
 #&gt; Y = EFF + EPS(1)
 #&gt; $ESTIMATION METHOD=COND MAXEVAL=999999 
-#&gt; $TABLE DV PRED RES WRES IPREDI IWRESI FILE=sdtab NOAPPEND NOPRINT
+#&gt; $TABLE DV PRED RES WRES IPREDI IWRESI CWRES FILE=sdtab NOAPPEND NOPRINT
 #&gt; $TABLE EMAX ED50 ETA(1) ETA(2) FILE=patab NOAPPEND NOPRINT
 #&gt; $THETA (0, 1, Inf) ; POP_EMAX
 #&gt; $THETA (0, 1, Inf) ; POP_ED50
