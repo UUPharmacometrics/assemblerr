@@ -53,3 +53,9 @@ test_that("[[ <- ", {
   l[[2]] <- TestEntryComponent(index = 0L)
   expect_equal(l[[2]]@index, 0L)
 })
+
+test_that("add_component", {
+  l <- make_test_component_list(2)
+  l <- append(l, TestEntryComponent(index = 3L))
+  expect_equal(l[[3]]@index, 3L)
+})

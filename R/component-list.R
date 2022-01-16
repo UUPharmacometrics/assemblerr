@@ -104,6 +104,18 @@ setReplaceMethod("[[", "ComponentList",
 )
 
 
+#' @describeIn add_component y is added as a list element if has the right class
+setMethod(
+  "add_component",
+  signature = signature(x = "ComponentList", "Component"),
+  definition = function(x, y, ...) {
+    if (is_compatible(x,y)) {
+      x <- append(x, y)
+    }
+    return(x)
+  }
+)
+
 
 #' S4 class to represent a list of named components
 #'
