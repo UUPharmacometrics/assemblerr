@@ -7,7 +7,14 @@
 {render_component2(subroutines) %>% wrap()}
 {render_component2(model) %>% wrap()}
 {render_component2(pk)}
-{render_component2(des)}"
+{render_component2(des)}
+{render_component2(error)}
+{render_collection(estimation@elements, collapse = NULL)}{render_component2(covariance)}
+{render_collection(tables@elements, collapse = NULL)}
+{render_collection(thetas@elements, collapse = NULL)}
+{render_collection(omegas@elements, collapse = NULL)}
+{render_collection(sigmas@elements, collapse = NULL)}
+"
 
 .templates[["NmProblemRecord"]] <- "$PROBLEM {text}"
 
@@ -36,6 +43,30 @@
 .templates[["NmDesRecord"]] <- "$DES
 {render_collection(elements, collapse = NULL)}"
 
+.templates[["NmErrorRecord"]] <- "$ERROR
+{render_collection(elements, collapse = NULL)}"
 
 .templates[["NmAbbrivatedCodeBlock"]] <- "{indent(render_component(statements, collapse = NULL))}"
 
+.templates[["NmEstimationRecord2"]] <- "$ESTIMATION {p('METHOD=',method)} {p('MAXEVAL=',maxeval)} {ie(interaction, 'INTER')}"
+
+.templates[["NmCovarianceRecord"]] <- function(active, ...) {
+  if (active) {
+    "\n\n$COVARIANCE {p('MATRIX=',matrix)} {p('print=',print)}"
+  } else {
+    ""
+  }
+}
+
+.templates[["NmTableRecord2"]] <- "$TABLE {render_collection(elements)} {ie(print, 'PRINT', 'NOPRINT')} {ie(!append,'NOAPPEND')} {ie(oneheader,'ONEHEADER')} {p('FILE=',filename)}"
+
+.templates[["NmTableEntry"]] <- "{name}"
+
+
+.templates[["NmThetaRecord"]] <- "$THETA ({lbound}, {initial}, {ubound})\t; {name}"
+
+
+.templates[["NmOmegaRecord"]] <- "$OMEGA {initial}\t; {name}"
+
+
+.templates[["NmSigmaRecord"]] <- "$SIGMA {initial}\t; {name}"
