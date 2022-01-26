@@ -16,12 +16,14 @@ NamedComponentList <- setClass(
 setMethod(
   f = "initialize",
   signature = "NamedComponentList",
-  definition = function(.Object, ...){
-    dots <- rlang::list2(...)
-    .Object <- callNextMethod(.Object)
-    assert_compatible_list_elements(dots, .Object)
-    for (d in dots) {
-      .Object@elements[[name(d)]] <- d
+  definition = function(.Object, elements = NULL, ...){
+    .Object <- callNextMethod(.Object, ...)
+    if (length(elements) > 0 ) {
+      assert_compatible_list_elements(elements, .Object)
+      for (e in elements) {
+        .Object@elements[[name(e)]] <- e
+      }
+
     }
     return(.Object)
   }

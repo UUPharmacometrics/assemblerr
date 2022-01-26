@@ -19,11 +19,12 @@ ComponentList <- setClass(
 setMethod(
   f = "initialize",
   signature = "ComponentList",
-  definition = function(.Object, ...){
-    dots <- rlang::list2(...)
-    .Object <- callNextMethod(.Object)
-    assert_compatible_list_elements(dots, .Object)
-    .Object@elements <- append(.Object@elements, dots)
+  definition = function(.Object, elements = NULL, ...){
+    .Object <- callNextMethod(.Object, ...)
+    if (length(elements) > 0) {
+      assert_compatible_list_elements(elements, .Object)
+      .Object@elements <- append(.Object@elements, elements)
+    }
     return(.Object)
   }
 )

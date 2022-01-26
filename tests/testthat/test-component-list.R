@@ -6,13 +6,13 @@ make_test_component_list <- function(n) {
   for (i in seq_len(n)) {
     l[[i]] <- TestEntryComponent(index = i)
   }
-  return(ComponentList(!!!l))
+  return(ComponentList(elements = l))
 }
 
 test_that("contructor", {
   ParameterComponent <- setClass("ParameterComponent", contains = "Component")
-  expect_silent(l <- ComponentList(ParameterComponent(), ParameterComponent()))
-  expect_error(ComponentList(data.frame()))
+  expect_silent(l <- ComponentList(elements = c(ParameterComponent(), ParameterComponent())))
+  expect_error(ComponentList(elements = list(data.frame())))
 })
 
 
