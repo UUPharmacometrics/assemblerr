@@ -1,25 +1,26 @@
 create_nm_test_model <- function() {
-  nm <- NmModel2() %>%
-    add_component(NmDataInputLabel(name = "ID")) %>%
-    add_component(NmDataInputLabel(name = "TIME")) %>%
-    add_component(NmDataInputLabel(name = "DV")) %>%
-    add_component(NmDataInputLabel(name = "STUDY")) %>%
-    add_component(NmSubroutine(name = "ADVAN1")) %>%
-    add_component(NmCompartment2(name = "CENTRAL")) %>%
-    add_component(NmCompartment2(name = "DEPOT", initial_off = TRUE)) %>%
-    add_component(NmPkCode(statements = statement("cl <- theta[1]*exp(eta[1])"))) %>%
-    add_component(NmPkCode(statements = statement("v <- theta[2]*exp(eta[2])"))) %>%
-    add_component(NmPkCode(statements = statement("k <- cl/v", "conc <- d/v*exp(-k*time)"))) %>%
-    add_component(NmDesCode(statements = statement("dadt[1] <- k*A[1]")))
-
-
-
-  nm@data@filename <- "test/path.csv"
-  nm@data@ignore_character <- "@"
-  nm <- nm %>%
-    add_component(NmIgnoreStatement(variable = "STUDY", operator = ".AND.", value = "1"))
-
-  nm@subroutines@tol <- 3L
-
-  nm
+  NmModel2() +
+      nm_problem("test model") +
+      nm_input_label(name = "ID") +
+      nm_input_label(name = "TIME") +
+      nm_input_label(name = "DV") +
+      nm_input_label(name = "STUDY") +
+      nm_data_record(filename = "test/path.csv", ignore_character = "@") +
+      {nm_subroutine_record(tol = 3L) +
+      nm_subroutine("ADVAN1")} +
+      nm_compartment(name = "CENTRAL") +
+      nm_compartment(name = "DEPOT") +
+      nm_pk_code("cl <- theta[1]*exp(eta[1])") +
+      nm_pk_code("v <- theta[2]*exp(eta[2])") +
+      nm_pk_code("k <- cl/v", "conc <- d/v*exp(-k*time)") +
+      nm_des_code("dadt[1] <- k*A[1]") +
+      nm_error_code("ipred <- A[1]") +
+      nm_estimation_record(method = "FOCE", maxeval = 99999L, interaction = TRUE) +
+      nm_estimation_record(method = "IMP") +
+      nm_covariance_record() +
+      nm_table_record("sdtab", entries = c("PRED", "IPRED", "DV", "CWRES", "WRES", "ETA(1)", "ETA(2)")) +
+      nm_theta_record("cl", 10, 0) +
+      nm_theta_record("v", 6) +
+      nm_omega_record("cl", 0.09) +
+      nm_sigma_record("ruv", 1)
 }
