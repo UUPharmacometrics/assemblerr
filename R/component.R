@@ -124,6 +124,18 @@ setMethod(
   }
 )
 
+#' Add components
+#' @param e1 A component
+#' @param e2 A component
+#' @keywords internal
+setMethod(
+  f = "+",
+  signature = signature(e1 = "Component", e2 = "Component"),
+  definition =  function(e1, e2) {
+    add_component(e1, e2)
+  }
+)
+
 
 setGeneric(
   "name",
