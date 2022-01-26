@@ -55,3 +55,26 @@ map_chr <- function(.x, .f, ...) {
 map_lgl <- function(.x, .f, ...) {
   as.logical(map(.x, .f, ...))
 }
+
+setGeneric(
+  "reduce",
+  def = function(.x, .f, ..., .init) {
+    standardGeneric("reduce")
+  }
+)
+
+setMethod(
+  "reduce",
+  signature = signature(.x = "list"),
+  definition = function(.x, .f, ..., .init) {
+    return(purrr::reduce(.x, .f, ..., .init))
+  }
+)
+
+setMethod(
+  "reduce",
+  signature = signature(.x = "ComponentList"),
+  definition = function(.x, .f, ..., .init) {
+    return(purrr::reduce(.x@elements, .f, ..., .init))
+  }
+)
