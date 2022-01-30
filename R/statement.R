@@ -49,6 +49,37 @@ as_statement.assemblerr_declaration <- function(x, ...){
 vec_ptype_abbr.assemblerr_statement <- function(x, ...) "stm"
 vec_ptype_full.assemblerr_statement <- function(x, ...) "statement"
 
+#' @export
+vec_ptype2.assemblerr_statement.assemblerr_statement <- function(x, y, ...) {
+  x
+}
+
+#' @export
+vec_ptype2.assemblerr_statement.character <- function(x, y, ...) {
+  y
+}
+
+#' @export
+vec_ptype2.character.assemblerr_statement <- function(y, x, ...) {
+  x
+}
+
+#' @export
+vec_cast.assemblerr_statement.assemblerr_statement <- function(x, to, ...) {
+  x
+}
+
+#' @export
+vec_cast.assemblerr_statement.character <- function(x, to, ...) {
+  statement(x)
+}
+
+#' @export
+vec_cast.character.assemblerr_statement <- function(x, to, ...) {
+  vec_data(x) %>%
+    purrr::map_chr(deparse, control = c(), width.cutoff = 200)
+}
+
 
 setMethod(
   f = "render_component",

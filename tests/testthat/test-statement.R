@@ -43,3 +43,8 @@ test_that("code rendering", {
                "CL = THETA(1) * EXP(ETA(1))\nV = THETA(2)")
 
 })
+
+test_that("conversion to character", {
+  s <- statement(quote(v <- theta[2]))
+  expect_equal(as.character(s), "v <- theta[2]")
+})
