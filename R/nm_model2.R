@@ -163,43 +163,41 @@ NmAbbrivatedCodeRecord <- setClass(
 
 # $PK ---------------------------------------------------------------------
 
-NmPkCode <- setClass(
-  "NmPkCode",
+NmPkCode2 <- setClass(
+  "NmPkCode2",
   contains = "NmAbbrivatedCodeBlock"
 )
 
-nm_pk_code <- function(...) {
-  dots <- rlang::list2(...)
-  NmPkCode(
-    statements = statement(!!!dots)
+nm_pk_code <- function(statement) {
+  NmPkCode2(
+    statements = statement
   )
 }
 
 NmPkRecord <- setClass(
   "NmPkRecord",
   contains = "NmAbbrivatedCodeRecord",
-  prototype = prototype(component_class = "NmPkCode")
+  prototype = prototype(component_class = "NmPkCode2")
 )
 
 # $DES ---------------------------------------------------------------------
 
-NmDesCode <- setClass(
-  "NmDesCode",
+NmDesCode2 <- setClass(
+  "NmDesCode2",
   contains = "NmAbbrivatedCodeBlock"
 )
 
 
-nm_des_code <- function(...) {
-  dots <- rlang::list2(...)
-  NmDesCode(
-    statements = statement(!!!dots)
+nm_des_code <- function(statement) {
+  NmDesCode2(
+    statements = statement
   )
 }
 
 NmDesRecord <- setClass(
   "NmDesRecord",
   contains = "NmAbbrivatedCodeRecord",
-  prototype = prototype(component_class = "NmDesCode")
+  prototype = prototype(component_class = "NmDesCode2")
 )
 
 
@@ -207,23 +205,22 @@ NmDesRecord <- setClass(
 
 
 
-NmErrorCode <- setClass(
-  "NmErrorCode",
+NmErrorCode2 <- setClass(
+  "NmErrorCode2",
   contains = "NmAbbrivatedCodeBlock"
 )
 
 
-nm_error_code <- function(...) {
-  dots <- rlang::list2(...)
+nm_error_code <- function(statement) {
   NmErrorCode(
-    statements = statement(!!!dots)
+    statements = statement
   )
 }
 
 NmErrorRecord <- setClass(
   "NmErrorRecord",
   contains = "NmAbbrivatedCodeRecord",
-  prototype = prototype(component_class = "NmErrorCode")
+  prototype = prototype(component_class = "NmErrorCode2")
 )
 
 

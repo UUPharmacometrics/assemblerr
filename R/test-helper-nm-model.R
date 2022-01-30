@@ -10,11 +10,11 @@ create_nm_test_model <- function() {
       nm_subroutine("ADVAN1")} +
       nm_compartment(name = "CENTRAL") +
       nm_compartment(name = "DEPOT") +
-      nm_pk_code("cl <- theta[1]*exp(eta[1])") +
-      nm_pk_code("v <- theta[2]*exp(eta[2])") +
-      nm_pk_code("k <- cl/v", "conc <- d/v*exp(-k*time)") +
-      nm_des_code("dadt[1] <- k*A[1]") +
-      nm_error_code("ipred <- A[1]") +
+      nm_pk_code(statement("cl <- theta[1]*exp(eta[1])")) +
+      nm_pk_code(statement("v <- theta[2]*exp(eta[2])")) +
+      nm_pk_code(statement("k <- cl/v", "conc <- d/v*exp(-k*time)")) +
+      nm_des_code(statement("dadt[1] <- k*A[1]")) +
+      nm_error_code(statement("ipred <- A[1]")) +
       nm_estimation_record(method = "FOCE", maxeval = 99999L, interaction = TRUE) +
       nm_estimation_record(method = "IMP") +
       nm_covariance_record() +
