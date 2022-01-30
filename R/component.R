@@ -73,28 +73,6 @@ setMethod(
   }
 )
 
-#' Add y to slot s in x
-#'
-#' @noRd
-setGeneric(
-  "add_to_slot",
-  def = function(x, s, y) {
-    standardGeneric("add_to_slot")
-  }
-)
-
-setMethod(
-  "add_to_slot",
-  signature = signature(x = "Component", y = "Component"),
-  definition = function(x, s, y) {
-    if (is(slot(x, s), "ComponentList")) {
-      slot(x, s) <- append(slot(x, s), y)
-    } else {
-      slot(x, s) <- y
-    }
-    return(x)
-  }
-)
 
 
 #' Add a component to another one
@@ -116,7 +94,11 @@ setMethod(
     slots <- getSlots(class(x))
     for (s in names(slots)) {
       if (is_compatible_slot(x, s, y)) {
-        x <- add_to_slot(x, s, y)
+        if (is(slot(x, s), "ComponentList")) {
+          slot(x, s) <- add_component(slot(x, s), y)
+        } else {
+          slot(x, s) <- y
+        }
         break
       }
     }
