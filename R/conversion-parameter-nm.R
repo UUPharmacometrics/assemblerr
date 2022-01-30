@@ -90,6 +90,32 @@ setMethod(
   }
 )
 
+setMethod(
+  f = "convert",
+  signature = c(target = "NmModel2", source = "ANY", component = "PrmNormal"),
+  definition = function(target, source, component, options) {
+    values <- parameter_values(component)
+    target <- target +
+      nm_theta_record(component@name, initial = values["mean"], lbound = 0) +
+      nm_omega_record(component@name, initial = values["var"])
+
+    theta_index <- index_of(target@thetas, component@name)
+    eta_index <- index_of(target@omegas, component@name)
+    if (options$prm.use_mu_referencing) {
+      mu_name <- sym(paste0("mu_",eta_index))
+      stm <- statement(
+        "{mu_name} <- theta[{theta_index}]",
+        "{component@name} <- {mu_name} + eta[{eta_index}]"
+      )
+    } else {
+      stm <- statement(
+        "{component@name} <- theta[{theta_index}] + eta[{eta_index}]"
+      )
+    }
+    target + nm_pk_code(stm)
+  }
+)
+
 # logit ------------------------------------------------------------------
 
 
