@@ -156,8 +156,23 @@ NmAbbrivatedCodeBlock <- setClass(
 
 NmAbbrivatedCodeRecord <- setClass(
   "NmAbbrivatedCodeRecord",
+  slots = c(
+    statements = "assemblerr_statement"
+  ),
   contains = "ComponentList",
-  prototype = prototype(component_class = "NmAbbrivatedCodeBlock")
+  prototype = prototype(component_class = "NmAbbrivatedCodeBlock",
+                        statements = statement())
+)
+
+setMethod(
+  "add_component",
+  signature = signature(x = "NmAbbrivatedCodeRecord", "NmAbbrivatedCodeBlock"),
+  definition = function(x, y, ...) {
+    if (is_compatible(x,y)) {
+      x@statements <- append(x@statements, y@statements)
+    }
+    return(x)
+  }
 )
 
 
@@ -212,7 +227,7 @@ NmErrorCode2 <- setClass(
 
 
 nm_error_code <- function(statement) {
-  NmErrorCode(
+  NmErrorCode2(
     statements = statement
   )
 }

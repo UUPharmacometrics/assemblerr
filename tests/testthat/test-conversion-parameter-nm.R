@@ -6,7 +6,7 @@ test_that("prm_log_normal", {
   nm <- convert(nm, m, m@facets$ParameterFacet@entries$test, o)
   expect_named(nm@thetas, "test")
   expect_named(nm@omegas, "test")
-  expect_match(as.character(nm@pk[[1]]@statements), "test <- theta\\[\\d\\] \\* exp\\(eta\\[\\d\\]\\)")
+  expect_match(as.character(nm@pk@statements), "test <- theta\\[\\d\\] \\* exp\\(eta\\[\\d\\]\\)")
 })
 
 
@@ -18,5 +18,5 @@ test_that("prm_normal", {
   nm <- convert(nm, m, m@facets$ParameterFacet@entries$test, o)
   expect_named(nm@thetas, "test")
   expect_named(nm@omegas, "test")
-  expect_match(as.character(nm@pk[[1]]@statements), "test <- theta\\[\\d\\] \\+ eta\\[\\d\\]")
+  expect_match(as.character(nm@pk@statements), "test <- theta\\[\\d\\] \\+ eta\\[\\d\\]")
 })

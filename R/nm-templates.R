@@ -38,15 +38,13 @@
 .templates[["NmCompartment2"]] <- "COMPARTMENT=({name}{ie(initial_off,' INITIALOFF')}{ie(no_off,' INITIALOFF')}{ie(no_dose,' NODOSE')}{ie(equilibrium,' EQUILIBRIUM')}{ie(default_observation,' DEFOBSERVATION')}{ie(default_dose,' DEFDOSE')})"
 
 .templates[["NmPkRecord"]] <- "$PK
-{render_collection(elements, collapse = NULL)}"
+{indent(render_component(statements, collapse = NULL))}"
 
 .templates[["NmDesRecord"]] <- "$DES
-{render_collection(elements, collapse = NULL)}"
+{indent(render_component(statements, collapse = NULL))}"
 
 .templates[["NmErrorRecord"]] <- "$ERROR
-{render_collection(elements, collapse = NULL)}"
-
-.templates[["NmAbbrivatedCodeBlock"]] <- "{indent(render_component(statements, collapse = NULL))}"
+{indent(render_component(statements, collapse = NULL))}"
 
 .templates[["NmEstimationRecord2"]] <- "$ESTIMATION {p('METHOD=',method)} {p('MAXEVAL=',maxeval)} {ie(interaction, 'INTER')}"
 
