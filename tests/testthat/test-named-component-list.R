@@ -8,16 +8,18 @@ make_test_named_component_list <- function(n) {
   for (i in seq_len(n)) {
     l[[i]] <- ParameterComponent(name = paste0("prm_", i))
   }
-  return(NamedComponentList(!!!l))
+  return(NamedComponentList(elements = l))
 }
 
 test_that("constructor", {
   expect_silent(l <- NamedComponentList(
-    ParameterComponent(name = "cl"),
-    ParameterComponent(name = "v")
+    elements = list(
+      ParameterComponent(name = "cl"),
+      ParameterComponent(name = "v")
+    )
   ))
-  expect_error(NamedComponentList(data.frame()))
-  expect_error(NamedComponentList(FlowComponent()))
+  expect_error(NamedComponentList(elements = list(data.frame())))
+  expect_error(NamedComponentList(elements = FlowComponent()))
 })
 
 test_that("is_empty", {
