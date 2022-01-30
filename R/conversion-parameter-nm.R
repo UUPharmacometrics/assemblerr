@@ -32,6 +32,34 @@ setMethod(
 )
 
 
+setMethod(
+  f = "convert",
+  signature = c(target = "NmModel2", source = "ANY", component = "PrmLogNormal"),
+  definition = function(target, source, component, options) {
+    values <- parameter_values(component)
+    target <- target +
+      nm_theta_record(component@name, initial = values["median"], lbound = 0) +
+      nm_omega_record(component@name, initial = values["var_log"])
+
+    theta_index <- index_of(target@thetas, component@name)
+    eta_index <- index_of(target@omegas, component@name)
+
+    if (options$prm.use_mu_referencing) {
+      mu_name <- paste0('mu_',eta_index)
+      stm <- statement(
+        "{mu_name} <- log(theta[{theta_index}])",
+        "{component@name} <- exp({mu_name} + eta[{eta_index}])"
+      )
+    } else {
+      stm <- statement(
+        "{component@name} <- theta[{theta_index}]*exp(eta[{eta_index}])"
+      )
+    }
+    target + nm_pk_code(stm)
+  }
+)
+
+
 # normal ------------------------------------------------------------------
 
 
