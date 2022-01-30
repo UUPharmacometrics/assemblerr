@@ -30,6 +30,14 @@ setMethod(
 )
 
 setMethod(
+  "index_of",
+  signature = signature(facet = "NamedComponentList"),
+  definition = function(facet, x) {
+    which(names(facet@elements) == x)
+  }
+)
+
+setMethod(
   "append",
   signature = signature(x = "NamedComponentList"),
   definition = function(x, values, after = length(x)) {
@@ -41,6 +49,11 @@ setMethod(
   }
 )
 
+setMethod(
+  "names",
+  signature = signature(x = "NamedComponentList"),
+  definition = function(x) return(names(x@elements))
+)
 
 
 setReplaceMethod("[[", "NamedComponentList",
