@@ -6,10 +6,9 @@ create_nm_test_model <- function() {
       nm_input_label(name = "DV") +
       nm_input_label(name = "STUDY") +
       nm_data_record(filename = "test/path.csv", ignore_character = "@") +
-      {nm_subroutine_record(tol = 3L) +
-      nm_subroutine("ADVAN1")} +
-      nm_compartment(name = "CENTRAL") +
-      nm_compartment(name = "DEPOT") +
+      nm_subroutines_record(subroutines = "ADVAN1", tol = 3L) +
+      nm_compartment2(name = "CENTRAL") +
+      nm_compartment2(name = "DEPOT") +
       nm_pk_code(statement("cl <- theta[1]*exp(eta[1])")) +
       nm_pk_code(statement("v <- theta[2]*exp(eta[2])")) +
       nm_pk_code(statement("k <- cl/v", "conc <- d/v*exp(-k*time)")) +
