@@ -7,7 +7,7 @@ test_that("prm_log_normal", {
   nm <- convert(nm, m, m@facets$ParameterFacet@entries$test, assemblerr_options())
   expect_named(nm@thetas, "test")
   expect_named(nm@omegas, "test")
-  expect_snapshot_value(as.character(nm@pk@statements), style = "json2")
+  expect_snapshot_output(as.character(nm@pk@statements))
 })
 
 
@@ -18,7 +18,7 @@ test_that("prm_normal", {
   nm <- convert(nm, m, m@facets$ParameterFacet@entries$test, assemblerr_options())
   expect_named(nm@thetas, "test")
   expect_named(nm@omegas, "test")
-  expect_snapshot_value(as.character(nm@pk@statements), style = "json2")
+  expect_snapshot_output(as.character(nm@pk@statements))
 })
 
 test_that("prm_logit_normal", {
@@ -28,7 +28,7 @@ test_that("prm_logit_normal", {
   nm <- convert(nm, m, m@facets$ParameterFacet@entries$test, assemblerr_options())
   expect_named(nm@thetas, "test")
   expect_named(nm@omegas, "test")
-  expect_snapshot_value(as.character(nm@pk@statements), style = "json2")
+  expect_snapshot_output(as.character(nm@pk@statements))
 })
 
 test_that("prm_no_var", {
@@ -37,5 +37,5 @@ test_that("prm_no_var", {
 
   nm <- convert(nm, m, m@facets$ParameterFacet@entries$test, assemblerr_options())
   expect_named(nm@thetas, "test")
-  expect_snapshot_value(as.character(nm@pk@statements), style = "json2")
+  expect_snapshot_output(as.character(nm@pk@statements))
 })
