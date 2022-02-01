@@ -1,5 +1,6 @@
 #' @include compartment.R
 #' @include nm_model.R
+#' @include nm_model2.R
 
 setMethod(
   f = "convert",
@@ -8,6 +9,15 @@ setMethod(
     target + nm_compartment(name = component@name)
   }
 )
+
+setMethod(
+  f = "convert",
+  signature = c(target = "NmModel2", source = "Model", component = "Compartment"),
+  definition = function(target, source, component, options) {
+    target + nm_compartment2(name = component@name)
+  }
+)
+
 
 setMethod(
   f = "optimize_for_conversion",
@@ -76,6 +86,29 @@ setMethod(
     target +
       nm_subroutine(advan, tol = 6L) +
       nm_des(as_statement(ode_dcl))
+  }
+)
+
+setMethod(
+  f = "convert",
+  signature = c(target = "NmModel2", source = "Model", component = "FlowFacet"),
+  definition = function(target, source, component, options) {
+    if (vec_is_empty(component@entries)) return(target)
+
+    flows <- collect_flows(component, source)
+    ode_dcl <- purrr::map(source@facets[["CompartmentFacet"]]@entries, function(cmp){
+      outflow <- dcl_sum(flows$definition[flows$from == cmp@name & !is.na(flows$from)])
+      inflow <- dcl_sum(flows$definition[flows$to == cmp@name & !is.na(flows$to)])
+      dcl_substract(inflow, outflow, lhs = bquote(dadt[.(cmp@name)]))
+    }) %>%
+      purrr::set_names(NULL) %>%
+      {vec_c(!!!.)} %>%
+      replace_compartment_references2(name_index_map(target@model), source)
+
+    advan <- options$ode.general_nonlinear_advan
+    target +
+      nm_subroutines_record(advan, tol = 6L) +
+      nm_des_code(as_statement(ode_dcl))
   }
 )
 

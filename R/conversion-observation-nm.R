@@ -53,6 +53,17 @@ replace_compartment_references <- function(dcl, target, source){
   return(dcl)
 }
 
+replace_compartment_references2 <- function(dcl, compartment_indicies, source){
+  if (any(c("C","A","dadt") %in% dcl_vars_chr(dcl))) {
+    conc_dcls <- as.list(generate_concentration_substitutions(source@facets[["CompartmentFacet"]]@entries))
+    dcl <- dcl %>%
+      dcl_substitute(substitutions = conc_dcls) %>%
+      dcl_substitute_index("A", compartment_indicies) %>%
+      dcl_substitute_index("dadt", compartment_indicies)
+  }
+  return(dcl)
+}
+
 
 generate_concentration_substitutions <- function(cmps){
   names <- names(cmps)
