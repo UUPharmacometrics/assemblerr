@@ -89,18 +89,19 @@ nm_subroutine <- function(name) {
 
 NmSubroutinesRecord <- setClass(
   "NmSubroutinesRecord",
-  contains = "NamedComponentList",
+  contains = "Component",
   slots = c(
+    subroutines = "character",
     tol = "integer",
     atol = "integer",
     sstol = "integer",
     ssatol = "integer"
-  ),
-  prototype = prototype(component_class = "NmSubroutine")
+  )
 )
 
-nm_subroutine_record <- function(tol = integer(), atol = integer(), sstol = integer(), ssatol = integer()) {
+nm_subroutines_record <- function(subroutines = character(), tol = integer(), atol = integer(), sstol = integer(), ssatol = integer()) {
   NmSubroutinesRecord(
+    subroutines = subroutines,
     tol = tol,
     atol = atol,
     sstol = sstol,
@@ -127,7 +128,7 @@ NmCompartment2 <- setClass(
   prototype = c(initial_off = FALSE)
 )
 
-nm_compartment <- function(name, initial_off = FALSE) {
+nm_compartment2 <- function(name, initial_off = FALSE) {
   NmCompartment2(
     name = name,
     initial_off = initial_off

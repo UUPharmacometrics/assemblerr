@@ -29,7 +29,7 @@
 
 .templates[["NmIgnoreStatement"]] <- "IGNORE=({variable}{operator}{value})"
 
-.templates[["NmSubroutinesRecord"]] <- "$SUBROUTINES {render_collection(elements)} {p('TOL=',tol)} {p('SSTOL=',sstol)} {p('ATOL=',atol)} {p('SSATOL=',ssatol)}"
+.templates[["NmSubroutinesRecord"]] <- "$SUBROUTINES {paste(subroutines, collapse=' ')} {p('TOL=',tol)} {p('SSTOL=',sstol)} {p('ATOL=',atol)} {p('SSATOL=',ssatol)}"
 
 .templates[["NmSubroutine"]] <- "{name}"
 
