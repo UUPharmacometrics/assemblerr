@@ -13,6 +13,7 @@ test_that("add component to slot", {
   expect_s4_class(m@absorption, "FOAbsorptionComponent")
 })
 
+
 test_that("add component to list slot", {
   TestParameter <- setClass("TestParameter", contains = "NamedComponent")
   ParameterList <- setClass(

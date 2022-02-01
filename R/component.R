@@ -23,9 +23,6 @@ NamedComponent <- setClass(
   slots = c(name = "character")
 )
 
-
-
-
 #' Check whether component x and y are compatible
 #'
 #' @noRd
@@ -52,8 +49,6 @@ setMethod(
       return(is(y, class(x)))
   }
 )
-
-
 
 #' Check whether component y can be added to slot s in x
 #'
@@ -106,6 +101,7 @@ setMethod(
   }
 )
 
+
 #' Add components
 #' @param e1 A component
 #' @param e2 A component
@@ -117,6 +113,7 @@ setMethod(
     add_component(e1, e2)
   }
 )
+
 
 
 setGeneric(
@@ -143,5 +140,4 @@ setMethod(
     return(x)
   }
 )
-
 
