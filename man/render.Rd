@@ -36,9 +36,11 @@ specification of model tasks and the \verb{options=} argument customizes the gen
 \subsection{Task specification}{
 
 Tasks are building blocks that allow to specify what a model should "do". Like other model building blocks, they can be combined using the \code{+} operator.
-For example, the following adds an estimation task and an xpose4 output task to the generated code:\preformatted{   render(m, tasks = tsk_estimation() +
+For example, the following adds an estimation task and an xpose4 output task to the generated code:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{   render(m, tasks = tsk_estimation() +
         tsk_output_xpose4())
-}
+}\if{html}{\out{</div>}}
 
 The default argument (\code{tasks=tsk_estimation()}) adds an FOCE estimation task to the code.
 }
@@ -48,8 +50,10 @@ The default argument (\code{tasks=tsk_estimation()}) adds an FOCE estimation tas
 The \verb{options=} argument allows to modify the rendering process and, hence,  the generated code. Options are provided
 as a list and the \code{assemblerr_options()} function helps to generate list with the proper formatting.
 
-The following code block renders the model \code{m} with automatic mu-referencing for the model parameters\preformatted{   render(m, options = assemblerr_options(prm.use_mu_referencing = TRUE))
-}
+The following code block renders the model \code{m} with automatic mu-referencing for the model parameters
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{   render(m, options = assemblerr_options(prm.use_mu_referencing = TRUE))
+}\if{html}{\out{</div>}}
 }
 }
 \examples{

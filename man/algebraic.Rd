@@ -19,8 +19,10 @@ This building block defines a model variable as a function of other variables.
 Algebraic relationships are equations where one variable is defined as a function of multiple other variables. assemblerr
 uses R formulas to implement these equations. For example, the Emax dose response model
 \deqn{effect=emax*dose/(ed50 + dose)}
-could be declared as\preformatted{    algebraic(effect~emax*dose/(ed50+dose))
-}
+could be declared as
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{    algebraic(effect~emax*dose/(ed50+dose))
+}\if{html}{\out{</div>}}
 
 where the tilde \code{~} replaced the equal sign \code{=} in the definition.
 }

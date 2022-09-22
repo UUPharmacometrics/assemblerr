@@ -28,8 +28,10 @@ need to have a left-hand side (i.e., \code{~k0} is a valid flow definition).
 
 Flow equations can contains the special variables \code{A} and \code{C} which can be used to refer to the amount and concentration in the compartment specified via
 the \verb{from=} argument. For example, the following code creates a flow building block describing the first-order transfer from the depot to the central
-compartment\preformatted{flow(~ka*A, "depot", "central")
-}
+compartment
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{flow(~ka*A, "depot", "central")
+}\if{html}{\out{</div>}}
 
 When the model is rendered, \code{A} and \code{C} will get replaced with the corresponding compartment reference. assemblerr will raise an error if \code{A} or \code{C} are used
 without specifying the \verb{from=} compartment (such as in an inflow).

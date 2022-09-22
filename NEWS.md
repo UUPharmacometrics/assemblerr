@@ -1,4 +1,5 @@
 # assemblerr (development version)
+* regenerate help files for compatability with new CRAN check
 
 # assemblerr 0.1.1
 * add CWRES to `vars_nm_std`

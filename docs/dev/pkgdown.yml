@@ -1,10 +1,10 @@
 pandoc: '2.5'
-pkgdown: 1.6.1
+pkgdown: 2.0.6
 pkgdown_sha: ~
 articles:
   getting-started: getting-started.html
-last_built: 2022-01-13T19:40Z
+last_built: 2022-09-22T15:14Z
 urls:
-  reference: https://uupharmacometrics.github.io/assemblerr//reference
-  article: https://uupharmacometrics.github.io/assemblerr//articles
+  reference: https://uupharmacometrics.github.io/assemblerr/reference
+  article: https://uupharmacometrics.github.io/assemblerr/articles
 

@@ -29,10 +29,12 @@ start with a letter.
 
 Adding a parameter with an already existing name will replace the
 definition of the parameter. For example, the parameter “base” will have
-a log-normal distribution in the following snippet:\preformatted{m <- model() +
+a log-normal distribution in the following snippet:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{m <- model() +
  prm_normal("base") +
  prm_log_normal("base")
-}
+}\if{html}{\out{</div>}}
 }
 
 \subsection{Parameter values}{
@@ -49,7 +51,9 @@ expected.
 \code{assemblerr} can include mu-referencing statements for parameter
 distributions that support it. The functionality can be activated by
 setting the option \code{prm.use_mu_referencing} to \code{TRUE} as shown in the
-following snippet:\preformatted{m <- model() +
+following snippet:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{m <- model() +
   prm_normal("base") +
   prm_log_normal("slp") +
   obs_additive(response~base+slp*time)
@@ -58,7 +62,7 @@ render(
   model = m,
   options = assemblerr_options(prm.use_mu_referencing = TRUE)
 )
-}
+}\if{html}{\out{</div>}}
 }
 }
 \examples{

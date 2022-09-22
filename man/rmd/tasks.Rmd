@@ -1,7 +1,6 @@
 ## Tasks
 
-Tasks are building blocks that allow to specify what a model should "do". Like other model building blocks, they can be combined using the `+` operator. 
-However, they should not be added to a model but rather provided via the `tasks=` argument to the render function, e.g.,    
+Tasks are building blocks that allow to specify what a model should "do". Like other model building blocks, they can be combined using the `+` operator. However, they should not be added to a model but rather provided via the `tasks=` argument to the render function, e.g.,    
 
 ```r
 render(m, tasks = tsk_estimation() +

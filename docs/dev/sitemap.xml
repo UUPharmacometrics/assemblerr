@@ -1,168 +1,189 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//index.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/404.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/algebraic.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/assemblerr-package.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/LICENSE.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/assemblerr-vctrs.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/articles/getting-started.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/assemblerr_options.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/articles/index.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/c-IssueList-method.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/authors.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/check.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/index.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/compartment.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/news/index.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/dcl_add.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/algebraic.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/dcl_id-set.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/assemblerr-package.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/dcl_id.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/assemblerr-vctrs.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/declaration.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/assemblerr_options.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/facet_names_to_labels.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/c-IssueList-method.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/flow.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/check.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/input_variables.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/compartment.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/interp.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/dcl_add.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/is_valid_lhs.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/dcl_id-set.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/md_doc_links_for_package_functions.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/dcl_id.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/model-variable-selection.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/declaration.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/model.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/facet_names_to_labels.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/names-NamedFacet-method.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/flow.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/new_declaration.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/index.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/nm_model.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/input_variables.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/nm_pk.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/interp.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/nm_theta.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/is_valid_lhs.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/obs_additive.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/md_doc_links_for_package_functions.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/obs_combined.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/model-variable-selection.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/obs_proportional.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/model.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/pipe.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/names-NamedFacet-method.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/pk_absorption_fo.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/new_declaration.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/pk_absorption_fo_lag.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/nm_model.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/pk_absorption_fo_transit.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/nm_pk.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/pk_absorption_fo_zo.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/nm_theta.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/pk_absorption_zo.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/obs_additive.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/pk_absorption_zo_lag.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/obs_combined.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/pk_distribution_1cmp.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/obs_proportional.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/pk_distribution_2cmp.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/pipe.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/pk_distribution_3cmp.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/pk_absorption_fo.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/pk_elimination_linear.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/pk_absorption_fo_lag.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/pk_elimination_linear_nl.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/pk_absorption_fo_transit.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/pk_elimination_nl.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/pk_absorption_fo_zo.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/pk_model.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/pk_absorption_zo.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/plus-BuildingBlock-BuildingBlock-method.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/pk_absorption_zo_lag.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/plus-BuildingBlock-NULL-method.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/pk_distribution_1cmp.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/print_shortened_tree_description.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/pk_distribution_2cmp.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/prm_log_normal.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/pk_distribution_3cmp.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/prm_logit_normal.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/pk_elimination_linear.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/prm_no_var.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/pk_elimination_linear_nl.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/prm_normal.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/pk_elimination_nl.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/render.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/pk_model.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/transform_ast.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/plus-BuildingBlock-BuildingBlock-method.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/tsk_estimation.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/plus-BuildingBlock-NULL-method.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/tsk_output.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/print_shortened_tree_description.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//reference/xtfrm-IssueList-method.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/prm_log_normal.html</loc>
   </url>
   <url>
-    <loc>https://uupharmacometrics.github.io/assemblerr//articles/getting-started.html</loc>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/prm_logit_normal.html</loc>
+  </url>
+  <url>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/prm_no_var.html</loc>
+  </url>
+  <url>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/prm_normal.html</loc>
+  </url>
+  <url>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/render.html</loc>
+  </url>
+  <url>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/transform_ast.html</loc>
+  </url>
+  <url>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/tsk_estimation.html</loc>
+  </url>
+  <url>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/tsk_output.html</loc>
+  </url>
+  <url>
+    <loc>https://uupharmacometrics.github.io/assemblerr/reference/xtfrm-IssueList-method.html</loc>
   </url>
 </urlset>

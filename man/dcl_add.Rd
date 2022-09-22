@@ -30,13 +30,13 @@ These functions allow to combine two declarations using addition, substraction, 
 }
 \section{Functions}{
 \itemize{
-\item \code{dcl_add}: Addition of the declarations
+\item \code{dcl_add()}: Addition of the declarations
 
-\item \code{dcl_substract}: Substraction of the declarations
+\item \code{dcl_substract()}: Substraction of the declarations
 
-\item \code{dcl_multiply}: Multiplications of the declarations
+\item \code{dcl_multiply()}: Multiplications of the declarations
 
-\item \code{dcl_devide}: Division of the declarations
+\item \code{dcl_devide()}: Division of the declarations
+
 }}
-
 \keyword{internal}

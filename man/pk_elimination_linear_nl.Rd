@@ -37,14 +37,16 @@ and need to be added for the PK model to be valid.
 A PK model can only have one component of each type and adding a
 component with an already existing type will replace the previous
 definition. For example, the distribution component will be a two
-compartment model in the following snippet:\preformatted{pkm <- pk_model() +
+compartment model in the following snippet:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{pkm <- pk_model() +
   pk_absorption_fo() +
   pk_distribution_1cmp() +
   pk_distribution_2cmp() +
   pk_elimination_linear() +
   obs_additive(conc~C["central"]) 
 pkm
-}
+}\if{html}{\out{</div>}}
 }
 
 \subsection{Parameter models}{
@@ -60,10 +62,12 @@ For example, the parameter \verb{prm_vc=} refers to the central volume of
 distribution parameter in the one compartment distribution PK component
 and the default parameter model is a log-normal distribution. The
 following code block specifies a normal distribution parameter model and
-names the parameter \code{v}:\preformatted{pk_distribution_1cmp(
+names the parameter \code{v}:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{pk_distribution_1cmp(
     prm_vc = prm_normal("v", mean = 50, var = 25)
 )
-}
+}\if{html}{\out{</div>}}
 }
 }
 \seealso{
